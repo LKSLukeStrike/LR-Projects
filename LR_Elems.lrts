@@ -90,6 +90,33 @@ function getElemValue(elem) {
 	return Number.isNaN(Number(elm_value)) ? // right type
 		elm_value : Number(elm_value)
 }
+function setElemValue(elem, elm_value) {
+	debugFA("setElemValue", arguments)
+	if (yesArray(elem)) {return elem.forEach(function(elem) { // recursive
+		setElemValue(elem, elm_value)
+	})} // single elem from here
+	elm_value = hasElemPlussigned(elem) && gthValue(elm_value, Int_Zero) ? // add + ?
+		pfxValue(elm_value, Str_Plus) : elm_value
+	elem.value(elm_value)
+	setElemDotted(elem) // dotted representation if any
+	return elm_value
+}
+function rsaElemValue(elem, value_str, value_rpl) { // replace a string all
+	debugFA("rsaElemValue", arguments)
+	if (yesArray(elem)) {return elem.forEach(function(elem) { // recursive
+		rsaElemValue(elem, value_str, value_rpl)
+	})} // single elem from here
+	const elm_value = rsaValue(getElemValue(elem), value_str, value_rpl)
+	return setElemValue(elem, elm_value)
+}
+function hasElemValue(elem, elm_value) {
+	debugFA("hasElemValue", arguments)
+	return equValue(getElemValue(elem), elm_value)
+}
+function yisElemValue(elem, value_str) { // if includes a string
+	debugFA("yisElemValue", arguments)
+	return yisValue(getElemValue(elem), value_str)
+}
 //endregion
 
 //region LR_Elems Css Classes
@@ -104,6 +131,39 @@ function getElemCss(elem) {
 	try {result = elem.getClasses()} // skip error when no classes
 	finally {}
 	return result
+}
+//endregion
+
+//region LR_Elems Cfk Classes
+//endregion
+
+//region LR_Elems Repeaters
+function rptElemDoIf(elem, _do_fct, _if_fct) { // apply fct on repeater if true
+	debugFA("rptElemDoIf", arguments)
+	if (arguments.length < 3) { // filter function
+		_if_fct = function(elem) {
+			debugFA("rptElemDoIf_if_fct", arguments)
+			return true // true to do action function
+		}
+	}
+	if (arguments.length < 2) { // action function
+		_do_fct = function(elem) {
+			debugFA("rptElemDoIf_do_fct", arguments)
+			debugElem(elem, Yes_Debug, Yes_Indent)
+			return true // true to continue recursive
+		}
+	}
+	if (notElem(elem)) {return} // not an elem
+	if (_if_fct(elem)) {
+		// if (! _do_fct(elem)) {return} // /!\ repeat twice (why ?)
+		const yes_recursive = _do_fct(elem)
+		if (! yes_recursive) {return} // interrupt recursive 
+	}
+	// getElemChildren(elem).forEach(function(child) // /!\ repeat twice (why ?)
+	const elm_children = getElemChildren(elem) 
+	elm_children.forEach(function(child) { // recursive
+		rptElemDoIf(getElemChild(elem, child), _do_fct, _if_fct)
+	})
 }
 //endregion
 //endregion

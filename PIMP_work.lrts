@@ -1,0 +1,35 @@
+//region LR_Elems Values
+function getElemValue(elem) {
+	debugFA("getElemValue", arguments)
+	const elm_value = elem.value()
+	return Number.isNaN(Number(elm_value)) ? // right type
+		elm_value : Number(elm_value)
+}
+function setElemValue(elem, elm_value) {
+	debugFA("setElemValue", arguments)
+	if (yesArray(elem)) {return elem.forEach(function(elem) { // recursive
+		setElemValue(elem, elm_value)
+	})} // single elem from here
+	elm_value = hasElemPlussigned(elem) && gthValue(elm_value, Int_Zero) ? // add + ?
+		pfxValue(elm_value, Str_Plus) : elm_value
+	elem.value(elm_value)
+	setElemDotted(elem) // dotted representation if any
+	return elm_value
+}
+function rsaElemValue(elem, value_str, value_rpl) { // replace a string all
+	debugFA("rsaElemValue", arguments)
+	if (yesArray(elem)) {return elem.forEach(function(elem) { // recursive
+		rsaElemValue(elem, value_str, value_rpl)
+	})} // single elem from here
+	const elm_value = rsaValue(getElemValue(elem), value_str, value_rpl)
+	return setElemValue(elem, elm_value)
+}
+function hasElemValue(elem, elm_value) {
+	debugFA("hasElemValue", arguments)
+	return equValue(getElemValue(elem), elm_value)
+}
+function yisElemValue(elem, value_str) { // if includes a string
+	debugFA("yisElemValue", arguments)
+	return yisValue(getElemValue(elem), value_str)
+}
+//endregion

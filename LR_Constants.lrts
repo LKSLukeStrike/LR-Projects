@@ -16,6 +16,8 @@ const Str_CArray   = "]"
 const Str_Comma    = ","
 const Str_SDot     = "."
 const Str_DDot     = ":"
+const Str_Plus     = "+"
+const Str_Minus    = "-"
 const Infinity     = Number.MAX_SAFE_INTEGER
 //endregion
 

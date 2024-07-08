@@ -40,33 +40,6 @@ function hasSheetItemValue(sheet, item, itm_value) {
 //endregion
 
 
-function rptElemDoIf(elem, do_fct, if_fct) { // apply fct on repeater if true
-	debugFA("rptElemDoIf", arguments)
-	if (arguments.length < 3) { // filter function
-		if_fct = function(elem) {
-			debugFA("rptElemDoIf_if_fct", arguments)
-			return true // true to do action function
-		}
-	}
-	if (arguments.length < 2) { // action function
-		do_fct = function(elem) {
-			debugFA("rptElemDoIf_do_fct", arguments)
-			debugElem(elem, true, true)
-			return true // true to continue recursive
-		}
-	}
-	if (notElem(elem)) {return} // not an elem
-	if (if_fct(elem)) {
-		// if (! do_fct(elem)) {return} // /!\ repeat twice (why ?)
-		const yes_recursive = do_fct(elem)
-		if (! yes_recursive) {return} // interrupt recursive 
-	}
-	// getElemChildren(elem).forEach(function(child) // /!\ repeat twice (why ?)
-	const elm_children = getElemChildren(elem) 
-	elm_children.forEach(function(child) { // recursive
-		rptElemDoIf(elem.find(child), do_fct, if_fct)
-	})
-}
 
 
 
