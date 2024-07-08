@@ -1,0 +1,51 @@
+//region LR_Types
+const Str_Null		= "null"
+const Str_Undefined	= "undefined"
+const Str_String	= "string"
+const Str_Thing	    = "thing"
+const Str_Object	= "object"
+const Str_Array	    = "array"
+const Str_Elem	    = "elem"
+function yesNull(thing) {
+	return thing === null
+}
+function notNull(thing) {
+	return ! yesNull(thing)
+}
+function yesUndefined(thing) {
+	return typeof thing === Str_Undefined
+}
+function notUndefined(thing) {
+	return ! yesUndefined(thing)
+}
+function yesString(thing) {
+	return typeof thing === Str_String
+}
+function notString(thing) {
+	return ! yesString(thing)
+}
+function yesThing(thing) {
+	return notNull(thing) && notUndefined(thing)
+}
+function notThing(thing) {
+	return ! yesThing(thing)
+}
+function yesObject(thing) {
+	return yesThing(thing) && typeof thing === Str_Object
+}
+function notObject(thing) {
+	return ! yesObject(thing)
+}
+function yesArray(thing) {
+	return yesThing(thing) && Array.isArray(thing)
+}
+function notArray(thing) {
+	return ! yesArray(thing)
+}
+function yesElem(thing) {
+	return yesObject(thing) && notArray(thing)
+}
+function notElem(thing) {
+	return ! yesElem(thing)
+}
+//endregion

@@ -1,0 +1,71 @@
+//region LR_Constants
+//region LR_Constants Values
+const Int_Zero     = 0
+const Str_None     = ""
+const Str_Space    = " "
+const Str_Tab      = "\t"
+const Str_Newline  = "\n"
+const Str_SQMark   = "'"
+const Str_DQMark   = '"'
+const Str_OObject  = "{"
+const Str_CObject  = "}"
+const Str_OArray   = "["
+const Str_CArray   = "]"
+const Str_Comma    = ","
+const Str_SDot     = "."
+const Str_DDot     = ":"
+const Infinity     = Number.MAX_SAFE_INTEGER
+//endregion
+
+//region LR_Constants Items Prefixes /!\ respect this convention for the code to work
+const Str_PFXDXV = "DxV_" // dot and value item (container)
+const Str_PFXVAL = "Val_" // value item
+const Str_PFXDOT = "Dot_" // dot item
+const Str_PFXEFF = "Eff_" // effort item
+const Str_PFXMOD = "Mod_" // modifier item
+const Str_PFXREP = "Rep_" // repeater item
+const Str_PFXCHC = "Chc_" // choice item
+const Str_PFXCHK = "Chk_" // checkbox item (can also be a label/icon etc)
+const Str_PFXFLD = "Fld_" // foldering item (can also be a label/icon etc)
+//endregion
+
+//region LR_Constants DxV Display Modes
+const Str_DXVDOT = "dots" // only dots
+const Str_DXVVAL = "vals" // only values
+const Str_DXVBTH = "both" // both of them
+const Dft_DXVDFT = Str_DXVBTH
+const Arr_DXVALW = [ // DxV allowed display modes
+	Str_DXVDOT,
+	Str_DXVVAL,
+	Str_DXVBTH,
+]
+//endregion
+
+//region LR_Constants Sheet Themes /!\ some items REQuired on sheets for theme to work on it
+const REQ_THMOLD		= "REQ_THMOLD"		// previous theme (REQuired)
+const REQ_THMPRF		= "REQ_THMPRF"		// choosen theme  (REQuired)
+const Css_TextPrimary	= "text-primary"
+const Css_TextSecondary	= "text-secondary"
+const Css_TextSuccess	= "text-success"
+const Css_TextDanger	= "text-danger"
+const Css_TextWarning	= "text-warning"
+const Css_TextInfo		= "text-info"
+const Css_TextLight		= "text-light"
+const Css_TextDark		= "text-dark"
+const Css_TextMuted		= "text-muted"
+const Css_TextWhite		= "text-white"
+const Dft_THMDFT		= Css_TextWarning
+const Arr_THMALW		= [ // Themes allowed
+	Css_TextPrimary,
+	Css_TextSecondary,
+	Css_TextSuccess,
+	Css_TextDanger,
+	Css_TextWarning,
+	Css_TextInfo,
+	Css_TextLight,
+	Css_TextDark,
+	Css_TextMuted,
+	Css_TextWhite,
+]
+//endregion
+//endregion

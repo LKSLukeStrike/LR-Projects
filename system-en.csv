@@ -1,0 +1,20 @@
+Source,Translation
+Tip_HLPSHT_,Help
+Tip_PRFSHT_,Preferences
+Txt_BIONAM_,Name
+Txt_BIOCMS_,Size (cm)
+Txt_BIOAGE_,Age
+Txt_BIOKGS_,Weigtht (kg)
+Txt_BIODSC_,Description
+Tip_YLCKSHTY_,Lock Sheet
+Tip_NLCKSHTN_,Unlock Sheet
+Tip_YFLDBIOY_,Fold BIO
+Tip_NFLDBION_,Unfold BIO
+Tip_YFLDMAXY_,Fold MAX
+Tip_NFLDMAXN_,Unfold MAX
+Tip_YFLDACTY_,Fold ACT
+Tip_NFLDACTN_,Unfold ACT
+Tip_YFLDSCOY_,Fold SCO
+Tip_NFLDSCON_,Unfold SCO
+Tip_YFLDHOPY_,Fold HOP
+Tip_NFLDHOPN_,Unfold HOP

@@ -1,0 +1,34 @@
+    //region limit CARACT Mns, Pls based on min constant, max constant, scoact
+	function limCARACTMnsPls(item, mns_item, pls_item) {
+		const min_value = hasItemValue(Val_SCOACT, Min_CARACT) ? // cannot Mns if any
+			getItemValue(item) : Min_CARMOD
+		const max_value = hasItemValue(Val_SCOACT, Max_CARACT) ? // cannot Pls if any
+			getItemValue(item) : Max_CARMOD
+		limCARMnsPls(item, mns_item, pls_item, min_value, max_value)
+		if (! hasItemFakeupdate(item)) { // only if it's a real value modification
+			computeSCOACT() // compute related items
+		}
+		remItemFakeupdate(item) // modification by default again
+	}
+	//endregion
+
+
+
+    //region limit CAR Mns, Pls based on min, max values
+	function limCARMnsPls(item, mns_item, pls_item, min_value, max_value) {
+		remItemClickable(item)
+		remItemClickable(mns_item)
+		remItemClickable(pls_item)
+		if (! hasItemSelected(item)) { // cannot Mns, Pls
+			// reset himself if any /!\ test to avoid infinite loop
+			return hasItemZro(item) ? undefined : setItemZro(item)
+		}
+		addItemClickable(item) // make himself clickable for reset
+		if (! hasItemValue(item, min_value)) {
+			addItemClickable(mns_item)
+		}
+		if (! hasItemValue(item, max_value)) {
+			addItemClickable(pls_item)
+		}
+	}
+	//endregion

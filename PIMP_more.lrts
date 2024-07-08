@@ -1,0 +1,15 @@
+
+	//region Dotted10
+	function addItemDotted10(item) {
+		debugFA("addItemDotted10", arguments)
+		return addSheetItemDotted10(sheet, item)
+	}
+	function remItemDotted10(item) {
+		debugFA("remItemDotted10", arguments)
+		return remSheetItemDotted10(sheet, item)
+	}
+	function hasItemDotted10(item) {
+		debugFA("hasItemDotted10", arguments)
+		return hasSheetItemDotted10(sheet, item)
+	}	
+	//endregion

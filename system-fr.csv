@@ -1,0 +1,20 @@
+Source,Translation
+Tip_HLPSHT_,Aide
+Tip_PRFSHT_,Préférences
+Txt_BIONAM_,Nom
+Txt_BIOCMS_,Taille (cm)
+Txt_BIOAGE_,Age
+Txt_BIOKGS_,Poids (kg)
+Txt_BIODSC_,Description
+Tip_YLCKSHTY_,Verrouiller Fiche
+Tip_NLCKSHTN_,Déverrouiller Fiche
+Tip_YFLDBIOY_,Replier BIO
+Tip_NFLDBION_,Déplier BIO
+Tip_YFLDMAXY_,Replier MAX
+Tip_NFLDMAXN_,Déplier MAX
+Tip_YFLDACTY_,Replier ACT
+Tip_NFLDACTN_,Déplier ACT
+Tip_YFLDSCOY_,Replier SCO
+Tip_NFLDSCON_,Déplier SCO
+Tip_YFLDHOPY_,Replier HOP
+Tip_NFLDHOPN_,Déplier HOP

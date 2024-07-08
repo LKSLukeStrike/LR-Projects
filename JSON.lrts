@@ -1,0 +1,548 @@
+//region LR_Globals
+//endregion
+
+
+//region JSON_Globals
+const Arr_SUCFAI	= ["0", "1", "2", "3", "4", "5", "6", "7", "8", "9",]
+
+const Lbl_ROLSUC_	= "Lbl_ROLSUC_"
+const Lbl_ROLFAI_	= "Lbl_ROLFAI_"
+//endregion
+
+
+//region Elems (aka components in LR)
+//region Elems Events
+const Evt_Click  = "click"
+const Evt_Update = "update"
+function onElemEvtFct(elem, evt, fct) {
+	debugFA("onElemEvtFct", arguments)
+	return elem.on(evt, fct)
+}
+function onElemClickFct(elem, fct) {
+	debugFA("onElemClickFct", arguments)
+	return onElemEvtFct(elem, Evt_Click, fct)
+}
+function onElemUpdateFct(elem, fct) {
+	debugFA("onElemUpdateFct", arguments)
+	return onElemEvtFct(elem, Evt_Update, fct)
+}
+function onElemChildEvtFct(elem, child, evt, fct) {
+	debugFA("onElemChildEvtFct", arguments)
+	return elem.on(evt, child, fct)
+}
+function onElemChildClickFct(elem, child, fct) {
+	debugFA("onElemChildClickFct", arguments)
+	return onElemChildEvtFct(elem, child, Evt_Click, fct)
+}
+function onElemChildUpdateFct(elem, child, fct) {
+	debugFA("onElemChildUpdateFct", arguments)
+	return onElemChildEvtFct(elem, child, Evt_Update, fct)
+}
+//endregion
+
+//region Elems Attributes
+function getElemParent(elem) {
+	debugFA("getElemParent", arguments)
+	let result = null
+	try {result = elem.parent()} // skip error when no parent
+	finally {}
+	return result
+}
+function getElemChild(elem, child) {
+	debugFA("getElemChild", arguments)
+	let result = null
+	try {result = elem.find(child)} // skip error when no child
+	finally {}
+	return result
+}
+function getElemSheet(elem) {
+	debugFA("getElemSheet", arguments)
+	let result = null
+	try {result = elem.sheet()} // skip error when no sheet
+	finally {}
+	return result
+}
+function getElemName(elem) {
+	debugFA("getElemName", arguments)
+	let result = null
+	try {result = elem.name()} // skip error when no name
+	finally {}
+	return result
+}
+function getElemId(elem) {
+	debugFA("getElemId", arguments)
+	let result = null
+	try {result = elem.id()} // skip error when no id
+	finally {}
+	return result
+}
+function getElemIndex(elem) {
+	debugFA("getElemIndex", arguments)
+	let result = null
+	try {result = elem.index()} // skip error when no index
+	finally {}
+	return result
+}
+function getElemTypeof(elem) {
+	debugFA("getElemTypeof", arguments)
+	return typeof elem
+}
+function getElemChildren(elem) { // return children ids (get them with find)
+	debugFA("getElemChildren", arguments)
+	const elm_value = getElemValue(elem)
+	if (notElem(elm_value)) {return []} // not an elem so no children
+	return Object.keys(elm_value)
+}
+//endregion
+
+//region Elems Values
+function getElemValue(elem) {
+	debugFA("getElemValue", arguments)
+	const elm_value = elem.value()
+	return Number.isNaN(Number(elm_value)) ? // right type
+		elm_value : Number(elm_value)
+}
+//endregion
+
+//region Elems Classes
+function getElemCss(elem) {
+	debugFA("getElemCss", arguments)
+	let result = []
+	try {result = elem.getClasses()} // skip error when no classes
+	finally {}
+	return result
+}
+//endregion
+//endregion
+
+
+//region Items (designed by a sheet and an item id)
+function getSheetItem(sheet, item) { // returns an elem
+	debugFA("getSheetItem", arguments)
+	return sheet.get(item)
+}
+function getSheetItemChild(sheet, item, child) { // OBSO
+	return sheet.get(item).value()[child]
+}
+function getSheetItemParent(sheet, item) { // OBSO
+	return sheet.get(item).parent().id()
+}
+//endregion
+
+//region Events // due to JS we cannot use Event and Function so ... Evt and Fct
+// const Evt_Click  = "click"
+// const Evt_Update = "update"
+function onSheetItemEvtFct(sheet, item, evt, fct) {
+	return sheet.get(item).on(evt, fct)
+}
+function onSheetItemClickFct(sheet, item, fct) {
+	return onSheetItemEvtFct(sheet, item, Evt_Click, fct)
+}
+function onSheetItemUpdateFct(sheet, item, fct) {
+	return onSheetItemEvtFct(sheet, item, Evt_Update, fct)
+}
+//endregion
+
+//region Values
+function getSheetItemValue(sheet, item) {
+	const itm_value = sheet.get(item).value()
+	return Number.isNaN(Number(itm_value)) ? // right type
+		itm_value : Number(itm_value)
+}
+function setSheetItemValue(sheet, item, itm_value) {
+	if (Array.isArray(item)) {return item.forEach(function(item) { // recursive
+		setSheetItemValue(sheet, item, itm_value)
+	})} // single item from here
+	sheet.get(item).value(itm_value)
+	return itm_value
+}
+function hasSheetItemValue(sheet, item, itm_value) {
+	return getSheetItemValue(sheet, item) == itm_value
+}
+//endregion
+
+
+const Css_Repeater = "repeater"
+const Css_RepeaterElement = "repeater-element"
+function rptElemDoIf(elem, do_fct, if_fct) { // apply fct on repeater if true
+	debugFA("rptElemDoIf", arguments)
+	if (arguments.length < 3) { // filter function
+		if_fct = function(elem) {
+			debugFA("rptElemDoIf_if_fct", arguments)
+			return true // true to do action function
+		}
+	}
+	if (arguments.length < 2) { // action function
+		do_fct = function(elem) {
+			debugFA("rptElemDoIf_do_fct", arguments)
+			debugElem(elem, true, true)
+			return true // true to continue recursive
+		}
+	}
+	if (notElem(elem)) {return} // not an elem
+	if (if_fct(elem)) {
+		// if (! do_fct(elem)) {return} // /!\ repeat twice (why ?)
+		const yes_recursive = do_fct(elem)
+		if (! yes_recursive) {return} // interrupt recursive 
+	}
+	// getElemChildren(elem).forEach(function(child) // /!\ repeat twice (why ?)
+	const elm_children = getElemChildren(elem) 
+	elm_children.forEach(function(child) { // recursive
+		rptElemDoIf(elem.find(child), do_fct, if_fct)
+	})
+}
+
+
+
+
+init = function(sheet) {
+	// initialize all the sheets
+	if (sheet.id() === "main") {initMainSheet(sheet)}
+	if (sheet.id() === "Dia_SHTPRF") {initPreferencesSheet(sheet)}
+	if (sheet.id() === "Bnd_SCOROL") {initScoreRollBindingSheet(sheet)}
+}
+
+
+// Main Sheet
+const initMainSheet = function(sheet) {
+
+	const Row_SCO = "Row_SCO"
+	const Lbl_Nom = "Lbl_Nom"
+	const Clk_Icon = "Clk_Icon"
+	const Dot_Test = "Dot_Test"
+	const Val_RESULT = "Val_RESULT"
+	const Row_SCO = "Row_SCO"
+	const Clk_HOP = "Clk_HOP"
+	const Rep_HIS = "Rep_HIS"
+	const Val_HIS = "Val_HIS"
+	const Rep_OBJ = "Rep_OBJ"
+	const Rep_PER = "Rep_PER"
+	const Chk_PHYCHK = "Chk_PHYCHK"
+	const Val_PHYCHK = "Val_PHYCHK"
+	const Val_OBJITM = "Val_OBJITM"
+	const Val_Nom = "Val_Nom"
+	const Vis_OBJITM = "Vis_OBJITM"
+	const Css_BgSecondary = "bg-secondary"
+
+	const Arr_Loop = [
+		11,
+		[
+			22,
+			[
+				111,
+				222,
+			],
+			33,
+			[],
+		],
+		"charlie",
+		null,
+	]
+
+	const Key_TEST = {
+		Lbl_Nom: Lbl_Nom + " this is my name",
+		dummy: {},
+	}
+	const Fruit = "Apple"
+	Key_TEST["Fruit"] = Fruit
+	Key_TEST["Arr_Loop"] = Arr_Loop
+
+	// setSheetItemValue(sheet, Val_RESULT, strThing(10, true))
+	// setSheetItemValue(sheet, Val_RESULT, strThing(10.256, true))
+	// setSheetItemValue(sheet, Val_RESULT, strThing("", true))
+	// setSheetItemValue(sheet, Val_RESULT, strThing("hello", true))
+	// setSheetItemValue(sheet, Val_RESULT, strThing([], true))
+	// setSheetItemValue(sheet, Val_RESULT, strThing([[]], true))
+	// setSheetItemValue(sheet, Val_RESULT, strThing([10], true))
+	// setSheetItemValue(sheet, Val_RESULT, strThing([10, 20], true))
+	// setSheetItemValue(sheet, Val_RESULT, strThing(null, true))
+	// setSheetItemValue(sheet, Val_RESULT, strThing(Arr_Loop, true))
+	// setSheetItemValue(sheet, Val_RESULT, strThing({}, true))
+	// setSheetItemValue(sheet, Val_RESULT, strThing({stuff: {}}, true))
+	// setSheetItemValue(sheet, Val_RESULT, strThing(Key_TEST, true))
+
+	debug("start")
+	
+	// debug(cpoValue("   this is     THE way   "))
+	// debug(cpoValue("   THIS is     THE way   "))
+	// debug(cpoValue("   THIS is     THE way   ", true))
+	// debug(cpaValue("   this is     THE way   "))
+	// debug(cpaValue("   THIS is     THE way   "))
+	// debug(cpaValue("   THIS is     THE way   ", true))
+	// debug(tynValue(0))
+	// debug(tynValue(1))
+	// debug(tynValue(false))
+	// debug(tynValue(true))
+	
+	setSheetItemValue(sheet, Val_HIS, 0)
+	const Chk_HOPITM = "Chk_HOPITM"
+	const Rep_his = getSheetItem(sheet, Rep_HIS)
+	const Rep_obj = getSheetItem(sheet, Rep_OBJ)
+	
+	function setRep_PER() {
+		const rep_value = {
+			"1": {
+				Val_HOPITM: "boiteux",
+			},
+			"2": {
+				Val_HOPITM: "génie",
+			},
+		}
+		if (! getSheetItemValue(sheet, Rep_PER)) {
+			setSheetItemValue(sheet, Rep_PER, rep_value)
+		}
+		return getSheetItemValue(sheet, Rep_PER)
+	}
+	
+	function setVal_RESULT(str_result) {
+		return setSheetItemValue(sheet, Val_RESULT, str_result)
+	}
+	
+	function fakRep_OBJ() {
+		return setSheetItemValue(sheet, Rep_OBJ, getSheetItemValue(sheet, Rep_OBJ))
+	}
+	
+	onElemUpdateFct(getSheetItem(sheet, Val_Nom), function(elem) {
+		debugElemUpdate(elem)
+		rptElemDoIf(elem)
+	})
+	
+	onElemClickFct(Rep_obj, function(elem) {
+		debugElemClick(elem)
+		debug(elem)
+		setVal_RESULT("Click:\n" + strThing(getSheetItemValue(sheet, Rep_OBJ), true))
+	})
+	
+	onElemUpdateFct(Rep_obj, function(elem) {
+		debugElemUpdate(elem)
+		debug(elem)
+		setVal_RESULT("Update:\n" + strThing(getSheetItemValue(sheet, Rep_OBJ), true))
+	})
+	
+	onElemChildClickFct(Rep_obj, Chk_PHYCHK, function(elem) {
+		debugElemClick(elem)
+		rptElemDoIf(elem)
+		const elm_index = getElemIndex(elem)
+		const val_phychk = Rep_obj.find(elm_index).find(Val_PHYCHK)
+		// const val_phychk = elem.find(Val_PHYCHK)
+		debug("--")
+		onElemUpdateFct(val_phychk, function(elem) {
+			debugElemUpdate(elem)
+			// rptElemDoIf(elem)
+			const chk_phychk = Rep_obj.find(elm_index).find(Chk_PHYCHK)
+			if (getElemValue(elem)) {
+				chk_phychk.addClass(Css_BgSecondary)
+			} else  {
+				chk_phychk.removeClass(Css_BgSecondary)
+			}
+		})
+		debug("--")
+		debugElem(val_phychk, true, true)
+		debug(val_phychk.value())
+		val_phychk.value(tynValue(val_phychk.value()))
+		debug(val_phychk.value())
+	})
+	
+	onElemChildClickFct(Rep_obj, Val_OBJITM, function(elem) {
+		debugElemClick(elem)
+		rptElemDoIf(elem)
+	})
+	
+	onElemChildUpdateFct(Rep_obj, Val_OBJITM, function(elem) {
+		debugElemUpdate(elem)
+		rptElemDoIf(elem)
+	})
+	
+	onElemChildUpdateFct(Rep_obj, Vis_OBJITM, function(elem) {
+		debugElemUpdate(elem)
+		rptElemDoIf(elem)
+	})
+	
+	onElemChildClickFct(Rep_obj, Val_PHYCHK, function(elem) {
+		debugElemClick(elem)
+		debugElem(elem, true, true)
+	})
+	
+	onElemChildUpdateFct(Rep_obj, Val_PHYCHK, function(elem) {
+		debugElemUpdate(elem)
+		debugElem(elem, true, true)
+	})
+
+
+	fakRep_OBJ() 
+	setRep_PER()
+
+
+
+	sheet.get(Lbl_Nom).addClass(Lbl_Nom)
+	// log(sheet.get(Lbl_Nom).getClasses(Lbl_Nom))
+
+
+	// const Data = sheet.getData()
+	// log(Data)
+	// log("Ok")
+	// const Cpn_Test = sheet.get(Dot_Test)
+	// log(Cpn_Test)
+	// log(typeof Cpn_Test)
+	// log(Cpn_Test.parent())
+	// log(Object.entries(Cpn_Test))
+	// log("Ok")
+	
+    // limit PHYMAX dec, inc
+	sheet.get(Clk_Icon).on("click", function() {
+		loop1(Arr_Loop, "Hello", "World")
+		loop2(Arr_Loop, "Hello", "World")
+		loop3(Arr_Loop, "Hello", "World")
+	})
+
+	function loop1(item, itm_value1, itm_value2) {
+		debugFA("loop1", arguments)
+		if (Array.isArray(item)) {
+			item.forEach(function(item) {
+				loop1(item, itm_value1, itm_value2)
+			})
+			return
+		}	// recursive
+		debugFA("loop1", [item + " " + itm_value1 + " " + itm_value2])
+	}
+
+	function loop2(item, itm_value1, itm_value2) {
+		debugFA("loop2", arguments)
+		debugFA("loop2", item)
+		debugFA("loop2", itm_value1)
+		debugFAOK("loop2")
+		log(item)
+		log(typeof item)
+		log(arguments)
+		log(typeof arguments)
+		log(itm_value1)
+		log(typeof itm_value1)
+	}
+
+	function loop3(item, itm_value1, itm_value2) {
+		debugFA("loop3", arguments)
+		item.flat(Infinity).forEach(function(item) {
+			debugFA("loop3", [item + " " + itm_value1 + " " + itm_value2])
+		})
+	}
+	
+	onSheetItemClickFct(sheet, "Dia_SHTPRF", function() {
+		const item = "Dia_SHTPRF"
+		debug(item)
+		sheet.prompt("Prefs", item, function(dialog) {
+			setSheetItemValue(sheet, "Prf_DXVPRF", dialog.Chc_DXVPRF)
+			setSheetItemValue(sheet, Val_RESULT, Object.entries(dialog))
+		}, function(dialog) {
+			setSheetItemValue(dialog, "Chc_DXVPRF", getSheetItemValue(sheet, "Prf_DXVPRF"))
+		})
+	})
+	
+	// log(sheet.get("Cnt_TESTS").getClasses())
+	// log(sheet.get("Lbl_TESTS").getClasses())
+	// sheet.get("Cnt_TESTS").hide()
+	// sheet.get("Lbl_TESTS").hide()
+	// log("---")
+	// log(sheet.get("Cnt_TESTS").getClasses())
+	// log(sheet.get("Lbl_TESTS").getClasses())
+	
+	
+	const Val_CMASEL = "Val_CMASEL"
+	const Val_SCOACT = "Val_SCOACT"
+	const Val_SCOROL = "Val_SCOROL"
+	const Bnd_SCOROL = "Bnd_SCOROL"
+
+	onSheetItemClickFct(sheet, Bnd_SCOROL, function() {
+		debug("onSheetItemClickFct")
+		const rol_scorol = new RollBuilder(sheet)
+			.expression("1d10")
+			.title("Score Roll")
+			.visibility("visible")
+			.onRoll(function(diceresult) {
+				const val_cmasel = ":fist-raised: (PHY|MEN) :brain:"
+				const val_scoact = getSheetItemValue(sheet, Val_SCOACT)
+				const val_scorol = diceresult.total
+				setSheetItemValue(sheet, Val_SCOROL, val_scorol)
+				const dif_scorol = val_scoact - val_scorol
+				if (dif_scorol >= 0) {
+					const lbl_sucfai = _(Lbl_ROLSUC_)
+					const val_sucfai = "+" + dif_scorol
+				} else {
+					const lbl_sucfai = _(Lbl_ROLFAI_)
+					const val_sucfai = "" + dif_scorol
+				}
+				const bna_scorol = lbl_sucfai + " " + val_sucfai
+		
+				Bindings.clear(Val_SCOACT)
+				Bindings.add(bna_scorol, Val_SCOACT, Bnd_SCOROL, function() {
+					debugOK()
+					return {
+						Lbl_SUCFAI: lbl_sucfai,
+						Val_SUCFAI: val_sucfai,
+						Val_CMASEL: val_cmasel,
+						Val_SCOACT: val_scoact,
+						Val_SCOROL: val_scorol,
+					}
+				})
+				Bindings.send(sheet, bna_scorol)
+			})
+			.roll()
+	})
+
+
+	
+	onSheetItemClickFct(sheet, Clk_HOP, function() {
+		const item = Clk_HOP
+		debug(item)
+		const Rep_his = getSheetItemValue(sheet, Rep_HIS)
+		debug("> Rep_his")
+		debug(Rep_his)
+		debug(sheet.get(Rep_HIS).getClasses())
+		setSheetItemValue(sheet, Val_RESULT, strThing(Rep_his))
+		// each(Rep_his, function(entryData, entryId) {
+			// debug(">> entryData"); debug(entryData)
+			// debug(">> entryId"); debug(entryId)
+			// let entry = sheet.get(Rep_HIS).find(entryId)
+			// debug(">> entry"); debug(entry)
+
+            // if (entryData.attackSt && entryData.attackSt != "0") {
+                // attackSavingThrowLabel = _(Attributes.get(entryData.attackSt).name);
+                // entry.find("attackSavingThrowLabel").text(attackSavingThrowLabel);
+            // } else entry.find("attackSavingThrowRow").hide();
+		// })
+		Object.keys(Rep_his).forEach(function(key_typ, idx_typ) {
+			debug(">> key_typ " + strThing(key_typ))
+			debug(">> idx_typ " + strThing(idx_typ))
+			debug(Rep_his[key_typ])
+			debug(getSheetItemChild(sheet, Rep_HIS, key_typ))
+			// debug(sheet.get(Rep_HIS).value().find(key_typ))
+			// debug(getSheetItemParent(sheet, key_typ))
+		})
+	})
+}
+
+
+const initPreferencesSheet = function(sheet) {
+	debug("initPreferencesSheet")
+
+	onSheetItemClickFct(sheet, "Set_DXVPRF", function() {
+		debugOK()
+		setSheetItemValue(sheet, "Chc_DXVPRF", "both")
+	})
+
+	onSheetItemClickFct(sheet, "Get_DXVPRF", function() {
+		debugOK()
+		setSheetItemValue(sheet, Val_RESULT, getSheetItemValue(sheet, "Chc_DXVPRF"))
+	})
+
+}
+
+
+const initScoreRollBindingSheet = function(sheet) {
+	debug("initScoreRollBindingSheet")
+	
+	if (getSheetItemValue(sheet, "Lbl_SUCFAI") == _(Lbl_ROLSUC_)) {
+		sheet.get("Row_SUCFAI").addClass("text-success")
+	} else {
+		sheet.get("Row_SUCFAI").addClass("text-danger")
+	}
+}

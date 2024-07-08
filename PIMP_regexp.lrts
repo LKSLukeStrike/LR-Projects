@@ -1,0 +1,31 @@
+// functions entire lines
+(^([ \t]*)function[ \t]*(\w*).*$)
+// => add debugFA lines
+\1\n\2\tdebugFA\("\3", arguments\)
+
+
+// onItemClickFct entire lines
+(^([ \t]*)onItemClickFct[ \t]*\((\w*).*$)
+// onItemUpdateFct entire lines
+(^([ \t]*)onItemUpdateFct[ \t]*\((\w*).*$)
+// => add const item lines
+\1\n\2\tconst item = \3
+// => add debugFA onItemClickFct lines
+\1\n\2\tdebugFA\("onItemClickFct_\3"\)
+// => add debugFA onItemUpdateFct lines
+\1\n\2\tdebugFA\("onItemUpdateFct_\3"\)
+
+
+// json DxV
+^([ \t]*)"id": "\w*",\r\n([ \t]*)"name": "(DxV_\w*)",
+// json Dot
+^([ \t]*)"id": "\w*",\r\n([ \t]*)"name": "(Dot_\w*)",
+
+
+// json ids names
+(^[ \t]*"id": ")\w*(",\r\n[ \t]*"name": "(\w*)",)
+// json random ids names
+(^[ \t]*"id": ")[a-z]*(",\r\n[ \t]*"name": "(\w*)",)
+// => set the id to name
+\1\3\2
+
