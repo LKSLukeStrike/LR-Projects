@@ -1,5 +1,5 @@
 //region Classes // due to JS we cannot use Class so ... Css // Cfk are fake classes
-function addElemCfk(elem, cfk) { // multiple Cfk allowed in one string
+function addElemCfk(elem, cfk) { // multiple cfk allowed in one string
 	debugFA("addElemCfk", arguments)
 	if (yesArray(elem)) {return elem.forEach(function(elem) { // recursive
 		addElemCfk(elem, cfk)
@@ -18,7 +18,7 @@ function addElemCfk(elem, cfk) { // multiple Cfk allowed in one string
 	})
 	return cfk
 }
-function remElemCfk(elem, cfk) { // multiple Cfk allowed in one string
+function remElemCfk(elem, cfk) { // multiple cfk allowed in one string
 	debugFA("remElemCfk", arguments)
 	if (yesArray(elem)) {return elem.forEach(function(elem) { // recursive
 		remElemCfk(elem, cfk)
@@ -42,7 +42,7 @@ function remElemCfk(elem, cfk) { // multiple Cfk allowed in one string
 	})
 	return cfk
 }
-function hasElemCfk(elem, cfk) { // multiple Cfk allowed in one string
+function hasElemCfk(elem, cfk) { // multiple cfk allowed in one string
 	debugFA("hasElemCfk", arguments)
 	return hasElemCss(elem, cfk) // check only Cfk, not their Css
 }
