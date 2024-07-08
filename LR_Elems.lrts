@@ -1,0 +1,109 @@
+//region LR_Elems (aka components in LR)
+//region LR_Elems Events
+const Evt_Click  = "click"
+const Evt_Update = "update"
+function onElemEvtFct(elem, evt, fct) {
+	debugFA("onElemEvtFct", arguments)
+	return elem.on(evt, fct)
+}
+function onElemClickFct(elem, fct) {
+	debugFA("onElemClickFct", arguments)
+	return onElemEvtFct(elem, Evt_Click, fct)
+}
+function onElemUpdateFct(elem, fct) {
+	debugFA("onElemUpdateFct", arguments)
+	return onElemEvtFct(elem, Evt_Update, fct)
+}
+function onElemChildEvtFct(elem, child, evt, fct) {
+	debugFA("onElemChildEvtFct", arguments)
+	return elem.on(evt, child, fct)
+}
+function onElemChildClickFct(elem, child, fct) {
+	debugFA("onElemChildClickFct", arguments)
+	return onElemChildEvtFct(elem, child, Evt_Click, fct)
+}
+function onElemChildUpdateFct(elem, child, fct) {
+	debugFA("onElemChildUpdateFct", arguments)
+	return onElemChildEvtFct(elem, child, Evt_Update, fct)
+}
+//endregion
+
+//region LR_Elems Attributes
+function getElemParent(elem) {
+	debugFA("getElemParent", arguments)
+	let result = null
+	try {result = elem.parent()} // skip error when no parent
+	finally {}
+	return result
+}
+function getElemChild(elem, child) {
+	debugFA("getElemChild", arguments)
+	let result = null
+	try {result = elem.find(child)} // skip error when no child
+	finally {}
+	return result
+}
+function getElemSheet(elem) {
+	debugFA("getElemSheet", arguments)
+	let result = null
+	try {result = elem.sheet()} // skip error when no sheet
+	finally {}
+	return result
+}
+function getElemName(elem) {
+	debugFA("getElemName", arguments)
+	let result = null
+	try {result = elem.name()} // skip error when no name
+	finally {}
+	return result
+}
+function getElemId(elem) {
+	debugFA("getElemId", arguments)
+	let result = null
+	try {result = elem.id()} // skip error when no id
+	finally {}
+	return result
+}
+function getElemIndex(elem) {
+	debugFA("getElemIndex", arguments)
+	let result = null
+	try {result = elem.index()} // skip error when no index
+	finally {}
+	return result
+}
+function getElemTypeof(elem) {
+	debugFA("getElemTypeof", arguments)
+	return typeof elem
+}
+function getElemChildren(elem) { // return children ids (get them with find)
+	debugFA("getElemChildren", arguments)
+	const elm_value = getElemValue(elem)
+	if (notElem(elm_value)) {return []} // not an elem so no children
+	return Object.keys(elm_value)
+}
+//endregion
+
+//region LR_Elems Values
+function getElemValue(elem) {
+	debugFA("getElemValue", arguments)
+	const elm_value = elem.value()
+	return Number.isNaN(Number(elm_value)) ? // right type
+		elm_value : Number(elm_value)
+}
+//endregion
+
+//region LR_Elems Css Classes
+const Css_DFlex			  = "d-flex" // add/remove for Displayed on Containers to work
+const Css_WidgetContainer = "widget-container" // identify a Container
+const Css_DNone			  = "d-none"
+const Css_Repeater        = "repeater"
+const Css_RepeaterElement = "repeater-element"
+function getElemCss(elem) {
+	debugFA("getElemCss", arguments)
+	let result = Arr_None
+	try {result = elem.getClasses()} // skip error when no classes
+	finally {}
+	return result
+}
+//endregion
+//endregion

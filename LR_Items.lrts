@@ -1,0 +1,8 @@
+//region LR_Items (aka sheet ids in LR)
+//region LR_Items Elems
+function getSheetItem(sheet, item) { // returns sheet item elem
+	debugFA("getSheetItem", arguments)
+	return sheet.get(item)
+}
+//endregion
+//endregion

@@ -546,13 +546,13 @@ function notZero(value_one) { // if not zero
 	debugFA("notZero", arguments)
 	return ! yesZero(value_one)
 }
-function yesNone(value_one) { // if none
-	debugFA("yesNone", arguments)
+function yesStrNone(value_one) { // if none
+	debugFA("yesStrNone", arguments)
 	return equValue(value_one, Str_None)
 }
-function notNone(value_one) { // if not none
-	debugFA("notNone", arguments)
-	return ! yesNone(value_one)
+function notStrNone(value_one) { // if not none
+	debugFA("notStrNone", arguments)
+	return ! yesStrNone(value_one)
 }
 function lthValue(value_one, value_two) { // if lower than
 	debugFA("lthValue", arguments)

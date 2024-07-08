@@ -2,6 +2,8 @@
 //region LR_Constants Values
 const Int_Zero     = 0
 const Str_None     = ""
+const Arr_None     = []
+const Obj_None     = {}
 const Str_Space    = " "
 const Str_Tab      = "\t"
 const Str_Newline  = "\n"
