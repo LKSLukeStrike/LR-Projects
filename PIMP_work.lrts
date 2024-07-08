@@ -1,35 +1,53 @@
-//region LR_Elems Values
-function getElemValue(elem) {
-	debugFA("getElemValue", arguments)
-	const elm_value = elem.value()
-	return Number.isNaN(Number(elm_value)) ? // right type
-		elm_value : Number(elm_value)
-}
-function setElemValue(elem, elm_value) {
-	debugFA("setElemValue", arguments)
+//region Classes // due to JS we cannot use Class so ... Css // Cfk are fake classes
+function addElemCfk(elem, cfk) { // multiple Cfk allowed in one string
+	debugFA("addElemCfk", arguments)
 	if (yesArray(elem)) {return elem.forEach(function(elem) { // recursive
-		setElemValue(elem, elm_value)
+		addElemCfk(elem, cfk)
 	})} // single elem from here
-	elm_value = hasElemPlussigned(elem) && gthValue(elm_value, Int_Zero) ? // add + ?
-		pfxValue(elm_value, Str_Plus) : elm_value
-	elem.value(elm_value)
-	setElemDotted(elem) // dotted representation if any
-	return elm_value
+	cfk.split(Str_Space).forEach(function(cfk) {
+		let css = Key_CfkCss[cfk]
+		if (Arr_THMCFK.includes(cfk)) { // add the theme if any
+			css = css + Str_Space + getElemValue(sheet, REQ_THMPRF)
+		}
+		addElemCss(elem, css) // /!\ has to be first
+		if (hasElemCfk(elem, Cfk_Dotted10)) { // mimics on related dot
+			if (cfk != Cfk_Undisplayed) { // except for Displayed
+				addElemCss(sheet, val2dotItem(elem), css)
+			}
+		}
+	})
+	return cfk
 }
-function rsaElemValue(elem, value_str, value_rpl) { // replace a string all
-	debugFA("rsaElemValue", arguments)
+function remElemCfk(elem, cfk) { // multiple Cfk allowed in one string
+	debugFA("remElemCfk", arguments)
 	if (yesArray(elem)) {return elem.forEach(function(elem) { // recursive
-		rsaElemValue(elem, value_str, value_rpl)
+		remElemCfk(elem, cfk)
 	})} // single elem from here
-	const elm_value = rsaValue(getElemValue(elem), value_str, value_rpl)
-	return setElemValue(elem, elm_value)
+	cfk.split(Str_Space).forEach(function(cfk) {
+		let css = Key_CfkCss[cfk]
+		if (Arr_THMCFK.includes(cfk)) { // add the theme if any
+			css = css + Str_Space + getElemValue(sheet, REQ_THMPRF)
+		}
+		if (hasElemCfk(elem, Cfk_Dotted10)) { // mimics on related dot
+			if (cfk != Cfk_Undisplayed) { // except for Displayed
+				remElemCss(sheet, val2dotItem(elem), css)
+			}
+		}
+		remElemCss(elem, css) // /!\ has to be last
+	})
+	Object.keys(Key_CfkCss).forEach(function(cfk) { // restore any "broken" Cfk
+		if (hasElemCfk(elem, cfk)) {
+			addElemCfk(elem, cfk)
+		}
+	})
+	return cfk
 }
-function hasElemValue(elem, elm_value) {
-	debugFA("hasElemValue", arguments)
-	return equValue(getElemValue(elem), elm_value)
+function hasElemCfk(elem, cfk) { // multiple Cfk allowed in one string
+	debugFA("hasElemCfk", arguments)
+	return hasElemCss(elem, cfk) // check only Cfk, not their Css
 }
-function yisElemValue(elem, value_str) { // if includes a string
-	debugFA("yisElemValue", arguments)
-	return yisValue(getElemValue(elem), value_str)
+function getElemCss(elem) {
+	debugFA("getElemCss", arguments)
+	return elem.getClasses()
 }
 //endregion

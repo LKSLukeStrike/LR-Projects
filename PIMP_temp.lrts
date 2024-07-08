@@ -1,0 +1,23 @@
+const Cfk_Effort      = "Cfk_Effort"		// has an effort related item
+const Cfk_Dotted10    = "Cfk_Dotted10"		// has a dotted10 value representation
+const Cfk_Plussigned  = "Cfk_Plussigned"	// allows to show "+" for positive values
+const Cfk_Undisplayed = "Cfk_Undisplayed"	// allows to show/hide items
+const Cfk_Clickable   = "Cfk_Clickable"		// allows to react to onclick
+const Cfk_Modifiable  = "Cfk_Modifiable"	// allows only Dec, Inc
+const Cfk_Selected    = "Cfk_Selected"		// allows only Rej, Inj
+const Cfk_Fakeupdated = "Cfk_Fakeupdated"	// avoid computations propagation
+const Key_CfkCss      = { // relation between Cfk and Css /!\ space to separate
+	Cfk_Effort        : Cfk_Effort      ,
+	Cfk_Dotted10      : Cfk_Dotted10    ,
+	Cfk_Plussigned    : Cfk_Plussigned  ,
+	Cfk_Undisplayed   : Cfk_Undisplayed + Str_Space + Css_DNone,
+	Cfk_Clickable     : Cfk_Clickable   + Str_Space + Css_Clickable,
+	Cfk_Modifiable    : Cfk_Modifiable  ,
+	Cfk_Selected      : Cfk_Selected    + Str_Space + Css_BgSecondary,
+	Cfk_Fakeupdated   : Cfk_Fakeupdated ,
+}
+const Arr_THMCFK      = [ // Cfk that support theme
+	Cfk_Clickable,
+	Cfk_Modifiable,
+	Cfk_Selected,
+]	

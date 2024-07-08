@@ -120,11 +120,58 @@ function yisElemValue(elem, value_str) { // if includes a string
 //endregion
 
 //region LR_Elems Css Classes
-const Css_DFlex			  = "d-flex" // add/remove for Displayed on Containers to work
-const Css_WidgetContainer = "widget-container" // identify a Container
+const Css_DFlex			  = "d-flex" // add/remove for displayed on containers to work
+const Css_WidgetContainer = "widget-container" // identify a container
 const Css_DNone			  = "d-none"
+const Css_Clickable		  = "clickable"
+const Css_BgSecondary     = "bg-secondary"
 const Css_Repeater        = "repeater"
 const Css_RepeaterElement = "repeater-element"
+function addElemCss(elem, css) { // multiple css allowed in one string
+	debugFA("addElemCss", arguments)
+	if (yesArray(elem)) {return elem.forEach(function(elem) { // recursive
+		addElemCss(elem, css)
+	})} // single elem from here
+	css.split(Str_Space).forEach(function(css) {
+		try { // skip error when no css
+			const yes_dflex = hasElemCss(elem, Css_WidgetContainer)
+			if (equValue(css, Css_DNone) && yes_dflex) {
+				elem.removeClass(Css_DFlex)
+			}
+			elem.addClass(css)
+		}
+		finally {}
+	})
+	return css
+}
+function remElemCss(elem, css) { // multiple css allowed in one string
+	debugFA("remElemCss", arguments)
+	if (yesArray(elem)) {return elem.forEach(function(elem) { // recursive
+		remElemCss(elem, css)
+	})} // single elem from here
+	css.split(Str_Space).forEach(function(css) {
+		try { // skip error when no css
+			const yes_dflex = hasElemCss(elem, Css_WidgetContainer)
+			if (equValue(css, Css_DNone) && yes_dflex) {
+				elem.addClass(Css_DFlex)
+			}
+			elem.removeClass(css)
+		}
+		finally {}
+	})
+	return css
+}
+function hasElemCss(elem, css) { // multiple css allowed in one string
+	debugFA("hasElemCss", arguments)
+	let result = true
+	css.split(Str_Space).forEach(function(css) { // every css has to be present
+		try { // skip error when no css
+			if (! elem.hasClass(css)) {result = false}
+		}
+		catch {result = false}
+	})
+	return result
+}
 function getElemCss(elem) {
 	debugFA("getElemCss", arguments)
 	let result = Arr_None
@@ -135,6 +182,29 @@ function getElemCss(elem) {
 //endregion
 
 //region LR_Elems Cfk Classes
+const Cfk_Effort      = "Cfk_Effort"		// has an effort related item
+const Cfk_Dotted10    = "Cfk_Dotted10"		// has a dotted10 value representation
+const Cfk_Plussigned  = "Cfk_Plussigned"	// allows to show "+" for positive values
+const Cfk_Undisplayed = "Cfk_Undisplayed"	// allows to show/hide items
+const Cfk_Clickable   = "Cfk_Clickable"		// allows to react to onclick
+const Cfk_Modifiable  = "Cfk_Modifiable"	// allows only Dec, Inc
+const Cfk_Selected    = "Cfk_Selected"		// allows only Rej, Inj
+const Cfk_Fakeupdated = "Cfk_Fakeupdated"	// avoid computations propagation
+const Key_CfkCss      = { // relation between Cfk and Css /!\ space to separate
+	Cfk_Effort        : Cfk_Effort      ,
+	Cfk_Dotted10      : Cfk_Dotted10    ,
+	Cfk_Plussigned    : Cfk_Plussigned  ,
+	Cfk_Undisplayed   : Cfk_Undisplayed + Str_Space + Css_DNone,
+	Cfk_Clickable     : Cfk_Clickable   + Str_Space + Css_Clickable,
+	Cfk_Modifiable    : Cfk_Modifiable  ,
+	Cfk_Selected      : Cfk_Selected    + Str_Space + Css_BgSecondary,
+	Cfk_Fakeupdated   : Cfk_Fakeupdated ,
+}
+const Arr_THMCFK      = [ // Cfk that support theme
+	Cfk_Clickable,
+	Cfk_Modifiable,
+	Cfk_Selected,
+]	
 //endregion
 
 //region LR_Elems Repeaters
