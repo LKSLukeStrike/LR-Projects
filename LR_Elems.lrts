@@ -127,15 +127,29 @@ const Css_Clickable		  = "clickable"
 const Css_BgSecondary     = "bg-secondary"
 const Css_Repeater        = "repeater"
 const Css_RepeaterElement = "repeater-element"
+function yesDFlexElem(elem) { // if require to add/rem dflex
+	debugFA("yesDFlexElem", arguments)
+	let result = hasElemCss(elem, Css_WidgetContainer)
+	return result
+}
+function yesDFlexCss(css) { // if require to add/rem dflex
+	debugFA("yesDFlexCss", arguments)
+	let result = equValue(css, Css_DNone)
+	return result
+}
+function yesDFlex(elem, css) { // if require to add/rem dflex
+	debugFA("yesDFlex", arguments)
+	let result = yesDFlexElem(elem) && yesDFlexCss(css)
+	return result
+}
 function addElemCss(elem, css) { // multiple css allowed in one string
 	debugFA("addElemCss", arguments)
 	if (yesArray(elem)) {return elem.forEach(function(elem) { // recursive
 		addElemCss(elem, css)
 	})} // single elem from here
 	css.split(Str_Space).forEach(function(css) {
-		try { // skip error when no css
-			const yes_dflex = hasElemCss(elem, Css_WidgetContainer)
-			if (equValue(css, Css_DNone) && yes_dflex) {
+		try { // skip error when no css classes
+			if (yesDFlex(elem, css)) {
 				elem.removeClass(Css_DFlex)
 			}
 			elem.addClass(css)
@@ -150,9 +164,8 @@ function remElemCss(elem, css) { // multiple css allowed in one string
 		remElemCss(elem, css)
 	})} // single elem from here
 	css.split(Str_Space).forEach(function(css) {
-		try { // skip error when no css
-			const yes_dflex = hasElemCss(elem, Css_WidgetContainer)
-			if (equValue(css, Css_DNone) && yes_dflex) {
+		try { // skip error when no css classes
+			if (yesDFlex(elem, css)) {
 				elem.addClass(Css_DFlex)
 			}
 			elem.removeClass(css)
@@ -165,7 +178,7 @@ function hasElemCss(elem, css) { // multiple css allowed in one string
 	debugFA("hasElemCss", arguments)
 	let result = true
 	css.split(Str_Space).forEach(function(css) { // every css has to be present
-		try { // skip error when no css
+		try { // skip error when no css classes
 			if (! elem.hasClass(css)) {result = false}
 		}
 		catch {result = false}
@@ -175,7 +188,7 @@ function hasElemCss(elem, css) { // multiple css allowed in one string
 function getElemCss(elem) {
 	debugFA("getElemCss", arguments)
 	let result = Arr_None
-	try {result = elem.getClasses()} // skip error when no classes
+	try {result = elem.getClasses()} // skip error when no css classes
 	finally {}
 	return result
 }
@@ -205,6 +218,23 @@ const Arr_THMCFK      = [ // cfk that support theme
 	Cfk_Modifiable,
 	Cfk_Selected,
 ]	
+function yesCfkTheme(cfk) { // if cfk support theme
+	debugFA("yesCfkTheme", arguments)
+	return yaiValue(Arr_THMCFK, cfk)
+}
+function getElemCfkCss(elem, cfk) { // full corresponding css
+	debugFA("getElemCfkCss", arguments)
+	let result = Key_CfkCss[cfk]
+	if (yesCfkTheme(cfk)) { // add the elem sheet theme if any
+		try { // skip error if any
+			const elm_sheet = getElemSheet(elem)
+			const prf_theme = getSheetThemePrf(elm_sheet)
+			result = result + Str_Space + prf_theme
+		}
+		finally {}
+	}
+	return result
+}
 //endregion
 
 //region LR_Elems Repeaters

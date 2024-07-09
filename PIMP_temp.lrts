@@ -1,44 +1,15 @@
-//region LR_Themes Sheet Themes
-function getSheetThemeOld(sheet) { // get previous sheet theme
-	debugFA("getSheetThemeOld", arguments)
-	let result = Dft_THMDFT
-	try { // skip error when no sheet item
-		result = getElemValue(getSheetItem(sheet, REQ_THMOLD))
-	}
-	finally {}
-	result = yawTheme(result) ? // force to default allowed theme if any
-		result : Dft_THMDFT
+function yesDFlexElem(elem) { // if require to add/rem dflex
+	debugFA("yesDFlexElem", arguments)
+	let result = hasElemCss(elem, Css_WidgetContainer)
 	return result
 }
-function setSheetThemeOld(sheet, css_theme) { // set previous sheet theme
-	debugFA("setSheetThemeOld", arguments)
-	css_theme = yawTheme(css_theme) ? // force to default allowed theme if any
-		css_theme : Dft_THMDFT
-	try { // skip error when no sheet item
-		setElemValue(getSheetItem(sheet, REQ_THMOLD), css_theme)
-	}
-	finally {}
-	return css_theme
-}
-function getSheetThemePrf(sheet) { // get choosen sheet theme
-	debugFA("getSheetThemePrf", arguments)
-	let result = Dft_THMDFT
-	try { // skip error when no sheet item
-		result = getElemValue(getSheetItem(sheet, REQ_THMPRF))
-	}
-	finally {}
-	result = yawTheme(result) ? // force to default allowed theme if any
-		result : Dft_THMDFT
+function yesDFlexCss(css) { // if require to add/rem dflex
+	debugFA("yesDFlexCss", arguments)
+	let result = equValue(css, Css_DNone)
 	return result
 }
-function setSheetThemePrf(sheet, css_theme) { // set choosen sheet theme
-	debugFA("setSheetThemePrf", arguments)
-	css_theme = yawTheme(css_theme) ? // force to default allowed theme if any
-		css_theme : Dft_THMDFT
-	try { // skip error when no sheet item
-		setElemValue(getSheetItem(sheet, REQ_THMPRF), css_theme)
-	}
-	finally {}
-	return css_theme
+function yesDFlex(elem, css) { // if require to add/rem dflex
+	debugFA("yesDFlex", arguments)
+	let result = yesDFlexElem(elem) && yesDFlexCss(css)
+	return result
 }
-//endregion
