@@ -115,7 +115,7 @@ function hasSheetItemValue(sheet, item, itm_value) {
 }
 function hasSheetItemString(sheet, item, value_str) { // includes a string
 	debugFA("hasSheetItemString", arguments)
-	return yisValue(getSheetItemValue(sheet, item), value_str)
+	return ysiValue(getSheetItemValue(sheet, item), value_str)
 }
 //endregion
 
@@ -570,12 +570,12 @@ function geqValue(value_one, value_two) { // if greater or equal
 	debugFA("geqValue", arguments)
 	return value_one >= value_two
 }
-function yisValue(value_one, value_str) { // if includes a string
-	debugFA("yisValue", arguments)
+function ysiValue(value_one, value_str) { // if includes a string
+	debugFA("ysiValue", arguments)
 	return value_one.includes(value_str)
 }
-function nisValue(value_one, value_str) { // if not includes a string
-	debugFA("nisValue", arguments)
+function nsiValue(value_one, value_str) { // if not includes a string
+	debugFA("nsiValue", arguments)
 	return ! value_one.includes(value_str)
 }
 function rsoValue(value_one, value_str, value_rpl) { // replace once by a string

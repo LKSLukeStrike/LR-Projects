@@ -7,6 +7,7 @@ function rndValue(value_min, value_max) { // random value (integer, inclusive)
 	return Math.floor(Math.random() * (value_max - value_min + 1) + value_min)
 }
 //endregion
+
 //region LR_Operators Min/Max
 function minValue(value_one, value_two) { // minimum value
 	debugFA("minValue", arguments)
@@ -19,6 +20,7 @@ function maxValue(value_one, value_two) { // maximum value
 		value_one : value_two
 }
 //endregion
+
 //region LR_Operators Mix
 function mxlValue(value_one, value_two) { // minimum mix value
 	debugFA("mxlValue", arguments)
@@ -29,6 +31,7 @@ function mxhValue(value_one, value_two) { // maximum mix value
 	return Math.ceil((value_one + value_two) / 2)
 }
 //endregion
+
 //region LR_Operators Compare
 function equValue(value_one, value_two) { // if equal
 	debugFA("equValue", arguments)
@@ -87,16 +90,26 @@ function geqValue(value_one, value_two) { // if greater or equal
 	return value_one >= value_two
 }
 //endregion
+
 //region LR_Operators Include
-function yisValue(value_one, value_str) { // if includes a string
-	debugFA("yisValue", arguments)
-	return value_one.includes(value_str)
+function ysiValue(value_one, value_two) { // if string include
+	debugFA("ysiValue", arguments)
+	return value_one.includes(value_two)
 }
-function nisValue(value_one, value_str) { // if not includes a string
-	debugFA("nisValue", arguments)
-	return ! yisValue(value_one, value_str)
+function nsiValue(value_one, value_two) { // if not string include
+	debugFA("nsiValue", arguments)
+	return ! ysiValue(value_one, value_two)
+}
+function yaiValue(value_one, value_two) { // if array include
+	debugFA("yaiValue", arguments)
+	return value_one.includes(value_two)
+}
+function naiValue(value_one, value_two) { // if not array include
+	debugFA("naiValue", arguments)
+	return ! yaiValue(value_one, value_two)
 }
 //endregion
+
 //region LR_Operators Replace
 function rsoValue(value_one, value_str, value_rpl) { // replace a string once
 	debugFA("rsoValue", arguments)
@@ -107,6 +120,7 @@ function rsaValue(value_one, value_str, value_rpl) { // replace a string all
 	return value_one.replaceAll(value_str, value_rpl)
 }
 //endregion
+
 //region LR_Operators Prefix/Suffix
 function pfxValue(value_one, value_str) { // prefix with a string
 	debugFA("pfxValue", arguments)
@@ -117,6 +131,7 @@ function sfxValue(value_one, value_str) { // suffix with a string
 	return value_one + value_str
 }
 //endregion
+
 //region LR_Operators Enclose
 function sqmValue(value_one) { // single quotes
 	debugFA("sqmValue", arguments)
@@ -127,6 +142,7 @@ function dqmValue(value_one) { // double quotes
 	return Str_DQMark + value_one + Str_DQMark
 }
 //endregion
+
 //region LR_Operators Cases
 const Yes_FromLC        = true
 const Not_FromLC        = false
@@ -160,6 +176,7 @@ function cpaValue(value_one, _yes_fromlc) { // capitalize all
 	})
 }
 //endregion
+
 //region LR_Operators Toggle
 function tynValue(value_one) { // toggle yes/not (1/0)
 	debugFA("tynValue", arguments)
@@ -167,6 +184,7 @@ function tynValue(value_one) { // toggle yes/not (1/0)
 		0 : 1
 }
 //endregion
+
 //region LR_Operators Stringify
 function strThing(thing, _yes_indent, _str_indentcur, _str_indentuse) { // thing as a string
 	debugFA("strThing", arguments)
@@ -223,6 +241,7 @@ function strThing(thing, _yes_indent, _str_indentcur, _str_indentuse) { // thing
 	return result
 }
 //endregion
+
 //region LR_Operators Convert
 function val2dotItem(item) { // related dot item
 	debugFA("val2dotItem", arguments)

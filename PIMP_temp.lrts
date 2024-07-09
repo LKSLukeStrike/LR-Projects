@@ -1,23 +1,44 @@
-const Cfk_Effort      = "Cfk_Effort"		// has an effort related item
-const Cfk_Dotted10    = "Cfk_Dotted10"		// has a dotted10 value representation
-const Cfk_Plussigned  = "Cfk_Plussigned"	// allows to show "+" for positive values
-const Cfk_Undisplayed = "Cfk_Undisplayed"	// allows to show/hide items
-const Cfk_Clickable   = "Cfk_Clickable"		// allows to react to onclick
-const Cfk_Modifiable  = "Cfk_Modifiable"	// allows only Dec, Inc
-const Cfk_Selected    = "Cfk_Selected"		// allows only Rej, Inj
-const Cfk_Fakeupdated = "Cfk_Fakeupdated"	// avoid computations propagation
-const Key_CfkCss      = { // relation between Cfk and Css /!\ space to separate
-	Cfk_Effort        : Cfk_Effort      ,
-	Cfk_Dotted10      : Cfk_Dotted10    ,
-	Cfk_Plussigned    : Cfk_Plussigned  ,
-	Cfk_Undisplayed   : Cfk_Undisplayed + Str_Space + Css_DNone,
-	Cfk_Clickable     : Cfk_Clickable   + Str_Space + Css_Clickable,
-	Cfk_Modifiable    : Cfk_Modifiable  ,
-	Cfk_Selected      : Cfk_Selected    + Str_Space + Css_BgSecondary,
-	Cfk_Fakeupdated   : Cfk_Fakeupdated ,
+//region LR_Themes Sheet Themes
+function getSheetThemeOld(sheet) { // get previous sheet theme
+	debugFA("getSheetThemeOld", arguments)
+	let result = Dft_THMDFT
+	try { // skip error when no sheet item
+		result = getElemValue(getSheetItem(sheet, REQ_THMOLD))
+	}
+	finally {}
+	result = yawTheme(result) ? // force to default allowed theme if any
+		result : Dft_THMDFT
+	return result
 }
-const Arr_THMCFK      = [ // Cfk that support theme
-	Cfk_Clickable,
-	Cfk_Modifiable,
-	Cfk_Selected,
-]	
+function setSheetThemeOld(sheet, css_theme) { // set previous sheet theme
+	debugFA("setSheetThemeOld", arguments)
+	css_theme = yawTheme(css_theme) ? // force to default allowed theme if any
+		css_theme : Dft_THMDFT
+	try { // skip error when no sheet item
+		setElemValue(getSheetItem(sheet, REQ_THMOLD), css_theme)
+	}
+	finally {}
+	return css_theme
+}
+function getSheetThemePrf(sheet) { // get choosen sheet theme
+	debugFA("getSheetThemePrf", arguments)
+	let result = Dft_THMDFT
+	try { // skip error when no sheet item
+		result = getElemValue(getSheetItem(sheet, REQ_THMPRF))
+	}
+	finally {}
+	result = yawTheme(result) ? // force to default allowed theme if any
+		result : Dft_THMDFT
+	return result
+}
+function setSheetThemePrf(sheet, css_theme) { // set choosen sheet theme
+	debugFA("setSheetThemePrf", arguments)
+	css_theme = yawTheme(css_theme) ? // force to default allowed theme if any
+		css_theme : Dft_THMDFT
+	try { // skip error when no sheet item
+		setElemValue(getSheetItem(sheet, REQ_THMPRF), css_theme)
+	}
+	finally {}
+	return css_theme
+}
+//endregion

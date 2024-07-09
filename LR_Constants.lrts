@@ -46,8 +46,8 @@ const Arr_DXVALW = [ // DxV allowed display modes
 //endregion
 
 //region LR_Constants Sheet Themes /!\ some items REQuired on sheets for theme to work on it
-const REQ_THMOLD		= "REQ_THMOLD"		// previous theme (REQuired)
-const REQ_THMPRF		= "REQ_THMPRF"		// choosen theme  (REQuired)
+const REQ_THMOLD		= "REQ_THMOLD"		// previous theme item (REQuired)
+const REQ_THMPRF		= "REQ_THMPRF"		// choosen theme item  (REQuired)
 const Css_TextPrimary	= "text-primary"
 const Css_TextSecondary	= "text-secondary"
 const Css_TextSuccess	= "text-success"
@@ -59,7 +59,7 @@ const Css_TextDark		= "text-dark"
 const Css_TextMuted		= "text-muted"
 const Css_TextWhite		= "text-white"
 const Dft_THMDFT		= Css_TextWarning
-const Arr_THMALW		= [ // Themes allowed
+const Arr_THMALW		= [ // themes allowed
 	Css_TextPrimary,
 	Css_TextSecondary,
 	Css_TextSuccess,

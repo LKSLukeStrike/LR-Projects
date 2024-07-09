@@ -113,9 +113,9 @@ function hasElemValue(elem, elm_value) {
 	debugFA("hasElemValue", arguments)
 	return equValue(getElemValue(elem), elm_value)
 }
-function yisElemValue(elem, value_str) { // if includes a string
-	debugFA("yisElemValue", arguments)
-	return yisValue(getElemValue(elem), value_str)
+function ysiElemValue(elem, value_str) { // if includes a string
+	debugFA("ysiElemValue", arguments)
+	return ysiValue(getElemValue(elem), value_str)
 }
 //endregion
 
@@ -187,10 +187,10 @@ const Cfk_Dotted10    = "Cfk_Dotted10"		// has a dotted10 value representation
 const Cfk_Plussigned  = "Cfk_Plussigned"	// allows to show "+" for positive values
 const Cfk_Undisplayed = "Cfk_Undisplayed"	// allows to show/hide items
 const Cfk_Clickable   = "Cfk_Clickable"		// allows to react to onclick
-const Cfk_Modifiable  = "Cfk_Modifiable"	// allows only Dec, Inc
-const Cfk_Selected    = "Cfk_Selected"		// allows only Rej, Inj
+const Cfk_Modifiable  = "Cfk_Modifiable"	// allows only dec, inc
+const Cfk_Selected    = "Cfk_Selected"		// allows only rej, inj
 const Cfk_Fakeupdated = "Cfk_Fakeupdated"	// avoid computations propagation
-const Key_CfkCss      = { // relation between Cfk and Css /!\ space to separate
+const Key_CfkCss      = { // relation between cfk and css /!\ space to separate
 	Cfk_Effort        : Cfk_Effort      ,
 	Cfk_Dotted10      : Cfk_Dotted10    ,
 	Cfk_Plussigned    : Cfk_Plussigned  ,
@@ -200,7 +200,7 @@ const Key_CfkCss      = { // relation between Cfk and Css /!\ space to separate
 	Cfk_Selected      : Cfk_Selected    + Str_Space + Css_BgSecondary,
 	Cfk_Fakeupdated   : Cfk_Fakeupdated ,
 }
-const Arr_THMCFK      = [ // Cfk that support theme
+const Arr_THMCFK      = [ // cfk that support theme
 	Cfk_Clickable,
 	Cfk_Modifiable,
 	Cfk_Selected,
