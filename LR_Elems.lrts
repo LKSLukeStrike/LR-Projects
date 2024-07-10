@@ -32,43 +32,53 @@ function onElemChildUpdateFct(elem, child, fct) {
 function getElemParent(elem) {
 	debugFA("getElemParent", arguments)
 	let result = null
-	try {result = elem.parent()} // skip error when no parent
-	finally {}
+	try { // skip error when no parent
+		result = elem.parent()
+	} catch {}
 	return result
 }
 function getElemChild(elem, child) {
 	debugFA("getElemChild", arguments)
 	let result = null
-	try {result = elem.find(child)} // skip error when no child
-	finally {}
+	try { // skip error when no child
+		result = elem.find(child)
+	} catch {}
 	return result
 }
 function getElemSheet(elem) {
 	debugFA("getElemSheet", arguments)
 	let result = null
-	try {result = elem.sheet()} // skip error when no sheet
-	finally {}
+	try { // skip error when no sheet
+		result = elem.sheet()
+	} catch {}
 	return result
 }
 function getElemName(elem) {
 	debugFA("getElemName", arguments)
 	let result = null
-	try {result = elem.name()} // skip error when no name
-	finally {}
+	try { // skip error when no name
+		result = elem.name()
+	} catch {}
 	return result
 }
 function getElemId(elem) {
 	debugFA("getElemId", arguments)
 	let result = null
-	try {result = elem.id()} // skip error when no id
-	finally {}
+	try { // skip error when no id
+		result = elem.id()
+	} catch {}
 	return result
+}
+function getElemItem(elem) { // item is the id (aliases)
+	debugFA("getElemItem", arguments)
+	return getElemId(elem)
 }
 function getElemIndex(elem) {
 	debugFA("getElemIndex", arguments)
 	let result = null
-	try {result = elem.index()} // skip error when no index
-	finally {}
+	try { // skip error when no index
+		result = elem.index()
+	} catch {}
 	return result
 }
 function getElemTypeof(elem) {
@@ -78,7 +88,7 @@ function getElemTypeof(elem) {
 function getElemChildren(elem) { // return children ids (get them with find)
 	debugFA("getElemChildren", arguments)
 	const elm_value = getElemValue(elem)
-	if (notElem(elm_value)) {return []} // not an elem so no children
+	if (notElem(elm_value)) {return Arr_None} // not an elem so no children
 	return Object.keys(elm_value)
 }
 //endregion
@@ -153,8 +163,7 @@ function addElemCss(elem, css) { // multiple css allowed in one string
 				elem.removeClass(Css_DFlex)
 			}
 			elem.addClass(css)
-		}
-		finally {}
+		} catch {}
 	})
 	return css
 }
@@ -169,8 +178,7 @@ function remElemCss(elem, css) { // multiple css allowed in one string
 				elem.addClass(Css_DFlex)
 			}
 			elem.removeClass(css)
-		}
-		finally {}
+		} catch {}
 	})
 	return css
 }
@@ -180,16 +188,18 @@ function hasElemCss(elem, css) { // multiple css allowed in one string
 	css.split(Str_Space).forEach(function(css) { // every css has to be present
 		try { // skip error when no css classes
 			if (! elem.hasClass(css)) {result = false}
+		} catch {
+			result = false
 		}
-		catch {result = false}
 	})
 	return result
 }
 function getElemCss(elem) {
 	debugFA("getElemCss", arguments)
 	let result = Arr_None
-	try {result = elem.getClasses()} // skip error when no css classes
-	finally {}
+	try { // skip error when no css classes
+		result = elem.getClasses()
+	} catch {}
 	return result
 }
 //endregion
@@ -230,8 +240,7 @@ function getElemCfkCss(elem, cfk) { // full corresponding css
 			const elm_sheet = getElemSheet(elem)
 			const prf_theme = getSheetThemePrf(elm_sheet)
 			result = result + Str_Space + prf_theme
-		}
-		finally {}
+		} catch {}
 	}
 	return result
 }

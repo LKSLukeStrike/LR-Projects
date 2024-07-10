@@ -1,15 +1,32 @@
-
-	//region Dotted10
-	function addItemDotted10(item) {
-		debugFA("addItemDotted10", arguments)
-		return addSheetItemDotted10(sheet, item)
-	}
-	function remItemDotted10(item) {
-		debugFA("remItemDotted10", arguments)
-		return remSheetItemDotted10(sheet, item)
-	}
-	function hasItemDotted10(item) {
-		debugFA("hasItemDotted10", arguments)
-		return hasSheetItemDotted10(sheet, item)
-	}	
-	//endregion
+//region LR_Elems Related
+function one2twoElem(elem, prefix_one, prefix_two) { // one related two elem
+	debugFA("one2twoElem", arguments)
+	try { // skip error when no related elem
+		const elm_sheet = getElemSheet(elem)
+		const elm_item = getElemItem(elem)
+		const rel_item = rsoValue(elm_item, prefix_one, prefix_two)
+		elem = getSheetItem(elm_sheet, rel_item)
+	} catch {}
+	return elem
+}
+function val2dotElem(elem) { // val related dot elem
+	debugFA("val2dotElem", arguments)
+	return one2twoElem(elem, Str_PFXVAL, Str_PFXDOT)
+}
+function val2effElem(elem) { // val related eff elem
+	debugFA("val2effElem", arguments)
+	return one2twoElem(elem, Str_PFXVAL, Str_PFXEFF)
+}
+function val2dxvElem(elem) { // val related dxv elem
+	debugFA("val2dxvElem", arguments)
+	return one2twoElem(elem, Str_PFXVAL, Str_PFXDVX)
+}
+function val2chkElem(elem) { // val related chk elem
+	debugFA("val2chkElem", arguments)
+	return one2twoElem(elem, Str_PFXVAL, Str_PFXCHK)
+}
+function chk2valElem(elem) { // chk related val elem
+	debugFA("chk2valElem", arguments)
+	return one2twoElem(elem, Str_PFXCHK, Str_PFXVAL)
+}
+//endregion

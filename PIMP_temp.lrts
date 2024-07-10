@@ -1,15 +1,33 @@
-function yesDFlexElem(elem) { // if require to add/rem dflex
-	debugFA("yesDFlexElem", arguments)
-	let result = hasElemCss(elem, Css_WidgetContainer)
-	return result
+//region LR_Elems Dotted Values
+const Str_Dotempty  = ":ga_circle:"
+const Str_Dotplain  = ":ga_plain-circle:"
+const Str_Dotinject = ":arrow-alt-circle-down:"
+const Arr_Dotter10  = ["01", "02", "03", "04", "05", "06", "07", "08", "09", "10",]
+function setElemDotted(elem) { // adjust the dotted representation
+	debugFA("setElemDotted", arguments)
+	setElemDotted10(elem) // try this one
 }
-function yesDFlexCss(css) { // if require to add/rem dflex
-	debugFA("yesDFlexCss", arguments)
-	let result = equValue(css, Css_DNone)
-	return result
+function setElemDotted10(elem) { // adjust the dotted10 representation
+	debugFA("setElemDotted10", arguments)
+	if (yesArray(elem)) {return elem.forEach(function(elem) { // recursive
+		setElemDotted10(elem)
+	})} // single elem from here
+	if (! hasElemDotted10(elem)) {return} // no dotted representation
+	const elm_value = getElemValue(elem)
+	const dot_elem  = val2dotElem(elem)
+	const eff_elem  = val2effElem(elem)
+	const eff_value = hasElemEffort(elem) ? // use effort representation if any
+		getElemValue(sheet, eff_elem) : Int_Zero
+	Arr_Dotter10.forEach(function(dot_value) {
+		const dot_elemnn = sfxValue(dot_elem, dot_value)
+		if (gthValue(Number(dot_value), elm_value)) {
+			sheet.get(dot_elemnn).value(Str_Dotempty)
+		} else if (gthValue(Number(dot_value), elm_value - eff_value)) {
+			sheet.get(dot_elemnn).value(Str_Dotinject)
+		} else {
+			sheet.get(dot_elemnn).value(Str_Dotplain)
+		}
+	})
+	return elm_value
 }
-function yesDFlex(elem, css) { // if require to add/rem dflex
-	debugFA("yesDFlex", arguments)
-	let result = yesDFlexElem(elem) && yesDFlexCss(css)
-	return result
-}
+//endregion

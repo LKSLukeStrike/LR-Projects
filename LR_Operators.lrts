@@ -242,24 +242,24 @@ function strThing(thing, _yes_indent, _str_indentcur, _str_indentuse) { // thing
 }
 //endregion
 
-//region LR_Operators Convert
-function val2dotItem(item) { // related dot item
+//region LR_Operators Related
+function val2dotItem(item) { // val related dot item
 	debugFA("val2dotItem", arguments)
 	return rsoValue(item, Str_PFXVAL, Str_PFXDOT)
 }
-function val2effItem(item) { // related eff item
+function val2effItem(item) { // val related eff item
 	debugFA("val2effItem", arguments)
 	return rsoValue(item, Str_PFXVAL, Str_PFXEFF)
 }
-function val2dxvItem(item) { // related dxv item
+function val2dxvItem(item) { // val related dxv item
 	debugFA("val2dxvItem", arguments)
 	return rsoValue(item, Str_PFXVAL, Str_PFXDXV)
 }
-function val2chkItem(item) { // related chk item
+function val2chkItem(item) { // val related chk item
 	debugFA("val2chkItem", arguments)
 	return rsoValue(item, Str_PFXVAL, Str_PFXCHK)
 }
-function chk2valItem(item) { // related val item
+function chk2valItem(item) { // chk related val item
 	debugFA("chk2valItem", arguments)
 	return rsoValue(item, Str_PFXCHK, Str_PFXVAL)
 }
