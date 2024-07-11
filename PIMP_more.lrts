@@ -1,32 +1,54 @@
-//region LR_Elems Related
-function one2twoElem(elem, prefix_one, prefix_two) { // one related two elem
-	debugFA("one2twoElem", arguments)
-	try { // skip error when no related elem
-		const elm_sheet = getElemSheet(elem)
-		const elm_item = getElemItem(elem)
-		const rel_item = rsoValue(elm_item, prefix_one, prefix_two)
-		elem = getSheetItem(elm_sheet, rel_item)
-	} catch {}
-	return elem
+//region LR_Elems Locked
+const Str_Locked   = ":lock:"
+const Str_Unlocked = ":lock-open:"
+function setElemLocked(elem) {
+	debugFA("setElemLocked", arguments)
+	return setElemValue(elem, Str_Locked)
 }
-function val2dotElem(elem) { // val related dot elem
-	debugFA("val2dotElem", arguments)
-	return one2twoElem(elem, Str_PFXVAL, Str_PFXDOT)
+function setElemUnlocked(elem) {
+	debugFA("setElemUnlocked", arguments)
+	return setElemValue(elem, Str_Unlocked)
 }
-function val2effElem(elem) { // val related eff elem
-	debugFA("val2effElem", arguments)
-	return one2twoElem(elem, Str_PFXVAL, Str_PFXEFF)
+function togElemLocked(elem) {
+	debugFA("togElemLocked", arguments)
+	return hasElemLocked(elem) ?
+		setElemUnlocked(elem) : setElemLocked(elem)
 }
-function val2dxvElem(elem) { // val related dxv elem
-	debugFA("val2dxvElem", arguments)
-	return one2twoElem(elem, Str_PFXVAL, Str_PFXDVX)
-}
-function val2chkElem(elem) { // val related chk elem
-	debugFA("val2chkElem", arguments)
-	return one2twoElem(elem, Str_PFXVAL, Str_PFXCHK)
-}
-function chk2valElem(elem) { // chk related val elem
-	debugFA("chk2valElem", arguments)
-	return one2twoElem(elem, Str_PFXCHK, Str_PFXVAL)
+function hasElemLocked(elem) {
+	debugFA("hasElemLocked", arguments)
+	return hasElemValue(elem, Str_Locked)
 }
 //endregion
+
+//region LR_Elems Folded
+const Str_Folded   = ":sort-up:"
+const Str_Unfolded = ":sort-down:"
+function setElemFolded(elem) {
+	debugFA("setElemFolded", arguments)
+	return rsaElemValue(elem, Str_Unfolded, Str_Folded)
+}
+function setElemUnfolded(elem) {
+	debugFA("setElemUnfolded", arguments)
+	return rsaElemValue(elem, Str_Folded, Str_Unfolded)
+}
+function togElemFolded(elem) {
+	debugFA("togElemFolded", arguments)
+	return hasElemFolded(elem) ?
+		setElemUnfolded(elem) : setElemFolded(elem)
+}
+function hasElemFolded(elem) {
+	debugFA("hasElemFolded", arguments)
+	return ysiElemValue(elem, Str_Folded)
+}
+//endregion
+
+//region LR_Elems Tooltips
+function setElemTooltip(elem, str_tooltip) {
+	debugFA("setElemTooltip", arguments)
+	try { // skip error when no tooltip
+		elem.setToolTip(str_tooltip)
+	} catch {}
+	return str_tooltip
+}
+//endregion
+

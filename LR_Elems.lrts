@@ -129,6 +129,60 @@ function ysiElemValue(elem, value_str) { // if includes a string
 }
 //endregion
 
+//region LR_Elems Locked
+const Str_Locked   = ":lock:"
+const Str_Unlocked = ":lock-open:"
+function setElemLocked(elem) {
+	debugFA("setElemLocked", arguments)
+	return setElemValue(elem, Str_Locked)
+}
+function setElemUnlocked(elem) {
+	debugFA("setElemUnlocked", arguments)
+	return setElemValue(elem, Str_Unlocked)
+}
+function togElemLocked(elem) {
+	debugFA("togElemLocked", arguments)
+	return hasElemLocked(elem) ?
+		setElemUnlocked(elem) : setElemLocked(elem)
+}
+function hasElemLocked(elem) {
+	debugFA("hasElemLocked", arguments)
+	return hasElemValue(elem, Str_Locked)
+}
+//endregion
+
+//region LR_Elems Folded
+const Str_Folded   = ":sort-up:"
+const Str_Unfolded = ":sort-down:"
+function setElemFolded(elem) {
+	debugFA("setElemFolded", arguments)
+	return rsaElemValue(elem, Str_Unfolded, Str_Folded)
+}
+function setElemUnfolded(elem) {
+	debugFA("setElemUnfolded", arguments)
+	return rsaElemValue(elem, Str_Folded, Str_Unfolded)
+}
+function togElemFolded(elem) {
+	debugFA("togElemFolded", arguments)
+	return hasElemFolded(elem) ?
+		setElemUnfolded(elem) : setElemFolded(elem)
+}
+function hasElemFolded(elem) {
+	debugFA("hasElemFolded", arguments)
+	return ysiElemValue(elem, Str_Folded)
+}
+//endregion
+
+//region LR_Elems Tooltips
+function setElemTooltip(elem, str_tooltip) {
+	debugFA("setElemTooltip", arguments)
+	try { // skip error when no tooltip
+		elem.setToolTip(str_tooltip)
+	} catch {}
+	return str_tooltip
+}
+//endregion
+
 //region LR_Elems Css Classes
 const Css_DFlex			  = "d-flex" // add/remove for displayed on containers to work
 const Css_WidgetContainer = "widget-container" // identify a container
