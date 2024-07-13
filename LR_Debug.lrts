@@ -1,12 +1,12 @@
 //region LR_Debug
-const Yes_Debug         = true
-const Not_Debug         = false
-const Dft_Debug         = Yes_Debug
-const Dft_DebugFA       = Not_Debug
-const Yes_Indent        = true
-const Not_Indent        = false
-const Dft_Indent        = Not_Indent
-let   Key_DebugFAFctYes = { //relation between fct_name and debug // else Dft_DebugFA
+const Yes_Debug   = true
+const Not_Debug   = false
+const Dft_Debug   = Yes_Debug
+const Dft_DebugFA = Not_Debug
+const Yes_Indent  = true
+const Not_Indent  = false
+const Dft_Indent  = Not_Indent
+let   Key_DEBUGFA = { //relation between fct_name and debug // else Dft_DebugFA
 }
 function debug(str_debug, _yes_debug) {
 	if (arguments.length < 2) {_yes_debug = Dft_Debug}
@@ -47,8 +47,8 @@ function debugElemUpdate(elem) {
 function debugFA(fct_name, _fct_args, _yes_debugfa) { // use: debugFA("myFct", arguments)
 	if (arguments.length < 3) {_yes_debugfa = Dft_DebugFA}
 	if (arguments.length < 2) {_fct_args = ""}
-	_yes_debugfa = Key_DebugFAFctYes.hasOwnProperty(fct_name) ?
-		Key_DebugFAFctYes[fct_name] : _yes_debugfa
+	_yes_debugfa = ykiValue(Key_DEBUGFA, fct_name) ?
+		Key_DEBUGFA[fct_name] : _yes_debugfa
 	if (! _yes_debugfa) {return} // do not debug
 	if (yesObject(_fct_args)) {
 		if (yesArray(_fct_args)) {

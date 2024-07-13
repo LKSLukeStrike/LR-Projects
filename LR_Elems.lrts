@@ -275,7 +275,7 @@ const Cfk_Clickable   = "Cfk_Clickable"		// allows to react to onclick
 const Cfk_Modifiable  = "Cfk_Modifiable"	// allows only dec, inc
 const Cfk_Selected    = "Cfk_Selected"		// allows only rej, inj
 const Cfk_Fakeupdated = "Cfk_Fakeupdated"	// avoid computations propagation
-const Key_CfkCss      = { // relation between cfk and css /!\ space to separate
+const Key_CFKCSS      = { // relation between cfk and css /!\ space to separate
 	Cfk_Effort        : Cfk_Effort      ,
 	Cfk_Dotted10      : Cfk_Dotted10    ,
 	Cfk_Plussigned    : Cfk_Plussigned  ,
@@ -296,7 +296,7 @@ function yesCfkTheme(cfk) { // if cfk support theme
 }
 function getElemCfkCss(elem, cfk) { // full corresponding css
 	debugFA("getElemCfkCss", arguments)
-	let result = Key_CfkCss[cfk]
+	let result = Key_CFKCSS[cfk]
 	if (yesCfkTheme(cfk)) { // add the elem sheet theme if any
 		try { // skip error if any
 			const elm_sheet = getElemSheet(elem)

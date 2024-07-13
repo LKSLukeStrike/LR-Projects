@@ -91,33 +91,41 @@ function geqValue(value_one, value_two) { // if greater or equal
 }
 //endregion
 
-//region LR_Operators Include
-function ysiValue(value_one, value_two) { // if string include
+//region LR_Operators Includes
+function ysiValue(str_value, value_one) { // if string includes
 	debugFA("ysiValue", arguments)
-	return value_one.includes(value_two)
+	return str_value.includes(value_one)
 }
-function nsiValue(value_one, value_two) { // if not string include
+function nsiValue(str_value, value_one) { // if not string includes
 	debugFA("nsiValue", arguments)
-	return ! ysiValue(value_one, value_two)
+	return ! ysiValue(str_value, value_one)
 }
-function yaiValue(value_one, value_two) { // if array include
+function yaiValue(arr_value, value_one) { // if array includes
 	debugFA("yaiValue", arguments)
-	return value_one.includes(value_two)
+	return arr_value.includes(value_one)
 }
-function naiValue(value_one, value_two) { // if not array include
+function naiValue(arr_value, value_one) { // if not array includes
 	debugFA("naiValue", arguments)
-	return ! yaiValue(value_one, value_two)
+	return ! yaiValue(arr_value, value_one)
+}
+function ykiValue(obj_value, value_one) { // if object includes key
+	debugFA("ykiValue", arguments)
+	return arr_value.hasOwnProperty(value_one)
+}
+function nkiValue(obj_value, value_one) { // if not object includes key
+	debugFA("nkiValue", arguments)
+	return ! ykiValue(arr_value, value_one)
 }
 //endregion
 
 //region LR_Operators Replace
-function rsoValue(value_one, value_str, value_rpl) { // replace a string once
+function rsoValue(str_value, value_one, value_two) { // replace a string once
 	debugFA("rsoValue", arguments)
-	return value_one.replace(value_str, value_rpl)
+	return str_value.replace(value_one, value_two)
 }
-function rsaValue(value_one, value_str, value_rpl) { // replace a string all
+function rsaValue(str_value, value_one, value_two) { // replace a string all
 	debugFA("rsaValue", arguments)
-	return value_one.replaceAll(value_str, value_rpl)
+	return str_value.replaceAll(value_one, value_two)
 }
 //endregion
 
