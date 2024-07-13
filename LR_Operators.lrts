@@ -243,25 +243,29 @@ function strThing(thing, _yes_indent, _str_indentcur, _str_indentuse) { // thing
 //endregion
 
 //region LR_Operators Related
+function one2twoItem(item, prefix_one, prefix_two) { // one related two item
+	debugFA("one2twoItem", arguments)
+	return rsoValue(item, prefix_one, prefix_two)
+}
 function val2dotItem(item) { // val related dot item
 	debugFA("val2dotItem", arguments)
-	return rsoValue(item, Str_PFXVAL, Str_PFXDOT)
+	return one2twoItem(item, Str_PFXVAL, Str_PFXDOT)
 }
 function val2effItem(item) { // val related eff item
 	debugFA("val2effItem", arguments)
-	return rsoValue(item, Str_PFXVAL, Str_PFXEFF)
+	return one2twoItem(item, Str_PFXVAL, Str_PFXEFF)
 }
 function val2dxvItem(item) { // val related dxv item
 	debugFA("val2dxvItem", arguments)
-	return rsoValue(item, Str_PFXVAL, Str_PFXDXV)
+	return one2twoItem(item, Str_PFXVAL, Str_PFXDXV)
 }
 function val2chkItem(item) { // val related chk item
 	debugFA("val2chkItem", arguments)
-	return rsoValue(item, Str_PFXVAL, Str_PFXCHK)
+	return one2twoItem(item, Str_PFXVAL, Str_PFXCHK)
 }
 function chk2valItem(item) { // chk related val item
 	debugFA("chk2valItem", arguments)
-	return rsoValue(item, Str_PFXCHK, Str_PFXVAL)
+	return one2twoItem(item, Str_PFXCHK, Str_PFXVAL)
 }
 //endregion
 //endregion

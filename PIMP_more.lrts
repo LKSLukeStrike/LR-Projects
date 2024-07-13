@@ -1,54 +1,22 @@
-//region LR_Elems Locked
-const Str_Locked   = ":lock:"
-const Str_Unlocked = ":lock-open:"
-function setElemLocked(elem) {
-	debugFA("setElemLocked", arguments)
-	return setElemValue(elem, Str_Locked)
+function setElemDottedNN(elem, arr_dotternn) { // adjust the dottedNN representation
+	debugFA("setElemDottedNN", arguments)
+	if (yesArray(elem)) {return elem.forEach(function(elem) { // recursive
+		setElemDottedNN(elem, arr_dotternn)
+	})} // single elem from here
+	const elm_value = getElemValue(elem)
+	const dot_elem  = val2dotElem(elem)
+	const eff_elem  = val2effElem(elem)
+	const eff_value = hasElemEffort(elem) ? // use effort representation if any
+		getElemValue(sheet, eff_elem) : Int_Zero
+	Arr_DotterNN.forEach(function(dot_value) {
+		const dot_elemnn = sfxValue(dot_elem, dot_value)
+		if (gthValue(Number(dot_value), elm_value)) {
+			sheet.get(dot_elemnn).value(Str_Dotempty)
+		} else if (gthValue(Number(dot_value), elm_value - eff_value)) {
+			sheet.get(dot_elemnn).value(Str_Dotinject)
+		} else {
+			sheet.get(dot_elemnn).value(Str_Dotplain)
+		}
+	})
+	return elm_value
 }
-function setElemUnlocked(elem) {
-	debugFA("setElemUnlocked", arguments)
-	return setElemValue(elem, Str_Unlocked)
-}
-function togElemLocked(elem) {
-	debugFA("togElemLocked", arguments)
-	return hasElemLocked(elem) ?
-		setElemUnlocked(elem) : setElemLocked(elem)
-}
-function hasElemLocked(elem) {
-	debugFA("hasElemLocked", arguments)
-	return hasElemValue(elem, Str_Locked)
-}
-//endregion
-
-//region LR_Elems Folded
-const Str_Folded   = ":sort-up:"
-const Str_Unfolded = ":sort-down:"
-function setElemFolded(elem) {
-	debugFA("setElemFolded", arguments)
-	return rsaElemValue(elem, Str_Unfolded, Str_Folded)
-}
-function setElemUnfolded(elem) {
-	debugFA("setElemUnfolded", arguments)
-	return rsaElemValue(elem, Str_Folded, Str_Unfolded)
-}
-function togElemFolded(elem) {
-	debugFA("togElemFolded", arguments)
-	return hasElemFolded(elem) ?
-		setElemUnfolded(elem) : setElemFolded(elem)
-}
-function hasElemFolded(elem) {
-	debugFA("hasElemFolded", arguments)
-	return ysiElemValue(elem, Str_Folded)
-}
-//endregion
-
-//region LR_Elems Tooltips
-function setElemTooltip(elem, str_tooltip) {
-	debugFA("setElemTooltip", arguments)
-	try { // skip error when no tooltip
-		elem.setToolTip(str_tooltip)
-	} catch {}
-	return str_tooltip
-}
-//endregion
-

@@ -1,4 +1,11 @@
 //region LR_Elems (aka components in LR)
+//region LR_Elems Sheet Items
+function getSheetItem(sheet, item) { // returns sheet item elem
+	debugFA("getSheetItem", arguments)
+	return sheet.get(item)
+}
+//endregion
+
 //region LR_Elems Events
 const Evt_Click  = "click"
 const Evt_Update = "update"
@@ -105,7 +112,8 @@ function setElemValue(elem, elm_value) {
 	if (yesArray(elem)) {return elem.forEach(function(elem) { // recursive
 		setElemValue(elem, elm_value)
 	})} // single elem from here
-	elm_value = hasElemPlussigned(elem) && gthValue(elm_value, Int_Zero) ? // add + ?
+	elm_value = hasElemPlussigned(elem) // plussigned representation if any
+	&& gthValue(elm_value, Int_Zero) ?
 		pfxValue(elm_value, Str_Plus) : elm_value
 	elem.value(elm_value)
 	setElemDotted(elem) // dotted representation if any
@@ -297,6 +305,191 @@ function getElemCfkCss(elem, cfk) { // full corresponding css
 		} catch {}
 	}
 	return result
+}
+//endregion
+
+//region LR_Elems Cfk Effort
+function addElemEffort(elem) {
+	debugFA("addElemEffort", arguments)
+	return addElemCfk(elem, Cfk_Effort)			// normal operation
+}
+function remElemEffort(elem) {
+	debugFA("remElemEffort", arguments)
+	return remElemCfk(elem, Cfk_Effort)			// normal operation
+}
+function hasElemEffort(elem) {
+	debugFA("hasElemEffort", arguments)
+	return hasElemCfk(elem, Cfk_Effort)			// normal operation
+}
+//endregion
+
+//region LR_Elems Cfk Dotted // Fakeupdate
+function addElemDotted(elem, cfk_dotted) {
+	debugFA("addElemDotted", arguments)
+	addElemCfk(elem, cfk_dotted)				// normal operation
+	return fakElemUpdate(elem)
+}
+function remElemDotted(elem, cfk_dotted) {
+	debugFA("remElemDotted", arguments)
+	remElemCfk(elem, cfk_dotted)				// normal operation
+	return fakElemUpdate(elem)
+}
+function hasElemDotted(elem, cfk_dotted) {
+	debugFA("hasElemDotted", arguments)
+	return hasElemCfk(elem, cfk_dotted)			// normal operation
+}
+//region LR_Elems Cfk Dotted10
+function addElemDotted10(elem) {
+	debugFA("addElemDotted10", arguments)
+	return addElemDotted(elem, Cfk_Dotted10)
+}
+function remElemDotted10(elem) {
+	debugFA("remElemDotted10", arguments)
+	return remElemDotted(elem, Cfk_Dotted10)
+}
+function hasElemDotted10(elem) {
+	debugFA("hasElemDotted10", arguments)
+	return hasElemCfk(elem, Cfk_Dotted10)
+}
+//endregion
+//endregion
+
+//region LR_Elems Cfk Plussigned // Fakeupdate
+function addElemPlussigned(elem) {
+	debugFA("addElemPlussigned", arguments)
+	addElemCfk(elem, Cfk_Plussigned)			// normal operation
+	return fakElemUpdate(elem)
+}
+function remElemPlussigned(elem) {
+	debugFA("remElemPlussigned", arguments)
+	remElemCfk(elem, Cfk_Plussigned)			// normal operation
+	return fakElemUpdate(elem)
+}
+function hasElemPlussigned(elem) {
+	debugFA("hasElemPlussigned", arguments)
+	return hasElemCfk(elem, Cfk_Plussigned)		// normal operation
+}
+//endregion
+
+//region LR_Elems Cfk Displayed
+function addElemDisplayed(elem) {
+	debugFA("addElemDisplayed", arguments)
+	return remElemCfk(elem, Cfk_Undisplayed)	// reverse operation
+}
+function remElemDisplayed(elem) {
+	debugFA("remElemDisplayed", arguments)
+	return addElemCfk(elem, Cfk_Undisplayed)	// reverse operation
+}
+function hasElemDisplayed(elem) {
+	debugFA("hasElemDisplayed", arguments)
+	return ! hasElemCfk(elem, Cfk_Undisplayed)	// reverse operation
+}
+//endregion
+
+//region LR_Elems Cfk Clickable
+function addElemClickable(elem) {
+	debugFA("addElemClickable", arguments)
+	return addElemCfk(elem, Cfk_Clickable)		// normal operation
+}
+function remElemClickable(elem) {
+	debugFA("remElemClickable", arguments)
+	return remElemCfk(elem, Cfk_Clickable)		// normal operation
+}
+function hasElemClickable(elem) {
+	debugFA("hasElemClickable", arguments)
+	return hasElemCfk(elem, Cfk_Clickable)		// normal operation
+}
+//endregion
+
+//region LR_Elems Cfk Modifiable // Fakeupdate
+function addElemModifiable(elem) {
+	debugFA("addElemModifiable", arguments)
+	addElemCfk(elem, Cfk_Modifiable)			// normal operation
+	return fakElemUpdate(elem)
+}
+function remElemModifiable(elem) {
+	debugFA("remElemModifiable", arguments)
+	remElemCfk(elem, Cfk_Modifiable)			// normal operation
+	return fakElemUpdate(elem)
+}
+function hasElemModifiable(elem) {
+	debugFA("hasElemModifiable", arguments)
+	return hasElemCfk(elem, Cfk_Modifiable)		// normal operation
+}
+//endregion
+
+//region LR_Elems Cfk Selected // Fakeupdate // Toggle Modifiable
+function addElemSelected(elem) {
+	debugFA("addElemSelected", arguments)
+	remElemModifiable(elem)						// toggle modifiable/selected
+	addElemCfk(elem, Cfk_Selected)				// normal operation
+	return fakElemUpdate(elem)
+}
+function remElemSelected(elem) {
+	debugFA("remElemSelected", arguments)
+	addElemModifiable(elem)						// toggle modifiable/selected
+	remElemCfk(elem, Cfk_Selected)				// normal operation
+	return fakElemUpdate(elem)
+}
+function hasElemSelected(elem) {
+	debugFA("hasElemSelected", arguments)
+	return hasElemCfk(elem, Cfk_Selected)		// normal operation
+}
+//endregion
+
+//region LR_Elems Cfk Fakeupdated
+function addElemFakeupdated(elem) {
+	debugFA("addElemFakeupdated", arguments)
+	return addElemCfk(elem, Cfk_Fakeupdated)	// normal operation
+}
+function remElemFakeupdated(elem) {
+	debugFA("remElemFakeupdated", arguments)
+	return remElemCfk(elem, Cfk_Fakeupdated)	// normal operation
+}
+function hasElemFakeupdated(elem) {
+	debugFA("hasElemFakeupdated", arguments)
+	return hasElemCfk(elem, Cfk_Fakeupdated)	// normal operation
+}
+function fakElemUpdate(elem) {
+	debugFA("fakElemUpdate", arguments)
+	if (yesArray(elem)) {return elem.forEach(function(elem) { // recursive
+		fakElemUpdate(elem)
+	})} // single elem from here
+	addElemFakeupdated(elem) // avoid computations propagation
+	return setElemValue(elem, getElemValue(elem)) // provoke the fake update
+}
+//endregion
+
+//region LR_Elems Related
+function one2twoElem(elem, prefix_one, prefix_two) { // one related two elem
+	debugFA("one2twoElem", arguments)
+	try {
+		const elm_sheet = getElemSheet(elem)
+		const elm_item  = getElemItem(elem)
+		const rel_item  = one2twoItem(elm_item, prefix_one, prefix_two)
+		elem 			= getSheetItem(elm_sheet, rel_item)
+	} catch {}
+	return elem
+}
+function val2dotElem(elem) { // val related dot elem
+	debugFA("val2dotElem", arguments)
+	return one2twoElem(elem, Str_PFXVAL, Str_PFXDOT)
+}
+function val2effElem(elem) { // val related eff elem
+	debugFA("val2effElem", arguments)
+	return one2twoElem(elem, Str_PFXVAL, Str_PFXEFF)
+}
+function val2dxvElem(elem) { // val related dxv elem
+	debugFA("val2dxvElem", arguments)
+	return one2twoElem(elem, Str_PFXVAL, Str_PFXDXV)
+}
+function val2chkElem(elem) { // val related chk elem
+	debugFA("val2chkElem", arguments)
+	return one2twoElem(elem, Str_PFXVAL, Str_PFXCHK)
+}
+function chk2valElem(elem) { // chk related val elem
+	debugFA("chk2valElem", arguments)
+	return one2twoElem(elem, Str_PFXCHK, Str_PFXVAL)
 }
 //endregion
 
