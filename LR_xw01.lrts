@@ -1,0 +1,59 @@
+//region LR_Elems Cfk Dotted // Fakeupdate
+const Yes_Dotted   = true
+const Not_Dotted   = false
+const Arr_Dotter10 = ["01", "02", "03", "04", "05", "06", "07", "08", "09", "10",]
+const Key_DFKDOT   = { // relation between cfk_dottednn and arr_dotternn
+	Cfk_Dotted10 : Arr_Dotter10,
+}
+function getElemDotter(elem) {
+	debugFA("getElemDotter", arguments)
+	const result = Not_Dotted
+	Object.keys(Key_DFKDOT).forEach(function(cfk_dottednn) {
+		if (hasElemCfk(elem, cfk_dottednn)) { // related arr_dotternn
+			result = Key_DFKDOT[cfk_dottednn]
+		}
+	})
+	return result
+}
+function yesElemDotted(elem) { // if elem is dotted
+	debugFA("yesElemDotted", arguments)
+	return getElemDotter(elem) ?
+		Yes_Dotted : Not_Dotted
+}
+function notElemDotted(elem) { // if not elem is dotted
+	debugFA("notElemDotted", arguments)
+	return ! yesElemDotted(elem)
+}
+
+//region LR_Elems Cfk DottedNN
+function addElemDottedNN(elem, cfk_dottednn) {
+	debugFA("addElemDottedNN", arguments)
+	addElemCfk(elem, cfk_dottednn)					// normal operation
+	return fakElemUpdate(elem)
+}
+function remElemDottedNN(elem, cfk_dottednn) {
+	debugFA("remElemDottedNN", arguments)
+	remElemCfk(elem, cfk_dottednn)					// normal operation
+	return fakElemUpdate(elem)
+}
+function hasElemDottedNN(elem, cfk_dottednn) {
+	debugFA("hasElemDottedNN", arguments)
+	return hasElemCfk(elem, cfk_dottednn)			// normal operation
+}
+//endregion
+
+//region LR_Elems Cfk Dotted10
+function addElemDotted10(elem) {
+	debugFA("addElemDotted10", arguments)
+	return addElemDottedNN(elem, Cfk_Dotted10)
+}
+function remElemDotted10(elem) {
+	debugFA("remElemDotted10", arguments)
+	return remElemDottedNN(elem, Cfk_Dotted10)
+}
+function hasElemDotted10(elem) {
+	debugFA("hasElemDotted10", arguments)
+	return hasElemDottedNN(elem, Cfk_Dotted10)
+}
+//endregion
+//endregion

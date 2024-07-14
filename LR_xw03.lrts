@@ -2,7 +2,6 @@
 const Str_Dotempty  = ":ga_circle:"
 const Str_Dotplain  = ":ga_plain-circle:"
 const Str_Dotinject = ":arrow-alt-circle-down:"
-const Arr_Dotter10  = ["01", "02", "03", "04", "05", "06", "07", "08", "09", "10",]
 function setElemDotted(elem) { // adjust the dotted representation
 	debugFA("setElemDotted", arguments)
 	setElemDotted10(elem) // try this one
