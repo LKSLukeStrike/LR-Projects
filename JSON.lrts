@@ -1,11 +1,177 @@
-
-//region JSON_Globals
 const Arr_SUCFAI	= ["0", "1", "2", "3", "4", "5", "6", "7", "8", "9",]
 
 const Lbl_ROLSUC_	= "Lbl_ROLSUC_"
 const Lbl_ROLFAI_	= "Lbl_ROLFAI_"
+
+// Sheet Items prefixes /!\ respect this convention for the code to work
+const Str_PFXDXV = "DxV_" // dot and value item (container)
+const Str_PFXVAL = "Val_" // value item
+const Str_PFXDOT = "Dot_" // dot item
+const Str_PFXEFF = "Eff_" // effort item
+const Str_PFXMOD = "Mod_" // modifier item
+const Str_PFXREP = "Rep_" // repeater item
+const Str_PFXCHK = "Chk_" // checkbox item (can also be a label/icon etc)
+const Str_PFXFLD = "Fld_" // foldering item (can also be a label/icon etc)
+
+
+//region Types
+function yesNull(thing) {
+	return thing === null
+}
+function notNull(thing) {
+	return ! yesNull(thing)
+}
+function yesUndefined(thing) {
+	return typeof thing === "undefined"
+}
+function notUndefined(thing) {
+	return ! yesUndefined(thing)
+}
+function yesThing(thing) {
+	return notNull(thing) && notUndefined(thing)
+}
+function notThing(thing) {
+	return ! yesThing(thing)
+}
+function yesObject(thing) {
+	return yesThing(thing) && typeof thing === "object"
+}
+function notObject(thing) {
+	return ! yesObject(thing)
+}
+function yesArray(thing) {
+	return yesThing(thing) && Array.isArray(thing)
+}
+function notArray(thing) {
+	return ! yesArray(thing)
+}
+function yesElem(thing) {
+	return yesObject(thing) && notArray(thing)
+}
+function notElem(thing) {
+	return ! yesElem(thing)
+}
 //endregion
 
+
+//region Elems (aka components in LR)
+//region Elems Events
+const Evt_Click  = "click"
+const Evt_Update = "update"
+function onElemEvtFct(elem, evt, fct) {
+	debugFA("onElemEvtFct", arguments)
+	return elem.on(evt, fct)
+}
+function onElemClickFct(elem, fct) {
+	debugFA("onElemClickFct", arguments)
+	return onElemEvtFct(elem, Evt_Click, fct)
+}
+function onElemUpdateFct(elem, fct) {
+	debugFA("onElemUpdateFct", arguments)
+	return onElemEvtFct(elem, Evt_Update, fct)
+}
+function onElemChildEvtFct(elem, child, evt, fct) {
+	debugFA("onElemChildEvtFct", arguments)
+	return elem.on(evt, child, fct)
+}
+function onElemChildClickFct(elem, child, fct) {
+	debugFA("onElemChildClickFct", arguments)
+	return onElemChildEvtFct(elem, child, Evt_Click, fct)
+}
+function onElemChildUpdateFct(elem, child, fct) {
+	debugFA("onElemChildUpdateFct", arguments)
+	return onElemChildEvtFct(elem, child, Evt_Update, fct)
+}
+//endregion
+
+//region Elems Attributes
+function getElemParent(elem) {
+	debugFA("getElemParent", arguments)
+	let result = null
+	try {result = elem.parent()} // skip error when no parent
+	finally {}
+	return result
+}
+function getElemChild(elem, child) {
+	debugFA("getElemChild", arguments)
+	let result = null
+	try {result = elem.find(child)} // skip error when no child
+	finally {}
+	return result
+}
+function getElemSheet(elem) {
+	debugFA("getElemSheet", arguments)
+	let result = null
+	try {result = elem.sheet()} // skip error when no sheet
+	finally {}
+	return result
+}
+function getElemName(elem) {
+	debugFA("getElemName", arguments)
+	let result = null
+	try {result = elem.name()} // skip error when no name
+	finally {}
+	return result
+}
+function getElemId(elem) {
+	debugFA("getElemId", arguments)
+	let result = null
+	try {result = elem.id()} // skip error when no id
+	finally {}
+	return result
+}
+function getElemIndex(elem) {
+	debugFA("getElemIndex", arguments)
+	let result = null
+	try {result = elem.index()} // skip error when no index
+	finally {}
+	return result
+}
+function getElemTypeof(elem) {
+	debugFA("getElemTypeof", arguments)
+	return typeof elem
+}
+function getElemChildren(elem) { // return children ids (get them with find)
+	debugFA("getElemChildren", arguments)
+	const elm_value = getElemValue(elem)
+	if (notElem(elm_value)) {return []} // not an elem so no children
+	return Object.keys(elm_value)
+}
+//endregion
+
+//region Elems Values
+function getElemValue(elem) {
+	debugFA("getElemValue", arguments)
+	const elm_value = elem.value()
+	return Number.isNaN(Number(elm_value)) ? // right type
+		elm_value : Number(elm_value)
+}
+//endregion
+
+//region Elems Classes
+function getElemCss(elem) {
+	debugFA("getElemCss", arguments)
+	let result = []
+	try {result = elem.getClasses()} // skip error when no classes
+	finally {}
+	return result
+}
+//endregion
+//endregion
+
+
+//region Items (designed by a sheet and an item id)
+function getSheetItem(sheet, item) { // returns an elem
+	debugFA("getSheetItem", arguments)
+	return sheet.get(item)
+}
+function getSheetItemChild(sheet, item, child) { // OBSO
+	return sheet.get(item).value()[child]
+}
+function getSheetItemParent(sheet, item) { // OBSO
+	return sheet.get(item).parent().id()
+}
+//endregion
 
 //region Events // due to JS we cannot use Event and Function so ... Evt and Fct
 // const Evt_Click  = "click"
@@ -40,6 +206,207 @@ function hasSheetItemValue(sheet, item, itm_value) {
 //endregion
 
 
+const Infinity   = Number.MAX_SAFE_INTEGER
+
+//region Debug
+const Yes_Debug         = true
+const Not_Debug         = false
+const Dft_Debug         = Yes_Debug
+const Dft_DebugFA       = Not_Debug
+const Key_DebugFAFctYes = { //relation between fct_name and debug // else Dft_DebugFA
+	rptElemDoIf: Yes_Debug,
+	rptElemDoIf_if_fct: Yes_Debug,
+	rptElemDoIf_do_fct: Yes_Debug,
+}
+function debug(msg_debug, yes_debug) {
+	if (arguments.length < 2) {yes_debug = Dft_Debug}
+	if (yes_debug) {log(msg_debug)}
+}
+function debugOK(yes_debug) {
+	if (arguments.length < 1) {yes_debug = Dft_Debug}
+	debug("OK", yes_debug)
+}
+function debugElem(elem, yes_debug, yes_indent) {
+	if (arguments.length < 3) {yes_indent = false}
+	if (arguments.length < 2) {yes_debug = Dft_Debug}
+	if (! yes_debug) {return} // force not debug
+	debug("< ELEM >")
+	debug("> parent: " + getElemParent(elem))
+	debug("> parent id: " + getElemId(getElemParent(elem)))
+	debug("> parent name: " + getElemName(getElemParent(elem)))
+	debug("> sheet: " + getElemSheet(elem))
+	debug("> sheet id: " + getElemId(getElemSheet(elem)))
+	debug("> sheet name: " + getElemName(getElemSheet(elem)))
+	debug("> id: " + getElemId(elem))
+	debug("> name: " + getElemName(elem))
+	debug("> index: " + getElemIndex(elem))
+	debug("> typeof: " + getElemTypeof(elem))
+	debug("> children: " + getElemChildren(elem))
+	debug("> value: " + strObject(getElemValue(elem), yes_indent))
+	debug("> css: " + strObject(getElemCss(elem), yes_indent))
+}
+function debugElemEvt(elem, evt) {
+	debug("! on" + cpoValue(evt) + " " + getElemId(elem))
+}
+function debugElemClick(elem) {
+	debugElemEvt(elem, Evt_Click)
+}
+function debugElemUpdate(elem) {
+	debugElemEvt(elem, Evt_Update)
+}
+function debugFA(fct_name, fct_args, yes_debugfa) { // use: debugFA("myFunction", arguments)
+	if (arguments.length < 3) {yes_debugfa = Dft_DebugFA}
+	if (arguments.length < 2) {fct_args = ""}
+	yes_debugfa = Key_DebugFAFctYes.hasOwnProperty(fct_name) ?
+		Key_DebugFAFctYes[fct_name] : yes_debugfa
+	if (! yes_debugfa) {return} // do not debug
+	if (typeof fct_args == "object") {
+		if (Array.isArray(fct_args)) {
+			fct_args = fct_args.flat(Infinity)
+		} else {
+			fct_args = Object.values(fct_args)
+		}
+	}
+	debug(fct_name + " " + fct_args) // default debug mode
+}
+function debugFAOK(fct_name, yes_debugfa) { // use: debugFAOK("myFunction")
+	if (arguments.length < 2) {yes_debugfa = Dft_DebugFA}
+	debugFA(fct_name, "OK", yes_debugfa)
+}
+//endregion
+
+function togValue(value_one) { // toggle value between 0 to 1
+	debugFA("togValue", arguments)
+	return value_one ?
+		0 : 1
+}
+
+function cpoValue(value_one, _yes_fromlower) { // capitalize once
+	debugFA("cpoValue", arguments)
+	if (arguments.length < 2) {_yes_fromlower = false}
+	if (_yes_fromlower) {
+		value_one = value_one.toLowerCase()
+	}
+	return value_one.replace(/(^\w{1})|(\s+\w{1})/, function(letter) {
+		return letter.toUpperCase()
+	})
+}
+
+function cpaValue(value_one, _yes_fromlower) { // capitalize all
+	debugFA("cpaValue", arguments)
+	if (arguments.length < 2) {_yes_fromlower = false}
+	if (_yes_fromlower) {
+		value_one = value_one.toLowerCase()
+	}
+	return value_one.replace(/(^\w{1})|(\s+\w{1})/g, function(letter) {
+		return letter.toUpperCase()
+	})
+}
+
+function rndValue(value_min, value_max) { // random value (integer, inclusive)
+	debugFA("rndValue", arguments)
+	value_min = Math.ceil(value_min)
+	value_max = Math.floor(value_max)
+	return Math.floor(Math.random() * (value_max - value_min + 1) + value_min)
+}
+function rpoValue(value_one, value_str, value_rpl) { // replace once by a string
+	debugFA("rpoValue", arguments)
+	return value_one.replace(value_str, value_rpl)
+}
+function val2chkItem(item) { // related chk item
+	debugFA("val2chkItem", arguments)
+	return rpoValue(item, Str_PFXVAL, Str_PFXCHK)
+}
+function chk2valItem(item) { // related val item
+	debugFA("chk2valItem", arguments)
+	return rpoValue(item, Str_PFXCHK, Str_PFXVAL)
+}
+
+function strObject(obj, yes_indent, str_indentact, str_indentuse) { // object as str
+	debugFA("strObject", arguments)
+	if (arguments.length < 4) {str_indentuse = "\t"} // string to use for indentation
+	if (arguments.length < 3) {str_indentact = ""} // current indentation string
+	if (arguments.length < 2) {yes_indent = false}
+	const str_newline = yes_indent ?
+		"\n" : ""
+	str_indentact = yes_indent ? // clear str_indentact if no indentation
+		str_indentact : ""
+	const str_indentnxt = yes_indent ? // for the next indentation
+		str_indentact + str_indentuse : ""
+	let result = ""
+	let obj_result = "" // result of an object entries
+	let itm_result = "" // result of an object entry
+	if (typeof obj == "object") {
+		if (yesNull(obj)) {
+			result = "null"
+		} else if (Array.isArray(obj)) {
+			result = result + "["
+			obj.forEach(function(itm) { // recursive
+				itm_result = strObject(itm, yes_indent, str_indentnxt, str_indentuse)
+				if (itm_result != "") {
+					obj_result = obj_result + str_newline + str_indentnxt + itm_result + ", "
+				}
+			})
+			if (obj_result != "") {
+				result = result + str_indentact + obj_result + str_newline + str_indentact
+			}
+			result = result + "]"
+		} else {
+			result = result + "{"
+			Object.keys(obj).forEach(function(key) { // recursive
+				itm_result = '"' + key + '": '
+				itm_result = itm_result + strObject(obj[key], yes_indent, str_indentnxt, str_indentuse)
+				if (itm_result != "") {
+					obj_result = obj_result + str_newline + str_indentnxt + itm_result + ", "
+				}
+			})
+			if (obj_result != "") {
+				result = result + str_indentact + obj_result + str_newline + str_indentact
+			}
+			result = result + "}"
+		}
+	} else {
+		if (typeof obj == "string") {
+			result = '"' + obj + '"'
+		} else if (typeof obj == "undefined") {
+			result = "undefined"
+		} else {
+			result = obj
+		}
+	}
+	return result
+}
+
+
+const Css_Repeater = "repeater"
+const Css_RepeaterElement = "repeater-element"
+function rptElemDoIf(elem, do_fct, if_fct) { // apply fct on repeater if true
+	debugFA("rptElemDoIf", arguments)
+	if (arguments.length < 3) { // filter function
+		if_fct = function(elem) {
+			debugFA("rptElemDoIf_if_fct", arguments)
+			return true // true to do action function
+		}
+	}
+	if (arguments.length < 2) { // action function
+		do_fct = function(elem) {
+			debugFA("rptElemDoIf_do_fct", arguments)
+			debugElem(elem, true, true)
+			return true // true to continue recursive
+		}
+	}
+	if (notElem(elem)) {return} // not an elem
+	if (if_fct(elem)) {
+		// if (! do_fct(elem)) {return} // /!\ repeat twice (why ?)
+		const yes_recursive = do_fct(elem)
+		if (! yes_recursive) {return} // interrupt recursive 
+	}
+	// getElemChildren(elem).forEach(function(child) // /!\ repeat twice (why ?)
+	const elm_children = getElemChildren(elem) 
+	elm_children.forEach(function(child) { // recursive
+		rptElemDoIf(elem.find(child), do_fct, if_fct)
+	})
+}
 
 
 
@@ -96,32 +463,38 @@ const initMainSheet = function(sheet) {
 	Key_TEST["Fruit"] = Fruit
 	Key_TEST["Arr_Loop"] = Arr_Loop
 
-	// setSheetItemValue(sheet, Val_RESULT, strThing(10, true))
-	// setSheetItemValue(sheet, Val_RESULT, strThing(10.256, true))
-	// setSheetItemValue(sheet, Val_RESULT, strThing("", true))
-	// setSheetItemValue(sheet, Val_RESULT, strThing("hello", true))
-	// setSheetItemValue(sheet, Val_RESULT, strThing([], true))
-	// setSheetItemValue(sheet, Val_RESULT, strThing([[]], true))
-	// setSheetItemValue(sheet, Val_RESULT, strThing([10], true))
-	// setSheetItemValue(sheet, Val_RESULT, strThing([10, 20], true))
-	// setSheetItemValue(sheet, Val_RESULT, strThing(null, true))
-	// setSheetItemValue(sheet, Val_RESULT, strThing(Arr_Loop, true))
-	// setSheetItemValue(sheet, Val_RESULT, strThing({}, true))
-	// setSheetItemValue(sheet, Val_RESULT, strThing({stuff: {}}, true))
-	// setSheetItemValue(sheet, Val_RESULT, strThing(Key_TEST, true))
+	// setSheetItemValue(sheet, Val_RESULT, strObject(10, true))
+	// setSheetItemValue(sheet, Val_RESULT, strObject(10.256, true))
+	// setSheetItemValue(sheet, Val_RESULT, strObject("", true))
+	// setSheetItemValue(sheet, Val_RESULT, strObject("hello", true))
+	// setSheetItemValue(sheet, Val_RESULT, strObject([], true))
+	// setSheetItemValue(sheet, Val_RESULT, strObject([[]], true))
+	// setSheetItemValue(sheet, Val_RESULT, strObject([10], true))
+	// setSheetItemValue(sheet, Val_RESULT, strObject([10, 20], true))
+	// setSheetItemValue(sheet, Val_RESULT, strObject(null, true))
+	// setSheetItemValue(sheet, Val_RESULT, strObject(Arr_Loop, true))
+	// setSheetItemValue(sheet, Val_RESULT, strObject({}, true))
+	// setSheetItemValue(sheet, Val_RESULT, strObject({stuff: {}}, true))
+	// setSheetItemValue(sheet, Val_RESULT, strObject(Key_TEST, true))
 
 	debug("start")
-	
+function argTest(_arg) {
+	try {_arg = _arg} catch(e) {_arg = "World"}
+	log("Hello " + _arg)
+}
+
+argTest()
+argTest("John")	
 	// debug(cpoValue("   this is     THE way   "))
 	// debug(cpoValue("   THIS is     THE way   "))
 	// debug(cpoValue("   THIS is     THE way   ", true))
 	// debug(cpaValue("   this is     THE way   "))
 	// debug(cpaValue("   THIS is     THE way   "))
 	// debug(cpaValue("   THIS is     THE way   ", true))
-	// debug(tynValue(0))
-	// debug(tynValue(1))
-	// debug(tynValue(false))
-	// debug(tynValue(true))
+	// debug(togValue(0))
+	// debug(togValue(1))
+	// debug(togValue(false))
+	// debug(togValue(true))
 	
 	setSheetItemValue(sheet, Val_HIS, 0)
 	const Chk_HOPITM = "Chk_HOPITM"
@@ -159,13 +532,13 @@ const initMainSheet = function(sheet) {
 	onElemClickFct(Rep_obj, function(elem) {
 		debugElemClick(elem)
 		debug(elem)
-		setVal_RESULT("Click:\n" + strThing(getSheetItemValue(sheet, Rep_OBJ), true))
+		setVal_RESULT("Click:\n" + strObject(getSheetItemValue(sheet, Rep_OBJ), true))
 	})
 	
 	onElemUpdateFct(Rep_obj, function(elem) {
 		debugElemUpdate(elem)
 		debug(elem)
-		setVal_RESULT("Update:\n" + strThing(getSheetItemValue(sheet, Rep_OBJ), true))
+		setVal_RESULT("Update:\n" + strObject(getSheetItemValue(sheet, Rep_OBJ), true))
 	})
 	
 	onElemChildClickFct(Rep_obj, Chk_PHYCHK, function(elem) {
@@ -188,7 +561,7 @@ const initMainSheet = function(sheet) {
 		debug("--")
 		debugElem(val_phychk, true, true)
 		debug(val_phychk.value())
-		val_phychk.value(tynValue(val_phychk.value()))
+		val_phychk.value(togValue(val_phychk.value()))
 		debug(val_phychk.value())
 	})
 	
@@ -346,7 +719,7 @@ const initMainSheet = function(sheet) {
 		debug("> Rep_his")
 		debug(Rep_his)
 		debug(sheet.get(Rep_HIS).getClasses())
-		setSheetItemValue(sheet, Val_RESULT, strThing(Rep_his))
+		setSheetItemValue(sheet, Val_RESULT, strObject(Rep_his))
 		// each(Rep_his, function(entryData, entryId) {
 			// debug(">> entryData"); debug(entryData)
 			// debug(">> entryId"); debug(entryId)
@@ -359,8 +732,8 @@ const initMainSheet = function(sheet) {
             // } else entry.find("attackSavingThrowRow").hide();
 		// })
 		Object.keys(Rep_his).forEach(function(key_typ, idx_typ) {
-			debug(">> key_typ " + strThing(key_typ))
-			debug(">> idx_typ " + strThing(idx_typ))
+			debug(">> key_typ " + strObject(key_typ))
+			debug(">> idx_typ " + strObject(idx_typ))
 			debug(Rep_his[key_typ])
 			debug(getSheetItemChild(sheet, Rep_HIS, key_typ))
 			// debug(sheet.get(Rep_HIS).value().find(key_typ))

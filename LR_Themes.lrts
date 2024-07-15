@@ -41,7 +41,7 @@ function getSheetThemeOld(sheet) { // get previous sheet theme
 	let result = Dft_THMDFT
 	try { // skip error when no sheet item
 		result = getElemValue(getSheetItem(sheet, REQ_THMOLD))
-	} catch {}
+	} finally {}
 	result = yawTheme(result) ? // force to default allowed theme if any
 		result : Dft_THMDFT
 	return result
@@ -52,7 +52,7 @@ function setSheetThemeOld(sheet, css_theme) { // set previous sheet theme
 		css_theme : Dft_THMDFT
 	try { // skip error when no sheet item
 		setElemValue(getSheetItem(sheet, REQ_THMOLD), css_theme)
-	} catch {}
+	} finally {}
 	return css_theme
 }
 function getSheetThemePrf(sheet) { // get choosen sheet theme
@@ -60,7 +60,7 @@ function getSheetThemePrf(sheet) { // get choosen sheet theme
 	let result = Dft_THMDFT
 	try { // skip error when no sheet item
 		result = getElemValue(getSheetItem(sheet, REQ_THMPRF))
-	} catch {}
+	} finally {}
 	result = yawTheme(result) ? // force to default allowed theme if any
 		result : Dft_THMDFT
 	return result
@@ -71,7 +71,7 @@ function setSheetThemePrf(sheet, css_theme) { // set choosen sheet theme
 		css_theme : Dft_THMDFT
 	try { // skip error when no sheet item
 		setElemValue(getSheetItem(sheet, REQ_THMPRF), css_theme)
-	} catch {}
+	} finally {}
 	return css_theme
 }
 //endregion

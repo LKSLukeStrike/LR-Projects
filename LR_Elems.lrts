@@ -41,7 +41,7 @@ function getElemParent(elem) {
 	let result = null
 	try { // skip error when no parent
 		result = elem.parent()
-	} catch {}
+	} finally {}
 	return result
 }
 function getElemChild(elem, child) {
@@ -49,7 +49,7 @@ function getElemChild(elem, child) {
 	let result = null
 	try { // skip error when no child
 		result = elem.find(child)
-	} catch {}
+	} finally {}
 	return result
 }
 function getElemSheet(elem) {
@@ -57,7 +57,7 @@ function getElemSheet(elem) {
 	let result = null
 	try { // skip error when no sheet
 		result = elem.sheet()
-	} catch {}
+	} finally {}
 	return result
 }
 function getElemName(elem) {
@@ -65,7 +65,7 @@ function getElemName(elem) {
 	let result = null
 	try { // skip error when no name
 		result = elem.name()
-	} catch {}
+	} finally {}
 	return result
 }
 function getElemId(elem) {
@@ -73,7 +73,7 @@ function getElemId(elem) {
 	let result = null
 	try { // skip error when no id
 		result = elem.id()
-	} catch {}
+	} finally {}
 	return result
 }
 function getElemItem(elem) { // item is the id (aliases)
@@ -85,7 +85,7 @@ function getElemIndex(elem) {
 	let result = null
 	try { // skip error when no index
 		result = elem.index()
-	} catch {}
+	} finally {}
 	return result
 }
 function getElemTypeof(elem) {
@@ -186,7 +186,7 @@ function setElemTooltip(elem, str_tooltip) {
 	debugFA("setElemTooltip", arguments)
 	try { // skip error when no tooltip
 		elem.setToolTip(str_tooltip)
-	} catch {}
+	} finally {}
 	return str_tooltip
 }
 //endregion
@@ -225,7 +225,7 @@ function addElemCss(elem, css) { // multiple css allowed in one string
 				elem.removeClass(Css_DFlex)
 			}
 			elem.addClass(css)
-		} catch {}
+		} finally {}
 	})
 	return css
 }
@@ -240,7 +240,7 @@ function remElemCss(elem, css) { // multiple css allowed in one string
 				elem.addClass(Css_DFlex)
 			}
 			elem.removeClass(css)
-		} catch {}
+		} finally {}
 	})
 	return css
 }
@@ -250,9 +250,7 @@ function hasElemCss(elem, css) { // multiple css allowed in one string
 	css.split(Str_Space).forEach(function(css) { // every css has to be present
 		try { // skip error when no css classes
 			if (! elem.hasClass(css)) {result = false}
-		} catch {
-			result = false
-		}
+		} catch(e) {result = false}
 	})
 	return result
 }
@@ -261,7 +259,7 @@ function getElemCss(elem) {
 	let result = Arr_None
 	try { // skip error when no css classes
 		result = elem.getClasses()
-	} catch {}
+	} finally {}
 	return result
 }
 //endregion
@@ -320,7 +318,7 @@ function getElemCfkCss(elem, cfk) { // full corresponding css
 			const elm_sheet = getElemSheet(elem)
 			const prf_theme = getSheetThemePrf(elm_sheet)
 			result = result + Str_Space + prf_theme
-		} catch {}
+		} finally {}
 	}
 	return result
 }
@@ -572,7 +570,7 @@ function one2twoElem(elem, prefix_one, prefix_two) { // one related two elem
 		const elm_item  = getElemItem(elem)
 		const rel_item  = one2twoItem(elm_item, prefix_one, prefix_two)
 		elem 			= getSheetItem(elm_sheet, rel_item)
-	} catch {}
+	} finally {}
 	return elem
 }
 function val2dotElem(elem) { // val related dot elem

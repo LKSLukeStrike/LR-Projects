@@ -1,6 +1,7 @@
 //region LR_Constants
 //region LR_Constants Values
 const Int_Zero     = 0
+const Str_Zero     = "0"
 const Str_None     = ""
 const Arr_None     = []
 const Obj_None     = {}

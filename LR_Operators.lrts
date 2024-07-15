@@ -194,7 +194,7 @@ function tynValue(value_one) { // toggle yes/not (1/0)
 //endregion
 
 //region LR_Operators Stringify
-function strThing(thing, _yes_indent, _str_indentcur, _str_indentuse) { // thing as a string
+function strThing(thing, _yes_indent, _str_indentcur, _str_indentuse) { // str a thing
 	debugFA("strThing", arguments)
 	if (arguments.length < 4) {_str_indentuse = Str_Tab} // indentation string
 	if (arguments.length < 3) {_str_indentcur = Str_None} // current indentation

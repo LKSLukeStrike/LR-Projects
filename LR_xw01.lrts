@@ -1,0 +1,7 @@
+function argTest(_arg) {
+	_arg = _arg || "World"
+	log("Hello " + _arg)
+}
+
+argTest()
+argTest("John")
