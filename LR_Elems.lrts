@@ -268,6 +268,15 @@ function getElemCss(elem) {
 
 //region LR_Elems Cfk Classes
 const Cfk_Effort      = "Cfk_Effort"		// has an effort related item
+const Cfk_Dotted01    = "Cfk_Dotted01"		// has a dotted01 value representation
+const Cfk_Dotted02    = "Cfk_Dotted02"		// has a dotted02 value representation
+const Cfk_Dotted03    = "Cfk_Dotted03"		// has a dotted03 value representation
+const Cfk_Dotted04    = "Cfk_Dotted04"		// has a dotted04 value representation
+const Cfk_Dotted05    = "Cfk_Dotted05"		// has a dotted05 value representation
+const Cfk_Dotted06    = "Cfk_Dotted06"		// has a dotted06 value representation
+const Cfk_Dotted07    = "Cfk_Dotted07"		// has a dotted07 value representation
+const Cfk_Dotted08    = "Cfk_Dotted08"		// has a dotted08 value representation
+const Cfk_Dotted09    = "Cfk_Dotted09"		// has a dotted09 value representation
 const Cfk_Dotted10    = "Cfk_Dotted10"		// has a dotted10 value representation
 const Cfk_Plussigned  = "Cfk_Plussigned"	// allows to show "+" for positive values
 const Cfk_Undisplayed = "Cfk_Undisplayed"	// allows to show/hide items
@@ -277,6 +286,15 @@ const Cfk_Selected    = "Cfk_Selected"		// allows only rej, inj
 const Cfk_Fakeupdated = "Cfk_Fakeupdated"	// avoid computations propagation
 const Key_CFKCSS      = { // relation between cfk and css /!\ space to separate
 	Cfk_Effort        : Cfk_Effort      ,
+	Cfk_Dotted01      : Cfk_Dotted01    ,
+	Cfk_Dotted02      : Cfk_Dotted02    ,
+	Cfk_Dotted03      : Cfk_Dotted03    ,
+	Cfk_Dotted04      : Cfk_Dotted04    ,
+	Cfk_Dotted05      : Cfk_Dotted05    ,
+	Cfk_Dotted06      : Cfk_Dotted06    ,
+	Cfk_Dotted07      : Cfk_Dotted07    ,
+	Cfk_Dotted08      : Cfk_Dotted08    ,
+	Cfk_Dotted09      : Cfk_Dotted09    ,
 	Cfk_Dotted10      : Cfk_Dotted10    ,
 	Cfk_Plussigned    : Cfk_Plussigned  ,
 	Cfk_Undisplayed   : Cfk_Undisplayed + Str_Space + Css_DNone,
@@ -326,14 +344,32 @@ function hasElemEffort(elem) {
 //region LR_Elems Cfk Dotted // Fakeupdate
 const Yes_Dotted    = true
 const Not_Dotted    = false
+const Arr_Dotter01  = ["01",]
+const Arr_Dotter02  = ["01", "02",]
+const Arr_Dotter03  = ["01", "02", "03",]
+const Arr_Dotter04  = ["01", "02", "03", "04",]
+const Arr_Dotter05  = ["01", "02", "03", "04", "05",]
+const Arr_Dotter06  = ["01", "02", "03", "04", "05", "06",]
+const Arr_Dotter07  = ["01", "02", "03", "04", "05", "06", "07",]
+const Arr_Dotter08  = ["01", "02", "03", "04", "05", "06", "07", "08",]
+const Arr_Dotter09  = ["01", "02", "03", "04", "05", "06", "07", "08", "09",]
 const Arr_Dotter10  = ["01", "02", "03", "04", "05", "06", "07", "08", "09", "10",]
 const Key_DFKDOT    = { // relation between cfk_dottednn and arr_dotternn
+	Cfk_Dotted01 : Arr_Dotter01,
+	Cfk_Dotted02 : Arr_Dotter02,
+	Cfk_Dotted03 : Arr_Dotter03,
+	Cfk_Dotted04 : Arr_Dotter04,
+	Cfk_Dotted05 : Arr_Dotter05,
+	Cfk_Dotted06 : Arr_Dotter06,
+	Cfk_Dotted07 : Arr_Dotter07,
+	Cfk_Dotted08 : Arr_Dotter08,
+	Cfk_Dotted09 : Arr_Dotter09,
 	Cfk_Dotted10 : Arr_Dotter10,
 }
 const Str_DotEmpty  = ":ga_circle:"
 const Str_DotPlain  = ":ga_plain-circle:"
-const Str_DotInject = ":arrow-alt-circle-down:"
-const Str_DotReject = ":arrow-alt-circle-up:"
+const Str_DotInject = ":chevron-circle-down:"
+const Str_DotReject = ":chevron-circle-up:"
 //region LR_Elems Cfk Dotted Dotter/Checks
 function getElemDotter(elem) {
 	debugFA("getElemDotter", arguments)
