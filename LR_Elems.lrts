@@ -324,32 +324,100 @@ function hasElemEffort(elem) {
 //endregion
 
 //region LR_Elems Cfk Dotted // Fakeupdate
-function addElemDotted(elem, cfk_dotted) {
-	debugFA("addElemDotted", arguments)
-	addElemCfk(elem, cfk_dotted)				// normal operation
+const Yes_Dotted    = true
+const Not_Dotted    = false
+const Arr_Dotter10  = ["01", "02", "03", "04", "05", "06", "07", "08", "09", "10",]
+const Key_DFKDOT    = { // relation between cfk_dottednn and arr_dotternn
+	Cfk_Dotted10 : Arr_Dotter10,
+}
+const Str_DotEmpty  = ":ga_circle:"
+const Str_DotPlain  = ":ga_plain-circle:"
+const Str_DotInject = ":arrow-alt-circle-down:"
+const Str_DotReject = ":arrow-alt-circle-up:"
+//region LR_Elems Cfk Dotted Dotter/Checks
+function getElemDotter(elem) {
+	debugFA("getElemDotter", arguments)
+	const result = Not_Dotted
+	Object.keys(Key_DFKDOT).forEach(function(cfk_dottednn) {
+		if (hasElemCfk(elem, cfk_dottednn)) { // related arr_dotternn
+			result = Key_DFKDOT[cfk_dottednn]
+		}
+	})
+	return result
+}
+function yesElemDotted(elem) { // if elem is dotted
+	debugFA("yesElemDotted", arguments)
+	return getElemDotter(elem) ?
+		Yes_Dotted : Not_Dotted
+}
+function notElemDotted(elem) { // if not elem is dotted
+	debugFA("notElemDotted", arguments)
+	return ! yesElemDotted(elem)
+}
+//endregion
+//region LR_Elems Cfk Dotted Values
+function setElemDotted(elem) { // dotted representation if any
+	debugFA("setElemDotted", arguments)
+	const arr_dotternn = getElemDotter(elem)
+	return arr_dotternn ?
+		setElemDottedNN(elem, arr_dotternn) : Not_Dotted
+}
+function setElemDottedNN(elem, arr_dotternn) { // dottednn representation if any
+	debugFA("setElemDottedNN", arguments)
+	if (yesArray(elem)) {return elem.forEach(function(elem) { // recursive
+		setElemDottedNN(elem, arr_dotternn)
+	})} // single elem from here
+	if (notElemDotted(elem)) {return Not_Dotted} // no dotted representation
+	const elm_sheet = getElemSheet(elem)
+	const elm_value = getElemValue(elem)
+	const dot_elem  = val2dotElem(elem)
+	const dot_item  = getElemItem(dot_elem)
+	const eff_elem  = val2effElem(elem)
+	const eff_value = hasElemEffort(elem) ? // effort representation if any
+		getElemValue(eff_elem) : Int_Zero
+	arr_dotternn.forEach(function(str_dotternn) {
+		const int_dotternn = Number(str_dotternn)
+		const dot_itemnn   = sfxValue(dot_item, str_dotternn)
+		const dot_elemnn   = getSheetItem(elm_sheet, dot_itemnn)
+		if (gthValue(int_dotternn, elm_value)) {
+			dot_elemnn.value(Str_DotEmpty)
+		} else if (gthValue(int_dotternn, elm_value - eff_value)) {
+			dot_elemnn.value(Str_DotInject)
+		} else {
+			dot_elemnn.value(Str_DotPlain)
+		}
+	})
+	return Yes_Dotted
+}
+//endregion
+//region LR_Elems Cfk DottedNN
+function addElemDottedNN(elem, cfk_dottednn) {
+	debugFA("addElemDottedNN", arguments)
+	addElemCfk(elem, cfk_dottednn)					// normal operation
 	return fakElemUpdate(elem)
 }
-function remElemDotted(elem, cfk_dotted) {
-	debugFA("remElemDotted", arguments)
-	remElemCfk(elem, cfk_dotted)				// normal operation
+function remElemDottedNN(elem, cfk_dottednn) {
+	debugFA("remElemDottedNN", arguments)
+	remElemCfk(elem, cfk_dottednn)					// normal operation
 	return fakElemUpdate(elem)
 }
-function hasElemDotted(elem, cfk_dotted) {
-	debugFA("hasElemDotted", arguments)
-	return hasElemCfk(elem, cfk_dotted)			// normal operation
+function hasElemDottedNN(elem, cfk_dottednn) {
+	debugFA("hasElemDottedNN", arguments)
+	return hasElemCfk(elem, cfk_dottednn)			// normal operation
 }
+//endregion
 //region LR_Elems Cfk Dotted10
 function addElemDotted10(elem) {
 	debugFA("addElemDotted10", arguments)
-	return addElemDotted(elem, Cfk_Dotted10)
+	return addElemDottedNN(elem, Cfk_Dotted10)
 }
 function remElemDotted10(elem) {
 	debugFA("remElemDotted10", arguments)
-	return remElemDotted(elem, Cfk_Dotted10)
+	return remElemDottedNN(elem, Cfk_Dotted10)
 }
 function hasElemDotted10(elem) {
 	debugFA("hasElemDotted10", arguments)
-	return hasElemCfk(elem, Cfk_Dotted10)
+	return hasElemDottedNN(elem, Cfk_Dotted10)
 }
 //endregion
 //endregion
