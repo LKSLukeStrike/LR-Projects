@@ -1,8 +1,16 @@
 //region LR_Elems (aka components in LR)
-//region LR_Elems Sheet Items
+//region LR_Elems Sheet
 function getSheetItem(sheet, item) { // returns sheet item elem
 	debugFA("getSheetItem", arguments)
 	return sheet.get(item)
+}
+function getSheetName() { // the proper sheet/craft name
+	debugFA("getSheetName", arguments)
+	let result = null
+	try { // skip error when no name
+		result = sheet.properName()
+	} finally {}
+	return result
 }
 //endregion
 
