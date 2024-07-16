@@ -1,3 +1,61 @@
+//region LR_Types
+const Str_Null		= "null"
+const Str_Undefined	= "undefined"
+const Str_String	= "string"
+const Str_Thing	    = "thing"
+const Str_Object	= "object"
+const Str_Array	    = "array"
+const Str_Elem	    = "elem"
+function yesNull(thing) {
+	return thing === null
+}
+function notNull(thing) {
+	return ! yesNull(thing)
+}
+function yesUndefined(thing) {
+	return typeof thing === Str_Undefined
+}
+function notUndefined(thing) {
+	return ! yesUndefined(thing)
+}
+function yesString(thing) {
+	return typeof thing === Str_String
+}
+function notString(thing) {
+	return ! yesString(thing)
+}
+function yesThing(thing) {
+	return notNull(thing) && notUndefined(thing)
+}
+function notThing(thing) {
+	return ! yesThing(thing)
+}
+function yesObject(thing) {
+	return yesThing(thing) && typeof thing === Str_Object
+}
+function notObject(thing) {
+	return ! yesObject(thing)
+}
+function yesArray(thing) {
+	return yesThing(thing) && Array.isArray(thing)
+}
+function notArray(thing) {
+	return ! yesArray(thing)
+}
+function yesElem(thing) {
+	return yesObject(thing) && notArray(thing)
+}
+function notElem(thing) {
+	return ! yesElem(thing)
+}
+function tryArg(_arg) { // error if no arg or undefined arg // use for default args
+	try {
+		if (yesUndefined(_arg)) {throw Str_Undefined}
+	} catch(e) {throw Str_Undefined}
+}
+//endregion
+
+
 const Arr_SUCFAI	= ["0", "1", "2", "3", "4", "5", "6", "7", "8", "9",]
 
 const Lbl_ROLSUC_	= "Lbl_ROLSUC_"
@@ -478,13 +536,28 @@ const initMainSheet = function(sheet) {
 	// setSheetItemValue(sheet, Val_RESULT, strObject(Key_TEST, true))
 
 	debug("start")
-function argTest(_arg) {
-	try {_arg = _arg} catch(e) {_arg = "World"}
-	log("Hello " + _arg)
+
+function argTest(_arg1, _arg2, _arg3) {
+	try {tryArg(_arg1)} catch(e) {_arg1 = "Hello"}
+	try {tryArg(_arg2)} catch(e) {_arg2 = "World"}
+	try {tryArg(_arg3)} catch(e) {_arg3 = "!"}
+	log(_arg1 + " " + _arg2 + " " + _arg3)
 }
 
 argTest()
 argTest("John")	
+argTest("Bonjour")
+argTest("Bonjour", "Le Monde")	
+argTest(null, "Allan")	
+argTest(undefined, "Willy")	
+argTest("A", "B", "C")	
+argTest(undefined, "B", "C")	
+argTest("A", undefined, "C")	
+argTest("A", "B", undefined)
+// tryArg()
+
+// log(eval("10 + 30"))
+	
 	// debug(cpoValue("   this is     THE way   "))
 	// debug(cpoValue("   THIS is     THE way   "))
 	// debug(cpoValue("   THIS is     THE way   ", true))

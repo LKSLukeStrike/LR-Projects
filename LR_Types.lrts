@@ -48,4 +48,9 @@ function yesElem(thing) {
 function notElem(thing) {
 	return ! yesElem(thing)
 }
+function tryArg(_arg) { // error if no arg or undefined arg // use for default args
+	try {
+		if (yesUndefined(_arg)) {throw Str_Undefined}
+	} catch(e) {throw Str_Undefined}
+}
 //endregion
