@@ -1,0 +1,9 @@
+function genArrayIntFTS(_int_from, _int_to, _int_step, _yes_autostep) {
+	debugFA("genArrayIntFTS", arguments)
+	try {tryArg(_int_from)}     catch(e) {_int_from = Int_Zero}
+	try {tryArg(_int_to)}       catch(e) {_int_to   = _int_from}
+	try {tryArg(_int_step)}     catch(e) {_int_step = Int_POne}
+	try {tryArg(_yes_autostep)} catch(e) {_yes_autostep = true}
+	let result = Arr_None
+	return result
+}

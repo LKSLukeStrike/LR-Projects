@@ -121,7 +121,7 @@ function setElemValue(elem, elm_value) {
 		setElemValue(elem, elm_value)
 	})} // single elem from here
 	elm_value = hasElemPlussigned(elem) // plussigned representation if any
-	&& gthValue(elm_value, Int_Zero) ?
+	&& ygtValue(elm_value, Int_Zero) ?
 		pfxValue(elm_value, Str_Plus) : elm_value
 	elem.value(elm_value)
 	setElemDotted(elem) // dotted representation if any
@@ -137,7 +137,7 @@ function rsaElemValue(elem, value_str, value_rpl) { // replace a string all
 }
 function hasElemValue(elem, elm_value) {
 	debugFA("hasElemValue", arguments)
-	return equValue(getElemValue(elem), elm_value)
+	return yeqValue(getElemValue(elem), elm_value)
 }
 function ysiElemValue(elem, value_str) { // if includes a string
 	debugFA("ysiElemValue", arguments)
@@ -214,7 +214,7 @@ function yesDFlexElem(elem) { // if require to add/rem dflex
 }
 function yesDFlexCss(css) { // if require to add/rem dflex
 	debugFA("yesDFlexCss", arguments)
-	let result = equValue(css, Css_DNone)
+	let result = yeqValue(css, Css_DNone)
 	return result
 }
 function yesDFlex(elem, css) { // if require to add/rem dflex
@@ -421,9 +421,9 @@ function setElemDottedNN(elem, arr_dotternn) { // dottednn representation if any
 		const int_dotternn = Number(str_dotternn)
 		const dot_itemnn   = sfxValue(dot_item, str_dotternn)
 		const dot_elemnn   = getSheetItem(elm_sheet, dot_itemnn)
-		if (gthValue(int_dotternn, elm_value)) {
+		if (ygtValue(int_dotternn, elm_value)) {
 			dot_elemnn.value(Str_DotEmpty)
-		} else if (gthValue(int_dotternn, elm_value - eff_value)) {
+		} else if (ygtValue(int_dotternn, elm_value - eff_value)) {
 			dot_elemnn.value(Str_DotInject)
 		} else {
 			dot_elemnn.value(Str_DotPlain)

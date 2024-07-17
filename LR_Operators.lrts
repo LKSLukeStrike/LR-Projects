@@ -33,60 +33,76 @@ function mxhValue(value_one, value_two) { // maximum mix value
 //endregion
 
 //region LR_Operators Compare
-function equValue(value_one, value_two) { // if equal
-	debugFA("equValue", arguments)
+function yeqValue(value_one, value_two) { // if equal
+	debugFA("yeqValue", arguments)
 	return value_one === value_two
 }
 function neqValue(value_one, value_two) { // if not equal
 	debugFA("neqValue", arguments)
-	return value_one !== value_two
+	return ! yeqValue(value_one, value_two)
 }
-function yesZero(value_one) { // if zero
-	debugFA("yesZero", arguments)
-	return equValue(value_one, Int_Zero)
+function yizValue(value_one) { // if int zero
+	debugFA("yizValue", arguments)
+	return yeqValue(value_one, Int_Zero)
 }
-function notZero(value_one) { // if not zero
-	debugFA("notZero", arguments)
-	return ! yesZero(value_one)
+function yzpValue(value_one) { // if int zero positive
+	debugFA("yzpValue", arguments)
+	return ygeValue(value_one, Int_Zero)
 }
-function yesStrNone(value_one) { // if none
-	debugFA("yesStrNone", arguments)
-	return equValue(value_one, Str_None)
+function yppValue(value_one) { // if int pure positive
+	debugFA("yppValue", arguments)
+	return ygtValue(value_one, Int_Zero)
 }
-function notStrNone(value_one) { // if not none
-	debugFA("notStrNone", arguments)
-	return ! yesStrNone(value_one)
+function yznValue(value_one) { // if int zero negative
+	debugFA("yznValue", arguments)
+	return yleValue(value_one, Int_Zero)
 }
-function yesArrNone(value_one) { // if none
-	debugFA("yesArrNone", arguments)
-	return equValue(value_one, Arr_None)
+function ypnValue(value_one) { // if int pure negative
+	debugFA("ypnValue", arguments)
+	return yltValue(value_one, Int_Zero)
 }
-function notArrNone(value_one) { // if not none
-	debugFA("notArrNone", arguments)
-	return ! yesArrNone(value_one)
+function nizValue(value_one) { // if not int zero
+	debugFA("nizValue", arguments)
+	return ! yizValue(value_one)
 }
-function yesObjNone(value_one) { // if none
-	debugFA("yesObjNone", arguments)
-	return equValue(value_one, Obj_None)
+function ysnValue(value_one) { // if string none
+	debugFA("ysnValue", arguments)
+	return yeqValue(value_one, Str_None)
 }
-function notObjNone(value_one) { // if not none
-	debugFA("notObjNone", arguments)
-	return ! yesObjNone(value_one)
+function nsnValue(value_one) { // if not string none
+	debugFA("nsnValue", arguments)
+	return ! ysnValue(value_one)
 }
-function lthValue(value_one, value_two) { // if lower than
-	debugFA("lthValue", arguments)
+function yanValue(value_one) { // if array none
+	debugFA("yanValue", arguments)
+	return yeqValue(value_one, Arr_None)
+}
+function nanValue(value_one) { // if not array none
+	debugFA("nanValue", arguments)
+	return ! yanValue(value_one)
+}
+function yonValue(value_one) { // if object none
+	debugFA("yonValue", arguments)
+	return yeqValue(value_one, Obj_None)
+}
+function nonValue(value_one) { // if not object none
+	debugFA("nonValue", arguments)
+	return ! yonValue(value_one)
+}
+function yltValue(value_one, value_two) { // if lower than
+	debugFA("yltValue", arguments)
 	return value_one <  value_two
 }
-function gthValue(value_one, value_two) { // if greater than
-	debugFA("gthValue", arguments)
+function ygtValue(value_one, value_two) { // if greater than
+	debugFA("ygtValue", arguments)
 	return value_one >  value_two
 }
-function leqValue(value_one, value_two) { // if lower or equal
-	debugFA("leqValue", arguments)
+function yleValue(value_one, value_two) { // if lower or equal
+	debugFA("yleValue", arguments)
 	return value_one <= value_two
 }
-function geqValue(value_one, value_two) { // if greater or equal
-	debugFA("geqValue", arguments)
+function ygeValue(value_one, value_two) { // if greater or equal
+	debugFA("ygeValue", arguments)
 	return value_one >= value_two
 }
 //endregion
@@ -215,11 +231,11 @@ function strThing(thing, _yes_indent, _str_indentcur, _str_indentuse) { // str a
 			result = sfxValue(result, Str_OArray)
 			thing.forEach(function(itm) { // recursive
 				itm_result = strThing(itm, _yes_indent, str_indentnxt, _str_indentuse)
-				if (notStrNone(itm_result)) {
+				if (nsnValue(itm_result)) {
 					obj_result = obj_result + str_newline + str_indentnxt + itm_result + Str_Comma + Str_Space
 				}
 			})
-			if (notStrNone(obj_result)) {
+			if (nsnValue(obj_result)) {
 				result = result + _str_indentcur + obj_result + str_newline + _str_indentcur
 			}
 			result = sfxValue(result, Str_CArray)
@@ -228,11 +244,11 @@ function strThing(thing, _yes_indent, _str_indentcur, _str_indentuse) { // str a
 			Object.keys(thing).forEach(function(key) { // recursive
 				itm_result = dqmValue(key) + Str_DDot + Str_Space
 				itm_result = itm_result + strThing(thing[key], _yes_indent, str_indentnxt, _str_indentuse)
-				if (notStrNone(itm_result)) {
+				if (nsnValue(itm_result)) {
 					obj_result = obj_result + str_newline + str_indentnxt + itm_result + Str_Comma + Str_Space
 				}
 			})
-			if (notStrNone(obj_result)) {
+			if (nsnValue(obj_result)) {
 				result = result + _str_indentcur + obj_result + str_newline + _str_indentcur
 			}
 			result = sfxValue(result, Str_CObject)

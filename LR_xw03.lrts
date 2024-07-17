@@ -1,0 +1,8 @@
+function yznValue(value_one) { // if int zero negative
+	debugFA("yznValue", arguments)
+	return yleValue(value_one, Int_Zero)
+}
+function ypnValue(value_one) { // if int pure negative
+	debugFA("ypnValue", arguments)
+	return yltValue(value_one, Int_Zero)
+}

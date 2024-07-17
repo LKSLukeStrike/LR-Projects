@@ -111,7 +111,7 @@ function setSheetItemReplc(sheet, item, value_str, value_rpl) { // replace a str
 }
 function hasSheetItemValue(sheet, item, itm_value) {
 	debugFA("hasSheetItemValue", arguments)
-	return equValue(getSheetItemValue(sheet, item), itm_value)
+	return yeqValue(getSheetItemValue(sheet, item), itm_value)
 }
 function hasSheetItemString(sheet, item, value_str) { // includes a string
 	debugFA("hasSheetItemString", arguments)
@@ -141,9 +141,9 @@ function setSheetItemDotted10(sheet, item) {
 		getSheetItemValue(sheet, eff_item) : Int_Zero
 	Arr_Dotter10.forEach(function(dot_value) {
 		const dot_itemnn = sfxValue(dot_item, dot_value)
-		if (gthValue(Number(dot_value), itm_value)) {
+		if (ygtValue(Number(dot_value), itm_value)) {
 			sheet.get(dot_itemnn).value(Str_Dotempty)
-		} else if (gthValue(Number(dot_value), itm_value - eff_value)) {
+		} else if (ygtValue(Number(dot_value), itm_value - eff_value)) {
 			sheet.get(dot_itemnn).value(Str_Dotinject)
 		} else {
 			sheet.get(dot_itemnn).value(Str_Dotplain)
@@ -530,44 +530,44 @@ function mxhValue(value_one, value_two) { // maximum mix value
 	debugFA("mxhValue", arguments)
 	return Math.ceil((value_one + value_two) / 2)
 }
-function equValue(value_one, value_two) { // if equal
-	debugFA("equValue", arguments)
+function yeqValue(value_one, value_two) { // if equal
+	debugFA("yeqValue", arguments)
 	return value_one == value_two
 }
 function neqValue(value_one, value_two) { // if not equal
 	debugFA("neqValue", arguments)
 	return value_one != value_two
 }
-function yesZero(value_one) { // if zero
-	debugFA("yesZero", arguments)
-	return equValue(value_one, Int_Zero)
+function yizValue(value_one) { // if zero
+	debugFA("yizValue", arguments)
+	return yeqValue(value_one, Int_Zero)
 }
-function notZero(value_one) { // if not zero
-	debugFA("notZero", arguments)
-	return ! yesZero(value_one)
+function nizValue(value_one) { // if not zero
+	debugFA("nizValue", arguments)
+	return ! yizValue(value_one)
 }
-function yesStrNone(value_one) { // if none
-	debugFA("yesStrNone", arguments)
-	return equValue(value_one, Str_None)
+function ysnValue(value_one) { // if none
+	debugFA("ysnValue", arguments)
+	return yeqValue(value_one, Str_None)
 }
-function notStrNone(value_one) { // if not none
-	debugFA("notStrNone", arguments)
-	return ! yesStrNone(value_one)
+function nsnValue(value_one) { // if not none
+	debugFA("nsnValue", arguments)
+	return ! ysnValue(value_one)
 }
-function lthValue(value_one, value_two) { // if lower than
-	debugFA("lthValue", arguments)
+function yltValue(value_one, value_two) { // if lower than
+	debugFA("yltValue", arguments)
 	return value_one <  value_two
 }
-function gthValue(value_one, value_two) { // if greater than
-	debugFA("gthValue", arguments)
+function ygtValue(value_one, value_two) { // if greater than
+	debugFA("ygtValue", arguments)
 	return value_one >  value_two
 }
-function leqValue(value_one, value_two) { // if lower or equal
-	debugFA("leqValue", arguments)
+function yleValue(value_one, value_two) { // if lower or equal
+	debugFA("yleValue", arguments)
 	return value_one <= value_two
 }
-function geqValue(value_one, value_two) { // if greater or equal
-	debugFA("geqValue", arguments)
+function ygeValue(value_one, value_two) { // if greater or equal
+	debugFA("ygeValue", arguments)
 	return value_one >= value_two
 }
 function ysiValue(value_one, value_str) { // if includes a string
