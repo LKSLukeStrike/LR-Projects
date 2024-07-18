@@ -44,10 +44,10 @@ function debugElemClick(elem) {
 function debugElemUpdate(elem) {
 	debugElemEvt(elem, Evt_Update)
 }
-function debugFA(fct_name, _fct_args, _yes_debugfa) { // use: debugFA("myFct", arguments)
+function debugFA(fct_name, _fct_args, _yes_debugfa) { // debugFA("myFct", arguments)
 	if (arguments.length < 3) {_yes_debugfa = Dft_DebugFA}
 	if (arguments.length < 2) {_fct_args = ""}
-	_yes_debugfa = ykiValue(Key_DEBUGFA, fct_name) ?
+	_yes_debugfa = Key_DEBUGFA.hasOwnProperty(fct_name) ? // /!\ avoid dead loop
 		Key_DEBUGFA[fct_name] : _yes_debugfa
 	if (! _yes_debugfa) {return} // do not debug
 	if (yesObject(_fct_args)) {

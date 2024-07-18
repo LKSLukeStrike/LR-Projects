@@ -77,6 +77,385 @@ const Arr_THMALW		= [ // themes allowed
 //endregion
 //endregion
 
+//region LR_Debug
+const Yes_Debug   = true
+const Not_Debug   = false
+const Dft_Debug   = Yes_Debug
+const Dft_DebugFA = Not_Debug
+const Yes_Indent  = true
+const Not_Indent  = false
+const Dft_Indent  = Not_Indent
+let   Key_DEBUGFA = { //relation between fct_name and debug // else Dft_DebugFA
+}
+function debug(str_debug, _yes_debug) {
+	if (arguments.length < 2) {_yes_debug = Dft_Debug}
+	if (_yes_debug) {log(str_debug)}
+}
+function debugOK(_yes_debug) {
+	if (arguments.length < 1) {_yes_debug = Dft_Debug}
+	debug("OK", _yes_debug)
+}
+function debugElem(elem, _yes_debug, _yes_indent) {
+	if (arguments.length < 3) {_yes_indent = Dft_Indent}
+	if (arguments.length < 2) {_yes_debug = Dft_Debug}
+	if (! _yes_debug) {return} // force not debug
+	debug("< ELEM >")
+	debug("> parent: " + getElemParent(elem))
+	debug("> parent id: " + getElemId(getElemParent(elem)))
+	debug("> parent name: " + getElemName(getElemParent(elem)))
+	debug("> sheet: " + getElemSheet(elem))
+	debug("> sheet id: " + getElemId(getElemSheet(elem)))
+	debug("> sheet name: " + getElemName(getElemSheet(elem)))
+	debug("> id: " + getElemId(elem))
+	debug("> name: " + getElemName(elem))
+	debug("> index: " + getElemIndex(elem))
+	debug("> typeof: " + getElemTypeof(elem))
+	debug("> children: " + getElemChildren(elem))
+	debug("> value: " + strThing(getElemValue(elem), _yes_indent))
+	debug("> css: " + strThing(getElemCss(elem), _yes_indent))
+}
+function debugElemEvt(elem, evt) {
+	debug("! on" + cpoValue(evt) + " " + getElemId(elem))
+}
+function debugElemClick(elem) {
+	debugElemEvt(elem, Evt_Click)
+}
+function debugElemUpdate(elem) {
+	debugElemEvt(elem, Evt_Update)
+}
+function debugFA(fct_name, _fct_args, _yes_debugfa) { // debugFA("myFct", arguments)
+	if (arguments.length < 3) {_yes_debugfa = Dft_DebugFA}
+	if (arguments.length < 2) {_fct_args = ""}
+	_yes_debugfa = Key_DEBUGFA.hasOwnProperty(fct_name) ? // /!\ avoid dead loop
+		Key_DEBUGFA[fct_name] : _yes_debugfa
+	if (! _yes_debugfa) {return} // do not debug
+	if (yesObject(_fct_args)) {
+		if (yesArray(_fct_args)) {
+			_fct_args = _fct_args.flat(Infinity)
+		} else {
+			_fct_args = Object.values(_fct_args)
+		}
+	}
+	debug(fct_name + " " + _fct_args) // default debug mode
+}
+function debugFAOK(fct_name, _yes_debugfa) { // use: debugFAOK("myFunction")
+	if (arguments.length < 2) {_yes_debugfa = Dft_DebugFA}
+	debugFA(fct_name, "OK", _yes_debugfa)
+}
+//endregion
+
+//region LR_Operators
+//region LR_Operators Random
+function rndValue(value_min, value_max) { // random value (integer, inclusive)
+	debugFA("rndValue", arguments)
+	value_min = Math.ceil(value_min)
+	value_max = Math.floor(value_max)
+	return Math.floor(Math.random() * (value_max - value_min + 1) + value_min)
+}
+//endregion
+
+//region LR_Operators Min/Max
+function minValue(value_one, value_two) { // minimum value
+	debugFA("minValue", arguments)
+	return value_one < value_two ?
+		value_one : value_two
+}
+function maxValue(value_one, value_two) { // maximum value
+	debugFA("maxValue", arguments)
+	return value_one > value_two ?
+		value_one : value_two
+}
+//endregion
+
+//region LR_Operators Mix
+function mxlValue(value_one, value_two) { // minimum mix value
+	debugFA("mxlValue", arguments)
+	return Math.floor((value_one + value_two) / 2)
+}
+function mxhValue(value_one, value_two) { // maximum mix value
+	debugFA("mxhValue", arguments)
+	return Math.ceil((value_one + value_two) / 2)
+}
+//endregion
+
+//region LR_Operators Compare
+function yeqValue(value_one, value_two) { // if equal
+	debugFA("yeqValue", arguments)
+	return value_one === value_two
+}
+function neqValue(value_one, value_two) { // if not equal
+	debugFA("neqValue", arguments)
+	return ! yeqValue(value_one, value_two)
+}
+function yizValue(value_one) { // if int zero
+	debugFA("yizValue", arguments)
+	return yeqValue(value_one, Int_Zero)
+}
+function yzpValue(value_one) { // if int zero positive
+	debugFA("yzpValue", arguments)
+	return ygeValue(value_one, Int_Zero)
+}
+function yppValue(value_one) { // if int pure positive
+	debugFA("yppValue", arguments)
+	return ygtValue(value_one, Int_Zero)
+}
+function yznValue(value_one) { // if int zero negative
+	debugFA("yznValue", arguments)
+	return yleValue(value_one, Int_Zero)
+}
+function ypnValue(value_one) { // if int pure negative
+	debugFA("ypnValue", arguments)
+	return yltValue(value_one, Int_Zero)
+}
+function nizValue(value_one) { // if not int zero
+	debugFA("nizValue", arguments)
+	return ! yizValue(value_one)
+}
+function ysnValue(value_one) { // if string none
+	debugFA("ysnValue", arguments)
+	return yeqValue(value_one, Str_None)
+}
+function nsnValue(value_one) { // if not string none
+	debugFA("nsnValue", arguments)
+	return ! ysnValue(value_one)
+}
+function yanValue(value_one) { // if array none
+	debugFA("yanValue", arguments)
+	return yeqValue(value_one, Arr_None)
+}
+function nanValue(value_one) { // if not array none
+	debugFA("nanValue", arguments)
+	return ! yanValue(value_one)
+}
+function yonValue(value_one) { // if object none
+	debugFA("yonValue", arguments)
+	return yeqValue(value_one, Obj_None)
+}
+function nonValue(value_one) { // if not object none
+	debugFA("nonValue", arguments)
+	return ! yonValue(value_one)
+}
+function yltValue(value_one, value_two) { // if lower than
+	debugFA("yltValue", arguments)
+	return value_one <  value_two
+}
+function ygtValue(value_one, value_two) { // if greater than
+	debugFA("ygtValue", arguments)
+	return value_one >  value_two
+}
+function yleValue(value_one, value_two) { // if lower or equal
+	debugFA("yleValue", arguments)
+	return value_one <= value_two
+}
+function ygeValue(value_one, value_two) { // if greater or equal
+	debugFA("ygeValue", arguments)
+	return value_one >= value_two
+}
+//endregion
+
+//region LR_Operators Includes
+function ysiValue(str_value, value_one) { // if string includes
+	debugFA("ysiValue", arguments)
+	return str_value.includes(value_one)
+}
+function nsiValue(str_value, value_one) { // if not string includes
+	debugFA("nsiValue", arguments)
+	return ! ysiValue(str_value, value_one)
+}
+function yaiValue(arr_value, value_one) { // if array includes
+	debugFA("yaiValue", arguments)
+	return arr_value.includes(value_one)
+}
+function naiValue(arr_value, value_one) { // if not array includes
+	debugFA("naiValue", arguments)
+	return ! yaiValue(arr_value, value_one)
+}
+function ykiValue(obj_value, value_one) { // if object includes key
+	debugFA("ykiValue", arguments)
+	return arr_value.hasOwnProperty(value_one)
+}
+function nkiValue(obj_value, value_one) { // if not object includes key
+	debugFA("nkiValue", arguments)
+	return ! ykiValue(arr_value, value_one)
+}
+//endregion
+
+//region LR_Operators Replace
+function rsoValue(str_value, value_one, value_two) { // replace a string once
+	debugFA("rsoValue", arguments)
+	return str_value.replace(value_one, value_two)
+}
+function rsaValue(str_value, value_one, value_two) { // replace a string all
+	debugFA("rsaValue", arguments)
+	return str_value.replaceAll(value_one, value_two)
+}
+//endregion
+
+//region LR_Operators Generate
+function gaiValue(_int_from, _int_lenght, _int_step) { // generate array of int
+	debugFA("gaiValue", arguments)
+	try {tryArg(_int_from)}   catch(e) {_int_from   = Int_Zero}
+	try {tryArg(_int_lenght)} catch(e) {_int_lenght = Int_POne}
+	try {tryArg(_int_step)}   catch(e) {_int_step   = Int_POne}
+	let result = []
+	while (yppValue(_int_lenght)) {
+		result.push(_int_from)
+		_int_from   += _int_step
+		_int_lenght -= Int_POne
+	}
+	return result
+}
+//endregion
+
+//region LR_Operators Prefix/Suffix
+function pfxValue(value_one, value_str) { // prefix with a string
+	debugFA("pfxValue", arguments)
+	return value_str + value_one
+}
+function sfxValue(value_one, value_str) { // suffix with a string
+	debugFA("sfxValue", arguments)
+	return value_one + value_str
+}
+//endregion
+
+//region LR_Operators Enclose
+function sqmValue(value_one) { // single quotes
+	debugFA("sqmValue", arguments)
+	return Str_SQMark + value_one + Str_SQMark
+}
+function dqmValue(value_one) { // double quotes
+	debugFA("dqmValue", arguments)
+	return Str_DQMark + value_one + Str_DQMark
+}
+//endregion
+
+//region LR_Operators Cases
+const Yes_FromLC        = true
+const Not_FromLC        = false
+const Dft_FromLC        = Not_FromLC
+function lcaValue(value_one) { // lower case all
+	debugFA("lcaValue", arguments)
+	return value_one.toLowerCase()
+}
+function ucaValue(value_one) { // upper case all
+	debugFA("ucaValue", arguments)
+	return value_one.toUpperCase()
+}
+function cpoValue(value_one, _yes_fromlc) { // capitalize once
+	debugFA("cpoValue", arguments)
+	if (arguments.length < 2) {_yes_fromlc = Dft_FromLC}
+	if (_yes_fromlc) {
+		value_one = lcaValue(value_one)
+	}
+	return value_one.replace(/(^\w{1})|(\s+\w{1})/, function(letter) {
+		return ucaValue(letter)
+	})
+}
+function cpaValue(value_one, _yes_fromlc) { // capitalize all
+	debugFA("cpaValue", arguments)
+	if (arguments.length < 2) {_yes_fromlc = Dft_FromLC}
+	if (_yes_fromlc) {
+		value_one = lcaValue(value_one)
+	}
+	return value_one.replace(/(^\w{1})|(\s+\w{1})/g, function(letter) {
+		return ucaValue(letter)
+	})
+}
+//endregion
+
+//region LR_Operators Toggle
+function tynValue(value_one) { // toggle yes/not (1/0)
+	debugFA("tynValue", arguments)
+	return value_one ?
+		0 : 1
+}
+//endregion
+
+//region LR_Operators Stringify
+function strThing(thing, _yes_indent, _str_indentcur, _str_indentuse) { // str a thing
+	debugFA("strThing", arguments)
+	if (arguments.length < 4) {_str_indentuse = Str_Tab} // indentation string
+	if (arguments.length < 3) {_str_indentcur = Str_None} // current indentation
+	if (arguments.length < 2) {_yes_indent = Dft_Indent}
+	const str_newline = _yes_indent ? // no newline if no indentation
+		Str_Newline : Str_None
+	_str_indentcur = _yes_indent ? // clear _str_indentcur if no indentation
+		_str_indentcur : Str_None
+	const str_indentnxt = _yes_indent ? // for the next indentation
+		_str_indentcur + _str_indentuse : Str_None
+	let result = Str_None
+	let obj_result = Str_None // result of an object entries
+	let itm_result = Str_None // result of an object entry
+	if (yesObject(thing)) {
+		if (yesNull(thing)) { // null
+			result = Str_Null
+		} else if (yesArray(thing)) { // array
+			result = sfxValue(result, Str_OArray)
+			thing.forEach(function(itm) { // recursive
+				itm_result = strThing(itm, _yes_indent, str_indentnxt, _str_indentuse)
+				if (nsnValue(itm_result)) {
+					obj_result = obj_result + str_newline + str_indentnxt + itm_result + Str_Comma + Str_Space
+				}
+			})
+			if (nsnValue(obj_result)) {
+				result = result + _str_indentcur + obj_result + str_newline + _str_indentcur
+			}
+			result = sfxValue(result, Str_CArray)
+		} else { // object
+			result = sfxValue(result, Str_OObject)
+			Object.keys(thing).forEach(function(key) { // recursive
+				itm_result = dqmValue(key) + Str_DDot + Str_Space
+				itm_result = itm_result + strThing(thing[key], _yes_indent, str_indentnxt, _str_indentuse)
+				if (nsnValue(itm_result)) {
+					obj_result = obj_result + str_newline + str_indentnxt + itm_result + Str_Comma + Str_Space
+				}
+			})
+			if (nsnValue(obj_result)) {
+				result = result + _str_indentcur + obj_result + str_newline + _str_indentcur
+			}
+			result = sfxValue(result, Str_CObject)
+		}
+	} else {
+		if (yesString(thing)) {
+			result = dqmValue(thing)
+		} else if (yesUndefined(thing)) {
+			result = Str_Undefined
+		} else {
+			result = thing
+		}
+	}
+	return result
+}
+//endregion
+
+//region LR_Operators Related
+function one2twoItem(item, prefix_one, prefix_two) { // one related two item
+	debugFA("one2twoItem", arguments)
+	return rsoValue(item, prefix_one, prefix_two)
+}
+function val2dotItem(item) { // val related dot item
+	debugFA("val2dotItem", arguments)
+	return one2twoItem(item, Str_PFXVAL, Str_PFXDOT)
+}
+function val2effItem(item) { // val related eff item
+	debugFA("val2effItem", arguments)
+	return one2twoItem(item, Str_PFXVAL, Str_PFXEFF)
+}
+function val2dxvItem(item) { // val related dxv item
+	debugFA("val2dxvItem", arguments)
+	return one2twoItem(item, Str_PFXVAL, Str_PFXDXV)
+}
+function val2chkItem(item) { // val related chk item
+	debugFA("val2chkItem", arguments)
+	return one2twoItem(item, Str_PFXVAL, Str_PFXCHK)
+}
+function chk2valItem(item) { // chk related val item
+	debugFA("chk2valItem", arguments)
+	return one2twoItem(item, Str_PFXCHK, Str_PFXVAL)
+}
+//endregion
+//endregion
+
 //region LR_Types
 const Str_Null		= "null"
 const Str_Undefined	= "undefined"
@@ -135,20 +514,11 @@ function tryArg(_arg) { // error if no arg or undefined arg // use for default a
 //endregion
 
 
+//region JSON_
 const Arr_SUCFAI	= ["0", "1", "2", "3", "4", "5", "6", "7", "8", "9",]
-
 const Lbl_ROLSUC_	= "Lbl_ROLSUC_"
 const Lbl_ROLFAI_	= "Lbl_ROLFAI_"
-
-// Sheet Items prefixes /!\ respect this convention for the code to work
-const Str_PFXDXV = "DxV_" // dot and value item (container)
-const Str_PFXVAL = "Val_" // value item
-const Str_PFXDOT = "Dot_" // dot item
-const Str_PFXEFF = "Eff_" // effort item
-const Str_PFXMOD = "Mod_" // modifier item
-const Str_PFXREP = "Rep_" // repeater item
-const Str_PFXCHK = "Chk_" // checkbox item (can also be a label/icon etc)
-const Str_PFXFLD = "Fld_" // foldering item (can also be a label/icon etc)
+//endregion
 
 
 //region Elems (aka components in LR)
@@ -303,178 +673,6 @@ function hasSheetItemValue(sheet, item, itm_value) {
 //endregion
 
 
-const Infinity   = Number.MAX_SAFE_INTEGER
-
-//region Debug
-const Yes_Debug         = true
-const Not_Debug         = false
-const Dft_Debug         = Yes_Debug
-const Dft_DebugFA       = Not_Debug
-const Key_DebugFAFctYes = { //relation between fct_name and debug // else Dft_DebugFA
-	rptElemDoIf: Yes_Debug,
-	rptElemDoIf_if_fct: Yes_Debug,
-	rptElemDoIf_do_fct: Yes_Debug,
-}
-function debug(msg_debug, yes_debug) {
-	if (arguments.length < 2) {yes_debug = Dft_Debug}
-	if (yes_debug) {log(msg_debug)}
-}
-function debugOK(yes_debug) {
-	if (arguments.length < 1) {yes_debug = Dft_Debug}
-	debug("OK", yes_debug)
-}
-function debugElem(elem, yes_debug, yes_indent) {
-	if (arguments.length < 3) {yes_indent = false}
-	if (arguments.length < 2) {yes_debug = Dft_Debug}
-	if (! yes_debug) {return} // force not debug
-	debug("< ELEM >")
-	debug("> parent: " + getElemParent(elem))
-	debug("> parent id: " + getElemId(getElemParent(elem)))
-	debug("> parent name: " + getElemName(getElemParent(elem)))
-	debug("> sheet: " + getElemSheet(elem))
-	debug("> sheet id: " + getElemId(getElemSheet(elem)))
-	debug("> sheet name: " + getElemName(getElemSheet(elem)))
-	debug("> id: " + getElemId(elem))
-	debug("> name: " + getElemName(elem))
-	debug("> index: " + getElemIndex(elem))
-	debug("> typeof: " + getElemTypeof(elem))
-	debug("> children: " + getElemChildren(elem))
-	debug("> value: " + strObject(getElemValue(elem), yes_indent))
-	debug("> css: " + strObject(getElemCss(elem), yes_indent))
-}
-function debugElemEvt(elem, evt) {
-	debug("! on" + cpoValue(evt) + " " + getElemId(elem))
-}
-function debugElemClick(elem) {
-	debugElemEvt(elem, Evt_Click)
-}
-function debugElemUpdate(elem) {
-	debugElemEvt(elem, Evt_Update)
-}
-function debugFA(fct_name, fct_args, yes_debugfa) { // use: debugFA("myFunction", arguments)
-	if (arguments.length < 3) {yes_debugfa = Dft_DebugFA}
-	if (arguments.length < 2) {fct_args = ""}
-	yes_debugfa = Key_DebugFAFctYes.hasOwnProperty(fct_name) ?
-		Key_DebugFAFctYes[fct_name] : yes_debugfa
-	if (! yes_debugfa) {return} // do not debug
-	if (typeof fct_args == "object") {
-		if (Array.isArray(fct_args)) {
-			fct_args = fct_args.flat(Infinity)
-		} else {
-			fct_args = Object.values(fct_args)
-		}
-	}
-	debug(fct_name + " " + fct_args) // default debug mode
-}
-function debugFAOK(fct_name, yes_debugfa) { // use: debugFAOK("myFunction")
-	if (arguments.length < 2) {yes_debugfa = Dft_DebugFA}
-	debugFA(fct_name, "OK", yes_debugfa)
-}
-//endregion
-
-function togValue(value_one) { // toggle value between 0 to 1
-	debugFA("togValue", arguments)
-	return value_one ?
-		0 : 1
-}
-
-function cpoValue(value_one, _yes_fromlower) { // capitalize once
-	debugFA("cpoValue", arguments)
-	if (arguments.length < 2) {_yes_fromlower = false}
-	if (_yes_fromlower) {
-		value_one = value_one.toLowerCase()
-	}
-	return value_one.replace(/(^\w{1})|(\s+\w{1})/, function(letter) {
-		return letter.toUpperCase()
-	})
-}
-
-function cpaValue(value_one, _yes_fromlower) { // capitalize all
-	debugFA("cpaValue", arguments)
-	if (arguments.length < 2) {_yes_fromlower = false}
-	if (_yes_fromlower) {
-		value_one = value_one.toLowerCase()
-	}
-	return value_one.replace(/(^\w{1})|(\s+\w{1})/g, function(letter) {
-		return letter.toUpperCase()
-	})
-}
-
-function rndValue(value_min, value_max) { // random value (integer, inclusive)
-	debugFA("rndValue", arguments)
-	value_min = Math.ceil(value_min)
-	value_max = Math.floor(value_max)
-	return Math.floor(Math.random() * (value_max - value_min + 1) + value_min)
-}
-function rpoValue(value_one, value_str, value_rpl) { // replace once by a string
-	debugFA("rpoValue", arguments)
-	return value_one.replace(value_str, value_rpl)
-}
-function val2chkItem(item) { // related chk item
-	debugFA("val2chkItem", arguments)
-	return rpoValue(item, Str_PFXVAL, Str_PFXCHK)
-}
-function chk2valItem(item) { // related val item
-	debugFA("chk2valItem", arguments)
-	return rpoValue(item, Str_PFXCHK, Str_PFXVAL)
-}
-
-function strObject(obj, yes_indent, str_indentact, str_indentuse) { // object as str
-	debugFA("strObject", arguments)
-	if (arguments.length < 4) {str_indentuse = "\t"} // string to use for indentation
-	if (arguments.length < 3) {str_indentact = ""} // current indentation string
-	if (arguments.length < 2) {yes_indent = false}
-	const str_newline = yes_indent ?
-		"\n" : ""
-	str_indentact = yes_indent ? // clear str_indentact if no indentation
-		str_indentact : ""
-	const str_indentnxt = yes_indent ? // for the next indentation
-		str_indentact + str_indentuse : ""
-	let result = ""
-	let obj_result = "" // result of an object entries
-	let itm_result = "" // result of an object entry
-	if (typeof obj == "object") {
-		if (yesNull(obj)) {
-			result = "null"
-		} else if (Array.isArray(obj)) {
-			result = result + "["
-			obj.forEach(function(itm) { // recursive
-				itm_result = strObject(itm, yes_indent, str_indentnxt, str_indentuse)
-				if (itm_result != "") {
-					obj_result = obj_result + str_newline + str_indentnxt + itm_result + ", "
-				}
-			})
-			if (obj_result != "") {
-				result = result + str_indentact + obj_result + str_newline + str_indentact
-			}
-			result = result + "]"
-		} else {
-			result = result + "{"
-			Object.keys(obj).forEach(function(key) { // recursive
-				itm_result = '"' + key + '": '
-				itm_result = itm_result + strObject(obj[key], yes_indent, str_indentnxt, str_indentuse)
-				if (itm_result != "") {
-					obj_result = obj_result + str_newline + str_indentnxt + itm_result + ", "
-				}
-			})
-			if (obj_result != "") {
-				result = result + str_indentact + obj_result + str_newline + str_indentact
-			}
-			result = result + "}"
-		}
-	} else {
-		if (typeof obj == "string") {
-			result = '"' + obj + '"'
-		} else if (typeof obj == "undefined") {
-			result = "undefined"
-		} else {
-			result = obj
-		}
-	}
-	return result
-}
-
-
 const Css_Repeater = "repeater"
 const Css_RepeaterElement = "repeater-element"
 function rptElemDoIf(elem, do_fct, if_fct) { // apply fct on repeater if true
@@ -560,42 +758,47 @@ const initMainSheet = function(sheet) {
 	Key_TEST["Fruit"] = Fruit
 	Key_TEST["Arr_Loop"] = Arr_Loop
 
-	// setSheetItemValue(sheet, Val_RESULT, strObject(10, true))
-	// setSheetItemValue(sheet, Val_RESULT, strObject(10.256, true))
-	// setSheetItemValue(sheet, Val_RESULT, strObject("", true))
-	// setSheetItemValue(sheet, Val_RESULT, strObject("hello", true))
-	// setSheetItemValue(sheet, Val_RESULT, strObject([], true))
-	// setSheetItemValue(sheet, Val_RESULT, strObject([[]], true))
-	// setSheetItemValue(sheet, Val_RESULT, strObject([10], true))
-	// setSheetItemValue(sheet, Val_RESULT, strObject([10, 20], true))
-	// setSheetItemValue(sheet, Val_RESULT, strObject(null, true))
-	// setSheetItemValue(sheet, Val_RESULT, strObject(Arr_Loop, true))
-	// setSheetItemValue(sheet, Val_RESULT, strObject({}, true))
-	// setSheetItemValue(sheet, Val_RESULT, strObject({stuff: {}}, true))
-	// setSheetItemValue(sheet, Val_RESULT, strObject(Key_TEST, true))
+	// setSheetItemValue(sheet, Val_RESULT, strThing(10, true))
+	// setSheetItemValue(sheet, Val_RESULT, strThing(10.256, true))
+	// setSheetItemValue(sheet, Val_RESULT, strThing("", true))
+	// setSheetItemValue(sheet, Val_RESULT, strThing("hello", true))
+	// setSheetItemValue(sheet, Val_RESULT, strThing([], true))
+	// setSheetItemValue(sheet, Val_RESULT, strThing([[]], true))
+	// setSheetItemValue(sheet, Val_RESULT, strThing([10], true))
+	// setSheetItemValue(sheet, Val_RESULT, strThing([10, 20], true))
+	// setSheetItemValue(sheet, Val_RESULT, strThing(null, true))
+	// setSheetItemValue(sheet, Val_RESULT, strThing(Arr_Loop, true))
+	// setSheetItemValue(sheet, Val_RESULT, strThing({}, true))
+	// setSheetItemValue(sheet, Val_RESULT, strThing({stuff: {}}, true))
+	// setSheetItemValue(sheet, Val_RESULT, strThing(Key_TEST, true))
 
 	debug("start")
 
-function argTest(_arg1, _arg2, _arg3) {
-	try {tryArg(_arg1)} catch(e) {_arg1 = "Hello"}
-	try {tryArg(_arg2)} catch(e) {_arg2 = "World"}
-	try {tryArg(_arg3)} catch(e) {_arg3 = "!"}
-	log(_arg1 + " " + _arg2 + " " + _arg3)
-}
+	function argTest(_arg1, _arg2, _arg3) {
+		try {tryArg(_arg1)} catch(e) {_arg1 = "Hello"}
+		try {tryArg(_arg2)} catch(e) {_arg2 = "World"}
+		try {tryArg(_arg3)} catch(e) {_arg3 = "!"}
+		log(_arg1 + " " + _arg2 + " " + _arg3)
+	}
 
-argTest()
-argTest("John")	
-argTest("Bonjour")
-argTest("Bonjour", "Le Monde")	
-argTest(null, "Allan")	
-argTest(undefined, "Willy")	
-argTest("A", "B", "C")	
-argTest(undefined, "B", "C")	
-argTest("A", undefined, "C")	
-argTest("A", "B", undefined)
-// tryArg()
-
-// log(eval("10 + 30"))
+	// argTest()
+	// argTest("John")	
+	// argTest("Bonjour")
+	// argTest("Bonjour", "Le Monde")	
+	// argTest(null, "Allan")	
+	// argTest(undefined, "Willy")	
+	// argTest("A", "B", "C")	
+	// argTest(undefined, "B", "C")	
+	// argTest("A", undefined, "C")	
+	// argTest("A", "B", undefined)
+	// tryArg()
+	
+	// log(gaiValue())
+	// log(gaiValue(undefined, Int_Zero))
+	log(gaiValue(undefined, 10))
+	log(gaiValue(undefined, 10, Int_MOne))
+	log(gaiValue(Int_POne, 10))
+	log(gaiValue(undefined, 10, 20))
 	
 	// debug(cpoValue("   this is     THE way   "))
 	// debug(cpoValue("   THIS is     THE way   "))
@@ -603,10 +806,10 @@ argTest("A", "B", undefined)
 	// debug(cpaValue("   this is     THE way   "))
 	// debug(cpaValue("   THIS is     THE way   "))
 	// debug(cpaValue("   THIS is     THE way   ", true))
-	// debug(togValue(0))
-	// debug(togValue(1))
-	// debug(togValue(false))
-	// debug(togValue(true))
+	// debug(tynValue(0))
+	// debug(tynValue(1))
+	// debug(tynValue(false))
+	// debug(tynValue(true))
 	
 	setSheetItemValue(sheet, Val_HIS, 0)
 	const Chk_HOPITM = "Chk_HOPITM"
@@ -644,13 +847,13 @@ argTest("A", "B", undefined)
 	onElemClickFct(Rep_obj, function(elem) {
 		debugElemClick(elem)
 		debug(elem)
-		setVal_RESULT("Click:\n" + strObject(getSheetItemValue(sheet, Rep_OBJ), true))
+		setVal_RESULT("Click:\n" + strThing(getSheetItemValue(sheet, Rep_OBJ), true))
 	})
 	
 	onElemUpdateFct(Rep_obj, function(elem) {
 		debugElemUpdate(elem)
 		debug(elem)
-		setVal_RESULT("Update:\n" + strObject(getSheetItemValue(sheet, Rep_OBJ), true))
+		setVal_RESULT("Update:\n" + strThing(getSheetItemValue(sheet, Rep_OBJ), true))
 	})
 	
 	onElemChildClickFct(Rep_obj, Chk_PHYCHK, function(elem) {
@@ -673,7 +876,7 @@ argTest("A", "B", undefined)
 		debug("--")
 		debugElem(val_phychk, true, true)
 		debug(val_phychk.value())
-		val_phychk.value(togValue(val_phychk.value()))
+		val_phychk.value(tynValue(val_phychk.value()))
 		debug(val_phychk.value())
 	})
 	
@@ -831,7 +1034,7 @@ argTest("A", "B", undefined)
 		debug("> Rep_his")
 		debug(Rep_his)
 		debug(sheet.get(Rep_HIS).getClasses())
-		setSheetItemValue(sheet, Val_RESULT, strObject(Rep_his))
+		setSheetItemValue(sheet, Val_RESULT, strThing(Rep_his))
 		// each(Rep_his, function(entryData, entryId) {
 			// debug(">> entryData"); debug(entryData)
 			// debug(">> entryId"); debug(entryId)
@@ -844,8 +1047,8 @@ argTest("A", "B", undefined)
             // } else entry.find("attackSavingThrowRow").hide();
 		// })
 		Object.keys(Rep_his).forEach(function(key_typ, idx_typ) {
-			debug(">> key_typ " + strObject(key_typ))
-			debug(">> idx_typ " + strObject(idx_typ))
+			debug(">> key_typ " + strThing(key_typ))
+			debug(">> idx_typ " + strThing(idx_typ))
 			debug(Rep_his[key_typ])
 			debug(getSheetItemChild(sheet, Rep_HIS, key_typ))
 			// debug(sheet.get(Rep_HIS).value().find(key_typ))

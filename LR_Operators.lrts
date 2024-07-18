@@ -145,6 +145,22 @@ function rsaValue(str_value, value_one, value_two) { // replace a string all
 }
 //endregion
 
+//region LR_Operators Generate
+function gaiValue(_int_from, _int_lenght, _int_step) { // generate array of int
+	debugFA("gaiValue", arguments)
+	try {tryArg(_int_from)}   catch(e) {_int_from   = Int_Zero}
+	try {tryArg(_int_lenght)} catch(e) {_int_lenght = Int_POne}
+	try {tryArg(_int_step)}   catch(e) {_int_step   = Int_POne}
+	let result = []
+	while (yppValue(_int_lenght)) {
+		result.push(_int_from)
+		_int_from   += _int_step
+		_int_lenght -= Int_POne
+	}
+	return result
+}
+//endregion
+
 //region LR_Operators Prefix/Suffix
 function pfxValue(value_one, value_str) { // prefix with a string
 	debugFA("pfxValue", arguments)
