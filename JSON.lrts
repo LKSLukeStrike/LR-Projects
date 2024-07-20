@@ -144,6 +144,830 @@ function debugFAOK(fct_name, _yes_debugfa) { // use: debugFAOK("myFunction")
 }
 //endregion
 
+//region LR_Elems (aka components in LR)
+//region LR_Elems Sheet
+function getSheetItem(sheet, item) { // returns sheet item elem
+	debugFA("getSheetItem", arguments)
+	return sheet.get(item)
+}
+function getSheetName() { // the proper sheet/craft name
+	debugFA("getSheetName", arguments)
+	let result = null
+	try { // skip error when no name
+		result = sheet.properName()
+	} finally {}
+	return result
+}
+//endregion
+
+//region LR_Elems Events
+const Evt_Click  = "click"
+const Evt_Update = "update"
+function onElemEvtFct(elem, evt, fct) {
+	debugFA("onElemEvtFct", arguments)
+	return elem.on(evt, fct)
+}
+function onElemClickFct(elem, fct) {
+	debugFA("onElemClickFct", arguments)
+	return onElemEvtFct(elem, Evt_Click, fct)
+}
+function onElemUpdateFct(elem, fct) {
+	debugFA("onElemUpdateFct", arguments)
+	return onElemEvtFct(elem, Evt_Update, fct)
+}
+function onElemChildEvtFct(elem, child, evt, fct) {
+	debugFA("onElemChildEvtFct", arguments)
+	return elem.on(evt, child, fct)
+}
+function onElemChildClickFct(elem, child, fct) {
+	debugFA("onElemChildClickFct", arguments)
+	return onElemChildEvtFct(elem, child, Evt_Click, fct)
+}
+function onElemChildUpdateFct(elem, child, fct) {
+	debugFA("onElemChildUpdateFct", arguments)
+	return onElemChildEvtFct(elem, child, Evt_Update, fct)
+}
+//endregion
+
+//region LR_Elems Attributes
+function getElemParent(elem) {
+	debugFA("getElemParent", arguments)
+	let result = null
+	try { // skip error when no parent
+		result = elem.parent()
+	} finally {}
+	return result
+}
+function getElemChild(elem, child) {
+	debugFA("getElemChild", arguments)
+	let result = null
+	try { // skip error when no child
+		result = elem.find(child)
+	} finally {}
+	return result
+}
+function getElemSheet(elem) {
+	debugFA("getElemSheet", arguments)
+	let result = null
+	try { // skip error when no sheet
+		result = elem.sheet()
+	} finally {}
+	return result
+}
+function getElemName(elem) {
+	debugFA("getElemName", arguments)
+	let result = null
+	try { // skip error when no name
+		result = elem.name()
+	} finally {}
+	return result
+}
+function getElemId(elem) {
+	debugFA("getElemId", arguments)
+	let result = null
+	try { // skip error when no id
+		result = elem.id()
+	} finally {}
+	return result
+}
+function getElemItem(elem) { // item is the id (aliases)
+	debugFA("getElemItem", arguments)
+	return getElemId(elem)
+}
+function getElemIndex(elem) {
+	debugFA("getElemIndex", arguments)
+	let result = null
+	try { // skip error when no index
+		result = elem.index()
+	} finally {}
+	return result
+}
+function getElemTypeof(elem) {
+	debugFA("getElemTypeof", arguments)
+	return typeof elem
+}
+function getElemChildren(elem) { // return children ids (get them with find)
+	debugFA("getElemChildren", arguments)
+	const elm_value = getElemValue(elem)
+	if (notElem(elm_value)) {return Arr_None} // not an elem so no children
+	return Object.keys(elm_value)
+}
+//endregion
+
+//region LR_Elems Values
+function getElemValue(elem) {
+	debugFA("getElemValue", arguments)
+	const elm_value = elem.value()
+	return Number.isNaN(Number(elm_value)) ? // right type
+		elm_value : Number(elm_value)
+}
+function setElemValue(elem, elm_value) {
+	debugFA("setElemValue", arguments)
+	if (yesArray(elem)) {return elem.forEach(function(elem) { // recursive
+		setElemValue(elem, elm_value)
+	})} // single elem from here
+	elm_value = hasElemPlussigned(elem) // plussigned representation if any
+	&& ygtValue(elm_value, Int_Zero) ?
+		pfxValue(elm_value, Str_Plus) : elm_value
+	elem.value(elm_value)
+	setElemDotted(elem) // dotted representation if any
+	return elm_value
+}
+function rsaElemValue(elem, value_str, value_rpl) { // replace a string all
+	debugFA("rsaElemValue", arguments)
+	if (yesArray(elem)) {return elem.forEach(function(elem) { // recursive
+		rsaElemValue(elem, value_str, value_rpl)
+	})} // single elem from here
+	const elm_value = rsaValue(getElemValue(elem), value_str, value_rpl)
+	return setElemValue(elem, elm_value)
+}
+function hasElemValue(elem, elm_value) {
+	debugFA("hasElemValue", arguments)
+	return yeqValue(getElemValue(elem), elm_value)
+}
+function ysiElemValue(elem, value_str) { // if includes a string
+	debugFA("ysiElemValue", arguments)
+	return ysiValue(getElemValue(elem), value_str)
+}
+//endregion
+
+//region LR_Elems Locked
+const Str_Locked   = ":lock:"
+const Str_Unlocked = ":lock-open:"
+function setElemLocked(elem) {
+	debugFA("setElemLocked", arguments)
+	return setElemValue(elem, Str_Locked)
+}
+function setElemUnlocked(elem) {
+	debugFA("setElemUnlocked", arguments)
+	return setElemValue(elem, Str_Unlocked)
+}
+function togElemLocked(elem) {
+	debugFA("togElemLocked", arguments)
+	return hasElemLocked(elem) ?
+		setElemUnlocked(elem) : setElemLocked(elem)
+}
+function hasElemLocked(elem) {
+	debugFA("hasElemLocked", arguments)
+	return hasElemValue(elem, Str_Locked)
+}
+//endregion
+
+//region LR_Elems Folded
+const Str_Folded   = ":sort-up:"
+const Str_Unfolded = ":sort-down:"
+function setElemFolded(elem) {
+	debugFA("setElemFolded", arguments)
+	return rsaElemValue(elem, Str_Unfolded, Str_Folded)
+}
+function setElemUnfolded(elem) {
+	debugFA("setElemUnfolded", arguments)
+	return rsaElemValue(elem, Str_Folded, Str_Unfolded)
+}
+function togElemFolded(elem) {
+	debugFA("togElemFolded", arguments)
+	return hasElemFolded(elem) ?
+		setElemUnfolded(elem) : setElemFolded(elem)
+}
+function hasElemFolded(elem) {
+	debugFA("hasElemFolded", arguments)
+	return ysiElemValue(elem, Str_Folded)
+}
+//endregion
+
+//region LR_Elems Tooltips
+function setElemTooltip(elem, str_tooltip) {
+	debugFA("setElemTooltip", arguments)
+	try { // skip error when no tooltip
+		elem.setToolTip(str_tooltip)
+	} finally {}
+	return str_tooltip
+}
+//endregion
+
+//region LR_Elems Css Classes
+const Css_DFlex			  = "d-flex" // add/remove for displayed on containers to work
+const Css_WidgetContainer = "widget-container" // identify a container
+const Css_DNone			  = "d-none"
+const Css_Clickable		  = "clickable"
+const Css_BgSecondary     = "bg-secondary"
+const Css_Repeater        = "repeater"
+const Css_RepeaterElement = "repeater-element"
+function yesDFlexElem(elem) { // if require to add/rem dflex
+	debugFA("yesDFlexElem", arguments)
+	let result = hasElemCss(elem, Css_WidgetContainer)
+	return result
+}
+function yesDFlexCss(css) { // if require to add/rem dflex
+	debugFA("yesDFlexCss", arguments)
+	let result = yeqValue(css, Css_DNone)
+	return result
+}
+function yesDFlex(elem, css) { // if require to add/rem dflex
+	debugFA("yesDFlex", arguments)
+	let result = yesDFlexElem(elem) && yesDFlexCss(css)
+	return result
+}
+function addElemCss(elem, css) { // multiple css allowed in one string
+	debugFA("addElemCss", arguments)
+	if (yesArray(elem)) {return elem.forEach(function(elem) { // recursive
+		addElemCss(elem, css)
+	})} // single elem from here
+	css.split(Str_Space).forEach(function(css) {
+		try { // skip error when no css classes
+			if (yesDFlex(elem, css)) {
+				elem.removeClass(Css_DFlex)
+			}
+			elem.addClass(css)
+		} finally {}
+	})
+	return css
+}
+function remElemCss(elem, css) { // multiple css allowed in one string
+	debugFA("remElemCss", arguments)
+	if (yesArray(elem)) {return elem.forEach(function(elem) { // recursive
+		remElemCss(elem, css)
+	})} // single elem from here
+	css.split(Str_Space).forEach(function(css) {
+		try { // skip error when no css classes
+			if (yesDFlex(elem, css)) {
+				elem.addClass(Css_DFlex)
+			}
+			elem.removeClass(css)
+		} finally {}
+	})
+	return css
+}
+function hasElemCss(elem, css) { // multiple css allowed in one string
+	debugFA("hasElemCss", arguments)
+	let result = true
+	css.split(Str_Space).forEach(function(css) { // every css has to be present
+		try { // skip error when no css classes
+			if (! elem.hasClass(css)) {result = false}
+		} catch(e) {result = false}
+	})
+	return result
+}
+function getElemCss(elem) {
+	debugFA("getElemCss", arguments)
+	let result = []
+	try { // skip error when no css classes
+		result = elem.getClasses()
+	} finally {}
+	return result
+}
+//endregion
+
+//region LR_Elems Cfk Classes
+const Cfk_Effort      = "Cfk_Effort"		// has an effort related item
+const Cfk_Dotted01    = "Cfk_Dotted01"		// has a dotted01 value representation
+const Cfk_Dotted02    = "Cfk_Dotted02"		// has a dotted02 value representation
+const Cfk_Dotted03    = "Cfk_Dotted03"		// has a dotted03 value representation
+const Cfk_Dotted04    = "Cfk_Dotted04"		// has a dotted04 value representation
+const Cfk_Dotted05    = "Cfk_Dotted05"		// has a dotted05 value representation
+const Cfk_Dotted06    = "Cfk_Dotted06"		// has a dotted06 value representation
+const Cfk_Dotted07    = "Cfk_Dotted07"		// has a dotted07 value representation
+const Cfk_Dotted08    = "Cfk_Dotted08"		// has a dotted08 value representation
+const Cfk_Dotted09    = "Cfk_Dotted09"		// has a dotted09 value representation
+const Cfk_Dotted10    = "Cfk_Dotted10"		// has a dotted10 value representation
+const Cfk_Plussigned  = "Cfk_Plussigned"	// allows to show "+" for positive values
+const Cfk_Undisplayed = "Cfk_Undisplayed"	// allows to show/hide items
+const Cfk_Clickable   = "Cfk_Clickable"		// allows to react to onclick
+const Cfk_Modifiable  = "Cfk_Modifiable"	// allows only dec, inc
+const Cfk_Selected    = "Cfk_Selected"		// allows only rej, inj
+const Cfk_Fakeupdated = "Cfk_Fakeupdated"	// avoid computations propagation
+const Key_CFKCSS      = { // relation between cfk and css /!\ space to separate
+	Cfk_Effort        : Cfk_Effort      ,
+	Cfk_Dotted01      : Cfk_Dotted01    ,
+	Cfk_Dotted02      : Cfk_Dotted02    ,
+	Cfk_Dotted03      : Cfk_Dotted03    ,
+	Cfk_Dotted04      : Cfk_Dotted04    ,
+	Cfk_Dotted05      : Cfk_Dotted05    ,
+	Cfk_Dotted06      : Cfk_Dotted06    ,
+	Cfk_Dotted07      : Cfk_Dotted07    ,
+	Cfk_Dotted08      : Cfk_Dotted08    ,
+	Cfk_Dotted09      : Cfk_Dotted09    ,
+	Cfk_Dotted10      : Cfk_Dotted10    ,
+	Cfk_Plussigned    : Cfk_Plussigned  ,
+	Cfk_Undisplayed   : Cfk_Undisplayed + Str_Space + Css_DNone,
+	Cfk_Clickable     : Cfk_Clickable   + Str_Space + Css_Clickable,
+	Cfk_Modifiable    : Cfk_Modifiable  ,
+	Cfk_Selected      : Cfk_Selected    + Str_Space + Css_BgSecondary,
+	Cfk_Fakeupdated   : Cfk_Fakeupdated ,
+}
+function getElemCfkCss(elem, cfk) { // full corresponding css with addons if any
+	debugFA("getElemCfkCss", arguments)
+	let result = Key_CFKCSS[cfk]
+	result += getElemCfkThemeCss(elem, cfk) // add sheet theme css if any
+	return result
+}
+function addElemCfk(elem, cfk) { // multiple cfk allowed in one string
+	debugFA("addElemCfk", arguments)
+	if (yesArray(elem)) {return elem.forEach(function(elem) { // recursive
+		addElemCfk(elem, cfk)
+	})} // single elem from here
+	cfk.split(Str_Space).forEach(function(cfk) {
+		const css = getElemCfkCss(elem, cfk)
+		addElemCss(elem, css) // apply to the elem
+		if (yesCfkDotted(cfk) // mimics on related dot elem if any
+		&&  neqValue(cfk, Cfk_Undisplayed)) { // except for displayed
+			addElemCss(val2dotElem(elem), css)
+		}
+	})
+	return cfk
+}
+function remElemCfk(elem, cfk) { // multiple cfk allowed in one string
+	debugFA("remElemCfk", arguments)
+	if (yesArray(elem)) {return elem.forEach(function(elem) { // recursive
+		remElemCfk(elem, cfk)
+	})} // single elem from here
+	cfk.split(Str_Space).forEach(function(cfk) {
+		const css = getElemCfkCss(elem, cfk)
+		remElemCss(elem, css) // apply to the elem
+		if (yesCfkDotted(cfk) // mimics on related dot elem if any
+		&&  neqValue(cfk, Cfk_Undisplayed)) { // except for displayed
+			remElemCss(val2dotElem(elem), css)
+		}
+	})
+	Object.keys(Key_CfkCss).forEach(function(cfk) { // restore any "broken" Cfk
+		if (hasElemCfk(elem, cfk)) {
+			addElemCfk(elem, cfk)
+		}
+	})
+	return cfk
+}
+function hasElemCfk(elem, cfk) { // multiple cfk allowed in one string
+	debugFA("hasElemCfk", arguments)
+	return hasElemCss(elem, cfk) // check only Cfk, not their Css
+}
+//endregion
+
+//region LR_Elems Cfk Theme
+const Arr_CFKTHM      = [ // cfk that support theme
+	Cfk_Clickable,
+	Cfk_Modifiable,
+	Cfk_Selected,
+]	
+function yesCfkTheme(cfk) { // if cfk support theme
+	debugFA("yesCfkTheme", arguments)
+	return yaiValue(Arr_CFKTHM, cfk)
+}
+function notCfkTheme(cfk) { // if not cfk support theme
+	debugFA("notCfkTheme", arguments)
+	return ! yesCfkTheme(cfk)
+}
+function getElemCfkThemeCss(elem, cfk) { // theme css if any
+	debugFA("getElemCfkThemeCss", arguments)
+	let result = Str_None
+	if (yesCfkTheme(cfk)) { // add the elem sheet theme if any
+		try { // skip error if any
+			const elm_sheet = getElemSheet(elem)
+			const prf_theme = getSheetThemePrf(elm_sheet)
+			result += Str_Space + prf_theme
+		} finally {}
+	}
+	return result
+}
+//endregion
+
+//region LR_Elems Cfk Effort
+function addElemEffort(elem) {
+	debugFA("addElemEffort", arguments)
+	return addElemCfk(elem, Cfk_Effort)			// normal operation
+}
+function remElemEffort(elem) {
+	debugFA("remElemEffort", arguments)
+	return remElemCfk(elem, Cfk_Effort)			// normal operation
+}
+function hasElemEffort(elem) {
+	debugFA("hasElemEffort", arguments)
+	return hasElemCfk(elem, Cfk_Effort)			// normal operation
+}
+//endregion
+
+//region LR_Elems Cfk Dotted // Fakeupdate
+const Yes_Dotted    = true
+const Not_Dotted    = false
+const Arr_Dotter01  = ["01",]
+const Arr_Dotter02  = ["01", "02",]
+const Arr_Dotter03  = ["01", "02", "03",]
+const Arr_Dotter04  = ["01", "02", "03", "04",]
+const Arr_Dotter05  = ["01", "02", "03", "04", "05",]
+const Arr_Dotter06  = ["01", "02", "03", "04", "05", "06",]
+const Arr_Dotter07  = ["01", "02", "03", "04", "05", "06", "07",]
+const Arr_Dotter08  = ["01", "02", "03", "04", "05", "06", "07", "08",]
+const Arr_Dotter09  = ["01", "02", "03", "04", "05", "06", "07", "08", "09",]
+const Arr_Dotter10  = ["01", "02", "03", "04", "05", "06", "07", "08", "09", "10",]
+const Key_CFKDOT    = { // relation between cfk_dottednn and arr_dotternn
+	Cfk_Dotted01 : Arr_Dotter01,
+	Cfk_Dotted02 : Arr_Dotter02,
+	Cfk_Dotted03 : Arr_Dotter03,
+	Cfk_Dotted04 : Arr_Dotter04,
+	Cfk_Dotted05 : Arr_Dotter05,
+	Cfk_Dotted06 : Arr_Dotter06,
+	Cfk_Dotted07 : Arr_Dotter07,
+	Cfk_Dotted08 : Arr_Dotter08,
+	Cfk_Dotted09 : Arr_Dotter09,
+	Cfk_Dotted10 : Arr_Dotter10,
+}
+const Str_DotEmpty  = ":ga_circle:"
+const Str_DotPlain  = ":ga_plain-circle:"
+const Str_DotInject = ":chevron-circle-down:"
+const Str_DotReject = ":chevron-circle-up:"
+//region LR_Elems Cfk Dotted Dotter/Checks
+function yesCfkDotted(cfk) { // if cfk is a dotted one
+	debugFA("yesCfkDotted", arguments)
+	return yaiValue(Arr_CFKTHM, cfk)
+}
+function notCfkDotted(cfk) { // if not cfk is a dotted one
+	debugFA("notCfkDotted", arguments)
+	return ! yesCfkDotted(cfk)
+}
+function getElemDotter(elem) {
+	debugFA("getElemDotter", arguments)
+	const result = Not_Dotted
+	Object.keys(Key_CFKDOT).forEach(function(cfk_dottednn) {
+		if (hasElemCfk(elem, cfk_dottednn)) { // related arr_dotternn
+			result = Key_CFKDOT[cfk_dottednn]
+		}
+	})
+	return result
+}
+function yesElemDotted(elem) { // if elem is dotted
+	debugFA("yesElemDotted", arguments)
+	return getElemDotter(elem) ?
+		Yes_Dotted : Not_Dotted
+}
+function notElemDotted(elem) { // if not elem is dotted
+	debugFA("notElemDotted", arguments)
+	return ! yesElemDotted(elem)
+}
+//endregion
+//region LR_Elems Cfk Dotted Values
+function setElemDotted(elem) { // dotted representation if any
+	debugFA("setElemDotted", arguments)
+	const arr_dotternn = getElemDotter(elem)
+	return arr_dotternn ?
+		setElemDottedNN(elem, arr_dotternn) : Not_Dotted
+}
+function setElemDottedNN(elem, arr_dotternn) { // dottednn representation if any
+	debugFA("setElemDottedNN", arguments)
+	if (yesArray(elem)) {return elem.forEach(function(elem) { // recursive
+		setElemDottedNN(elem, arr_dotternn)
+	})} // single elem from here
+	if (notElemDotted(elem)) {return Not_Dotted} // no dotted representation
+	const elm_sheet = getElemSheet(elem)
+	const elm_value = getElemValue(elem)
+	const dot_elem  = val2dotElem(elem)
+	const dot_item  = getElemItem(dot_elem)
+	const eff_elem  = val2effElem(elem)
+	const eff_value = hasElemEffort(elem) ? // effort representation if any
+		getElemValue(eff_elem) : Int_Zero
+	arr_dotternn.forEach(function(str_dotternn) {
+		const int_dotternn = Number(str_dotternn)
+		const dot_itemnn   = sfxValue(dot_item, str_dotternn)
+		const dot_elemnn   = getSheetItem(elm_sheet, dot_itemnn)
+		if (ygtValue(int_dotternn, elm_value)) {
+			dot_elemnn.value(Str_DotEmpty)
+		} else if (ygtValue(int_dotternn, elm_value - eff_value)) {
+			dot_elemnn.value(Str_DotInject)
+		} else {
+			dot_elemnn.value(Str_DotPlain)
+		}
+	})
+	return Yes_Dotted
+}
+//endregion
+//region LR_Elems Cfk DottedNN
+function addElemDottedNN(elem, cfk_dottednn) {
+	debugFA("addElemDottedNN", arguments)
+	addElemCfk(elem, cfk_dottednn)					// normal operation
+	return fakElemUpdate(elem)
+}
+function remElemDottedNN(elem, cfk_dottednn) {
+	debugFA("remElemDottedNN", arguments)
+	remElemCfk(elem, cfk_dottednn)					// normal operation
+	return fakElemUpdate(elem)
+}
+function hasElemDottedNN(elem, cfk_dottednn) {
+	debugFA("hasElemDottedNN", arguments)
+	return hasElemCfk(elem, cfk_dottednn)			// normal operation
+}
+//endregion
+//region LR_Elems Cfk Dotted01 - Dotted10
+//region LR_Elems Cfk Dotted01
+function addElemDotted01(elem) {
+	debugFA("addElemDotted01", arguments)
+	return addElemDottedNN(elem, Cfk_Dotted01)
+}
+function remElemDotted01(elem) {
+	debugFA("remElemDotted01", arguments)
+	return remElemDottedNN(elem, Cfk_Dotted01)
+}
+function hasElemDotted01(elem) {
+	debugFA("hasElemDotted01", arguments)
+	return hasElemDottedNN(elem, Cfk_Dotted01)
+}
+//endregion
+//region LR_Elems Cfk Dotted02
+function addElemDotted02(elem) {
+	debugFA("addElemDotted02", arguments)
+	return addElemDottedNN(elem, Cfk_Dotted02)
+}
+function remElemDotted02(elem) {
+	debugFA("remElemDotted02", arguments)
+	return remElemDottedNN(elem, Cfk_Dotted02)
+}
+function hasElemDotted02(elem) {
+	debugFA("hasElemDotted02", arguments)
+	return hasElemDottedNN(elem, Cfk_Dotted02)
+}
+//endregion
+//region LR_Elems Cfk Dotted03
+function addElemDotted03(elem) {
+	debugFA("addElemDotted03", arguments)
+	return addElemDottedNN(elem, Cfk_Dotted03)
+}
+function remElemDotted03(elem) {
+	debugFA("remElemDotted03", arguments)
+	return remElemDottedNN(elem, Cfk_Dotted03)
+}
+function hasElemDotted03(elem) {
+	debugFA("hasElemDotted03", arguments)
+	return hasElemDottedNN(elem, Cfk_Dotted03)
+}
+//endregion
+//region LR_Elems Cfk Dotted04
+function addElemDotted04(elem) {
+	debugFA("addElemDotted04", arguments)
+	return addElemDottedNN(elem, Cfk_Dotted04)
+}
+function remElemDotted04(elem) {
+	debugFA("remElemDotted04", arguments)
+	return remElemDottedNN(elem, Cfk_Dotted04)
+}
+function hasElemDotted04(elem) {
+	debugFA("hasElemDotted04", arguments)
+	return hasElemDottedNN(elem, Cfk_Dotted04)
+}
+//endregion
+//region LR_Elems Cfk Dotted05
+function addElemDotted05(elem) {
+	debugFA("addElemDotted05", arguments)
+	return addElemDottedNN(elem, Cfk_Dotted05)
+}
+function remElemDotted05(elem) {
+	debugFA("remElemDotted05", arguments)
+	return remElemDottedNN(elem, Cfk_Dotted05)
+}
+function hasElemDotted05(elem) {
+	debugFA("hasElemDotted05", arguments)
+	return hasElemDottedNN(elem, Cfk_Dotted05)
+}
+//endregion
+//region LR_Elems Cfk Dotted06
+function addElemDotted06(elem) {
+	debugFA("addElemDotted06", arguments)
+	return addElemDottedNN(elem, Cfk_Dotted06)
+}
+function remElemDotted06(elem) {
+	debugFA("remElemDotted06", arguments)
+	return remElemDottedNN(elem, Cfk_Dotted06)
+}
+function hasElemDotted06(elem) {
+	debugFA("hasElemDotted06", arguments)
+	return hasElemDottedNN(elem, Cfk_Dotted06)
+}
+//endregion
+//region LR_Elems Cfk Dotted07
+function addElemDotted07(elem) {
+	debugFA("addElemDotted07", arguments)
+	return addElemDottedNN(elem, Cfk_Dotted07)
+}
+function remElemDotted07(elem) {
+	debugFA("remElemDotted07", arguments)
+	return remElemDottedNN(elem, Cfk_Dotted07)
+}
+function hasElemDotted07(elem) {
+	debugFA("hasElemDotted07", arguments)
+	return hasElemDottedNN(elem, Cfk_Dotted07)
+}
+//endregion
+//region LR_Elems Cfk Dotted08
+function addElemDotted08(elem) {
+	debugFA("addElemDotted08", arguments)
+	return addElemDottedNN(elem, Cfk_Dotted08)
+}
+function remElemDotted08(elem) {
+	debugFA("remElemDotted08", arguments)
+	return remElemDottedNN(elem, Cfk_Dotted08)
+}
+function hasElemDotted08(elem) {
+	debugFA("hasElemDotted08", arguments)
+	return hasElemDottedNN(elem, Cfk_Dotted08)
+}
+//endregion
+//region LR_Elems Cfk Dotted09
+function addElemDotted09(elem) {
+	debugFA("addElemDotted09", arguments)
+	return addElemDottedNN(elem, Cfk_Dotted09)
+}
+function remElemDotted09(elem) {
+	debugFA("remElemDotted09", arguments)
+	return remElemDottedNN(elem, Cfk_Dotted09)
+}
+function hasElemDotted09(elem) {
+	debugFA("hasElemDotted09", arguments)
+	return hasElemDottedNN(elem, Cfk_Dotted09)
+}
+//endregion
+//region LR_Elems Cfk Dotted10
+function addElemDotted10(elem) {
+	debugFA("addElemDotted10", arguments)
+	return addElemDottedNN(elem, Cfk_Dotted10)
+}
+function remElemDotted10(elem) {
+	debugFA("remElemDotted10", arguments)
+	return remElemDottedNN(elem, Cfk_Dotted10)
+}
+function hasElemDotted10(elem) {
+	debugFA("hasElemDotted10", arguments)
+	return hasElemDottedNN(elem, Cfk_Dotted10)
+}
+//endregion
+//endregion
+//endregion
+
+//region LR_Elems Cfk Plussigned // Fakeupdate
+function addElemPlussigned(elem) {
+	debugFA("addElemPlussigned", arguments)
+	addElemCfk(elem, Cfk_Plussigned)			// normal operation
+	return fakElemUpdate(elem)
+}
+function remElemPlussigned(elem) {
+	debugFA("remElemPlussigned", arguments)
+	remElemCfk(elem, Cfk_Plussigned)			// normal operation
+	return fakElemUpdate(elem)
+}
+function hasElemPlussigned(elem) {
+	debugFA("hasElemPlussigned", arguments)
+	return hasElemCfk(elem, Cfk_Plussigned)		// normal operation
+}
+//endregion
+
+//region LR_Elems Cfk Displayed
+function addElemDisplayed(elem) {
+	debugFA("addElemDisplayed", arguments)
+	return remElemCfk(elem, Cfk_Undisplayed)	// reverse operation
+}
+function remElemDisplayed(elem) {
+	debugFA("remElemDisplayed", arguments)
+	return addElemCfk(elem, Cfk_Undisplayed)	// reverse operation
+}
+function hasElemDisplayed(elem) {
+	debugFA("hasElemDisplayed", arguments)
+	return ! hasElemCfk(elem, Cfk_Undisplayed)	// reverse operation
+}
+//endregion
+
+//region LR_Elems Cfk Clickable
+function addElemClickable(elem) {
+	debugFA("addElemClickable", arguments)
+	return addElemCfk(elem, Cfk_Clickable)		// normal operation
+}
+function remElemClickable(elem) {
+	debugFA("remElemClickable", arguments)
+	return remElemCfk(elem, Cfk_Clickable)		// normal operation
+}
+function hasElemClickable(elem) {
+	debugFA("hasElemClickable", arguments)
+	return hasElemCfk(elem, Cfk_Clickable)		// normal operation
+}
+//endregion
+
+//region LR_Elems Cfk Modifiable // Fakeupdate
+function addElemModifiable(elem) {
+	debugFA("addElemModifiable", arguments)
+	addElemCfk(elem, Cfk_Modifiable)			// normal operation
+	return fakElemUpdate(elem)
+}
+function remElemModifiable(elem) {
+	debugFA("remElemModifiable", arguments)
+	remElemCfk(elem, Cfk_Modifiable)			// normal operation
+	return fakElemUpdate(elem)
+}
+function hasElemModifiable(elem) {
+	debugFA("hasElemModifiable", arguments)
+	return hasElemCfk(elem, Cfk_Modifiable)		// normal operation
+}
+//endregion
+
+//region LR_Elems Cfk Selected // Fakeupdate // Toggle Modifiable
+function addElemSelected(elem) {
+	debugFA("addElemSelected", arguments)
+	remElemModifiable(elem)						// toggle modifiable/selected
+	addElemCfk(elem, Cfk_Selected)				// normal operation
+	return fakElemUpdate(elem)
+}
+function remElemSelected(elem) {
+	debugFA("remElemSelected", arguments)
+	addElemModifiable(elem)						// toggle modifiable/selected
+	remElemCfk(elem, Cfk_Selected)				// normal operation
+	return fakElemUpdate(elem)
+}
+function hasElemSelected(elem) {
+	debugFA("hasElemSelected", arguments)
+	return hasElemCfk(elem, Cfk_Selected)		// normal operation
+}
+//endregion
+
+//region LR_Elems Cfk Fakeupdated
+function addElemFakeupdated(elem) {
+	debugFA("addElemFakeupdated", arguments)
+	return addElemCfk(elem, Cfk_Fakeupdated)	// normal operation
+}
+function remElemFakeupdated(elem) {
+	debugFA("remElemFakeupdated", arguments)
+	return remElemCfk(elem, Cfk_Fakeupdated)	// normal operation
+}
+function hasElemFakeupdated(elem) {
+	debugFA("hasElemFakeupdated", arguments)
+	return hasElemCfk(elem, Cfk_Fakeupdated)	// normal operation
+}
+function fakElemUpdate(elem) {
+	debugFA("fakElemUpdate", arguments)
+	if (yesArray(elem)) {return elem.forEach(function(elem) { // recursive
+		fakElemUpdate(elem)
+	})} // single elem from here
+	addElemFakeupdated(elem) // avoid computations propagation
+	return setElemValue(elem, getElemValue(elem)) // provoke the fake update
+}
+//endregion
+
+//region LR_Elems Related
+function one2twoElem(elem, prefix_one, prefix_two) { // one related two elem
+	debugFA("one2twoElem", arguments)
+	try {
+		const elm_sheet = getElemSheet(elem)
+		const elm_item  = getElemItem(elem)
+		const rel_item  = one2twoItem(elm_item, prefix_one, prefix_two)
+		elem 			= getSheetItem(elm_sheet, rel_item)
+	} finally {}
+	return elem
+}
+function val2dotElem(elem) { // val related dot elem
+	debugFA("val2dotElem", arguments)
+	return one2twoElem(elem, Str_PFXVAL, Str_PFXDOT)
+}
+function val2effElem(elem) { // val related eff elem
+	debugFA("val2effElem", arguments)
+	return one2twoElem(elem, Str_PFXVAL, Str_PFXEFF)
+}
+function val2dxvElem(elem) { // val related dxv elem
+	debugFA("val2dxvElem", arguments)
+	return one2twoElem(elem, Str_PFXVAL, Str_PFXDXV)
+}
+function val2chkElem(elem) { // val related chk elem
+	debugFA("val2chkElem", arguments)
+	return one2twoElem(elem, Str_PFXVAL, Str_PFXCHK)
+}
+function chk2valElem(elem) { // chk related val elem
+	debugFA("chk2valElem", arguments)
+	return one2twoElem(elem, Str_PFXCHK, Str_PFXVAL)
+}
+//endregion
+
+//region LR_Elems Repeaters
+function rptElemDoIf(elem, _do_fct, _if_fct) { // apply fct on repeater if true
+	debugFA("rptElemDoIf", arguments)
+	if (arguments.length < 3) { // filter function
+		_if_fct = function(elem) {
+			debugFA("rptElemDoIf_if_fct", arguments)
+			return true // true to do action function
+		}
+	}
+	if (arguments.length < 2) { // action function
+		_do_fct = function(elem) {
+			debugFA("rptElemDoIf_do_fct", arguments)
+			debugElem(elem, Yes_Debug, Yes_Indent)
+			return true // true to continue recursive
+		}
+	}
+	if (notElem(elem)) {return} // not an elem
+	if (_if_fct(elem)) {
+		// if (! _do_fct(elem)) {return} // /!\ repeat twice (why ?)
+		const yes_recursive = _do_fct(elem)
+		if (! yes_recursive) {return} // interrupt recursive 
+	}
+	// getElemChildren(elem).forEach(function(child) // /!\ repeat twice (why ?)
+	const elm_children = getElemChildren(elem) 
+	elm_children.forEach(function(child) { // recursive
+		rptElemDoIf(getElemChild(elem, child), _do_fct, _if_fct)
+	})
+}
+//endregion
+//endregion
+
 //region LR_Operators
 //region LR_Operators Random
 function rndValue(value_min, value_max) { // random value (integer, inclusive)
@@ -515,208 +1339,26 @@ function tryArg(_arg) { // error if no arg or undefined arg // use for default a
 
 
 //region JSON_
-const Arr_SUCFAI	= ["0", "1", "2", "3", "4", "5", "6", "7", "8", "9",]
-const Lbl_ROLSUC_	= "Lbl_ROLSUC_"
-const Lbl_ROLFAI_	= "Lbl_ROLFAI_"
+const Sht_SHTCHR  = "main"			// character sheet
+const Dia_SHTPRF  = "Dia_SHTPRF"	// preferences dialog
+const Bnd_SCOROL  = "Bnd_SCOROL"	// dice roll binding
+const Arr_SUCFAI  = ["0", "1", "2", "3", "4", "5", "6", "7", "8", "9",]
+const Lbl_ROLSUC_ = "Lbl_ROLSUC_"
+const Lbl_ROLFAI_ = "Lbl_ROLFAI_"
 //endregion
-
-
-//region Elems (aka components in LR)
-//region Elems Events
-const Evt_Click  = "click"
-const Evt_Update = "update"
-function onElemEvtFct(elem, evt, fct) {
-	debugFA("onElemEvtFct", arguments)
-	return elem.on(evt, fct)
-}
-function onElemClickFct(elem, fct) {
-	debugFA("onElemClickFct", arguments)
-	return onElemEvtFct(elem, Evt_Click, fct)
-}
-function onElemUpdateFct(elem, fct) {
-	debugFA("onElemUpdateFct", arguments)
-	return onElemEvtFct(elem, Evt_Update, fct)
-}
-function onElemChildEvtFct(elem, child, evt, fct) {
-	debugFA("onElemChildEvtFct", arguments)
-	return elem.on(evt, child, fct)
-}
-function onElemChildClickFct(elem, child, fct) {
-	debugFA("onElemChildClickFct", arguments)
-	return onElemChildEvtFct(elem, child, Evt_Click, fct)
-}
-function onElemChildUpdateFct(elem, child, fct) {
-	debugFA("onElemChildUpdateFct", arguments)
-	return onElemChildEvtFct(elem, child, Evt_Update, fct)
-}
-//endregion
-
-//region Elems Attributes
-function getElemParent(elem) {
-	debugFA("getElemParent", arguments)
-	let result = null
-	try {result = elem.parent()} // skip error when no parent
-	finally {}
-	return result
-}
-function getElemChild(elem, child) {
-	debugFA("getElemChild", arguments)
-	let result = null
-	try {result = elem.find(child)} // skip error when no child
-	finally {}
-	return result
-}
-function getElemSheet(elem) {
-	debugFA("getElemSheet", arguments)
-	let result = null
-	try {result = elem.sheet()} // skip error when no sheet
-	finally {}
-	return result
-}
-function getElemName(elem) {
-	debugFA("getElemName", arguments)
-	let result = null
-	try {result = elem.name()} // skip error when no name
-	finally {}
-	return result
-}
-function getElemId(elem) {
-	debugFA("getElemId", arguments)
-	let result = null
-	try {result = elem.id()} // skip error when no id
-	finally {}
-	return result
-}
-function getElemIndex(elem) {
-	debugFA("getElemIndex", arguments)
-	let result = null
-	try {result = elem.index()} // skip error when no index
-	finally {}
-	return result
-}
-function getElemTypeof(elem) {
-	debugFA("getElemTypeof", arguments)
-	return typeof elem
-}
-function getElemChildren(elem) { // return children ids (get them with find)
-	debugFA("getElemChildren", arguments)
-	const elm_value = getElemValue(elem)
-	if (notElem(elm_value)) {return []} // not an elem so no children
-	return Object.keys(elm_value)
-}
-//endregion
-
-//region Elems Values
-function getElemValue(elem) {
-	debugFA("getElemValue", arguments)
-	const elm_value = elem.value()
-	return Number.isNaN(Number(elm_value)) ? // right type
-		elm_value : Number(elm_value)
-}
-//endregion
-
-//region Elems Classes
-function getElemCss(elem) {
-	debugFA("getElemCss", arguments)
-	let result = []
-	try {result = elem.getClasses()} // skip error when no classes
-	finally {}
-	return result
-}
-//endregion
-//endregion
-
-
-//region Items (designed by a sheet and an item id)
-function getSheetItem(sheet, item) { // returns an elem
-	debugFA("getSheetItem", arguments)
-	return sheet.get(item)
-}
-function getSheetItemChild(sheet, item, child) { // OBSO
-	return sheet.get(item).value()[child]
-}
-function getSheetItemParent(sheet, item) { // OBSO
-	return sheet.get(item).parent().id()
-}
-//endregion
-
-//region Events // due to JS we cannot use Event and Function so ... Evt and Fct
-// const Evt_Click  = "click"
-// const Evt_Update = "update"
-function onSheetItemEvtFct(sheet, item, evt, fct) {
-	return sheet.get(item).on(evt, fct)
-}
-function onSheetItemClickFct(sheet, item, fct) {
-	return onSheetItemEvtFct(sheet, item, Evt_Click, fct)
-}
-function onSheetItemUpdateFct(sheet, item, fct) {
-	return onSheetItemEvtFct(sheet, item, Evt_Update, fct)
-}
-//endregion
-
-//region Values
-function getSheetItemValue(sheet, item) {
-	const itm_value = sheet.get(item).value()
-	return Number.isNaN(Number(itm_value)) ? // right type
-		itm_value : Number(itm_value)
-}
-function setSheetItemValue(sheet, item, itm_value) {
-	if (Array.isArray(item)) {return item.forEach(function(item) { // recursive
-		setSheetItemValue(sheet, item, itm_value)
-	})} // single item from here
-	sheet.get(item).value(itm_value)
-	return itm_value
-}
-function hasSheetItemValue(sheet, item, itm_value) {
-	return getSheetItemValue(sheet, item) == itm_value
-}
-//endregion
-
-
-const Css_Repeater = "repeater"
-const Css_RepeaterElement = "repeater-element"
-function rptElemDoIf(elem, do_fct, if_fct) { // apply fct on repeater if true
-	debugFA("rptElemDoIf", arguments)
-	if (arguments.length < 3) { // filter function
-		if_fct = function(elem) {
-			debugFA("rptElemDoIf_if_fct", arguments)
-			return true // true to do action function
-		}
-	}
-	if (arguments.length < 2) { // action function
-		do_fct = function(elem) {
-			debugFA("rptElemDoIf_do_fct", arguments)
-			debugElem(elem, true, true)
-			return true // true to continue recursive
-		}
-	}
-	if (notElem(elem)) {return} // not an elem
-	if (if_fct(elem)) {
-		// if (! do_fct(elem)) {return} // /!\ repeat twice (why ?)
-		const yes_recursive = do_fct(elem)
-		if (! yes_recursive) {return} // interrupt recursive 
-	}
-	// getElemChildren(elem).forEach(function(child) // /!\ repeat twice (why ?)
-	const elm_children = getElemChildren(elem) 
-	elm_children.forEach(function(child) { // recursive
-		rptElemDoIf(elem.find(child), do_fct, if_fct)
-	})
-}
-
 
 
 
 init = function(sheet) {
 	// initialize all the sheets
-	if (sheet.id() === "main") {initMainSheet(sheet)}
-	if (sheet.id() === "Dia_SHTPRF") {initPreferencesSheet(sheet)}
-	if (sheet.id() === "Bnd_SCOROL") {initScoreRollBindingSheet(sheet)}
+	if (sheet.id() === Sht_SHTCHR) {initMainSheet(sheet)}
+	if (sheet.id() === Dia_SHTPRF) {initPreferencesSheet(sheet)}
+	if (sheet.id() === Bnd_SCOROL) {initScoreRollBindingSheet(sheet)}
 }
 
 
 // Main Sheet
 const initMainSheet = function(sheet) {
-
 	const Row_SCO = "Row_SCO"
 	const Lbl_Nom = "Lbl_Nom"
 	const Clk_Icon = "Clk_Icon"
@@ -733,7 +1375,6 @@ const initMainSheet = function(sheet) {
 	const Val_OBJITM = "Val_OBJITM"
 	const Val_Nom = "Val_Nom"
 	const Vis_OBJITM = "Vis_OBJITM"
-	const Css_BgSecondary = "bg-secondary"
 
 	const Arr_Loop = [
 		11,
@@ -795,10 +1436,10 @@ const initMainSheet = function(sheet) {
 	
 	// log(gaiValue())
 	// log(gaiValue(undefined, Int_Zero))
-	log(gaiValue(undefined, 10))
-	log(gaiValue(undefined, 10, Int_MOne))
-	log(gaiValue(Int_POne, 10))
-	log(gaiValue(undefined, 10, 20))
+	// log(gaiValue(undefined, 10))
+	// log(gaiValue(undefined, 10, Int_MOne))
+	// log(gaiValue(Int_POne, 10))
+	// log(gaiValue(undefined, 10, 20))
 	
 	// debug(cpoValue("   this is     THE way   "))
 	// debug(cpoValue("   THIS is     THE way   "))
@@ -811,7 +1452,7 @@ const initMainSheet = function(sheet) {
 	// debug(tynValue(false))
 	// debug(tynValue(true))
 	
-	setSheetItemValue(sheet, Val_HIS, 0)
+	setElemValue(getSheetItem(sheet, Val_HIS), 0)
 	const Chk_HOPITM = "Chk_HOPITM"
 	const Rep_his = getSheetItem(sheet, Rep_HIS)
 	const Rep_obj = getSheetItem(sheet, Rep_OBJ)
@@ -963,8 +1604,8 @@ const initMainSheet = function(sheet) {
 		})
 	}
 	
-	onSheetItemClickFct(sheet, "Dia_SHTPRF", function() {
-		const item = "Dia_SHTPRF"
+	onSheetItemClickFct(sheet, Dia_SHTPRF, function() {
+		const item = Dia_SHTPRF
 		debug(item)
 		sheet.prompt("Prefs", item, function(dialog) {
 			setSheetItemValue(sheet, "Prf_DXVPRF", dialog.Chc_DXVPRF)
@@ -986,7 +1627,6 @@ const initMainSheet = function(sheet) {
 	const Val_CMASEL = "Val_CMASEL"
 	const Val_SCOACT = "Val_SCOACT"
 	const Val_SCOROL = "Val_SCOROL"
-	const Bnd_SCOROL = "Bnd_SCOROL"
 
 	onSheetItemClickFct(sheet, Bnd_SCOROL, function() {
 		debug("onSheetItemClickFct")

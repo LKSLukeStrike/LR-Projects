@@ -1,0 +1,6 @@
+function getElemCfkCss(elem, cfk) { // full corresponding css with addons if any
+	debugFA("getElemCfkCss", arguments)
+	let result = Key_CFKCSS[cfk]
+	result += getElemCfkThemeCss(elem, cfk) // add sheet theme css if any
+	return result
+}

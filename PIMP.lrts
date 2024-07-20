@@ -214,7 +214,7 @@ const Key_CfkCss		= { // relation between Cfk and Css /!\ blank to separate
 	Cfk_Selected		: Cfk_Selected    + " bg-secondary",
 	Cfk_Fakeupdated		: Cfk_Fakeupdated + "",
 }
-const Arr_THMCFK		= [ // Cfk that support theme
+const Arr_CFKTHM		= [ // Cfk that support theme
 	Cfk_Clickable,
 	Cfk_Modifiable,
 	Cfk_Selected,
@@ -265,7 +265,7 @@ function addSheetItemCfk(sheet, item, cfk) { // multiple Cfk allowed in one stri
 	})} // single item from here
 	cfk.split(" ").forEach(function(cfk) {
 		let css = Key_CfkCss[cfk]
-		if (Arr_THMCFK.includes(cfk)) { // add the theme if any
+		if (Arr_CFKTHM.includes(cfk)) { // add the theme if any
 			css = css + " " + getSheetItemValue(sheet, REQ_THMPRF)
 		}
 		addSheetItemCss(sheet, item, css) // /!\ has to be first
@@ -284,7 +284,7 @@ function remSheetItemCfk(sheet, item, cfk) { // multiple Cfk allowed in one stri
 	})} // single item from here
 	cfk.split(" ").forEach(function(cfk) {
 		let css = Key_CfkCss[cfk]
-		if (Arr_THMCFK.includes(cfk)) { // add the theme if any
+		if (Arr_CFKTHM.includes(cfk)) { // add the theme if any
 			css = css + " " + getSheetItemValue(sheet, REQ_THMPRF)
 		}
 		if (hasSheetItemCfk(sheet, item, Cfk_Dotted10)) { // mimics on related dot

@@ -1,19 +1,20 @@
-//region Classes // due to JS we cannot use Class so ... Css // Cfk are fake classes
+function getElemCfkCss(elem, cfk) { // full corresponding css with addons if any
+	debugFA("getElemCfkCss", arguments)
+	let result = Key_CFKCSS[cfk]
+	result += getElemCfkThemeCss(elem, cfk) // add sheet theme css if any
+	return result
+}
 function addElemCfk(elem, cfk) { // multiple cfk allowed in one string
 	debugFA("addElemCfk", arguments)
 	if (yesArray(elem)) {return elem.forEach(function(elem) { // recursive
 		addElemCfk(elem, cfk)
 	})} // single elem from here
 	cfk.split(Str_Space).forEach(function(cfk) {
-		let css = Key_CfkCss[cfk]
-		if (Arr_THMCFK.includes(cfk)) { // add the theme if any
-			css = css + Str_Space + getElemValue(sheet, REQ_THMPRF)
-		}
-		addElemCss(elem, css) // /!\ has to be first
-		if (hasElemCfk(elem, Cfk_Dotted10)) { // mimics on related dot
-			if (cfk != Cfk_Undisplayed) { // except for Displayed
-				addElemCss(sheet, val2dotItem(elem), css)
-			}
+		const css = getElemCfkCss(elem, cfk)
+		addElemCss(elem, css) // apply to the elem
+		if (yesCfkDotted(cfk) // mimics on related dot elem if any
+		&&  neqValue(cfk, Cfk_Undisplayed)) { // except for displayed
+			addElemCss(val2dotElem(elem), css)
 		}
 	})
 	return cfk
@@ -24,16 +25,12 @@ function remElemCfk(elem, cfk) { // multiple cfk allowed in one string
 		remElemCfk(elem, cfk)
 	})} // single elem from here
 	cfk.split(Str_Space).forEach(function(cfk) {
-		let css = Key_CfkCss[cfk]
-		if (Arr_THMCFK.includes(cfk)) { // add the theme if any
-			css = css + Str_Space + getElemValue(sheet, REQ_THMPRF)
+		const css = getElemCfkCss(elem, cfk)
+		remElemCss(elem, css) // apply to the elem
+		if (yesCfkDotted(cfk) // mimics on related dot elem if any
+		&&  neqValue(cfk, Cfk_Undisplayed)) { // except for displayed
+			remElemCss(val2dotElem(elem), css)
 		}
-		if (hasElemCfk(elem, Cfk_Dotted10)) { // mimics on related dot
-			if (cfk != Cfk_Undisplayed) { // except for Displayed
-				remElemCss(sheet, val2dotItem(elem), css)
-			}
-		}
-		remElemCss(elem, css) // /!\ has to be last
 	})
 	Object.keys(Key_CfkCss).forEach(function(cfk) { // restore any "broken" Cfk
 		if (hasElemCfk(elem, cfk)) {
@@ -46,8 +43,3 @@ function hasElemCfk(elem, cfk) { // multiple cfk allowed in one string
 	debugFA("hasElemCfk", arguments)
 	return hasElemCss(elem, cfk) // check only Cfk, not their Css
 }
-function getElemCss(elem) {
-	debugFA("getElemCss", arguments)
-	return elem.getClasses()
-}
-//endregion

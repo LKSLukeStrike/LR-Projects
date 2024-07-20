@@ -264,7 +264,7 @@ function hasElemCss(elem, css) { // multiple css allowed in one string
 }
 function getElemCss(elem) {
 	debugFA("getElemCss", arguments)
-	let result = Arr_None
+	let result = []
 	try { // skip error when no css classes
 		result = elem.getClasses()
 	} finally {}
@@ -309,23 +309,75 @@ const Key_CFKCSS      = { // relation between cfk and css /!\ space to separate
 	Cfk_Selected      : Cfk_Selected    + Str_Space + Css_BgSecondary,
 	Cfk_Fakeupdated   : Cfk_Fakeupdated ,
 }
-const Arr_THMCFK      = [ // cfk that support theme
+function getElemCfkCss(elem, cfk) { // full corresponding css with addons if any
+	debugFA("getElemCfkCss", arguments)
+	let result = Key_CFKCSS[cfk]
+	result += getElemCfkThemeCss(elem, cfk) // add sheet theme css if any
+	return result
+}
+function addElemCfk(elem, cfk) { // multiple cfk allowed in one string
+	debugFA("addElemCfk", arguments)
+	if (yesArray(elem)) {return elem.forEach(function(elem) { // recursive
+		addElemCfk(elem, cfk)
+	})} // single elem from here
+	cfk.split(Str_Space).forEach(function(cfk) {
+		const css = getElemCfkCss(elem, cfk)
+		addElemCss(elem, css) // apply to the elem
+		if (yesCfkDotted(cfk) // mimics on related dot elem if any
+		&&  neqValue(cfk, Cfk_Undisplayed)) { // except for displayed
+			addElemCss(val2dotElem(elem), css)
+		}
+	})
+	return cfk
+}
+function remElemCfk(elem, cfk) { // multiple cfk allowed in one string
+	debugFA("remElemCfk", arguments)
+	if (yesArray(elem)) {return elem.forEach(function(elem) { // recursive
+		remElemCfk(elem, cfk)
+	})} // single elem from here
+	cfk.split(Str_Space).forEach(function(cfk) {
+		const css = getElemCfkCss(elem, cfk)
+		remElemCss(elem, css) // apply to the elem
+		if (yesCfkDotted(cfk) // mimics on related dot elem if any
+		&&  neqValue(cfk, Cfk_Undisplayed)) { // except for displayed
+			remElemCss(val2dotElem(elem), css)
+		}
+	})
+	Object.keys(Key_CfkCss).forEach(function(cfk) { // restore any "broken" Cfk
+		if (hasElemCfk(elem, cfk)) {
+			addElemCfk(elem, cfk)
+		}
+	})
+	return cfk
+}
+function hasElemCfk(elem, cfk) { // multiple cfk allowed in one string
+	debugFA("hasElemCfk", arguments)
+	return hasElemCss(elem, cfk) // check only Cfk, not their Css
+}
+//endregion
+
+//region LR_Elems Cfk Theme
+const Arr_CFKTHM      = [ // cfk that support theme
 	Cfk_Clickable,
 	Cfk_Modifiable,
 	Cfk_Selected,
 ]	
 function yesCfkTheme(cfk) { // if cfk support theme
 	debugFA("yesCfkTheme", arguments)
-	return yaiValue(Arr_THMCFK, cfk)
+	return yaiValue(Arr_CFKTHM, cfk)
 }
-function getElemCfkCss(elem, cfk) { // full corresponding css
-	debugFA("getElemCfkCss", arguments)
-	let result = Key_CFKCSS[cfk]
+function notCfkTheme(cfk) { // if not cfk support theme
+	debugFA("notCfkTheme", arguments)
+	return ! yesCfkTheme(cfk)
+}
+function getElemCfkThemeCss(elem, cfk) { // theme css if any
+	debugFA("getElemCfkThemeCss", arguments)
+	let result = Str_None
 	if (yesCfkTheme(cfk)) { // add the elem sheet theme if any
 		try { // skip error if any
 			const elm_sheet = getElemSheet(elem)
 			const prf_theme = getSheetThemePrf(elm_sheet)
-			result = result + Str_Space + prf_theme
+			result += Str_Space + prf_theme
 		} finally {}
 	}
 	return result
@@ -360,7 +412,7 @@ const Arr_Dotter07  = ["01", "02", "03", "04", "05", "06", "07",]
 const Arr_Dotter08  = ["01", "02", "03", "04", "05", "06", "07", "08",]
 const Arr_Dotter09  = ["01", "02", "03", "04", "05", "06", "07", "08", "09",]
 const Arr_Dotter10  = ["01", "02", "03", "04", "05", "06", "07", "08", "09", "10",]
-const Key_DFKDOT    = { // relation between cfk_dottednn and arr_dotternn
+const Key_CFKDOT    = { // relation between cfk_dottednn and arr_dotternn
 	Cfk_Dotted01 : Arr_Dotter01,
 	Cfk_Dotted02 : Arr_Dotter02,
 	Cfk_Dotted03 : Arr_Dotter03,
@@ -377,12 +429,20 @@ const Str_DotPlain  = ":ga_plain-circle:"
 const Str_DotInject = ":chevron-circle-down:"
 const Str_DotReject = ":chevron-circle-up:"
 //region LR_Elems Cfk Dotted Dotter/Checks
+function yesCfkDotted(cfk) { // if cfk is a dotted one
+	debugFA("yesCfkDotted", arguments)
+	return yaiValue(Arr_CFKTHM, cfk)
+}
+function notCfkDotted(cfk) { // if not cfk is a dotted one
+	debugFA("notCfkDotted", arguments)
+	return ! yesCfkDotted(cfk)
+}
 function getElemDotter(elem) {
 	debugFA("getElemDotter", arguments)
 	const result = Not_Dotted
-	Object.keys(Key_DFKDOT).forEach(function(cfk_dottednn) {
+	Object.keys(Key_CFKDOT).forEach(function(cfk_dottednn) {
 		if (hasElemCfk(elem, cfk_dottednn)) { // related arr_dotternn
-			result = Key_DFKDOT[cfk_dottednn]
+			result = Key_CFKDOT[cfk_dottednn]
 		}
 	})
 	return result
@@ -448,6 +508,133 @@ function hasElemDottedNN(elem, cfk_dottednn) {
 	return hasElemCfk(elem, cfk_dottednn)			// normal operation
 }
 //endregion
+//region LR_Elems Cfk Dotted01 - Dotted10
+//region LR_Elems Cfk Dotted01
+function addElemDotted01(elem) {
+	debugFA("addElemDotted01", arguments)
+	return addElemDottedNN(elem, Cfk_Dotted01)
+}
+function remElemDotted01(elem) {
+	debugFA("remElemDotted01", arguments)
+	return remElemDottedNN(elem, Cfk_Dotted01)
+}
+function hasElemDotted01(elem) {
+	debugFA("hasElemDotted01", arguments)
+	return hasElemDottedNN(elem, Cfk_Dotted01)
+}
+//endregion
+//region LR_Elems Cfk Dotted02
+function addElemDotted02(elem) {
+	debugFA("addElemDotted02", arguments)
+	return addElemDottedNN(elem, Cfk_Dotted02)
+}
+function remElemDotted02(elem) {
+	debugFA("remElemDotted02", arguments)
+	return remElemDottedNN(elem, Cfk_Dotted02)
+}
+function hasElemDotted02(elem) {
+	debugFA("hasElemDotted02", arguments)
+	return hasElemDottedNN(elem, Cfk_Dotted02)
+}
+//endregion
+//region LR_Elems Cfk Dotted03
+function addElemDotted03(elem) {
+	debugFA("addElemDotted03", arguments)
+	return addElemDottedNN(elem, Cfk_Dotted03)
+}
+function remElemDotted03(elem) {
+	debugFA("remElemDotted03", arguments)
+	return remElemDottedNN(elem, Cfk_Dotted03)
+}
+function hasElemDotted03(elem) {
+	debugFA("hasElemDotted03", arguments)
+	return hasElemDottedNN(elem, Cfk_Dotted03)
+}
+//endregion
+//region LR_Elems Cfk Dotted04
+function addElemDotted04(elem) {
+	debugFA("addElemDotted04", arguments)
+	return addElemDottedNN(elem, Cfk_Dotted04)
+}
+function remElemDotted04(elem) {
+	debugFA("remElemDotted04", arguments)
+	return remElemDottedNN(elem, Cfk_Dotted04)
+}
+function hasElemDotted04(elem) {
+	debugFA("hasElemDotted04", arguments)
+	return hasElemDottedNN(elem, Cfk_Dotted04)
+}
+//endregion
+//region LR_Elems Cfk Dotted05
+function addElemDotted05(elem) {
+	debugFA("addElemDotted05", arguments)
+	return addElemDottedNN(elem, Cfk_Dotted05)
+}
+function remElemDotted05(elem) {
+	debugFA("remElemDotted05", arguments)
+	return remElemDottedNN(elem, Cfk_Dotted05)
+}
+function hasElemDotted05(elem) {
+	debugFA("hasElemDotted05", arguments)
+	return hasElemDottedNN(elem, Cfk_Dotted05)
+}
+//endregion
+//region LR_Elems Cfk Dotted06
+function addElemDotted06(elem) {
+	debugFA("addElemDotted06", arguments)
+	return addElemDottedNN(elem, Cfk_Dotted06)
+}
+function remElemDotted06(elem) {
+	debugFA("remElemDotted06", arguments)
+	return remElemDottedNN(elem, Cfk_Dotted06)
+}
+function hasElemDotted06(elem) {
+	debugFA("hasElemDotted06", arguments)
+	return hasElemDottedNN(elem, Cfk_Dotted06)
+}
+//endregion
+//region LR_Elems Cfk Dotted07
+function addElemDotted07(elem) {
+	debugFA("addElemDotted07", arguments)
+	return addElemDottedNN(elem, Cfk_Dotted07)
+}
+function remElemDotted07(elem) {
+	debugFA("remElemDotted07", arguments)
+	return remElemDottedNN(elem, Cfk_Dotted07)
+}
+function hasElemDotted07(elem) {
+	debugFA("hasElemDotted07", arguments)
+	return hasElemDottedNN(elem, Cfk_Dotted07)
+}
+//endregion
+//region LR_Elems Cfk Dotted08
+function addElemDotted08(elem) {
+	debugFA("addElemDotted08", arguments)
+	return addElemDottedNN(elem, Cfk_Dotted08)
+}
+function remElemDotted08(elem) {
+	debugFA("remElemDotted08", arguments)
+	return remElemDottedNN(elem, Cfk_Dotted08)
+}
+function hasElemDotted08(elem) {
+	debugFA("hasElemDotted08", arguments)
+	return hasElemDottedNN(elem, Cfk_Dotted08)
+}
+//endregion
+//region LR_Elems Cfk Dotted09
+function addElemDotted09(elem) {
+	debugFA("addElemDotted09", arguments)
+	return addElemDottedNN(elem, Cfk_Dotted09)
+}
+function remElemDotted09(elem) {
+	debugFA("remElemDotted09", arguments)
+	return remElemDottedNN(elem, Cfk_Dotted09)
+}
+function hasElemDotted09(elem) {
+	debugFA("hasElemDotted09", arguments)
+	return hasElemDottedNN(elem, Cfk_Dotted09)
+}
+//endregion
 //region LR_Elems Cfk Dotted10
 function addElemDotted10(elem) {
 	debugFA("addElemDotted10", arguments)
@@ -461,6 +648,7 @@ function hasElemDotted10(elem) {
 	debugFA("hasElemDotted10", arguments)
 	return hasElemDottedNN(elem, Cfk_Dotted10)
 }
+//endregion
 //endregion
 //endregion
 
