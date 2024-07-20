@@ -1,14 +1,11 @@
 //region LR_Elems (aka components in LR)
-//region LR_Elems Sheet
-function getSheetItem(sheet, item) { // returns sheet item elem
-	debugFA("getSheetItem", arguments)
-	return sheet.get(item)
-}
-function getSheetName() { // the proper sheet/craft name
+//region LR_Elems Sheets
+function getSheetName(_sheet) { // the proper sheet name
 	debugFA("getSheetName", arguments)
+	try {tryArg(_sheet)} catch(e) {_sheet = sheet}
 	let result = null
 	try { // skip error when no name
-		result = sheet.properName()
+		result = _sheet.properName()
 	} finally {}
 	return result
 }
@@ -17,29 +14,29 @@ function getSheetName() { // the proper sheet/craft name
 //region LR_Elems Events
 const Evt_Click  = "click"
 const Evt_Update = "update"
-function onElemEvtFct(elem, evt, fct) {
-	debugFA("onElemEvtFct", arguments)
-	return elem.on(evt, fct)
+function oneElemDo(elem, evt, do_fct) { // on event
+	debugFA("oneElemDo", arguments)
+	return elem.on(evt, do_fct)
 }
-function onElemClickFct(elem, fct) {
-	debugFA("onElemClickFct", arguments)
-	return onElemEvtFct(elem, Evt_Click, fct)
+function oncElemDo(elem, do_fct) { // on click
+	debugFA("oncElemDo", arguments)
+	return oneElemDo(elem, Evt_Click, do_fct)
 }
-function onElemUpdateFct(elem, fct) {
-	debugFA("onElemUpdateFct", arguments)
-	return onElemEvtFct(elem, Evt_Update, fct)
+function onuElemDo(elem, do_fct) { // on update
+	debugFA("onuElemDo", arguments)
+	return oneElemDo(elem, Evt_Update, do_fct)
 }
-function onElemChildEvtFct(elem, child, evt, fct) {
-	debugFA("onElemChildEvtFct", arguments)
-	return elem.on(evt, child, fct)
+function oneElemChildDo(elem, child, evt, do_fct) {
+	debugFA("oneElemChildDo", arguments)
+	return elem.on(evt, child, do_fct)
 }
-function onElemChildClickFct(elem, child, fct) {
-	debugFA("onElemChildClickFct", arguments)
-	return onElemChildEvtFct(elem, child, Evt_Click, fct)
+function oncElemChildDo(elem, child, do_fct) {
+	debugFA("oncElemChildDo", arguments)
+	return oneElemChildDo(elem, child, Evt_Click, do_fct)
 }
-function onElemChildUpdateFct(elem, child, fct) {
+function onElemChildUpdateFct(elem, child, do_fct) {
 	debugFA("onElemChildUpdateFct", arguments)
-	return onElemChildEvtFct(elem, child, Evt_Update, fct)
+	return oneElemChildDo(elem, child, Evt_Update, do_fct)
 }
 //endregion
 

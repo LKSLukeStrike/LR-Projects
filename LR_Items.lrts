@@ -1,0 +1,252 @@
+//region LR_Items (aka ids in LR)
+//region LR_Items Elems
+function getElem(item, _sheet) { // returns a sheet item elem
+	debugFA("getElem", arguments)
+	try {tryArg(_sheet)} catch(e) {_sheet = sheet}
+	return _sheet.get(item)
+}
+//endregion
+
+//region LR_Items Events
+function oncItemDo(item, do_fct, _sheet) {
+	debugFA("oncItemDo", arguments)
+	try {tryArg(_sheet)} catch(e) {_sheet = sheet}
+	return oncElemDo(getElem(item, _sheet), do_fct)
+}
+function onuItemDo(item, do_fct, _sheet) {
+	debugFA("onuItemDo", arguments)
+	try {tryArg(_sheet)} catch(e) {_sheet = sheet}
+	return onuElemDo(getElem(item, _sheet), do_fct)
+}
+//endregion
+
+//region LR_Items Values
+function getItemValue(item, _sheet) {
+	debugFA("getItemValue", arguments)
+	return getElemValue(getElem(item, _sheet))
+}
+function setItemValue(item, itm_value, _sheet) {
+	debugFA("setItemValue", arguments)
+	try {tryArg(_sheet)} catch(e) {_sheet = sheet}
+	return setElemValue(getElem(item, _sheet), itm_value)
+}
+function setItemZero(item, _sheet) {
+	debugFA("setItemZero", arguments)
+	try {tryArg(_sheet)} catch(e) {_sheet = sheet}
+	return setItemValue(item, Int_Zero)
+}
+function setItemNone(item, _sheet) {
+	debugFA("setItemNone", arguments)
+	try {tryArg(_sheet)} catch(e) {_sheet = sheet}
+	return setItemValue(item, Str_None)
+}
+function hasItemValue(item, itm_value, _sheet) {
+	debugFA("hasItemValue", arguments)
+	try {tryArg(_sheet)} catch(e) {_sheet = sheet}
+	return hasElemValue(getElem(item, _sheet), itm_value)
+}
+function hasItemZero(item, _sheet) {
+	debugFA("hasItemZero", arguments)
+	try {tryArg(_sheet)} catch(e) {_sheet = sheet}
+	return hasItemValue(item, Int_Zero)
+}
+function hasItemNone(item, _sheet) {
+	debugFA("hasItemNone", arguments)
+	try {tryArg(_sheet)} catch(e) {_sheet = sheet}
+	return hasItemValue(item, Str_None)
+}
+//endregion
+
+//region LR_Items Locked
+function setItemLocked(item, _sheet) {
+	debugFA("setItemLocked", arguments)
+	try {tryArg(_sheet)} catch(e) {_sheet = sheet}
+	return setElemLocked(getElem(item, _sheet))
+}
+function setItemUnlocked(item, _sheet) {
+	debugFA("setItemUnlocked", arguments)
+	try {tryArg(_sheet)} catch(e) {_sheet = sheet}
+	return setElemUnlocked(getElem(item, _sheet))
+}
+function hasItemLocked(item, _sheet) {
+	debugFA("hasItemLocked", arguments)
+	try {tryArg(_sheet)} catch(e) {_sheet = sheet}
+	return hasElemLocked(getElem(item, _sheet))
+}
+//endregion
+
+//region LR_Items Folded
+function setItemFolded(item, _sheet) {
+	debugFA("setItemFolded", arguments)
+	try {tryArg(_sheet)} catch(e) {_sheet = sheet}
+	return setElemFolded(getElem(item, _sheet))
+}
+function setItemUnfolded(item, _sheet) {
+	debugFA("setItemUnfolded", arguments)
+	try {tryArg(_sheet)} catch(e) {_sheet = sheet}
+	return setElemUnfolded(getElem(item, _sheet))
+}
+function hasItemFolded(item, _sheet) {
+	debugFA("hasItemFolded", arguments)
+	try {tryArg(_sheet)} catch(e) {_sheet = sheet}
+	return hasElemFolded(getElem(item, _sheet))
+}
+//endregion
+
+//region LR_Items Tooltips
+function setItemTooltip(item, itm_tooltip, _sheet) {
+	debugFA("setItemTooltip", arguments)
+	try {tryArg(_sheet)} catch(e) {_sheet = sheet}
+	return setElemTooltip(getElem(item, _sheet), itm_tooltip)
+}
+//endregion
+
+//region LR_Items Effort
+function addItemEffort(item, _sheet) {
+	debugFA("addItemEffort", arguments)
+	try {tryArg(_sheet)} catch(e) {_sheet = sheet}
+	return addElemEffort(getElem(item, _sheet))
+}
+function remItemEffort(item, _sheet) {
+	debugFA("remItemEffort", arguments)
+	try {tryArg(_sheet)} catch(e) {_sheet = sheet}
+	return remElemEffort(getElem(item, _sheet))
+}
+function hasItemEffort(item, _sheet) {
+	debugFA("hasItemEffort", arguments)
+	try {tryArg(_sheet)} catch(e) {_sheet = sheet}
+	return hasElemEffort(getElem(item, _sheet))
+}	
+//endregion
+
+//region LR_Items Dotted10
+function addItemDotted10(item, _sheet) {
+	debugFA("addItemDotted10", arguments)
+	try {tryArg(_sheet)} catch(e) {_sheet = sheet}
+	return addElemDotted10(getElem(item, _sheet))
+}
+function remItemDotted10(item, _sheet) {
+	debugFA("remItemDotted10", arguments)
+	try {tryArg(_sheet)} catch(e) {_sheet = sheet}
+	return remElemDotted10(getElem(item, _sheet))
+}
+function hasItemDotted10(item, _sheet) {
+	debugFA("hasItemDotted10", arguments)
+	try {tryArg(_sheet)} catch(e) {_sheet = sheet}
+	return hasElemDotted10(getElem(item, _sheet))
+}	
+//endregion
+
+//region LR_Items Plussigned
+function addItemPlussigned(item, _sheet) {
+	debugFA("addItemPlussigned", arguments)
+	try {tryArg(_sheet)} catch(e) {_sheet = sheet}
+	return addElemPlussigned(getElem(item, _sheet))
+}
+function remItemPlussigned(item, _sheet) {
+	debugFA("remItemPlussigned", arguments)
+	try {tryArg(_sheet)} catch(e) {_sheet = sheet}
+	return remElemPlussigned(getElem(item, _sheet))
+}
+function hasItemPlussigned(item, _sheet) {
+	debugFA("hasItemPlussigned", arguments)
+	try {tryArg(_sheet)} catch(e) {_sheet = sheet}
+	return hasElemPlussigned(getElem(item, _sheet))
+}	
+//endregion
+
+//region LR_Items Displayed
+function addItemDisplayed(item, _sheet) {
+	debugFA("addItemDisplayed", arguments)
+	try {tryArg(_sheet)} catch(e) {_sheet = sheet}
+	return addElemDisplayed(getElem(item, _sheet))
+}
+function remItemDisplayed(item, _sheet) {
+	debugFA("remItemDisplayed", arguments)
+	try {tryArg(_sheet)} catch(e) {_sheet = sheet}
+	return remElemDisplayed(getElem(item, _sheet))
+}
+function hasItemDisplayed(item, _sheet) {
+	debugFA("hasItemDisplayed", arguments)
+	try {tryArg(_sheet)} catch(e) {_sheet = sheet}
+	return hasElemDisplayed(getElem(item, _sheet))
+}
+//endregion
+
+//region LR_Items Clickable
+function addItemClickable(item, _sheet) {
+	debugFA("addItemClickable", arguments)
+	try {tryArg(_sheet)} catch(e) {_sheet = sheet}
+	return addElemClickable(getElem(item, _sheet))
+}
+function remItemClickable(item, _sheet) {
+	debugFA("remItemClickable", arguments)
+	try {tryArg(_sheet)} catch(e) {_sheet = sheet}
+	return remElemClickable(getElem(item, _sheet))
+}
+function hasItemClickable(item, _sheet) {
+	debugFA("hasItemClickable", arguments)
+	try {tryArg(_sheet)} catch(e) {_sheet = sheet}
+	return hasElemClickable(getElem(item, _sheet))
+}
+//endregion
+
+//region LR_Items Modifiable
+function addItemModifiable(item, _sheet) {
+	debugFA("addItemModifiable", arguments)
+	try {tryArg(_sheet)} catch(e) {_sheet = sheet}
+	return addElemModifiable(getElem(item, _sheet))
+}
+function remItemModifiable(item, _sheet) {
+	debugFA("remItemModifiable", arguments)
+	try {tryArg(_sheet)} catch(e) {_sheet = sheet}
+	return remElemModifiable(getElem(item, _sheet))
+}
+function hasItemModifiable(item, _sheet) {
+	debugFA("hasItemModifiable", arguments)
+	try {tryArg(_sheet)} catch(e) {_sheet = sheet}
+	return hasElemModifiable(getElem(item, _sheet))
+}
+//endregion
+
+//region LR_Items Selected
+function addItemSelected(item, _sheet) {
+	debugFA("addItemSelected", arguments)
+	try {tryArg(_sheet)} catch(e) {_sheet = sheet}
+	return addElemSelected(getElem(item, _sheet))
+}
+function remItemSelected(item, _sheet) {
+	debugFA("remItemSelected", arguments)
+	try {tryArg(_sheet)} catch(e) {_sheet = sheet}
+	return remElemSelected(getElem(item, _sheet))
+}
+function hasItemSelected(item, _sheet) {
+	debugFA("hasItemSelected", arguments)
+	try {tryArg(_sheet)} catch(e) {_sheet = sheet}
+	return hasElemSelected(getElem(item, _sheet))
+}
+//endregion
+
+//region LR_Items Fakeupdated // fake class to avoid computations propagation
+function addItemFakeupdated(item, _sheet) {
+	debugFA("addItemFakeupdated", arguments)
+	try {tryArg(_sheet)} catch(e) {_sheet = sheet}
+	return addElemFakeupdated(getElem(item, _sheet))
+}
+function remItemFakeupdated(item, _sheet) {
+	debugFA("remItemFakeupdated", arguments)
+	try {tryArg(_sheet)} catch(e) {_sheet = sheet}
+	return remElemFakeupdated(getElem(item, _sheet))
+}
+function hasItemFakeupdated(item, _sheet) {
+	debugFA("hasItemFakeupdated", arguments)
+	try {tryArg(_sheet)} catch(e) {_sheet = sheet}
+	return hasElemFakeupdated(getElem(item, _sheet))
+}	
+function fakItemUpdate(item, _sheet) {
+	debugFA("fakItemUpdate", arguments)
+	try {tryArg(_sheet)} catch(e) {_sheet = sheet}
+	return fakElemUpdate(getElem(item, _sheet))
+}
+//endregion
+//endregion
