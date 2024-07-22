@@ -1,13 +1,10 @@
-function gaiValue(_int_from, _int_lenght, _int_step) { // generate array of int
-	debugFA("gaiValue", arguments)
-	try {tryArg(_int_from)}   catch(e) {_int_from   = Int_Zero}
-	try {tryArg(_int_lenght)} catch(e) {_int_lenght = Int_POne}
-	try {tryArg(_int_step)}   catch(e) {_int_step   = Int_POne}
-	let result = Arr_None
-	while (yppValue(_int_lenght)) {
-		result.push(_int_from)
-		_int_from   += _int_step
-		_int_lenght -= Int_POne
-	}
-	return result
+function oncItemChildDo(item, child, do_fct, _sheet) {
+	debugFA("oncItemChildDo", arguments)
+	try {tryArg(_sheet)} catch(e) {_sheet = sheet}
+	return oncElemChildDo(getElem(item, _sheet), child, do_fct)
+}
+function onuItemChildDo(item, child, do_fct, _sheet) {
+	debugFA("onuItemChildDo", arguments)
+	try {tryArg(_sheet)} catch(e) {_sheet = sheet}
+	return onuElemChildDo(getElem(item, _sheet), child, do_fct)
 }

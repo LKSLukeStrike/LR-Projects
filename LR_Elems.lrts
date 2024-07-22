@@ -26,16 +26,16 @@ function onuElemDo(elem, do_fct) { // on update
 	debugFA("onuElemDo", arguments)
 	return oneElemDo(elem, Evt_Update, do_fct)
 }
-function oneElemChildDo(elem, child, evt, do_fct) {
+function oneElemChildDo(elem, child, evt, do_fct) { // on child event
 	debugFA("oneElemChildDo", arguments)
 	return elem.on(evt, child, do_fct)
 }
-function oncElemChildDo(elem, child, do_fct) {
+function oncElemChildDo(elem, child, do_fct) { // on child click
 	debugFA("oncElemChildDo", arguments)
 	return oneElemChildDo(elem, child, Evt_Click, do_fct)
 }
-function onElemChildUpdateFct(elem, child, do_fct) {
-	debugFA("onElemChildUpdateFct", arguments)
+function onuElemChildDo(elem, child, do_fct) { // on child update
+	debugFA("onuElemChildDo", arguments)
 	return oneElemChildDo(elem, child, Evt_Update, do_fct)
 }
 //endregion
@@ -108,9 +108,13 @@ function getElemChildren(elem) { // return children ids (get them with find)
 //region LR_Elems Values
 function getElemValue(elem) {
 	debugFA("getElemValue", arguments)
-	const elm_value = elem.value()
-	return Number.isNaN(Number(elm_value)) ? // right type
-		elm_value : Number(elm_value)
+	let result = null
+	try { // skip error when no value
+		const elm_value = elem.value()
+		result = Number.isNaN(Number(elm_value)) ? // right type
+			elm_value : Number(elm_value)
+	} finally {}
+	return result
 }
 function setElemValue(elem, elm_value) {
 	debugFA("setElemValue", arguments)

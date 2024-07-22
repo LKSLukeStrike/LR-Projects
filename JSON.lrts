@@ -1,3 +1,4 @@
+//region LR_ (LR Library)
 //region LR_Constants
 //region LR_Constants Values
 const Int_Zero     = 0
@@ -145,16 +146,13 @@ function debugFAOK(fct_name, _yes_debugfa) { // use: debugFAOK("myFunction")
 //endregion
 
 //region LR_Elems (aka components in LR)
-//region LR_Elems Sheet
-function getSheetItem(sheet, item) { // returns sheet item elem
-	debugFA("getSheetItem", arguments)
-	return sheet.get(item)
-}
-function getSheetName() { // the proper sheet/craft name
+//region LR_Elems Sheets
+function getSheetName(_sheet) { // the proper sheet name
 	debugFA("getSheetName", arguments)
+	try {tryArg(_sheet)} catch(e) {_sheet = sheet}
 	let result = null
 	try { // skip error when no name
-		result = sheet.properName()
+		result = _sheet.properName()
 	} finally {}
 	return result
 }
@@ -163,29 +161,29 @@ function getSheetName() { // the proper sheet/craft name
 //region LR_Elems Events
 const Evt_Click  = "click"
 const Evt_Update = "update"
-function onElemEvtFct(elem, evt, fct) {
-	debugFA("onElemEvtFct", arguments)
-	return elem.on(evt, fct)
+function oneElemDo(elem, evt, do_fct) { // on event
+	debugFA("oneElemDo", arguments)
+	return elem.on(evt, do_fct)
 }
-function onElemClickFct(elem, fct) {
-	debugFA("onElemClickFct", arguments)
-	return onElemEvtFct(elem, Evt_Click, fct)
+function oncElemDo(elem, do_fct) { // on click
+	debugFA("oncElemDo", arguments)
+	return oneElemDo(elem, Evt_Click, do_fct)
 }
-function onElemUpdateFct(elem, fct) {
-	debugFA("onElemUpdateFct", arguments)
-	return onElemEvtFct(elem, Evt_Update, fct)
+function onuElemDo(elem, do_fct) { // on update
+	debugFA("onuElemDo", arguments)
+	return oneElemDo(elem, Evt_Update, do_fct)
 }
-function onElemChildEvtFct(elem, child, evt, fct) {
-	debugFA("onElemChildEvtFct", arguments)
-	return elem.on(evt, child, fct)
+function oneElemChildDo(elem, child, evt, do_fct) { // on child event
+	debugFA("oneElemChildDo", arguments)
+	return elem.on(evt, child, do_fct)
 }
-function onElemChildClickFct(elem, child, fct) {
-	debugFA("onElemChildClickFct", arguments)
-	return onElemChildEvtFct(elem, child, Evt_Click, fct)
+function oncElemChildDo(elem, child, do_fct) { // on child click
+	debugFA("oncElemChildDo", arguments)
+	return oneElemChildDo(elem, child, Evt_Click, do_fct)
 }
-function onElemChildUpdateFct(elem, child, fct) {
-	debugFA("onElemChildUpdateFct", arguments)
-	return onElemChildEvtFct(elem, child, Evt_Update, fct)
+function onuElemChildDo(elem, child, do_fct) { // on child update
+	debugFA("onuElemChildDo", arguments)
+	return oneElemChildDo(elem, child, Evt_Update, do_fct)
 }
 //endregion
 
@@ -257,9 +255,13 @@ function getElemChildren(elem) { // return children ids (get them with find)
 //region LR_Elems Values
 function getElemValue(elem) {
 	debugFA("getElemValue", arguments)
-	const elm_value = elem.value()
-	return Number.isNaN(Number(elm_value)) ? // right type
-		elm_value : Number(elm_value)
+	let result = null
+	try { // skip error when no value
+		const elm_value = elem.value()
+		result = Number.isNaN(Number(elm_value)) ? // right type
+			elm_value : Number(elm_value)
+	} finally {}
+	return result
 }
 function setElemValue(elem, elm_value) {
 	debugFA("setElemValue", arguments)
@@ -968,6 +970,270 @@ function rptElemDoIf(elem, _do_fct, _if_fct) { // apply fct on repeater if true
 //endregion
 //endregion
 
+//region LR_Items (aka ids in LR)
+//region LR_Items Elems
+function getElem(item, _sheet) { // returns a sheet item elem
+	debugFA("getElem", arguments)
+	try {tryArg(_sheet)} catch(e) {_sheet = sheet}
+	return _sheet.get(item)
+}
+//endregion
+
+//region LR_Items Events
+function oncItemDo(item, do_fct, _sheet) {
+	debugFA("oncItemDo", arguments)
+	try {tryArg(_sheet)} catch(e) {_sheet = sheet}
+	return oncElemDo(getElem(item, _sheet), do_fct)
+}
+function onuItemDo(item, do_fct, _sheet) {
+	debugFA("onuItemDo", arguments)
+	try {tryArg(_sheet)} catch(e) {_sheet = sheet}
+	return onuElemDo(getElem(item, _sheet), do_fct)
+}
+function oncItemChildDo(item, child, do_fct, _sheet) {
+	debugFA("oncItemChildDo", arguments)
+	try {tryArg(_sheet)} catch(e) {_sheet = sheet}
+	return oncElemChildDo(getElem(item, _sheet), child, do_fct)
+}
+function onuItemChildDo(item, child, do_fct, _sheet) {
+	debugFA("onuItemChildDo", arguments)
+	try {tryArg(_sheet)} catch(e) {_sheet = sheet}
+	return onuElemChildDo(getElem(item, _sheet), child, do_fct)
+}
+//endregion
+
+//region LR_Items Values
+function getItemValue(item, _sheet) {
+	debugFA("getItemValue", arguments)
+	try {tryArg(_sheet)} catch(e) {_sheet = sheet}
+	return getElemValue(getElem(item, _sheet))
+}
+function setItemValue(item, itm_value, _sheet) {
+	debugFA("setItemValue", arguments)
+	try {tryArg(_sheet)} catch(e) {_sheet = sheet}
+	return setElemValue(getElem(item, _sheet), itm_value)
+}
+function setItemZero(item, _sheet) {
+	debugFA("setItemZero", arguments)
+	try {tryArg(_sheet)} catch(e) {_sheet = sheet}
+	return setItemValue(item, Int_Zero, _sheet)
+}
+function setItemNone(item, _sheet) {
+	debugFA("setItemNone", arguments)
+	try {tryArg(_sheet)} catch(e) {_sheet = sheet}
+	return setItemValue(item, Str_None, _sheet)
+}
+function hasItemValue(item, itm_value, _sheet) {
+	debugFA("hasItemValue", arguments)
+	try {tryArg(_sheet)} catch(e) {_sheet = sheet}
+	return hasElemValue(getElem(item, _sheet), itm_value)
+}
+function hasItemZero(item, _sheet) {
+	debugFA("hasItemZero", arguments)
+	try {tryArg(_sheet)} catch(e) {_sheet = sheet}
+	return hasItemValue(item, Int_Zero, _sheet)
+}
+function hasItemNone(item, _sheet) {
+	debugFA("hasItemNone", arguments)
+	try {tryArg(_sheet)} catch(e) {_sheet = sheet}
+	return hasItemValue(item, Str_None, _sheet)
+}
+//endregion
+
+//region LR_Items Locked
+function setItemLocked(item, _sheet) {
+	debugFA("setItemLocked", arguments)
+	try {tryArg(_sheet)} catch(e) {_sheet = sheet}
+	return setElemLocked(getElem(item, _sheet))
+}
+function setItemUnlocked(item, _sheet) {
+	debugFA("setItemUnlocked", arguments)
+	try {tryArg(_sheet)} catch(e) {_sheet = sheet}
+	return setElemUnlocked(getElem(item, _sheet))
+}
+function hasItemLocked(item, _sheet) {
+	debugFA("hasItemLocked", arguments)
+	try {tryArg(_sheet)} catch(e) {_sheet = sheet}
+	return hasElemLocked(getElem(item, _sheet))
+}
+//endregion
+
+//region LR_Items Folded
+function setItemFolded(item, _sheet) {
+	debugFA("setItemFolded", arguments)
+	try {tryArg(_sheet)} catch(e) {_sheet = sheet}
+	return setElemFolded(getElem(item, _sheet))
+}
+function setItemUnfolded(item, _sheet) {
+	debugFA("setItemUnfolded", arguments)
+	try {tryArg(_sheet)} catch(e) {_sheet = sheet}
+	return setElemUnfolded(getElem(item, _sheet))
+}
+function hasItemFolded(item, _sheet) {
+	debugFA("hasItemFolded", arguments)
+	try {tryArg(_sheet)} catch(e) {_sheet = sheet}
+	return hasElemFolded(getElem(item, _sheet))
+}
+//endregion
+
+//region LR_Items Tooltips
+function setItemTooltip(item, itm_tooltip, _sheet) {
+	debugFA("setItemTooltip", arguments)
+	try {tryArg(_sheet)} catch(e) {_sheet = sheet}
+	return setElemTooltip(getElem(item, _sheet), itm_tooltip)
+}
+//endregion
+
+//region LR_Items Effort
+function addItemEffort(item, _sheet) {
+	debugFA("addItemEffort", arguments)
+	try {tryArg(_sheet)} catch(e) {_sheet = sheet}
+	return addElemEffort(getElem(item, _sheet))
+}
+function remItemEffort(item, _sheet) {
+	debugFA("remItemEffort", arguments)
+	try {tryArg(_sheet)} catch(e) {_sheet = sheet}
+	return remElemEffort(getElem(item, _sheet))
+}
+function hasItemEffort(item, _sheet) {
+	debugFA("hasItemEffort", arguments)
+	try {tryArg(_sheet)} catch(e) {_sheet = sheet}
+	return hasElemEffort(getElem(item, _sheet))
+}	
+//endregion
+
+//region LR_Items Dotted10
+function addItemDotted10(item, _sheet) {
+	debugFA("addItemDotted10", arguments)
+	try {tryArg(_sheet)} catch(e) {_sheet = sheet}
+	return addElemDotted10(getElem(item, _sheet))
+}
+function remItemDotted10(item, _sheet) {
+	debugFA("remItemDotted10", arguments)
+	try {tryArg(_sheet)} catch(e) {_sheet = sheet}
+	return remElemDotted10(getElem(item, _sheet))
+}
+function hasItemDotted10(item, _sheet) {
+	debugFA("hasItemDotted10", arguments)
+	try {tryArg(_sheet)} catch(e) {_sheet = sheet}
+	return hasElemDotted10(getElem(item, _sheet))
+}	
+//endregion
+
+//region LR_Items Plussigned
+function addItemPlussigned(item, _sheet) {
+	debugFA("addItemPlussigned", arguments)
+	try {tryArg(_sheet)} catch(e) {_sheet = sheet}
+	return addElemPlussigned(getElem(item, _sheet))
+}
+function remItemPlussigned(item, _sheet) {
+	debugFA("remItemPlussigned", arguments)
+	try {tryArg(_sheet)} catch(e) {_sheet = sheet}
+	return remElemPlussigned(getElem(item, _sheet))
+}
+function hasItemPlussigned(item, _sheet) {
+	debugFA("hasItemPlussigned", arguments)
+	try {tryArg(_sheet)} catch(e) {_sheet = sheet}
+	return hasElemPlussigned(getElem(item, _sheet))
+}	
+//endregion
+
+//region LR_Items Displayed
+function addItemDisplayed(item, _sheet) {
+	debugFA("addItemDisplayed", arguments)
+	try {tryArg(_sheet)} catch(e) {_sheet = sheet}
+	return addElemDisplayed(getElem(item, _sheet))
+}
+function remItemDisplayed(item, _sheet) {
+	debugFA("remItemDisplayed", arguments)
+	try {tryArg(_sheet)} catch(e) {_sheet = sheet}
+	return remElemDisplayed(getElem(item, _sheet))
+}
+function hasItemDisplayed(item, _sheet) {
+	debugFA("hasItemDisplayed", arguments)
+	try {tryArg(_sheet)} catch(e) {_sheet = sheet}
+	return hasElemDisplayed(getElem(item, _sheet))
+}
+//endregion
+
+//region LR_Items Clickable
+function addItemClickable(item, _sheet) {
+	debugFA("addItemClickable", arguments)
+	try {tryArg(_sheet)} catch(e) {_sheet = sheet}
+	return addElemClickable(getElem(item, _sheet))
+}
+function remItemClickable(item, _sheet) {
+	debugFA("remItemClickable", arguments)
+	try {tryArg(_sheet)} catch(e) {_sheet = sheet}
+	return remElemClickable(getElem(item, _sheet))
+}
+function hasItemClickable(item, _sheet) {
+	debugFA("hasItemClickable", arguments)
+	try {tryArg(_sheet)} catch(e) {_sheet = sheet}
+	return hasElemClickable(getElem(item, _sheet))
+}
+//endregion
+
+//region LR_Items Modifiable
+function addItemModifiable(item, _sheet) {
+	debugFA("addItemModifiable", arguments)
+	try {tryArg(_sheet)} catch(e) {_sheet = sheet}
+	return addElemModifiable(getElem(item, _sheet))
+}
+function remItemModifiable(item, _sheet) {
+	debugFA("remItemModifiable", arguments)
+	try {tryArg(_sheet)} catch(e) {_sheet = sheet}
+	return remElemModifiable(getElem(item, _sheet))
+}
+function hasItemModifiable(item, _sheet) {
+	debugFA("hasItemModifiable", arguments)
+	try {tryArg(_sheet)} catch(e) {_sheet = sheet}
+	return hasElemModifiable(getElem(item, _sheet))
+}
+//endregion
+
+//region LR_Items Selected
+function addItemSelected(item, _sheet) {
+	debugFA("addItemSelected", arguments)
+	try {tryArg(_sheet)} catch(e) {_sheet = sheet}
+	return addElemSelected(getElem(item, _sheet))
+}
+function remItemSelected(item, _sheet) {
+	debugFA("remItemSelected", arguments)
+	try {tryArg(_sheet)} catch(e) {_sheet = sheet}
+	return remElemSelected(getElem(item, _sheet))
+}
+function hasItemSelected(item, _sheet) {
+	debugFA("hasItemSelected", arguments)
+	try {tryArg(_sheet)} catch(e) {_sheet = sheet}
+	return hasElemSelected(getElem(item, _sheet))
+}
+//endregion
+
+//region LR_Items Fakeupdated // fake class to avoid computations propagation
+function addItemFakeupdated(item, _sheet) {
+	debugFA("addItemFakeupdated", arguments)
+	try {tryArg(_sheet)} catch(e) {_sheet = sheet}
+	return addElemFakeupdated(getElem(item, _sheet))
+}
+function remItemFakeupdated(item, _sheet) {
+	debugFA("remItemFakeupdated", arguments)
+	try {tryArg(_sheet)} catch(e) {_sheet = sheet}
+	return remElemFakeupdated(getElem(item, _sheet))
+}
+function hasItemFakeupdated(item, _sheet) {
+	debugFA("hasItemFakeupdated", arguments)
+	try {tryArg(_sheet)} catch(e) {_sheet = sheet}
+	return hasElemFakeupdated(getElem(item, _sheet))
+}	
+function fakItemUpdate(item, _sheet) {
+	debugFA("fakItemUpdate", arguments)
+	try {tryArg(_sheet)} catch(e) {_sheet = sheet}
+	return fakElemUpdate(getElem(item, _sheet))
+}
+//endregion
+//endregion
+
 //region LR_Operators
 //region LR_Operators Random
 function rndValue(value_min, value_max) { // random value (integer, inclusive)
@@ -1280,6 +1546,85 @@ function chk2valItem(item) { // chk related val item
 //endregion
 //endregion
 
+//region LR_Themes /!\ some items are REQuired on sheets for theme to work on it
+const REQ_THMOLD		= "REQ_THMOLD"		// previous theme sheet item (REQuired)
+const REQ_THMPRF		= "REQ_THMPRF"		// choosen theme sheet item  (REQuired)
+const Css_TextPrimary	= "text-primary"
+const Css_TextSecondary	= "text-secondary"
+const Css_TextSuccess	= "text-success"
+const Css_TextDanger	= "text-danger"
+const Css_TextWarning	= "text-warning"
+const Css_TextInfo		= "text-info"
+const Css_TextLight		= "text-light"
+const Css_TextDark		= "text-dark"
+const Css_TextMuted		= "text-muted"
+const Css_TextWhite		= "text-white"
+const Dft_THMDFT		= Css_TextWarning
+const Arr_THMALW		= [ // themes allowed
+	Css_TextPrimary,
+	Css_TextSecondary,
+	Css_TextSuccess,
+	Css_TextDanger,
+	Css_TextWarning,
+	Css_TextInfo,
+	Css_TextLight,
+	Css_TextDark,
+	Css_TextMuted,
+	Css_TextWhite,
+]
+//region LR_Themes Allowed
+function yawTheme(css_theme) { // if theme allowed
+	debugFA("yawTheme", arguments)
+	return yaiValue(Arr_THMALW, css_theme)
+}
+function nawTheme(css_theme) { // if not theme allowed
+	debugFA("nawTheme", arguments)
+	return ! yawTheme(css_theme)
+}
+//endregion
+
+//region LR_Themes Sheet Themes
+function getSheetThemeOld(sheet) { // get previous sheet theme
+	debugFA("getSheetThemeOld", arguments)
+	let result = Dft_THMDFT
+	try { // skip error when no sheet item
+		result = getElemValue(getSheetItem(sheet, REQ_THMOLD))
+	} finally {}
+	result = yawTheme(result) ? // force to default allowed theme if any
+		result : Dft_THMDFT
+	return result
+}
+function setSheetThemeOld(sheet, css_theme) { // set previous sheet theme
+	debugFA("setSheetThemeOld", arguments)
+	css_theme = yawTheme(css_theme) ? // force to default allowed theme if any
+		css_theme : Dft_THMDFT
+	try { // skip error when no sheet item
+		setElemValue(getSheetItem(sheet, REQ_THMOLD), css_theme)
+	} finally {}
+	return css_theme
+}
+function getSheetThemePrf(sheet) { // get choosen sheet theme
+	debugFA("getSheetThemePrf", arguments)
+	let result = Dft_THMDFT
+	try { // skip error when no sheet item
+		result = getElemValue(getSheetItem(sheet, REQ_THMPRF))
+	} finally {}
+	result = yawTheme(result) ? // force to default allowed theme if any
+		result : Dft_THMDFT
+	return result
+}
+function setSheetThemePrf(sheet, css_theme) { // set choosen sheet theme
+	debugFA("setSheetThemePrf", arguments)
+	css_theme = yawTheme(css_theme) ? // force to default allowed theme if any
+		css_theme : Dft_THMDFT
+	try { // skip error when no sheet item
+		setElemValue(getSheetItem(sheet, REQ_THMPRF), css_theme)
+	} finally {}
+	return css_theme
+}
+//endregion
+//endregion
+
 //region LR_Types
 const Str_Null		= "null"
 const Str_Undefined	= "undefined"
@@ -1336,6 +1681,7 @@ function tryArg(_arg) { // error if no arg or undefined arg // use for default a
 	} catch(e) {throw Str_Undefined}
 }
 //endregion
+//endregion
 
 
 //region JSON_
@@ -1345,6 +1691,27 @@ const Bnd_SCOROL  = "Bnd_SCOROL"	// dice roll binding
 const Arr_SUCFAI  = ["0", "1", "2", "3", "4", "5", "6", "7", "8", "9",]
 const Lbl_ROLSUC_ = "Lbl_ROLSUC_"
 const Lbl_ROLFAI_ = "Lbl_ROLFAI_"
+const Row_SCO     = "Row_SCO"
+const Lbl_Nom     = "Lbl_Nom"
+const Clk_Icon    = "Clk_Icon"
+const Dot_Test    = "Dot_Test"
+const Val_RESULT  = "Val_RESULT"
+const Row_SCO     = "Row_SCO"
+const Clk_HOP     = "Clk_HOP"
+const Rep_HIS     = "Rep_HIS"
+const Val_HIS     = "Val_HIS"
+const Rep_OBJ     = "Rep_OBJ"
+const Rep_PER     = "Rep_PER"
+const Chk_PHYCHK  = "Chk_PHYCHK"
+const Val_PHYCHK  = "Val_PHYCHK"
+const Val_OBJITM  = "Val_OBJITM"
+const Val_Nom     = "Val_Nom"
+const Vis_OBJITM  = "Vis_OBJITM"
+const Chk_HOPITM  = "Chk_HOPITM"
+	
+function setRESULT(str_result) {
+	return setItemValue(Val_RESULT, str_result)
+}
 //endregion
 
 
@@ -1359,22 +1726,6 @@ init = function(sheet) {
 
 // Main Sheet
 const initMainSheet = function(sheet) {
-	const Row_SCO = "Row_SCO"
-	const Lbl_Nom = "Lbl_Nom"
-	const Clk_Icon = "Clk_Icon"
-	const Dot_Test = "Dot_Test"
-	const Val_RESULT = "Val_RESULT"
-	const Row_SCO = "Row_SCO"
-	const Clk_HOP = "Clk_HOP"
-	const Rep_HIS = "Rep_HIS"
-	const Val_HIS = "Val_HIS"
-	const Rep_OBJ = "Rep_OBJ"
-	const Rep_PER = "Rep_PER"
-	const Chk_PHYCHK = "Chk_PHYCHK"
-	const Val_PHYCHK = "Val_PHYCHK"
-	const Val_OBJITM = "Val_OBJITM"
-	const Val_Nom = "Val_Nom"
-	const Vis_OBJITM = "Vis_OBJITM"
 
 	const Arr_Loop = [
 		11,
@@ -1399,29 +1750,30 @@ const initMainSheet = function(sheet) {
 	Key_TEST["Fruit"] = Fruit
 	Key_TEST["Arr_Loop"] = Arr_Loop
 
-	// setSheetItemValue(sheet, Val_RESULT, strThing(10, true))
-	// setSheetItemValue(sheet, Val_RESULT, strThing(10.256, true))
-	// setSheetItemValue(sheet, Val_RESULT, strThing("", true))
-	// setSheetItemValue(sheet, Val_RESULT, strThing("hello", true))
-	// setSheetItemValue(sheet, Val_RESULT, strThing([], true))
-	// setSheetItemValue(sheet, Val_RESULT, strThing([[]], true))
-	// setSheetItemValue(sheet, Val_RESULT, strThing([10], true))
-	// setSheetItemValue(sheet, Val_RESULT, strThing([10, 20], true))
-	// setSheetItemValue(sheet, Val_RESULT, strThing(null, true))
-	// setSheetItemValue(sheet, Val_RESULT, strThing(Arr_Loop, true))
-	// setSheetItemValue(sheet, Val_RESULT, strThing({}, true))
-	// setSheetItemValue(sheet, Val_RESULT, strThing({stuff: {}}, true))
-	// setSheetItemValue(sheet, Val_RESULT, strThing(Key_TEST, true))
+	// setRESULT(strThing(10, Yes_Indent))
+	// setRESULT(strThing(10.256, Yes_Indent))
+	// setRESULT(strThing("", Yes_Indent))
+	// setRESULT(strThing("hello", Yes_Indent))
+	// setRESULT(strThing([], Yes_Indent))
+	// setRESULT(strThing([[]], Yes_Indent))
+	// setRESULT(strThing([10], Yes_Indent))
+	// setRESULT(strThing([10, 20], Yes_Indent))
+	// setRESULT(strThing(null, Yes_Indent))
+	// setRESULT(strThing(Arr_Loop, Yes_Indent))
+	// setRESULT(strThing({}, Yes_Indent))
+	// setRESULT(strThing({stuff: {}}, Yes_Indent))
+	// setRESULT(strThing(Key_TEST, Yes_Indent))
 
 	debug("start")
+	
+	debugElem(sheet)
 
-	function argTest(_arg1, _arg2, _arg3) {
-		try {tryArg(_arg1)} catch(e) {_arg1 = "Hello"}
-		try {tryArg(_arg2)} catch(e) {_arg2 = "World"}
-		try {tryArg(_arg3)} catch(e) {_arg3 = "!"}
-		log(_arg1 + " " + _arg2 + " " + _arg3)
-	}
-
+	// function argTest(_arg1, _arg2, _arg3) {
+		// try {tryArg(_arg1)} catch(e) {_arg1 = "Hello"}
+		// try {tryArg(_arg2)} catch(e) {_arg2 = "World"}
+		// try {tryArg(_arg3)} catch(e) {_arg3 = "!"}
+		// log(_arg1 + " " + _arg2 + " " + _arg3)
+	// }
 	// argTest()
 	// argTest("John")	
 	// argTest("Bonjour")
@@ -1443,19 +1795,16 @@ const initMainSheet = function(sheet) {
 	
 	// debug(cpoValue("   this is     THE way   "))
 	// debug(cpoValue("   THIS is     THE way   "))
-	// debug(cpoValue("   THIS is     THE way   ", true))
+	// debug(cpoValue("   THIS is     THE way   ", Yes_FromLC))
 	// debug(cpaValue("   this is     THE way   "))
 	// debug(cpaValue("   THIS is     THE way   "))
-	// debug(cpaValue("   THIS is     THE way   ", true))
+	// debug(cpaValue("   THIS is     THE way   ", Yes_FromLC))
 	// debug(tynValue(0))
 	// debug(tynValue(1))
 	// debug(tynValue(false))
 	// debug(tynValue(true))
 	
-	setElemValue(getSheetItem(sheet, Val_HIS), 0)
-	const Chk_HOPITM = "Chk_HOPITM"
-	const Rep_his = getSheetItem(sheet, Rep_HIS)
-	const Rep_obj = getSheetItem(sheet, Rep_OBJ)
+	setItemValue(Val_HIS, Int_Zero)
 	
 	function setRep_PER() {
 		const rep_value = {
@@ -1466,48 +1815,44 @@ const initMainSheet = function(sheet) {
 				Val_HOPITM: "génie",
 			},
 		}
-		if (! getSheetItemValue(sheet, Rep_PER)) {
-			setSheetItemValue(sheet, Rep_PER, rep_value)
+		if (! getItemValue(Rep_PER)) {
+			setItemValue(Rep_PER, rep_value)
 		}
-		return getSheetItemValue(sheet, Rep_PER)
-	}
-	
-	function setVal_RESULT(str_result) {
-		return setSheetItemValue(sheet, Val_RESULT, str_result)
+		return getItemValue(Rep_PER)
 	}
 	
 	function fakRep_OBJ() {
-		return setSheetItemValue(sheet, Rep_OBJ, getSheetItemValue(sheet, Rep_OBJ))
+		return setItemValue(Rep_OBJ, getItemValue(Rep_OBJ))
 	}
 	
-	onElemUpdateFct(getSheetItem(sheet, Val_Nom), function(elem) {
+	onuItemDo(Val_Nom, function(elem) {
 		debugElemUpdate(elem)
 		rptElemDoIf(elem)
 	})
 	
-	onElemClickFct(Rep_obj, function(elem) {
+	oncItemDo(Rep_OBJ, function(elem) {
 		debugElemClick(elem)
 		debug(elem)
-		setVal_RESULT("Click:\n" + strThing(getSheetItemValue(sheet, Rep_OBJ), true))
+		setRESULT("Click:\n" + strThing(getItemValue(Rep_OBJ), Yes_Indent))
 	})
 	
-	onElemUpdateFct(Rep_obj, function(elem) {
+	onuItemDo(Rep_OBJ, function(elem) {
 		debugElemUpdate(elem)
 		debug(elem)
-		setVal_RESULT("Update:\n" + strThing(getSheetItemValue(sheet, Rep_OBJ), true))
+		setRESULT("Update:\n" + strThing(getItemValue(Rep_OBJ), Yes_Indent))
 	})
 	
-	onElemChildClickFct(Rep_obj, Chk_PHYCHK, function(elem) {
+	oncItemChildDo(Rep_OBJ, Chk_PHYCHK, function(elem) {
 		debugElemClick(elem)
 		rptElemDoIf(elem)
 		const elm_index = getElemIndex(elem)
-		const val_phychk = Rep_obj.find(elm_index).find(Val_PHYCHK)
+		const val_phychk = getElem(Rep_OBJ).find(elm_index).find(Val_PHYCHK)
 		// const val_phychk = elem.find(Val_PHYCHK)
 		debug("--")
-		onElemUpdateFct(val_phychk, function(elem) {
+		onuItemDo(val_phychk, function(elem) {
 			debugElemUpdate(elem)
 			// rptElemDoIf(elem)
-			const chk_phychk = Rep_obj.find(elm_index).find(Chk_PHYCHK)
+			const chk_phychk = getElem(Rep_OBJ).find(elm_index).find(Chk_PHYCHK)
 			if (getElemValue(elem)) {
 				chk_phychk.addClass(Css_BgSecondary)
 			} else  {
@@ -1521,27 +1866,27 @@ const initMainSheet = function(sheet) {
 		debug(val_phychk.value())
 	})
 	
-	onElemChildClickFct(Rep_obj, Val_OBJITM, function(elem) {
+	oncItemChildDo(Rep_OBJ, Val_OBJITM, function(elem) {
 		debugElemClick(elem)
 		rptElemDoIf(elem)
 	})
 	
-	onElemChildUpdateFct(Rep_obj, Val_OBJITM, function(elem) {
+	onuItemChildDo(Rep_OBJ, Val_OBJITM, function(elem) {
 		debugElemUpdate(elem)
 		rptElemDoIf(elem)
 	})
 	
-	onElemChildUpdateFct(Rep_obj, Vis_OBJITM, function(elem) {
+	onuItemChildDo(Rep_OBJ, Vis_OBJITM, function(elem) {
 		debugElemUpdate(elem)
 		rptElemDoIf(elem)
 	})
 	
-	onElemChildClickFct(Rep_obj, Val_PHYCHK, function(elem) {
+	oncItemChildDo(Rep_OBJ, Val_PHYCHK, function(elem) {
 		debugElemClick(elem)
 		debugElem(elem, true, true)
 	})
 	
-	onElemChildUpdateFct(Rep_obj, Val_PHYCHK, function(elem) {
+	onuItemChildDo(Rep_OBJ, Val_PHYCHK, function(elem) {
 		debugElemUpdate(elem)
 		debugElem(elem, true, true)
 	})
@@ -1608,10 +1953,10 @@ const initMainSheet = function(sheet) {
 		const item = Dia_SHTPRF
 		debug(item)
 		sheet.prompt("Prefs", item, function(dialog) {
-			setSheetItemValue(sheet, "Prf_DXVPRF", dialog.Chc_DXVPRF)
-			setSheetItemValue(sheet, Val_RESULT, Object.entries(dialog))
+			setItemValue("Prf_DXVPRF", dialog.Chc_DXVPRF)
+			setRESULT(Object.entries(dialog))
 		}, function(dialog) {
-			setSheetItemValue(dialog, "Chc_DXVPRF", getSheetItemValue(sheet, "Prf_DXVPRF"))
+			setSheetItemValue(dialog, "Chc_DXVPRF", getItemValue("Prf_DXVPRF"))
 		})
 	})
 	
@@ -1636,9 +1981,9 @@ const initMainSheet = function(sheet) {
 			.visibility("visible")
 			.onRoll(function(diceresult) {
 				const val_cmasel = ":fist-raised: (PHY|MEN) :brain:"
-				const val_scoact = getSheetItemValue(sheet, Val_SCOACT)
+				const val_scoact = getItemValue(Val_SCOACT)
 				const val_scorol = diceresult.total
-				setSheetItemValue(sheet, Val_SCOROL, val_scorol)
+				setItemValue(Val_SCOROL, val_scorol)
 				const dif_scorol = val_scoact - val_scorol
 				if (dif_scorol >= 0) {
 					const lbl_sucfai = _(Lbl_ROLSUC_)
@@ -1670,11 +2015,11 @@ const initMainSheet = function(sheet) {
 	onSheetItemClickFct(sheet, Clk_HOP, function() {
 		const item = Clk_HOP
 		debug(item)
-		const Rep_his = getSheetItemValue(sheet, Rep_HIS)
+		const Rep_his = getItemValue(Rep_HIS)
 		debug("> Rep_his")
 		debug(Rep_his)
 		debug(sheet.get(Rep_HIS).getClasses())
-		setSheetItemValue(sheet, Val_RESULT, strThing(Rep_his))
+		setRESULT(strThing(Rep_his))
 		// each(Rep_his, function(entryData, entryId) {
 			// debug(">> entryData"); debug(entryData)
 			// debug(">> entryId"); debug(entryId)
@@ -1703,12 +2048,12 @@ const initPreferencesSheet = function(sheet) {
 
 	onSheetItemClickFct(sheet, "Set_DXVPRF", function() {
 		debugOK()
-		setSheetItemValue(sheet, "Chc_DXVPRF", "both")
+		setItemValue("Chc_DXVPRF", "both")
 	})
 
 	onSheetItemClickFct(sheet, "Get_DXVPRF", function() {
 		debugOK()
-		setSheetItemValue(sheet, Val_RESULT, getSheetItemValue(sheet, "Chc_DXVPRF"))
+		setRESULT(getItemValue("Chc_DXVPRF"))
 	})
 
 }
@@ -1717,7 +2062,7 @@ const initPreferencesSheet = function(sheet) {
 const initScoreRollBindingSheet = function(sheet) {
 	debug("initScoreRollBindingSheet")
 	
-	if (getSheetItemValue(sheet, "Lbl_SUCFAI") == _(Lbl_ROLSUC_)) {
+	if (getItemValue("Lbl_SUCFAI") == _(Lbl_ROLSUC_)) {
 		sheet.get("Row_SUCFAI").addClass("text-success")
 	} else {
 		sheet.get("Row_SUCFAI").addClass("text-danger")
