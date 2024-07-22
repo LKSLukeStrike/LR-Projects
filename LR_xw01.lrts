@@ -1,10 +1,31 @@
-function oncItemChildDo(item, child, do_fct, _sheet) {
-	debugFA("oncItemChildDo", arguments)
-	try {tryArg(_sheet)} catch(e) {_sheet = sheet}
-	return oncElemChildDo(getElem(item, _sheet), child, do_fct)
-}
-function onuItemChildDo(item, child, do_fct, _sheet) {
-	debugFA("onuItemChildDo", arguments)
-	try {tryArg(_sheet)} catch(e) {_sheet = sheet}
-	return onuElemChildDo(getElem(item, _sheet), child, do_fct)
-}
+//region LR_Sheets Module
+const LR_Sheets = (function() {
+	//region private
+	const arr_sheets = [] // sheets stack
+	//endregion
+
+	//region public
+	function push(sheet) { // stack sheet
+		return arr_sheets.push(sheet)
+	}
+	function pop() { // unstack last sheet
+		return arr_sheets.pop()
+	}
+	function top() { // get last sheet (current)
+		return arr_sheets.slice(-1)[0]
+	}
+	function value() { // stack value
+		return arr_sheets
+	}
+	//endregion
+
+ 	//region publish
+	return {
+		push: push,
+		pop: pop,
+		top: top,
+		value: value,
+	}
+	//endregion
+})()
+//endregion
