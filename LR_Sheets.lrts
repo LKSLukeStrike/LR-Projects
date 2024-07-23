@@ -1,5 +1,5 @@
 //region LR_Sheets
-//region LR_Sheets Module
+//region LR_Sheets Stack Module
 const LR_Sheets = (function() {
 	//region private
 	const arr_sheets = [] // sheets stack

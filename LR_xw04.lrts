@@ -1,6 +1,18 @@
-function getElemCfkCss(elem, cfk) { // full corresponding css with addons if any
-	debugFA("getElemCfkCss", arguments)
-	let result = Key_CFKCSS[cfk]
-	result += getElemCfkThemeCss(elem, cfk) // add sheet theme css if any
-	return result
+
+//region LR_Items Cfk Classes
+function addItemCfk(item, cfk, _sheet) {
+	debugFA("addItemCfk", arguments)
+	try {tryArg(_sheet)} catch(e) {_sheet = LR_Sheets.top()}
+	return addElemCfk(getElem(item, _sheet), cfk)
 }
+function remItemCfk(item, cfk, _sheet) {
+	debugFA("remItemCfk", arguments)
+	try {tryArg(_sheet)} catch(e) {_sheet = LR_Sheets.top()}
+	return remElemCfk(getElem(item, _sheet), cfk)
+}
+function hasItemCfk(item, cfk, _sheet) {
+	debugFA("hasItemCfk", arguments)
+	try {tryArg(_sheet)} catch(e) {_sheet = LR_Sheets.top()}
+	return hasElemCfk(getElem(item, _sheet), cfk)
+}	
+//endregion
