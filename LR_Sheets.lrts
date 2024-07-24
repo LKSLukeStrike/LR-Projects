@@ -7,15 +7,19 @@ const LR_Sheets = (function() {
 
 	//region public
 	function push(sheet) { // stack sheet
+		debugFA("LR_Sheets.push", arguments)
 		return arr_sheets.push(sheet)
 	}
 	function pop() { // unstack last sheet
+		debugFA("LR_Sheets.pop", arguments)
 		return arr_sheets.pop()
 	}
 	function top() { // get last sheet (current)
+		debugFA("LR_Sheets.top", arguments)
 		return arr_sheets.slice(-1)[0]
 	}
 	function value() { // stack value
+		debugFA("LR_Sheets.value", arguments)
 		return arr_sheets
 	}
 	//endregion

@@ -1,4 +1,5 @@
 //region LR_Debug
+//whatis /!\ avoid any dead loop here so no call to fcts that call fe debugFA
 const Yes_Debug   = true
 const Not_Debug   = false
 const Dft_Debug   = Yes_Debug
@@ -6,37 +7,37 @@ const Dft_DebugFA = Not_Debug
 const Yes_Indent  = true
 const Not_Indent  = false
 const Dft_Indent  = Not_Indent
-let   Key_DEBUGFA = { //relation between fct_name and debug // else Dft_DebugFA
+const Key_DEBUGFA = { //relation between fct_name and debug // else Dft_DebugFA
 }
 function debug(str_debug, _yes_debug) {
-	if (arguments.length < 2) {_yes_debug = Dft_Debug}
+	try {tryArg(_yes_debug)} catch(e) {_yes_debug = Dft_Debug}
 	if (_yes_debug) {log(str_debug)}
 }
 function debugOK(_yes_debug) {
-	if (arguments.length < 1) {_yes_debug = Dft_Debug}
+	try {tryArg(_yes_debug)} catch(e) {_yes_debug = Dft_Debug}
 	debug("OK", _yes_debug)
 }
 function debugElem(elem, _yes_debug, _yes_indent) {
-	if (arguments.length < 3) {_yes_indent = Dft_Indent}
-	if (arguments.length < 2) {_yes_debug = Dft_Debug}
+	try {tryArg(_yes_debug)} catch(e) {_yes_debug = Dft_Debug}
+	try {tryArg(_yes_indent)} catch(e) {_yes_indent = Dft_Indent}
 	if (! _yes_debug) {return} // force not debug
 	debug("< ELEM >")
-	debug("> parent: " + getElemParent(elem))
-	debug("> parent id: " + getElemId(getElemParent(elem)))
-	debug("> parent name: " + getElemName(getElemParent(elem)))
-	debug("> sheet: " + getElemSheet(elem))
-	debug("> sheet id: " + getElemId(getElemSheet(elem)))
-	debug("> sheet name: " + getElemName(getElemSheet(elem)))
-	debug("> id: " + getElemId(elem))
-	debug("> name: " + getElemName(elem))
-	debug("> index: " + getElemIndex(elem))
-	debug("> typeof: " + getElemTypeof(elem))
-	debug("> children: " + getElemChildren(elem))
-	debug("> value: " + strThing(getElemValue(elem), _yes_indent))
-	debug("> css: " + strThing(getElemCss(elem), _yes_indent))
+	debug("> parent: "		+ getElemParent(elem))
+	debug("> parent id: "	+ getElemId(getElemParent(elem)))
+	debug("> parent name: "	+ getElemName(getElemParent(elem)))
+	debug("> sheet: "		+ getElemSheet(elem))
+	debug("> sheet id: "	+ getElemId(getElemSheet(elem)))
+	debug("> sheet name: "	+ getElemName(getElemSheet(elem)))
+	debug("> id: "			+ getElemId(elem))
+	debug("> name: "		+ getElemName(elem))
+	debug("> index: "		+ getElemIndex(elem))
+	debug("> typeof: "		+ getElemTypeof(elem))
+	debug("> children: "	+ getElemChildren(elem))
+	debug("> value: "		+ strThing(getElemValue(elem), _yes_indent))
+	debug("> css: "			+ strThing(getElemCss(elem), _yes_indent))
 }
 function debugElemEvt(elem, evt) {
-	debug("! on" + cpoValue(evt) + " " + getElemId(elem))
+	debug("! on: "			+ cpoValue(evt) + " " + getElemId(elem))
 }
 function debugElemClick(elem) {
 	debugElemEvt(elem, Evt_Click)
@@ -44,10 +45,21 @@ function debugElemClick(elem) {
 function debugElemUpdate(elem) {
 	debugElemEvt(elem, Evt_Update)
 }
+function debugSheet() {
+	debug("< SHEET >")
+	debug("> value: "		+ LR_Sheets.value())	
+	debugElem(LR_Sheets.top())
+}
+function addFA(fct_name) { // add fct_name to debugFA
+	return addObject(Key_DEBUGFA, fct_name, Yes_Debug)
+}
+function remFA(fct_name) { // remove fct_name from debugFA
+	return remObject(Key_DEBUGFA, fct_name)
+}
 function debugFA(fct_name, _fct_args, _yes_debugfa) { // debugFA("myFct", arguments)
-	if (arguments.length < 3) {_yes_debugfa = Dft_DebugFA}
-	if (arguments.length < 2) {_fct_args = ""}
-	_yes_debugfa = Key_DEBUGFA.hasOwnProperty(fct_name) ? // /!\ avoid dead loop
+	try {tryArg(_fct_args)} catch(e) {_fct_args = Str_None}
+	try {tryArg(_yes_debugfa)} catch(e) {_yes_debugfa = Dft_DebugFA}
+	_yes_debugfa = Key_DEBUGFA.hasOwnProperty(fct_name) ? // /!\ avoid any dead loop
 		Key_DEBUGFA[fct_name] : _yes_debugfa
 	if (! _yes_debugfa) {return} // do not debug
 	if (yesObject(_fct_args)) {
@@ -60,7 +72,7 @@ function debugFA(fct_name, _fct_args, _yes_debugfa) { // debugFA("myFct", argume
 	debug(fct_name + " " + _fct_args) // default debug mode
 }
 function debugFAOK(fct_name, _yes_debugfa) { // use: debugFAOK("myFunction")
-	if (arguments.length < 2) {_yes_debugfa = Dft_DebugFA}
+	try {tryArg(_yes_debugfa)} catch(e) {_yes_debugfa = Dft_DebugFA}
 	debugFA(fct_name, "OK", _yes_debugfa)
 }
 //endregion

@@ -1,8 +1,8 @@
-function yznValue(value_one) { // if int zero negative
-	debugFA("yznValue", arguments)
-	return yleValue(value_one, Int_Zero)
+function ykiObject(obj, key) { // if object includes key
+	debugFA("ykiObject", arguments)
+	return obj.hasOwnProperty(key)
 }
-function ypnValue(value_one) { // if int pure negative
-	debugFA("ypnValue", arguments)
-	return yltValue(value_one, Int_Zero)
+function nkiObject(obj, key) { // if not object includes key
+	debugFA("nkiObject", arguments)
+	return ! ykiObject(obj, key)
 }

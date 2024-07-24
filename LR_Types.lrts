@@ -1,4 +1,5 @@
 //region LR_Types
+//whatis /!\ avoid debugFA here
 const Str_Null		= "null"
 const Str_Undefined	= "undefined"
 const Str_String	= "string"

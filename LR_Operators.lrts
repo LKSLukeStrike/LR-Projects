@@ -124,14 +124,6 @@ function naiValue(arr_value, value_one) { // if not array includes
 	debugFA("naiValue", arguments)
 	return ! yaiValue(arr_value, value_one)
 }
-function ykiValue(obj_value, value_one) { // if object includes key
-	debugFA("ykiValue", arguments)
-	return arr_value.hasOwnProperty(value_one)
-}
-function nkiValue(obj_value, value_one) { // if not object includes key
-	debugFA("nkiValue", arguments)
-	return ! ykiValue(arr_value, value_one)
-}
 //endregion
 
 //region LR_Operators Replace
@@ -306,6 +298,41 @@ function val2chkItem(item) { // val related chk item
 function chk2valItem(item) { // chk related val item
 	debugFA("chk2valItem", arguments)
 	return one2twoItem(item, Str_PFXCHK, Str_PFXVAL)
+}
+//endregion
+
+//region LR_Operators Objects
+function addObject(obj, key, val) { // add a key : val to an object
+	debugFA("addObject", arguments)
+	return obj[key] = val
+}
+function remObject(obj, key) { // remove a key : val from an object
+	debugFA("remObject", arguments)
+	return delete obj[key]
+}
+function gkvObject(obj, key) { // get the val of an object key
+	debugFA("gkvObject", arguments)
+	return obj[key]
+}
+function gokObject(obj) { // get object keys
+	debugFA("gokObject", arguments)
+	return Object.keys(obj)
+}
+function govObject(obj) { // get object values
+	debugFA("govObject", arguments)
+	return Object.values(obj)
+}
+function goeObject(obj) { // get object entries
+	debugFA("goeObject", arguments)
+	return Object.entries(obj)
+}
+function ykiObject(obj, key) { // if object includes key
+	debugFA("ykiObject", arguments)
+	return obj.hasOwnProperty(key)
+}
+function nkiObject(obj, key) { // if not object includes key
+	debugFA("nkiObject", arguments)
+	return ! ykiObject(obj, key)
 }
 //endregion
 //endregion

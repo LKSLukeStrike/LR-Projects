@@ -48,37 +48,10 @@ const Arr_DXVALW = [ // DxV allowed display modes
 	Str_DXVBTH,
 ]
 //endregion
-
-//region LR_Constants Sheet Themes /!\ some items REQuired on sheets for theme to work on it
-const REQ_THMOLD		= "REQ_THMOLD"		// previous theme item (REQuired)
-const REQ_THMPRF		= "REQ_THMPRF"		// choosen theme item  (REQuired)
-const Css_TextPrimary	= "text-primary"
-const Css_TextSecondary	= "text-secondary"
-const Css_TextSuccess	= "text-success"
-const Css_TextDanger	= "text-danger"
-const Css_TextWarning	= "text-warning"
-const Css_TextInfo		= "text-info"
-const Css_TextLight		= "text-light"
-const Css_TextDark		= "text-dark"
-const Css_TextMuted		= "text-muted"
-const Css_TextWhite		= "text-white"
-const Dft_THMDFT		= Css_TextWarning
-const Arr_THMALW		= [ // themes allowed
-	Css_TextPrimary,
-	Css_TextSecondary,
-	Css_TextSuccess,
-	Css_TextDanger,
-	Css_TextWarning,
-	Css_TextInfo,
-	Css_TextLight,
-	Css_TextDark,
-	Css_TextMuted,
-	Css_TextWhite,
-]
-//endregion
 //endregion
 
 //region LR_Debug
+//whatis /!\ avoid any dead loop here so no call to fcts that call fe debugFA
 const Yes_Debug   = true
 const Not_Debug   = false
 const Dft_Debug   = Yes_Debug
@@ -86,37 +59,37 @@ const Dft_DebugFA = Not_Debug
 const Yes_Indent  = true
 const Not_Indent  = false
 const Dft_Indent  = Not_Indent
-let   Key_DEBUGFA = { //relation between fct_name and debug // else Dft_DebugFA
+const Key_DEBUGFA = { //relation between fct_name and debug // else Dft_DebugFA
 }
 function debug(str_debug, _yes_debug) {
-	if (arguments.length < 2) {_yes_debug = Dft_Debug}
+	try {tryArg(_yes_debug)} catch(e) {_yes_debug = Dft_Debug}
 	if (_yes_debug) {log(str_debug)}
 }
 function debugOK(_yes_debug) {
-	if (arguments.length < 1) {_yes_debug = Dft_Debug}
+	try {tryArg(_yes_debug)} catch(e) {_yes_debug = Dft_Debug}
 	debug("OK", _yes_debug)
 }
 function debugElem(elem, _yes_debug, _yes_indent) {
-	if (arguments.length < 3) {_yes_indent = Dft_Indent}
-	if (arguments.length < 2) {_yes_debug = Dft_Debug}
+	try {tryArg(_yes_debug)} catch(e) {_yes_debug = Dft_Debug}
+	try {tryArg(_yes_indent)} catch(e) {_yes_indent = Dft_Indent}
 	if (! _yes_debug) {return} // force not debug
 	debug("< ELEM >")
-	debug("> parent: " + getElemParent(elem))
-	debug("> parent id: " + getElemId(getElemParent(elem)))
-	debug("> parent name: " + getElemName(getElemParent(elem)))
-	debug("> sheet: " + getElemSheet(elem))
-	debug("> sheet id: " + getElemId(getElemSheet(elem)))
-	debug("> sheet name: " + getElemName(getElemSheet(elem)))
-	debug("> id: " + getElemId(elem))
-	debug("> name: " + getElemName(elem))
-	debug("> index: " + getElemIndex(elem))
-	debug("> typeof: " + getElemTypeof(elem))
-	debug("> children: " + getElemChildren(elem))
-	debug("> value: " + strThing(getElemValue(elem), _yes_indent))
-	debug("> css: " + strThing(getElemCss(elem), _yes_indent))
+	debug("> parent: "		+ getElemParent(elem))
+	debug("> parent id: "	+ getElemId(getElemParent(elem)))
+	debug("> parent name: "	+ getElemName(getElemParent(elem)))
+	debug("> sheet: "		+ getElemSheet(elem))
+	debug("> sheet id: "	+ getElemId(getElemSheet(elem)))
+	debug("> sheet name: "	+ getElemName(getElemSheet(elem)))
+	debug("> id: "			+ getElemId(elem))
+	debug("> name: "		+ getElemName(elem))
+	debug("> index: "		+ getElemIndex(elem))
+	debug("> typeof: "		+ getElemTypeof(elem))
+	debug("> children: "	+ getElemChildren(elem))
+	debug("> value: "		+ strThing(getElemValue(elem), _yes_indent))
+	debug("> css: "			+ strThing(getElemCss(elem), _yes_indent))
 }
 function debugElemEvt(elem, evt) {
-	debug("! on" + cpoValue(evt) + " " + getElemId(elem))
+	debug("! on: "			+ cpoValue(evt) + " " + getElemId(elem))
 }
 function debugElemClick(elem) {
 	debugElemEvt(elem, Evt_Click)
@@ -124,10 +97,21 @@ function debugElemClick(elem) {
 function debugElemUpdate(elem) {
 	debugElemEvt(elem, Evt_Update)
 }
+function debugSheet() {
+	debug("< SHEET >")
+	debug("> value: "		+ LR_Sheets.value())	
+	debugElem(LR_Sheets.top())
+}
+function addFA(fct_name) { // add fct_name to debugFA
+	return addObject(Key_DEBUGFA, fct_name, Yes_Debug)
+}
+function remFA(fct_name) { // remove fct_name from debugFA
+	return remObject(Key_DEBUGFA, fct_name)
+}
 function debugFA(fct_name, _fct_args, _yes_debugfa) { // debugFA("myFct", arguments)
-	if (arguments.length < 3) {_yes_debugfa = Dft_DebugFA}
-	if (arguments.length < 2) {_fct_args = ""}
-	_yes_debugfa = Key_DEBUGFA.hasOwnProperty(fct_name) ? // /!\ avoid dead loop
+	try {tryArg(_fct_args)} catch(e) {_fct_args = Str_None}
+	try {tryArg(_yes_debugfa)} catch(e) {_yes_debugfa = Dft_DebugFA}
+	_yes_debugfa = Key_DEBUGFA.hasOwnProperty(fct_name) ? // /!\ avoid any dead loop
 		Key_DEBUGFA[fct_name] : _yes_debugfa
 	if (! _yes_debugfa) {return} // do not debug
 	if (yesObject(_fct_args)) {
@@ -140,12 +124,13 @@ function debugFA(fct_name, _fct_args, _yes_debugfa) { // debugFA("myFct", argume
 	debug(fct_name + " " + _fct_args) // default debug mode
 }
 function debugFAOK(fct_name, _yes_debugfa) { // use: debugFAOK("myFunction")
-	if (arguments.length < 2) {_yes_debugfa = Dft_DebugFA}
+	try {tryArg(_yes_debugfa)} catch(e) {_yes_debugfa = Dft_DebugFA}
 	debugFA(fct_name, "OK", _yes_debugfa)
 }
 //endregion
 
-//region LR_Elems (aka components in LR)
+//region LR_Elems
+//whatis aka components in LR
 //region LR_Elems Sheets
 function getSheetName(_sheet) { // the proper sheet name
 	debugFA("getSheetName", arguments)
@@ -970,11 +955,12 @@ function rptElemDoIf(elem, _do_fct, _if_fct) { // apply fct on repeater if true
 //endregion
 //endregion
 
-//region LR_Items (aka ids in LR)
+//region LR_Items
+//whatis aka ids in LR
 //region LR_Items Elems
 function getElem(item, _sheet) { // returns a sheet item elem
 	debugFA("getElem", arguments)
-	try {tryArg(_sheet)} catch(e) {_sheet = sheet}
+	try {tryArg(_sheet)} catch(e) {_sheet = LR_Sheets.top()}
 	return _sheet.get(item)
 }
 //endregion
@@ -982,22 +968,22 @@ function getElem(item, _sheet) { // returns a sheet item elem
 //region LR_Items Events
 function oncItemDo(item, do_fct, _sheet) {
 	debugFA("oncItemDo", arguments)
-	try {tryArg(_sheet)} catch(e) {_sheet = sheet}
+	try {tryArg(_sheet)} catch(e) {_sheet = LR_Sheets.top()}
 	return oncElemDo(getElem(item, _sheet), do_fct)
 }
 function onuItemDo(item, do_fct, _sheet) {
 	debugFA("onuItemDo", arguments)
-	try {tryArg(_sheet)} catch(e) {_sheet = sheet}
+	try {tryArg(_sheet)} catch(e) {_sheet = LR_Sheets.top()}
 	return onuElemDo(getElem(item, _sheet), do_fct)
 }
 function oncItemChildDo(item, child, do_fct, _sheet) {
 	debugFA("oncItemChildDo", arguments)
-	try {tryArg(_sheet)} catch(e) {_sheet = sheet}
+	try {tryArg(_sheet)} catch(e) {_sheet = LR_Sheets.top()}
 	return oncElemChildDo(getElem(item, _sheet), child, do_fct)
 }
 function onuItemChildDo(item, child, do_fct, _sheet) {
 	debugFA("onuItemChildDo", arguments)
-	try {tryArg(_sheet)} catch(e) {_sheet = sheet}
+	try {tryArg(_sheet)} catch(e) {_sheet = LR_Sheets.top()}
 	return onuElemChildDo(getElem(item, _sheet), child, do_fct)
 }
 //endregion
@@ -1005,37 +991,37 @@ function onuItemChildDo(item, child, do_fct, _sheet) {
 //region LR_Items Values
 function getItemValue(item, _sheet) {
 	debugFA("getItemValue", arguments)
-	try {tryArg(_sheet)} catch(e) {_sheet = sheet}
+	try {tryArg(_sheet)} catch(e) {_sheet = LR_Sheets.top()}
 	return getElemValue(getElem(item, _sheet))
 }
 function setItemValue(item, itm_value, _sheet) {
 	debugFA("setItemValue", arguments)
-	try {tryArg(_sheet)} catch(e) {_sheet = sheet}
+	try {tryArg(_sheet)} catch(e) {_sheet = LR_Sheets.top()}
 	return setElemValue(getElem(item, _sheet), itm_value)
 }
 function setItemZero(item, _sheet) {
 	debugFA("setItemZero", arguments)
-	try {tryArg(_sheet)} catch(e) {_sheet = sheet}
+	try {tryArg(_sheet)} catch(e) {_sheet = LR_Sheets.top()}
 	return setItemValue(item, Int_Zero, _sheet)
 }
 function setItemNone(item, _sheet) {
 	debugFA("setItemNone", arguments)
-	try {tryArg(_sheet)} catch(e) {_sheet = sheet}
+	try {tryArg(_sheet)} catch(e) {_sheet = LR_Sheets.top()}
 	return setItemValue(item, Str_None, _sheet)
 }
 function hasItemValue(item, itm_value, _sheet) {
 	debugFA("hasItemValue", arguments)
-	try {tryArg(_sheet)} catch(e) {_sheet = sheet}
+	try {tryArg(_sheet)} catch(e) {_sheet = LR_Sheets.top()}
 	return hasElemValue(getElem(item, _sheet), itm_value)
 }
 function hasItemZero(item, _sheet) {
 	debugFA("hasItemZero", arguments)
-	try {tryArg(_sheet)} catch(e) {_sheet = sheet}
+	try {tryArg(_sheet)} catch(e) {_sheet = LR_Sheets.top()}
 	return hasItemValue(item, Int_Zero, _sheet)
 }
 function hasItemNone(item, _sheet) {
 	debugFA("hasItemNone", arguments)
-	try {tryArg(_sheet)} catch(e) {_sheet = sheet}
+	try {tryArg(_sheet)} catch(e) {_sheet = LR_Sheets.top()}
 	return hasItemValue(item, Str_None, _sheet)
 }
 //endregion
@@ -1043,17 +1029,17 @@ function hasItemNone(item, _sheet) {
 //region LR_Items Locked
 function setItemLocked(item, _sheet) {
 	debugFA("setItemLocked", arguments)
-	try {tryArg(_sheet)} catch(e) {_sheet = sheet}
+	try {tryArg(_sheet)} catch(e) {_sheet = LR_Sheets.top()}
 	return setElemLocked(getElem(item, _sheet))
 }
 function setItemUnlocked(item, _sheet) {
 	debugFA("setItemUnlocked", arguments)
-	try {tryArg(_sheet)} catch(e) {_sheet = sheet}
+	try {tryArg(_sheet)} catch(e) {_sheet = LR_Sheets.top()}
 	return setElemUnlocked(getElem(item, _sheet))
 }
 function hasItemLocked(item, _sheet) {
 	debugFA("hasItemLocked", arguments)
-	try {tryArg(_sheet)} catch(e) {_sheet = sheet}
+	try {tryArg(_sheet)} catch(e) {_sheet = LR_Sheets.top()}
 	return hasElemLocked(getElem(item, _sheet))
 }
 //endregion
@@ -1061,17 +1047,17 @@ function hasItemLocked(item, _sheet) {
 //region LR_Items Folded
 function setItemFolded(item, _sheet) {
 	debugFA("setItemFolded", arguments)
-	try {tryArg(_sheet)} catch(e) {_sheet = sheet}
+	try {tryArg(_sheet)} catch(e) {_sheet = LR_Sheets.top()}
 	return setElemFolded(getElem(item, _sheet))
 }
 function setItemUnfolded(item, _sheet) {
 	debugFA("setItemUnfolded", arguments)
-	try {tryArg(_sheet)} catch(e) {_sheet = sheet}
+	try {tryArg(_sheet)} catch(e) {_sheet = LR_Sheets.top()}
 	return setElemUnfolded(getElem(item, _sheet))
 }
 function hasItemFolded(item, _sheet) {
 	debugFA("hasItemFolded", arguments)
-	try {tryArg(_sheet)} catch(e) {_sheet = sheet}
+	try {tryArg(_sheet)} catch(e) {_sheet = LR_Sheets.top()}
 	return hasElemFolded(getElem(item, _sheet))
 }
 //endregion
@@ -1079,25 +1065,61 @@ function hasItemFolded(item, _sheet) {
 //region LR_Items Tooltips
 function setItemTooltip(item, itm_tooltip, _sheet) {
 	debugFA("setItemTooltip", arguments)
-	try {tryArg(_sheet)} catch(e) {_sheet = sheet}
+	try {tryArg(_sheet)} catch(e) {_sheet = LR_Sheets.top()}
 	return setElemTooltip(getElem(item, _sheet), itm_tooltip)
 }
+//endregion
+
+//region LR_Items Css Classes
+function addItemCss(item, css, _sheet) {
+	debugFA("addItemCss", arguments)
+	try {tryArg(_sheet)} catch(e) {_sheet = LR_Sheets.top()}
+	return addElemCss(getElem(item, _sheet), css)
+}
+function remItemCss(item, css, _sheet) {
+	debugFA("remItemCss", arguments)
+	try {tryArg(_sheet)} catch(e) {_sheet = LR_Sheets.top()}
+	return remElemCss(getElem(item, _sheet), css)
+}
+function hasItemCss(item, css, _sheet) {
+	debugFA("hasItemCss", arguments)
+	try {tryArg(_sheet)} catch(e) {_sheet = LR_Sheets.top()}
+	return hasElemCss(getElem(item, _sheet), css)
+}	
+//endregion
+
+//region LR_Items Cfk Classes
+function addItemCfk(item, cfk, _sheet) {
+	debugFA("addItemCfk", arguments)
+	try {tryArg(_sheet)} catch(e) {_sheet = LR_Sheets.top()}
+	return addElemCfk(getElem(item, _sheet), cfk)
+}
+function remItemCfk(item, cfk, _sheet) {
+	debugFA("remItemCfk", arguments)
+	try {tryArg(_sheet)} catch(e) {_sheet = LR_Sheets.top()}
+	return remElemCfk(getElem(item, _sheet), cfk)
+}
+function hasItemCfk(item, cfk, _sheet) {
+	debugFA("hasItemCfk", arguments)
+	try {tryArg(_sheet)} catch(e) {_sheet = LR_Sheets.top()}
+	return hasElemCfk(getElem(item, _sheet), cfk)
+}	
 //endregion
 
 //region LR_Items Effort
 function addItemEffort(item, _sheet) {
 	debugFA("addItemEffort", arguments)
-	try {tryArg(_sheet)} catch(e) {_sheet = sheet}
+	try {tryArg(_sheet)} catch(e) {_sheet = LR_Sheets.top()}
 	return addElemEffort(getElem(item, _sheet))
 }
 function remItemEffort(item, _sheet) {
 	debugFA("remItemEffort", arguments)
-	try {tryArg(_sheet)} catch(e) {_sheet = sheet}
+	try {tryArg(_sheet)} catch(e) {_sheet = LR_Sheets.top()}
 	return remElemEffort(getElem(item, _sheet))
 }
 function hasItemEffort(item, _sheet) {
 	debugFA("hasItemEffort", arguments)
-	try {tryArg(_sheet)} catch(e) {_sheet = sheet}
+	try {tryArg(_sheet)} catch(e) {_sheet = LR_Sheets.top()}
 	return hasElemEffort(getElem(item, _sheet))
 }	
 //endregion
@@ -1105,17 +1127,17 @@ function hasItemEffort(item, _sheet) {
 //region LR_Items Dotted10
 function addItemDotted10(item, _sheet) {
 	debugFA("addItemDotted10", arguments)
-	try {tryArg(_sheet)} catch(e) {_sheet = sheet}
+	try {tryArg(_sheet)} catch(e) {_sheet = LR_Sheets.top()}
 	return addElemDotted10(getElem(item, _sheet))
 }
 function remItemDotted10(item, _sheet) {
 	debugFA("remItemDotted10", arguments)
-	try {tryArg(_sheet)} catch(e) {_sheet = sheet}
+	try {tryArg(_sheet)} catch(e) {_sheet = LR_Sheets.top()}
 	return remElemDotted10(getElem(item, _sheet))
 }
 function hasItemDotted10(item, _sheet) {
 	debugFA("hasItemDotted10", arguments)
-	try {tryArg(_sheet)} catch(e) {_sheet = sheet}
+	try {tryArg(_sheet)} catch(e) {_sheet = LR_Sheets.top()}
 	return hasElemDotted10(getElem(item, _sheet))
 }	
 //endregion
@@ -1123,17 +1145,17 @@ function hasItemDotted10(item, _sheet) {
 //region LR_Items Plussigned
 function addItemPlussigned(item, _sheet) {
 	debugFA("addItemPlussigned", arguments)
-	try {tryArg(_sheet)} catch(e) {_sheet = sheet}
+	try {tryArg(_sheet)} catch(e) {_sheet = LR_Sheets.top()}
 	return addElemPlussigned(getElem(item, _sheet))
 }
 function remItemPlussigned(item, _sheet) {
 	debugFA("remItemPlussigned", arguments)
-	try {tryArg(_sheet)} catch(e) {_sheet = sheet}
+	try {tryArg(_sheet)} catch(e) {_sheet = LR_Sheets.top()}
 	return remElemPlussigned(getElem(item, _sheet))
 }
 function hasItemPlussigned(item, _sheet) {
 	debugFA("hasItemPlussigned", arguments)
-	try {tryArg(_sheet)} catch(e) {_sheet = sheet}
+	try {tryArg(_sheet)} catch(e) {_sheet = LR_Sheets.top()}
 	return hasElemPlussigned(getElem(item, _sheet))
 }	
 //endregion
@@ -1141,17 +1163,17 @@ function hasItemPlussigned(item, _sheet) {
 //region LR_Items Displayed
 function addItemDisplayed(item, _sheet) {
 	debugFA("addItemDisplayed", arguments)
-	try {tryArg(_sheet)} catch(e) {_sheet = sheet}
+	try {tryArg(_sheet)} catch(e) {_sheet = LR_Sheets.top()}
 	return addElemDisplayed(getElem(item, _sheet))
 }
 function remItemDisplayed(item, _sheet) {
 	debugFA("remItemDisplayed", arguments)
-	try {tryArg(_sheet)} catch(e) {_sheet = sheet}
+	try {tryArg(_sheet)} catch(e) {_sheet = LR_Sheets.top()}
 	return remElemDisplayed(getElem(item, _sheet))
 }
 function hasItemDisplayed(item, _sheet) {
 	debugFA("hasItemDisplayed", arguments)
-	try {tryArg(_sheet)} catch(e) {_sheet = sheet}
+	try {tryArg(_sheet)} catch(e) {_sheet = LR_Sheets.top()}
 	return hasElemDisplayed(getElem(item, _sheet))
 }
 //endregion
@@ -1159,17 +1181,17 @@ function hasItemDisplayed(item, _sheet) {
 //region LR_Items Clickable
 function addItemClickable(item, _sheet) {
 	debugFA("addItemClickable", arguments)
-	try {tryArg(_sheet)} catch(e) {_sheet = sheet}
+	try {tryArg(_sheet)} catch(e) {_sheet = LR_Sheets.top()}
 	return addElemClickable(getElem(item, _sheet))
 }
 function remItemClickable(item, _sheet) {
 	debugFA("remItemClickable", arguments)
-	try {tryArg(_sheet)} catch(e) {_sheet = sheet}
+	try {tryArg(_sheet)} catch(e) {_sheet = LR_Sheets.top()}
 	return remElemClickable(getElem(item, _sheet))
 }
 function hasItemClickable(item, _sheet) {
 	debugFA("hasItemClickable", arguments)
-	try {tryArg(_sheet)} catch(e) {_sheet = sheet}
+	try {tryArg(_sheet)} catch(e) {_sheet = LR_Sheets.top()}
 	return hasElemClickable(getElem(item, _sheet))
 }
 //endregion
@@ -1177,17 +1199,17 @@ function hasItemClickable(item, _sheet) {
 //region LR_Items Modifiable
 function addItemModifiable(item, _sheet) {
 	debugFA("addItemModifiable", arguments)
-	try {tryArg(_sheet)} catch(e) {_sheet = sheet}
+	try {tryArg(_sheet)} catch(e) {_sheet = LR_Sheets.top()}
 	return addElemModifiable(getElem(item, _sheet))
 }
 function remItemModifiable(item, _sheet) {
 	debugFA("remItemModifiable", arguments)
-	try {tryArg(_sheet)} catch(e) {_sheet = sheet}
+	try {tryArg(_sheet)} catch(e) {_sheet = LR_Sheets.top()}
 	return remElemModifiable(getElem(item, _sheet))
 }
 function hasItemModifiable(item, _sheet) {
 	debugFA("hasItemModifiable", arguments)
-	try {tryArg(_sheet)} catch(e) {_sheet = sheet}
+	try {tryArg(_sheet)} catch(e) {_sheet = LR_Sheets.top()}
 	return hasElemModifiable(getElem(item, _sheet))
 }
 //endregion
@@ -1195,40 +1217,41 @@ function hasItemModifiable(item, _sheet) {
 //region LR_Items Selected
 function addItemSelected(item, _sheet) {
 	debugFA("addItemSelected", arguments)
-	try {tryArg(_sheet)} catch(e) {_sheet = sheet}
+	try {tryArg(_sheet)} catch(e) {_sheet = LR_Sheets.top()}
 	return addElemSelected(getElem(item, _sheet))
 }
 function remItemSelected(item, _sheet) {
 	debugFA("remItemSelected", arguments)
-	try {tryArg(_sheet)} catch(e) {_sheet = sheet}
+	try {tryArg(_sheet)} catch(e) {_sheet = LR_Sheets.top()}
 	return remElemSelected(getElem(item, _sheet))
 }
 function hasItemSelected(item, _sheet) {
 	debugFA("hasItemSelected", arguments)
-	try {tryArg(_sheet)} catch(e) {_sheet = sheet}
+	try {tryArg(_sheet)} catch(e) {_sheet = LR_Sheets.top()}
 	return hasElemSelected(getElem(item, _sheet))
 }
 //endregion
 
-//region LR_Items Fakeupdated // fake class to avoid computations propagation
+//region LR_Items Fakeupdated
+//whatis fake class to avoid computations propagation
 function addItemFakeupdated(item, _sheet) {
 	debugFA("addItemFakeupdated", arguments)
-	try {tryArg(_sheet)} catch(e) {_sheet = sheet}
+	try {tryArg(_sheet)} catch(e) {_sheet = LR_Sheets.top()}
 	return addElemFakeupdated(getElem(item, _sheet))
 }
 function remItemFakeupdated(item, _sheet) {
 	debugFA("remItemFakeupdated", arguments)
-	try {tryArg(_sheet)} catch(e) {_sheet = sheet}
+	try {tryArg(_sheet)} catch(e) {_sheet = LR_Sheets.top()}
 	return remElemFakeupdated(getElem(item, _sheet))
 }
 function hasItemFakeupdated(item, _sheet) {
 	debugFA("hasItemFakeupdated", arguments)
-	try {tryArg(_sheet)} catch(e) {_sheet = sheet}
+	try {tryArg(_sheet)} catch(e) {_sheet = LR_Sheets.top()}
 	return hasElemFakeupdated(getElem(item, _sheet))
 }	
 function fakItemUpdate(item, _sheet) {
 	debugFA("fakItemUpdate", arguments)
-	try {tryArg(_sheet)} catch(e) {_sheet = sheet}
+	try {tryArg(_sheet)} catch(e) {_sheet = LR_Sheets.top()}
 	return fakElemUpdate(getElem(item, _sheet))
 }
 //endregion
@@ -1359,14 +1382,6 @@ function yaiValue(arr_value, value_one) { // if array includes
 function naiValue(arr_value, value_one) { // if not array includes
 	debugFA("naiValue", arguments)
 	return ! yaiValue(arr_value, value_one)
-}
-function ykiValue(obj_value, value_one) { // if object includes key
-	debugFA("ykiValue", arguments)
-	return arr_value.hasOwnProperty(value_one)
-}
-function nkiValue(obj_value, value_one) { // if not object includes key
-	debugFA("nkiValue", arguments)
-	return ! ykiValue(arr_value, value_one)
 }
 //endregion
 
@@ -1544,9 +1559,83 @@ function chk2valItem(item) { // chk related val item
 	return one2twoItem(item, Str_PFXCHK, Str_PFXVAL)
 }
 //endregion
+
+//region LR_Operators Objects
+function addObject(obj, key, val) { // add a key : val to an object
+	debugFA("addObject", arguments)
+	return obj[key] = val
+}
+function remObject(obj, key) { // remove a key : val from an object
+	debugFA("remObject", arguments)
+	return delete obj[key]
+}
+function gkvObject(obj, key) { // get the val of an object key
+	debugFA("gkvObject", arguments)
+	return obj[key]
+}
+function gokObject(obj) { // get object keys
+	debugFA("gokObject", arguments)
+	return Object.keys(obj)
+}
+function govObject(obj) { // get object values
+	debugFA("govObject", arguments)
+	return Object.values(obj)
+}
+function goeObject(obj) { // get object entries
+	debugFA("goeObject", arguments)
+	return Object.entries(obj)
+}
+function ykiObject(obj, key) { // if object includes key
+	debugFA("ykiObject", arguments)
+	return obj.hasOwnProperty(key)
+}
+function nkiObject(obj, key) { // if not object includes key
+	debugFA("nkiObject", arguments)
+	return ! ykiObject(obj, key)
+}
+//endregion
 //endregion
 
-//region LR_Themes /!\ some items are REQuired on sheets for theme to work on it
+//region LR_Sheets
+//region LR_Sheets Stack Module
+const LR_Sheets = (function() {
+	//region private
+	const arr_sheets = [] // sheets stack
+	//endregion
+
+	//region public
+	function push(sheet) { // stack sheet
+		debugFA("LR_Sheets.push", arguments)
+		return arr_sheets.push(sheet)
+	}
+	function pop() { // unstack last sheet
+		debugFA("LR_Sheets.pop", arguments)
+		return arr_sheets.pop()
+	}
+	function top() { // get last sheet (current)
+		debugFA("LR_Sheets.top", arguments)
+		return arr_sheets.slice(-1)[0]
+	}
+	function value() { // stack value
+		debugFA("LR_Sheets.value", arguments)
+		return arr_sheets
+	}
+	//endregion
+
+ 	//region publish
+	return {
+		push: push,
+		pop: pop,
+		top: top,
+		value: value,
+	}
+	//endregion
+})()
+//endregion
+//endregion
+
+//region LR_Themes
+//whatis /!\ some items are REQuired on sheets for theme to work on it
 const REQ_THMOLD		= "REQ_THMOLD"		// previous theme sheet item (REQuired)
 const REQ_THMPRF		= "REQ_THMPRF"		// choosen theme sheet item  (REQuired)
 const Css_TextPrimary	= "text-primary"
@@ -1626,6 +1715,7 @@ function setSheetThemePrf(sheet, css_theme) { // set choosen sheet theme
 //endregion
 
 //region LR_Types
+//whatis /!\ avoid debugFA here
 const Str_Null		= "null"
 const Str_Undefined	= "undefined"
 const Str_String	= "string"
