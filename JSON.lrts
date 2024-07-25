@@ -62,17 +62,24 @@ const Dft_Indent  = Not_Indent
 const Key_DEBUGFA = { //relation between fct_name and debug // else Dft_DebugFA
 }
 function debug(str_debug, _yes_debug) {
-	try {tryArg(_yes_debug)} catch(e) {_yes_debug = Dft_Debug}
-	if (_yes_debug) {log(str_debug)}
+	const yes_debug = Dft_Debug
+	try  {yes_debug = tryArg(_yes_debug)}	finally {}
+
+	if (yes_debug) {log(str_debug)}
 }
 function debugOK(_yes_debug) {
-	try {tryArg(_yes_debug)} catch(e) {_yes_debug = Dft_Debug}
-	debug("OK", _yes_debug)
+	const yes_debug = Dft_Debug
+	try  {yes_debug = tryArg(_yes_debug)}	finally {}
+
+	debug("OK", yes_debug)
 }
 function debugElem(elem, _yes_debug, _yes_indent) {
-	try {tryArg(_yes_debug)} catch(e) {_yes_debug = Dft_Debug}
-	try {tryArg(_yes_indent)} catch(e) {_yes_indent = Dft_Indent}
-	if (! _yes_debug) {return} // force not debug
+	const yes_debug  = Dft_Debug
+	const yes_indent = Dft_Indent
+	try  {yes_debug  = tryArg(_yes_debug)}	finally {}
+	try  {yes_indent = tryArg(_yes_indent)}	finally {}
+
+	if (! yes_debug) {return} // force not debug
 	debug("< ELEM >")
 	debug("> parent: "		+ getElemParent(elem))
 	debug("> parent id: "	+ getElemId(getElemParent(elem)))
@@ -85,8 +92,8 @@ function debugElem(elem, _yes_debug, _yes_indent) {
 	debug("> index: "		+ getElemIndex(elem))
 	debug("> typeof: "		+ getElemTypeof(elem))
 	debug("> children: "	+ getElemChildren(elem))
-	debug("> value: "		+ strThing(getElemValue(elem), _yes_indent))
-	debug("> css: "			+ strThing(getElemCss(elem), _yes_indent))
+	debug("> value: "		+ strThing(getElemValue(elem), yes_indent))
+	debug("> css: "			+ strThing(getElemCss(elem), yes_indent))
 }
 function debugElemEvt(elem, evt) {
 	debug("! on: "			+ cpoValue(evt) + " " + getElemId(elem))
@@ -103,29 +110,34 @@ function debugSheet() {
 	debugElem(LR_Sheets.top())
 }
 function addFA(fct_name) { // add fct_name to debugFA
-	return addObject(Key_DEBUGFA, fct_name, Yes_Debug)
+	return Key_DEBUGFA[fct_name] = Yes_Debug
 }
 function remFA(fct_name) { // remove fct_name from debugFA
-	return remObject(Key_DEBUGFA, fct_name)
+	return delete Key_DEBUGFA[fct_name]
 }
 function debugFA(fct_name, _fct_args, _yes_debugfa) { // debugFA("myFct", arguments)
-	try {tryArg(_fct_args)} catch(e) {_fct_args = Str_None}
-	try {tryArg(_yes_debugfa)} catch(e) {_yes_debugfa = Dft_DebugFA}
-	_yes_debugfa = Key_DEBUGFA.hasOwnProperty(fct_name) ? // /!\ avoid any dead loop
-		Key_DEBUGFA[fct_name] : _yes_debugfa
-	if (! _yes_debugfa) {return} // do not debug
-	if (yesObject(_fct_args)) {
-		if (yesArray(_fct_args)) {
-			_fct_args = _fct_args.flat(Infinity)
+	const fct_args    = Str_None
+	const yes_debugfa = Dft_DebugFA
+	try  {fct_args    = tryArg(_fct_args)}		finally {}
+	try  {yes_debugfa = tryArg(_yes_debugfa)}	finally {}
+
+	yes_debugfa = Key_DEBUGFA.hasOwnProperty(fct_name) ? // /!\ avoid any dead loop
+		Key_DEBUGFA[fct_name] : yes_debugfa
+	if (! yes_debugfa) {return} // do not debug
+	if (yesObject(fct_args)) {
+		if (yesArray(fct_args)) {
+			fct_args = fct_args.flat(Infinity)
 		} else {
-			_fct_args = Object.values(_fct_args)
+			fct_args = Object.values(fct_args)
 		}
 	}
-	debug(fct_name + " " + _fct_args) // default debug mode
+	debug("FA: " + fct_name + " " + fct_args) // default debug mode
 }
 function debugFAOK(fct_name, _yes_debugfa) { // use: debugFAOK("myFunction")
-	try {tryArg(_yes_debugfa)} catch(e) {_yes_debugfa = Dft_DebugFA}
-	debugFA(fct_name, "OK", _yes_debugfa)
+	const yes_debugfa = Dft_DebugFA
+	try  {yes_debugfa = tryArg(_yes_debugfa)}	finally {}
+
+	debugFA(fct_name, "OK", yes_debugfa)
 }
 //endregion
 
@@ -1769,13 +1781,14 @@ function tryArg(_arg) { // error if no arg or undefined arg // use for default a
 	try {
 		if (yesUndefined(_arg)) {throw Str_Undefined}
 	} catch(e) {throw Str_Undefined}
+	return _arg
 }
 //endregion
 //endregion
 
 
 //region JSON_
-const Sht_SHTCHR  = "main"			// character sheet
+const Sht_CHRSHT  = "main"			// character sheet
 const Dia_SHTPRF  = "Dia_SHTPRF"	// preferences dialog
 const Bnd_SCOROL  = "Bnd_SCOROL"	// dice roll binding
 const Arr_SUCFAI  = ["0", "1", "2", "3", "4", "5", "6", "7", "8", "9",]
@@ -1813,30 +1826,45 @@ function setRESULT(str_result) {
 
 init = function(sheet) {
 	// initialize all the sheets
-	if (sheet.id() === Sht_SHTCHR) {
-		LR_Sheets.push(sheet)
+	if (sheet.id() === Sht_CHRSHT) {
+		// LR_Sheets.push(sheet)
 		initMainSheet(sheet)
-		LR_Sheets.pop()
+		// LR_Sheets.pop()
 	}
 	if (sheet.id() === Dia_SHTPRF) {
-		LR_Sheets.push(sheet)
-		initPreferencesSheet(sheet)
-		LR_Sheets.pop()
+		// LR_Sheets.push(sheet)
+		initDialogSheetPrefs(sheet)
+		// LR_Sheets.pop()
 	}
 	if (sheet.id() === Bnd_SCOROL) {
-		LR_Sheets.push(sheet)
-		initScoreRollBindingSheet(sheet)
-		LR_Sheets.pop()
+		// LR_Sheets.push(sheet)
+		initBindingScoreRoll(sheet)
+		// LR_Sheets.pop()
 	}
 }
 
 
 // Main Sheet
 const initMainSheet = function(sheet) {
+	log("< initMainSheet")
+	addFA("LR_Sheets.push")
+	addFA("LR_Sheets.pop")
+	addFA("LR_Sheets.top")
+	addFA("LR_Sheets.value")
+	// log(strThing(Key_DEBUGFA, Yes_Indent))
+	// return
+	log(LR_Sheets.value())
+	// return
+	log(LR_Sheets.push(sheet))
+	log(LR_Sheets.value())
+	const top_sheet = LR_Sheets.top() 
+	// return
+	log(top_sheet.id())
+	// logFA("TEST")
+	// log(LR_Sheets.top().id())
+	// log(LR_Sheets.top().name())
+	return
 
-	// log("sheets")
-	// log(LR_Sheets.value())
-	// log(LR_Sheets.push("a"))
 	// log(LR_Sheets.push("b"))
 	// log(LR_Sheets.top())
 	// log(LR_Sheets.pop())
@@ -1881,7 +1909,7 @@ const initMainSheet = function(sheet) {
 	// setRESULT(strThing(Key_TEST, Yes_Indent))
 
 	debug("start")	
-	debugSheet()
+	// debugSheet()
 
 	// function argTest(_arg1, _arg2, _arg3) {
 		// try {tryArg(_arg1)} catch(e) {_arg1 = "Hello"}
@@ -1920,6 +1948,7 @@ const initMainSheet = function(sheet) {
 	// debug(tynValue(true))
 	
 	setItemValue(Val_HIS, Int_Zero)
+	return
 	
 	function setRep_PER() {
 		const rep_value = {
@@ -1941,29 +1970,29 @@ const initMainSheet = function(sheet) {
 	}
 	
 	onuItemDo(Val_Nom, function(elem) {
-		debugElemUpdate(elem)
-		rptElemDoIf(elem)
+		// debugElemUpdate(elem)
+		// rptElemDoIf(elem)
 	})
 	
 	oncItemDo(Rep_OBJ, function(elem) {
-		debugElemClick(elem)
-		debug(elem)
+		// debugElemClick(elem)
+		// debug(elem)
 		setRESULT("Click:\n" + strThing(getItemValue(Rep_OBJ), Yes_Indent))
 	})
 	
 	onuItemDo(Rep_OBJ, function(elem) {
-		debugElemUpdate(elem)
-		debug(elem)
+		// debugElemUpdate(elem)
+		// debug(elem)
 		setRESULT("Update:\n" + strThing(getItemValue(Rep_OBJ), Yes_Indent))
 	})
 	
 	oncItemChildDo(Rep_OBJ, Chk_PHYCHK, function(elem) {
-		debugElemClick(elem)
-		rptElemDoIf(elem)
+		// debugElemClick(elem)
+		// rptElemDoIf(elem)
 		const elm_index = getElemIndex(elem)
 		const val_phychk = getElem(Rep_OBJ).find(elm_index).find(Val_PHYCHK)
 		// const val_phychk = elem.find(Val_PHYCHK)
-		debug("--")
+		// debug("--")
 		onuItemDo(val_phychk, function(elem) {
 			debugElemUpdate(elem)
 			// rptElemDoIf(elem)
@@ -1974,36 +2003,36 @@ const initMainSheet = function(sheet) {
 				chk_phychk.removeClass(Css_BgSecondary)
 			}
 		})
-		debug("--")
-		debugElem(val_phychk, true, true)
-		debug(val_phychk.value())
+		// debug("--")
+		// debugElem(val_phychk, true, true)
+		// debug(val_phychk.value())
 		val_phychk.value(tynValue(val_phychk.value()))
-		debug(val_phychk.value())
+		// debug(val_phychk.value())
 	})
 	
 	oncItemChildDo(Rep_OBJ, Val_OBJITM, function(elem) {
-		debugElemClick(elem)
-		rptElemDoIf(elem)
+		// debugElemClick(elem)
+		// rptElemDoIf(elem)
 	})
 	
 	onuItemChildDo(Rep_OBJ, Val_OBJITM, function(elem) {
-		debugElemUpdate(elem)
-		rptElemDoIf(elem)
+		// debugElemUpdate(elem)
+		// rptElemDoIf(elem)
 	})
 	
 	onuItemChildDo(Rep_OBJ, Vis_OBJITM, function(elem) {
-		debugElemUpdate(elem)
-		rptElemDoIf(elem)
+		// debugElemUpdate(elem)
+		// rptElemDoIf(elem)
 	})
 	
 	oncItemChildDo(Rep_OBJ, Val_PHYCHK, function(elem) {
-		debugElemClick(elem)
-		debugElem(elem, true, true)
+		// debugElemClick(elem)
+		// debugElem(elem, true, true)
 	})
 	
 	onuItemChildDo(Rep_OBJ, Val_PHYCHK, function(elem) {
-		debugElemUpdate(elem)
-		debugElem(elem, true, true)
+		// debugElemUpdate(elem)
+		// debugElem(elem, true, true)
 	})
 
 
@@ -2066,7 +2095,7 @@ const initMainSheet = function(sheet) {
 	
 	oncItemDo(Dia_SHTPRF, function() {
 		const item = Dia_SHTPRF
-		debug(item)
+		// debug(item)
 		sheet.prompt("Prefs", item, function(dialog) {
 			setItemValue(Prf_DXVPRF, dialog[Chc_DXVPRF])
 			setRESULT(Object.entries(dialog))
@@ -2081,7 +2110,7 @@ const initMainSheet = function(sheet) {
 	const Val_SCOROL = "Val_SCOROL"
 
 	oncItemDo(Bnd_SCOROL, function() {
-		debug("onSheetItemClickFct")
+		// debug("oncItemDo")
 		const rol_scorol = new RollBuilder(sheet)
 			.expression("1d10")
 			.title("Score Roll")
@@ -2103,7 +2132,7 @@ const initMainSheet = function(sheet) {
 		
 				Bindings.clear(Val_SCOACT)
 				Bindings.add(bna_scorol, Val_SCOACT, Bnd_SCOROL, function() {
-					debugOK()
+					// debugOK()
 					return {
 						Lbl_SUCFAI: lbl_sucfai,
 						Val_SUCFAI: val_sucfai,
@@ -2121,27 +2150,34 @@ const initMainSheet = function(sheet) {
 	
 	oncItemDo(Clk_HOP, function() {
 		const item = Clk_HOP
-		debug(item)
+		// debug(item)
 		const Rep_his = getItemValue(Rep_HIS)
-		debug("> Rep_his")
-		debug(Rep_his)
-		debug(sheet.get(Rep_HIS).getClasses())
+		// debug("> Rep_his")
+		// debug(Rep_his)
+		// debug(sheet.get(Rep_HIS).getClasses())
 		setRESULT(strThing(Rep_his))
 		Object.keys(Rep_his).forEach(function(key_typ, idx_typ) {
-			debug(">> key_typ " + strThing(key_typ))
-			debug(">> idx_typ " + strThing(idx_typ))
-			debug(Rep_his[key_typ])
-			debug(getSheetItemChild(sheet, Rep_HIS, key_typ))
+			// debug(">> key_typ " + strThing(key_typ))
+			// debug(">> idx_typ " + strThing(idx_typ))
+			// debug(Rep_his[key_typ])
+			// debug(getSheetItemChild(sheet, Rep_HIS, key_typ))
 			// debug(sheet.get(Rep_HIS).value().find(key_typ))
 			// debug(getSheetItemParent(sheet, key_typ))
 		})
 	})
+
+	log(LR_Sheets.value())
+	log(LR_Sheets.pop())
+	log(LR_Sheets.value())
+	log("initMainSheet >")
 }
 
 
-const initPreferencesSheet = function(sheet) {
-	debug("initPreferencesSheet")
-	debugSheet()
+const initDialogSheetPrefs = function(sheet) {
+	log("< initDialogSheetPrefs")
+	log(LR_Sheets.value())
+	log(LR_Sheets.push(sheet))
+	log(LR_Sheets.value())
 	
 	oncItemDo(Set_DXVPRF, function() {
 		debugOK()
@@ -2153,16 +2189,27 @@ const initPreferencesSheet = function(sheet) {
 		setRESULT(getItemValue(Chc_DXVPRF))
 	})
 
+	log(LR_Sheets.value())
+	log(LR_Sheets.pop())
+	log(LR_Sheets.value())
+	log("initDialogSheetPrefs >")
 }
 
 
-const initScoreRollBindingSheet = function(sheet) {
-	debug("initScoreRollBindingSheet")
-	debugSheet()
+const initBindingScoreRoll = function(sheet) {
+	log("< initBindingScoreRoll")
+	log(LR_Sheets.value())
+	log(LR_Sheets.push(sheet))
+	log(LR_Sheets.value())
 	
 	if (getItemValue(Lbl_SUCFAI) == _(Lbl_ROLSUC_)) {
 		addItemCss(Row_SUCFAI, Css_TextSuccess)
 	} else {
 		addItemCss(Row_SUCFAI, Css_TextDanger)
 	}
+	
+	log(LR_Sheets.value())
+	log(LR_Sheets.pop())
+	log(LR_Sheets.value())
+	log("initBindingScoreRoll >")
 }

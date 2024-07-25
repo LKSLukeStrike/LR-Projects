@@ -1,33 +1,105 @@
-//region LR_Sheets
-//region LR_Sheets Module
-const LR_Sheets = (function() {
-	//region private
-	const arr_sheets = [] // sheets stack
-	//endregion
 
-	//region public
-	function push(sheet) { // stack sheet
-		return arr_sheets.push(sheet)
-	}
-	function pop() { // unstack last sheet
-		return arr_sheets.pop()
-	}
-	function top() { // get last sheet (current)
-		return arr_sheets.slice(-1)[0]
-	}
-	function value() { // stack value
-		return arr_sheets
-	}
-	//endregion
+Character 1
+Character 2
+Character 3
+Rollo
+Principal
+Chat
+Historique des jets
+Raccourcis
+Scène
+Ordre des tours
+Outils
+Mesures
+Dessins
+Console
+Éclairage Dynamique
+Contenu
+Journal
+Création de contenu
+Livre
+Bibliothèque PDF
+Gestionnaire de médias
+Audio
+Musique
+Effets spéciaux
+Autres
+Quitter
+Menu
+Console
 
- 	//region publish
-	return {
-		push: push,
-		pop: pop,
-		top: top,
-		value: value,
-	}
-	//endregion
-})()
-//endregion
-//endregion
+< initMainSheet
+
+{
+  "0": "LR_Sheets.value",
+  "1": {}
+}
+
+Dft_DebugFA: false
+
+fct_args: LR_Sheets.value [object Arguments]
+
+yes_debugfa: LR_Sheets.value false
+
+yes_debugfa: LR_Sheets.value true
+
+FA: LR_Sheets.value 
+
+[]
+
+{
+  "0": "LR_Sheets.push",
+  "1": {
+    "0": {}
+  }
+}
+
+Dft_DebugFA: false
+
+fct_args: LR_Sheets.push [object Arguments]
+
+yes_debugfa: LR_Sheets.push false
+
+yes_debugfa: LR_Sheets.push true
+
+FA: LR_Sheets.push [object Object]
+
+1
+
+{
+  "0": "LR_Sheets.value",
+  "1": {}
+}
+
+Dft_DebugFA: false
+
+fct_args: LR_Sheets.value [object Arguments]
+
+yes_debugfa: LR_Sheets.value false
+
+yes_debugfa: LR_Sheets.value true
+
+FA: LR_Sheets.value 
+
+[
+  {}
+]
+
+{
+  "0": "LR_Sheets.top",
+  "1": {}
+}
+
+Dft_DebugFA: false
+
+fct_args: LR_Sheets.top [object Arguments]
+
+yes_debugfa: LR_Sheets.top false
+
+yes_debugfa: LR_Sheets.top true
+
+FA: LR_Sheets.top 
+
+main
+
+result
