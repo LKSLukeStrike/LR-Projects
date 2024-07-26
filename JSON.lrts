@@ -106,8 +106,8 @@ function debugElemUpdate(elem) {
 }
 function debugSheet() {
 	debug("< SHEET >")
-	debug("> value: "		+ LR_Sheets.value())	
-	debugElem(LR_Sheets.top())
+	debug("> value: "		+ LR_Views.value())	
+	debugElem(LR_Views.top())
 }
 function addFA(fct_name) { // add fct_name to debugFA
 	return Key_DEBUGFA[fct_name] = Yes_Debug
@@ -143,18 +143,6 @@ function debugFAOK(fct_name, _yes_debugfa) { // use: debugFAOK("myFunction")
 
 //region LR_Elems
 //whatis aka components in LR
-//region LR_Elems Sheets
-function getSheetName(_sheet) { // the proper sheet name
-	debugFA("getSheetName", arguments)
-	try {tryArg(_sheet)} catch(e) {_sheet = sheet}
-	let result = null
-	try { // skip error when no name
-		result = _sheet.properName()
-	} finally {}
-	return result
-}
-//endregion
-
 //region LR_Elems Events
 const Evt_Click  = "click"
 const Evt_Update = "update"
@@ -939,29 +927,26 @@ function chk2valElem(elem) { // chk related val elem
 //region LR_Elems Repeaters
 function rptElemDoIf(elem, _do_fct, _if_fct) { // apply fct on repeater if true
 	debugFA("rptElemDoIf", arguments)
-	if (arguments.length < 3) { // filter function
-		_if_fct = function(elem) {
-			debugFA("rptElemDoIf_if_fct", arguments)
-			return true // true to do action function
-		}
+	const do_fct = function(elem) {
+		debugFA("rptElemDoIf_do_fct", arguments)
+		debugElem(elem, Yes_Debug, Yes_Indent)
+		return true // true to continue recursive
 	}
-	if (arguments.length < 2) { // action function
-		_do_fct = function(elem) {
-			debugFA("rptElemDoIf_do_fct", arguments)
-			debugElem(elem, Yes_Debug, Yes_Indent)
-			return true // true to continue recursive
-		}
+	const if_fct = function(elem) {
+		debugFA("rptElemDoIf_if_fct", arguments)
+		return true // true to do action function
 	}
+	try  {do_fct = tryArg(_do_fct)}	finally {}
+	try  {if_fct = tryArg(_if_fct)}	finally {}
+
 	if (notElem(elem)) {return} // not an elem
-	if (_if_fct(elem)) {
-		// if (! _do_fct(elem)) {return} // /!\ repeat twice (why ?)
-		const yes_recursive = _do_fct(elem)
+	if (if_fct(elem)) {
+		const yes_recursive = do_fct(elem) // on 2 lines to avoid LR bouncing
 		if (! yes_recursive) {return} // interrupt recursive 
 	}
-	// getElemChildren(elem).forEach(function(child) // /!\ repeat twice (why ?)
-	const elm_children = getElemChildren(elem) 
+	const elm_children = getElemChildren(elem) // on 2 lines to avoid LR bouncing
 	elm_children.forEach(function(child) { // recursive
-		rptElemDoIf(getElemChild(elem, child), _do_fct, _if_fct)
+		rptElemDoIf(getElemChild(elem, child), do_fct, if_fct)
 	})
 }
 //endregion
@@ -970,301 +955,401 @@ function rptElemDoIf(elem, _do_fct, _if_fct) { // apply fct on repeater if true
 //region LR_Items
 //whatis aka ids in LR
 //region LR_Items Elems
-function getElem(item, _sheet) { // returns a sheet item elem
+function getElem(item, _view) { // returns a view item elem
 	debugFA("getElem", arguments)
-	try {tryArg(_sheet)} catch(e) {_sheet = LR_Sheets.top()}
-	return _sheet.get(item)
+	const view = LR_Views.top()
+	try  {view = tryArg(_view)} finally {}
+
+	return view.get(item)
 }
 //endregion
 
 //region LR_Items Events
-function oncItemDo(item, do_fct, _sheet) {
+function oncItemDo(item, do_fct, _view) {
 	debugFA("oncItemDo", arguments)
-	try {tryArg(_sheet)} catch(e) {_sheet = LR_Sheets.top()}
-	return oncElemDo(getElem(item, _sheet), do_fct)
+	const view = LR_Views.top()
+	try  {view = tryArg(_view)} finally {}
+
+	return oncElemDo(getElem(item, view), do_fct)
 }
-function onuItemDo(item, do_fct, _sheet) {
+function onuItemDo(item, do_fct, _view) {
 	debugFA("onuItemDo", arguments)
-	try {tryArg(_sheet)} catch(e) {_sheet = LR_Sheets.top()}
-	return onuElemDo(getElem(item, _sheet), do_fct)
+	const view = LR_Views.top()
+	try  {view = tryArg(_view)} finally {}
+
+	return onuElemDo(getElem(item, view), do_fct)
 }
-function oncItemChildDo(item, child, do_fct, _sheet) {
+function oncItemChildDo(item, child, do_fct, _view) {
 	debugFA("oncItemChildDo", arguments)
-	try {tryArg(_sheet)} catch(e) {_sheet = LR_Sheets.top()}
-	return oncElemChildDo(getElem(item, _sheet), child, do_fct)
+	const view = LR_Views.top()
+	try  {view = tryArg(_view)} finally {}
+
+	return oncElemChildDo(getElem(item, view), child, do_fct)
 }
-function onuItemChildDo(item, child, do_fct, _sheet) {
+function onuItemChildDo(item, child, do_fct, _view) {
 	debugFA("onuItemChildDo", arguments)
-	try {tryArg(_sheet)} catch(e) {_sheet = LR_Sheets.top()}
-	return onuElemChildDo(getElem(item, _sheet), child, do_fct)
+	const view = LR_Views.top()
+	try  {view = tryArg(_view)} finally {}
+
+	return onuElemChildDo(getElem(item, view), child, do_fct)
 }
 //endregion
 
 //region LR_Items Values
-function getItemValue(item, _sheet) {
+function getItemValue(item, _view) {
 	debugFA("getItemValue", arguments)
-	try {tryArg(_sheet)} catch(e) {_sheet = LR_Sheets.top()}
-	return getElemValue(getElem(item, _sheet))
+	const view = LR_Views.top()
+	try  {view = tryArg(_view)} finally {}
+
+	return getElemValue(getElem(item, view))
 }
-function setItemValue(item, itm_value, _sheet) {
+function setItemValue(item, itm_value, _view) {
 	debugFA("setItemValue", arguments)
-	try {tryArg(_sheet)} catch(e) {_sheet = LR_Sheets.top()}
-	return setElemValue(getElem(item, _sheet), itm_value)
+	const view = LR_Views.top()
+	try  {view = tryArg(_view)} finally {}
+
+	return setElemValue(getElem(item, view), itm_value)
 }
-function setItemZero(item, _sheet) {
+function setItemZero(item, _view) {
 	debugFA("setItemZero", arguments)
-	try {tryArg(_sheet)} catch(e) {_sheet = LR_Sheets.top()}
-	return setItemValue(item, Int_Zero, _sheet)
+	const view = LR_Views.top()
+	try  {view = tryArg(_view)} finally {}
+
+	return setItemValue(item, Int_Zero, view)
 }
-function setItemNone(item, _sheet) {
+function setItemNone(item, _view) {
 	debugFA("setItemNone", arguments)
-	try {tryArg(_sheet)} catch(e) {_sheet = LR_Sheets.top()}
-	return setItemValue(item, Str_None, _sheet)
+	const view = LR_Views.top()
+	try  {view = tryArg(_view)} finally {}
+
+	return setItemValue(item, Str_None, view)
 }
-function hasItemValue(item, itm_value, _sheet) {
+function hasItemValue(item, itm_value, _view) {
 	debugFA("hasItemValue", arguments)
-	try {tryArg(_sheet)} catch(e) {_sheet = LR_Sheets.top()}
-	return hasElemValue(getElem(item, _sheet), itm_value)
+	const view = LR_Views.top()
+	try  {view = tryArg(_view)} finally {}
+
+	return hasElemValue(getElem(item, view), itm_value)
 }
-function hasItemZero(item, _sheet) {
+function hasItemZero(item, _view) {
 	debugFA("hasItemZero", arguments)
-	try {tryArg(_sheet)} catch(e) {_sheet = LR_Sheets.top()}
-	return hasItemValue(item, Int_Zero, _sheet)
+	const view = LR_Views.top()
+	try  {view = tryArg(_view)} finally {}
+
+	return hasItemValue(item, Int_Zero, view)
 }
-function hasItemNone(item, _sheet) {
+function hasItemNone(item, _view) {
 	debugFA("hasItemNone", arguments)
-	try {tryArg(_sheet)} catch(e) {_sheet = LR_Sheets.top()}
-	return hasItemValue(item, Str_None, _sheet)
+	const view = LR_Views.top()
+	try  {view = tryArg(_view)} finally {}
+
+	return hasItemValue(item, Str_None, view)
 }
 //endregion
 
 //region LR_Items Locked
-function setItemLocked(item, _sheet) {
+function setItemLocked(item, _view) {
 	debugFA("setItemLocked", arguments)
-	try {tryArg(_sheet)} catch(e) {_sheet = LR_Sheets.top()}
-	return setElemLocked(getElem(item, _sheet))
+	const view = LR_Views.top()
+	try  {view = tryArg(_view)} finally {}
+
+	return setElemLocked(getElem(item, view))
 }
-function setItemUnlocked(item, _sheet) {
+function setItemUnlocked(item, _view) {
 	debugFA("setItemUnlocked", arguments)
-	try {tryArg(_sheet)} catch(e) {_sheet = LR_Sheets.top()}
-	return setElemUnlocked(getElem(item, _sheet))
+	const view = LR_Views.top()
+	try  {view = tryArg(_view)} finally {}
+
+	return setElemUnlocked(getElem(item, view))
 }
-function hasItemLocked(item, _sheet) {
+function hasItemLocked(item, _view) {
 	debugFA("hasItemLocked", arguments)
-	try {tryArg(_sheet)} catch(e) {_sheet = LR_Sheets.top()}
-	return hasElemLocked(getElem(item, _sheet))
+	const view = LR_Views.top()
+	try  {view = tryArg(_view)} finally {}
+
+	return hasElemLocked(getElem(item, view))
 }
 //endregion
 
 //region LR_Items Folded
-function setItemFolded(item, _sheet) {
+function setItemFolded(item, _view) {
 	debugFA("setItemFolded", arguments)
-	try {tryArg(_sheet)} catch(e) {_sheet = LR_Sheets.top()}
-	return setElemFolded(getElem(item, _sheet))
+	const view = LR_Views.top()
+	try  {view = tryArg(_view)} finally {}
+
+	return setElemFolded(getElem(item, view))
 }
-function setItemUnfolded(item, _sheet) {
+function setItemUnfolded(item, _view) {
 	debugFA("setItemUnfolded", arguments)
-	try {tryArg(_sheet)} catch(e) {_sheet = LR_Sheets.top()}
-	return setElemUnfolded(getElem(item, _sheet))
+	const view = LR_Views.top()
+	try  {view = tryArg(_view)} finally {}
+
+	return setElemUnfolded(getElem(item, view))
 }
-function hasItemFolded(item, _sheet) {
+function hasItemFolded(item, _view) {
 	debugFA("hasItemFolded", arguments)
-	try {tryArg(_sheet)} catch(e) {_sheet = LR_Sheets.top()}
-	return hasElemFolded(getElem(item, _sheet))
+	const view = LR_Views.top()
+	try  {view = tryArg(_view)} finally {}
+
+	return hasElemFolded(getElem(item, view))
 }
 //endregion
 
 //region LR_Items Tooltips
-function setItemTooltip(item, itm_tooltip, _sheet) {
+function setItemTooltip(item, itm_tooltip, _view) {
 	debugFA("setItemTooltip", arguments)
-	try {tryArg(_sheet)} catch(e) {_sheet = LR_Sheets.top()}
-	return setElemTooltip(getElem(item, _sheet), itm_tooltip)
+	const view = LR_Views.top()
+	try  {view = tryArg(_view)} finally {}
+
+	return setElemTooltip(getElem(item, view), itm_tooltip)
 }
 //endregion
 
 //region LR_Items Css Classes
-function addItemCss(item, css, _sheet) {
+function addItemCss(item, css, _view) {
 	debugFA("addItemCss", arguments)
-	try {tryArg(_sheet)} catch(e) {_sheet = LR_Sheets.top()}
-	return addElemCss(getElem(item, _sheet), css)
+	const view = LR_Views.top()
+	try  {view = tryArg(_view)} finally {}
+
+	return addElemCss(getElem(item, view), css)
 }
-function remItemCss(item, css, _sheet) {
+function remItemCss(item, css, _view) {
 	debugFA("remItemCss", arguments)
-	try {tryArg(_sheet)} catch(e) {_sheet = LR_Sheets.top()}
-	return remElemCss(getElem(item, _sheet), css)
+	const view = LR_Views.top()
+	try  {view = tryArg(_view)} finally {}
+
+	return remElemCss(getElem(item, view), css)
 }
-function hasItemCss(item, css, _sheet) {
+function hasItemCss(item, css, _view) {
 	debugFA("hasItemCss", arguments)
-	try {tryArg(_sheet)} catch(e) {_sheet = LR_Sheets.top()}
-	return hasElemCss(getElem(item, _sheet), css)
+	const view = LR_Views.top()
+	try  {view = tryArg(_view)} finally {}
+
+	return hasElemCss(getElem(item, view), css)
 }	
 //endregion
 
 //region LR_Items Cfk Classes
-function addItemCfk(item, cfk, _sheet) {
+function addItemCfk(item, cfk, _view) {
 	debugFA("addItemCfk", arguments)
-	try {tryArg(_sheet)} catch(e) {_sheet = LR_Sheets.top()}
-	return addElemCfk(getElem(item, _sheet), cfk)
+	const view = LR_Views.top()
+	try  {view = tryArg(_view)} finally {}
+
+	return addElemCfk(getElem(item, view), cfk)
 }
-function remItemCfk(item, cfk, _sheet) {
+function remItemCfk(item, cfk, _view) {
 	debugFA("remItemCfk", arguments)
-	try {tryArg(_sheet)} catch(e) {_sheet = LR_Sheets.top()}
-	return remElemCfk(getElem(item, _sheet), cfk)
+	const view = LR_Views.top()
+	try  {view = tryArg(_view)} finally {}
+
+	return remElemCfk(getElem(item, view), cfk)
 }
-function hasItemCfk(item, cfk, _sheet) {
+function hasItemCfk(item, cfk, _view) {
 	debugFA("hasItemCfk", arguments)
-	try {tryArg(_sheet)} catch(e) {_sheet = LR_Sheets.top()}
-	return hasElemCfk(getElem(item, _sheet), cfk)
+	const view = LR_Views.top()
+	try  {view = tryArg(_view)} finally {}
+
+	return hasElemCfk(getElem(item, view), cfk)
 }	
 //endregion
 
 //region LR_Items Effort
-function addItemEffort(item, _sheet) {
+function addItemEffort(item, _view) {
 	debugFA("addItemEffort", arguments)
-	try {tryArg(_sheet)} catch(e) {_sheet = LR_Sheets.top()}
-	return addElemEffort(getElem(item, _sheet))
+	const view = LR_Views.top()
+	try  {view = tryArg(_view)} finally {}
+
+	return addElemEffort(getElem(item, view))
 }
-function remItemEffort(item, _sheet) {
+function remItemEffort(item, _view) {
 	debugFA("remItemEffort", arguments)
-	try {tryArg(_sheet)} catch(e) {_sheet = LR_Sheets.top()}
-	return remElemEffort(getElem(item, _sheet))
+	const view = LR_Views.top()
+	try  {view = tryArg(_view)} finally {}
+
+	return remElemEffort(getElem(item, view))
 }
-function hasItemEffort(item, _sheet) {
+function hasItemEffort(item, _view) {
 	debugFA("hasItemEffort", arguments)
-	try {tryArg(_sheet)} catch(e) {_sheet = LR_Sheets.top()}
-	return hasElemEffort(getElem(item, _sheet))
+	const view = LR_Views.top()
+	try  {view = tryArg(_view)} finally {}
+
+	return hasElemEffort(getElem(item, view))
 }	
 //endregion
 
 //region LR_Items Dotted10
-function addItemDotted10(item, _sheet) {
+function addItemDotted10(item, _view) {
 	debugFA("addItemDotted10", arguments)
-	try {tryArg(_sheet)} catch(e) {_sheet = LR_Sheets.top()}
-	return addElemDotted10(getElem(item, _sheet))
+	const view = LR_Views.top()
+	try  {view = tryArg(_view)} finally {}
+
+	return addElemDotted10(getElem(item, view))
 }
-function remItemDotted10(item, _sheet) {
+function remItemDotted10(item, _view) {
 	debugFA("remItemDotted10", arguments)
-	try {tryArg(_sheet)} catch(e) {_sheet = LR_Sheets.top()}
-	return remElemDotted10(getElem(item, _sheet))
+	const view = LR_Views.top()
+	try  {view = tryArg(_view)} finally {}
+
+	return remElemDotted10(getElem(item, view))
 }
-function hasItemDotted10(item, _sheet) {
+function hasItemDotted10(item, _view) {
 	debugFA("hasItemDotted10", arguments)
-	try {tryArg(_sheet)} catch(e) {_sheet = LR_Sheets.top()}
-	return hasElemDotted10(getElem(item, _sheet))
+	const view = LR_Views.top()
+	try  {view = tryArg(_view)} finally {}
+
+	return hasElemDotted10(getElem(item, view))
 }	
 //endregion
 
 //region LR_Items Plussigned
-function addItemPlussigned(item, _sheet) {
+function addItemPlussigned(item, _view) {
 	debugFA("addItemPlussigned", arguments)
-	try {tryArg(_sheet)} catch(e) {_sheet = LR_Sheets.top()}
-	return addElemPlussigned(getElem(item, _sheet))
+	const view = LR_Views.top()
+	try  {view = tryArg(_view)} finally {}
+
+	return addElemPlussigned(getElem(item, view))
 }
-function remItemPlussigned(item, _sheet) {
+function remItemPlussigned(item, _view) {
 	debugFA("remItemPlussigned", arguments)
-	try {tryArg(_sheet)} catch(e) {_sheet = LR_Sheets.top()}
-	return remElemPlussigned(getElem(item, _sheet))
+	const view = LR_Views.top()
+	try  {view = tryArg(_view)} finally {}
+
+	return remElemPlussigned(getElem(item, view))
 }
-function hasItemPlussigned(item, _sheet) {
+function hasItemPlussigned(item, _view) {
 	debugFA("hasItemPlussigned", arguments)
-	try {tryArg(_sheet)} catch(e) {_sheet = LR_Sheets.top()}
-	return hasElemPlussigned(getElem(item, _sheet))
+	const view = LR_Views.top()
+	try  {view = tryArg(_view)} finally {}
+
+	return hasElemPlussigned(getElem(item, view))
 }	
 //endregion
 
 //region LR_Items Displayed
-function addItemDisplayed(item, _sheet) {
+function addItemDisplayed(item, _view) {
 	debugFA("addItemDisplayed", arguments)
-	try {tryArg(_sheet)} catch(e) {_sheet = LR_Sheets.top()}
-	return addElemDisplayed(getElem(item, _sheet))
+	const view = LR_Views.top()
+	try  {view = tryArg(_view)} finally {}
+
+	return addElemDisplayed(getElem(item, view))
 }
-function remItemDisplayed(item, _sheet) {
+function remItemDisplayed(item, _view) {
 	debugFA("remItemDisplayed", arguments)
-	try {tryArg(_sheet)} catch(e) {_sheet = LR_Sheets.top()}
-	return remElemDisplayed(getElem(item, _sheet))
+	const view = LR_Views.top()
+	try  {view = tryArg(_view)} finally {}
+
+	return remElemDisplayed(getElem(item, view))
 }
-function hasItemDisplayed(item, _sheet) {
+function hasItemDisplayed(item, _view) {
 	debugFA("hasItemDisplayed", arguments)
-	try {tryArg(_sheet)} catch(e) {_sheet = LR_Sheets.top()}
-	return hasElemDisplayed(getElem(item, _sheet))
+	const view = LR_Views.top()
+	try  {view = tryArg(_view)} finally {}
+
+	return hasElemDisplayed(getElem(item, view))
 }
 //endregion
 
 //region LR_Items Clickable
-function addItemClickable(item, _sheet) {
+function addItemClickable(item, _view) {
 	debugFA("addItemClickable", arguments)
-	try {tryArg(_sheet)} catch(e) {_sheet = LR_Sheets.top()}
-	return addElemClickable(getElem(item, _sheet))
+	const view = LR_Views.top()
+	try  {view = tryArg(_view)} finally {}
+
+	return addElemClickable(getElem(item, view))
 }
-function remItemClickable(item, _sheet) {
+function remItemClickable(item, _view) {
 	debugFA("remItemClickable", arguments)
-	try {tryArg(_sheet)} catch(e) {_sheet = LR_Sheets.top()}
-	return remElemClickable(getElem(item, _sheet))
+	const view = LR_Views.top()
+	try  {view = tryArg(_view)} finally {}
+
+	return remElemClickable(getElem(item, view))
 }
-function hasItemClickable(item, _sheet) {
+function hasItemClickable(item, _view) {
 	debugFA("hasItemClickable", arguments)
-	try {tryArg(_sheet)} catch(e) {_sheet = LR_Sheets.top()}
-	return hasElemClickable(getElem(item, _sheet))
+	const view = LR_Views.top()
+	try  {view = tryArg(_view)} finally {}
+
+	return hasElemClickable(getElem(item, view))
 }
 //endregion
 
 //region LR_Items Modifiable
-function addItemModifiable(item, _sheet) {
+function addItemModifiable(item, _view) {
 	debugFA("addItemModifiable", arguments)
-	try {tryArg(_sheet)} catch(e) {_sheet = LR_Sheets.top()}
-	return addElemModifiable(getElem(item, _sheet))
+	const view = LR_Views.top()
+	try  {view = tryArg(_view)} finally {}
+
+	return addElemModifiable(getElem(item, view))
 }
-function remItemModifiable(item, _sheet) {
+function remItemModifiable(item, _view) {
 	debugFA("remItemModifiable", arguments)
-	try {tryArg(_sheet)} catch(e) {_sheet = LR_Sheets.top()}
-	return remElemModifiable(getElem(item, _sheet))
+	const view = LR_Views.top()
+	try  {view = tryArg(_view)} finally {}
+
+	return remElemModifiable(getElem(item, view))
 }
-function hasItemModifiable(item, _sheet) {
+function hasItemModifiable(item, _view) {
 	debugFA("hasItemModifiable", arguments)
-	try {tryArg(_sheet)} catch(e) {_sheet = LR_Sheets.top()}
-	return hasElemModifiable(getElem(item, _sheet))
+	const view = LR_Views.top()
+	try  {view = tryArg(_view)} finally {}
+
+	return hasElemModifiable(getElem(item, view))
 }
 //endregion
 
 //region LR_Items Selected
-function addItemSelected(item, _sheet) {
+function addItemSelected(item, _view) {
 	debugFA("addItemSelected", arguments)
-	try {tryArg(_sheet)} catch(e) {_sheet = LR_Sheets.top()}
-	return addElemSelected(getElem(item, _sheet))
+	const view = LR_Views.top()
+	try  {view = tryArg(_view)} finally {}
+
+	return addElemSelected(getElem(item, view))
 }
-function remItemSelected(item, _sheet) {
+function remItemSelected(item, _view) {
 	debugFA("remItemSelected", arguments)
-	try {tryArg(_sheet)} catch(e) {_sheet = LR_Sheets.top()}
-	return remElemSelected(getElem(item, _sheet))
+	const view = LR_Views.top()
+	try  {view = tryArg(_view)} finally {}
+
+	return remElemSelected(getElem(item, view))
 }
-function hasItemSelected(item, _sheet) {
+function hasItemSelected(item, _view) {
 	debugFA("hasItemSelected", arguments)
-	try {tryArg(_sheet)} catch(e) {_sheet = LR_Sheets.top()}
-	return hasElemSelected(getElem(item, _sheet))
+	const view = LR_Views.top()
+	try  {view = tryArg(_view)} finally {}
+
+	return hasElemSelected(getElem(item, view))
 }
 //endregion
 
 //region LR_Items Fakeupdated
 //whatis fake class to avoid computations propagation
-function addItemFakeupdated(item, _sheet) {
+function addItemFakeupdated(item, _view) {
 	debugFA("addItemFakeupdated", arguments)
-	try {tryArg(_sheet)} catch(e) {_sheet = LR_Sheets.top()}
-	return addElemFakeupdated(getElem(item, _sheet))
+	const view = LR_Views.top()
+	try  {view = tryArg(_view)} finally {}
+
+	return addElemFakeupdated(getElem(item, view))
 }
-function remItemFakeupdated(item, _sheet) {
+function remItemFakeupdated(item, _view) {
 	debugFA("remItemFakeupdated", arguments)
-	try {tryArg(_sheet)} catch(e) {_sheet = LR_Sheets.top()}
-	return remElemFakeupdated(getElem(item, _sheet))
+	const view = LR_Views.top()
+	try  {view = tryArg(_view)} finally {}
+
+	return remElemFakeupdated(getElem(item, view))
 }
-function hasItemFakeupdated(item, _sheet) {
+function hasItemFakeupdated(item, _view) {
 	debugFA("hasItemFakeupdated", arguments)
-	try {tryArg(_sheet)} catch(e) {_sheet = LR_Sheets.top()}
-	return hasElemFakeupdated(getElem(item, _sheet))
+	const view = LR_Views.top()
+	try  {view = tryArg(_view)} finally {}
+
+	return hasElemFakeupdated(getElem(item, view))
 }	
-function fakItemUpdate(item, _sheet) {
+function fakItemUpdate(item, _view) {
 	debugFA("fakItemUpdate", arguments)
-	try {tryArg(_sheet)} catch(e) {_sheet = LR_Sheets.top()}
-	return fakElemUpdate(getElem(item, _sheet))
+	const view = LR_Views.top()
+	try  {view = tryArg(_view)} finally {}
+
+	return fakElemUpdate(getElem(item, view))
 }
 //endregion
 //endregion
@@ -1411,14 +1496,18 @@ function rsaValue(str_value, value_one, value_two) { // replace a string all
 //region LR_Operators Generate
 function gaiValue(_int_from, _int_lenght, _int_step) { // generate array of int
 	debugFA("gaiValue", arguments)
-	try {tryArg(_int_from)}   catch(e) {_int_from   = Int_Zero}
-	try {tryArg(_int_lenght)} catch(e) {_int_lenght = Int_POne}
-	try {tryArg(_int_step)}   catch(e) {_int_step   = Int_POne}
+	const int_from   = Int_Zero
+	const int_lenght = Int_POne
+	const int_step   = Int_POne
+	try  {int_from   = tryArg(_int_from)}	finally {}
+	try  {int_lenght = tryArg(_int_lenght)}	finally {}
+	try  {int_step   = tryArg(_int_step)}	finally {}
+
 	let result = []
-	while (yppValue(_int_lenght)) {
-		result.push(_int_from)
-		_int_from   += _int_step
-		_int_lenght -= Int_POne
+	while (yppValue(int_lenght)) {
+		result.push(int_from)
+		int_from   += int_step
+		int_lenght -= Int_POne
 	}
 	return result
 }
@@ -1460,8 +1549,10 @@ function ucaValue(value_one) { // upper case all
 }
 function cpoValue(value_one, _yes_fromlc) { // capitalize once
 	debugFA("cpoValue", arguments)
-	if (arguments.length < 2) {_yes_fromlc = Dft_FromLC}
-	if (_yes_fromlc) {
+	const yes_fromlc = Dft_FromLC
+	try  {yes_fromlc = tryArg(_yes_fromlc)}	finally {}
+
+	if (yes_fromlc) {
 		value_one = lcaValue(value_one)
 	}
 	return value_one.replace(/(^\w{1})|(\s+\w{1})/, function(letter) {
@@ -1470,8 +1561,10 @@ function cpoValue(value_one, _yes_fromlc) { // capitalize once
 }
 function cpaValue(value_one, _yes_fromlc) { // capitalize all
 	debugFA("cpaValue", arguments)
-	if (arguments.length < 2) {_yes_fromlc = Dft_FromLC}
-	if (_yes_fromlc) {
+	const yes_fromlc = Dft_FromLC
+	try  {yes_fromlc = tryArg(_yes_fromlc)}	finally {}
+
+	if (yes_fromlc) {
 		value_one = lcaValue(value_one)
 	}
 	return value_one.replace(/(^\w{1})|(\s+\w{1})/g, function(letter) {
@@ -1491,15 +1584,19 @@ function tynValue(value_one) { // toggle yes/not (1/0)
 //region LR_Operators Stringify
 function strThing(thing, _yes_indent, _str_indentcur, _str_indentuse) { // str a thing
 	debugFA("strThing", arguments)
-	if (arguments.length < 4) {_str_indentuse = Str_Tab} // indentation string
-	if (arguments.length < 3) {_str_indentcur = Str_None} // current indentation
-	if (arguments.length < 2) {_yes_indent = Dft_Indent}
-	const str_newline = _yes_indent ? // no newline if no indentation
+	const yes_indent    = Dft_Indent // if do indent
+	const str_indentcur = Str_None // current indentation
+	const str_indentuse = Str_Tab // indentation string
+	try  {yes_indent    = tryArg(_yes_indent)}		finally {}
+	try  {str_indentcur = tryArg(_str_indentcur)}	finally {}
+	try  {str_indentuse = tryArg(_str_indentuse)}	finally {}
+
+	const str_newline = yes_indent ? // no newline if no indentation
 		Str_Newline : Str_None
-	_str_indentcur = _yes_indent ? // clear _str_indentcur if no indentation
-		_str_indentcur : Str_None
-	const str_indentnxt = _yes_indent ? // for the next indentation
-		_str_indentcur + _str_indentuse : Str_None
+	str_indentcur = yes_indent ? // clear str_indentcur if no indentation
+		str_indentcur : Str_None
+	const str_indentnxt = yes_indent ? // for the next indentation
+		str_indentcur + str_indentuse : Str_None
 	let result = Str_None
 	let obj_result = Str_None // result of an object entries
 	let itm_result = Str_None // result of an object entry
@@ -1509,26 +1606,26 @@ function strThing(thing, _yes_indent, _str_indentcur, _str_indentuse) { // str a
 		} else if (yesArray(thing)) { // array
 			result = sfxValue(result, Str_OArray)
 			thing.forEach(function(itm) { // recursive
-				itm_result = strThing(itm, _yes_indent, str_indentnxt, _str_indentuse)
+				itm_result = strThing(itm, yes_indent, str_indentnxt, str_indentuse)
 				if (nsnValue(itm_result)) {
 					obj_result = obj_result + str_newline + str_indentnxt + itm_result + Str_Comma + Str_Space
 				}
 			})
 			if (nsnValue(obj_result)) {
-				result = result + _str_indentcur + obj_result + str_newline + _str_indentcur
+				result = result + str_indentcur + obj_result + str_newline + str_indentcur
 			}
 			result = sfxValue(result, Str_CArray)
 		} else { // object
 			result = sfxValue(result, Str_OObject)
 			Object.keys(thing).forEach(function(key) { // recursive
 				itm_result = dqmValue(key) + Str_DDot + Str_Space
-				itm_result = itm_result + strThing(thing[key], _yes_indent, str_indentnxt, _str_indentuse)
+				itm_result = itm_result + strThing(thing[key], yes_indent, str_indentnxt, str_indentuse)
 				if (nsnValue(itm_result)) {
 					obj_result = obj_result + str_newline + str_indentnxt + itm_result + Str_Comma + Str_Space
 				}
 			})
 			if (nsnValue(obj_result)) {
-				result = result + _str_indentcur + obj_result + str_newline + _str_indentcur
+				result = result + str_indentcur + obj_result + str_newline + str_indentcur
 			}
 			result = sfxValue(result, Str_CObject)
 		}
@@ -1605,44 +1702,6 @@ function nkiObject(obj, key) { // if not object includes key
 	debugFA("nkiObject", arguments)
 	return ! ykiObject(obj, key)
 }
-//endregion
-//endregion
-
-//region LR_Sheets
-//region LR_Sheets Stack Module
-const LR_Sheets = (function() {
-	//region private
-	const arr_sheets = [] // sheets stack
-	//endregion
-
-	//region public
-	function push(sheet) { // stack sheet
-		debugFA("LR_Sheets.push", arguments)
-		return arr_sheets.push(sheet)
-	}
-	function pop() { // unstack last sheet
-		debugFA("LR_Sheets.pop", arguments)
-		return arr_sheets.pop()
-	}
-	function top() { // get last sheet (current)
-		debugFA("LR_Sheets.top", arguments)
-		return arr_sheets.slice(-1)[0]
-	}
-	function value() { // stack value
-		debugFA("LR_Sheets.value", arguments)
-		return arr_sheets
-	}
-	//endregion
-
- 	//region publish
-	return {
-		push: push,
-		pop: pop,
-		top: top,
-		value: value,
-	}
-	//endregion
-})()
 //endregion
 //endregion
 
@@ -1784,6 +1843,59 @@ function tryArg(_arg) { // error if no arg or undefined arg // use for default a
 	return _arg
 }
 //endregion
+
+//region LR_Views
+//whatis aka sheets/crafts/prompts/bindings etc in LR
+//region LR_Views Attributes
+function getViewName(_view) { // the proper view name
+	debugFA("getViewName", arguments)
+	const view = LR_Views.top()
+	try {view = tryArg(_view)} finally {}
+
+	let result = null
+	try { // skip error when no proper name
+		result = view.properName()
+	} finally {}
+	return result
+}
+//endregion
+
+//region LR_Views Stack Module
+const LR_Views = (function() {
+	//region private
+	const arr_views = [] // views stack
+	//endregion
+
+	//region public
+	function push(view) { // stack view
+		debugFA("LR_Views.push", arguments)
+		return arr_views.push(view)
+	}
+	function pop() { // unstack last view
+		debugFA("LR_Views.pop", arguments)
+		return arr_views.pop()
+	}
+	function top() { // get last view (current)
+		debugFA("LR_Views.top", arguments)
+		return arr_views.slice(-1)[0]
+	}
+	function value() { // stack value
+		debugFA("LR_Views.value", arguments)
+		return arr_views
+	}
+	//endregion
+
+ 	//region publish
+	return {
+		push: push,
+		pop: pop,
+		top: top,
+		value: value,
+	}
+	//endregion
+})()
+//endregion
+//endregion
 //endregion
 
 
@@ -1827,19 +1939,19 @@ function setRESULT(str_result) {
 init = function(sheet) {
 	// initialize all the sheets
 	if (sheet.id() === Sht_CHRSHT) {
-		// LR_Sheets.push(sheet)
+		// LR_Views.push(sheet)
 		initMainSheet(sheet)
-		// LR_Sheets.pop()
+		// LR_Views.pop()
 	}
 	if (sheet.id() === Dia_SHTPRF) {
-		// LR_Sheets.push(sheet)
+		// LR_Views.push(sheet)
 		initDialogSheetPrefs(sheet)
-		// LR_Sheets.pop()
+		// LR_Views.pop()
 	}
 	if (sheet.id() === Bnd_SCOROL) {
-		// LR_Sheets.push(sheet)
+		// LR_Views.push(sheet)
 		initBindingScoreRoll(sheet)
-		// LR_Sheets.pop()
+		// LR_Views.pop()
 	}
 }
 
@@ -1847,29 +1959,29 @@ init = function(sheet) {
 // Main Sheet
 const initMainSheet = function(sheet) {
 	log("< initMainSheet")
-	addFA("LR_Sheets.push")
-	addFA("LR_Sheets.pop")
-	addFA("LR_Sheets.top")
-	addFA("LR_Sheets.value")
+	addFA("LR_Views.push")
+	addFA("LR_Views.pop")
+	addFA("LR_Views.top")
+	addFA("LR_Views.value")
 	// log(strThing(Key_DEBUGFA, Yes_Indent))
 	// return
-	log(LR_Sheets.value())
+	log(LR_Views.value())
 	// return
-	log(LR_Sheets.push(sheet))
-	log(LR_Sheets.value())
-	const top_sheet = LR_Sheets.top() 
+	log(LR_Views.push(sheet))
+	log(LR_Views.value())
+	const top_sheet = LR_Views.top() 
 	// return
 	log(top_sheet.id())
 	// logFA("TEST")
-	// log(LR_Sheets.top().id())
-	// log(LR_Sheets.top().name())
-	return
+	// log(LR_Views.top().id())
+	// log(LR_Views.top().name())
+	// return
 
-	// log(LR_Sheets.push("b"))
-	// log(LR_Sheets.top())
-	// log(LR_Sheets.pop())
-	// log(LR_Sheets.value())
-	// log(LR_Sheets.top())
+	// log(LR_Views.push("b"))
+	// log(LR_Views.top())
+	// log(LR_Views.pop())
+	// log(LR_Views.value())
+	// log(LR_Views.top())
 
 	const Arr_Loop = [
 		11,
@@ -1947,7 +2059,8 @@ const initMainSheet = function(sheet) {
 	// debug(tynValue(false))
 	// debug(tynValue(true))
 	
-	setItemValue(Val_HIS, Int_Zero)
+	// setItemValue(Val_HIS, Int_Zero)
+	setItemValue(Val_HIS, 100)
 	return
 	
 	function setRep_PER() {
@@ -2166,18 +2279,18 @@ const initMainSheet = function(sheet) {
 		})
 	})
 
-	log(LR_Sheets.value())
-	log(LR_Sheets.pop())
-	log(LR_Sheets.value())
+	log(LR_Views.value())
+	log(LR_Views.pop())
+	log(LR_Views.value())
 	log("initMainSheet >")
 }
 
 
 const initDialogSheetPrefs = function(sheet) {
 	log("< initDialogSheetPrefs")
-	log(LR_Sheets.value())
-	log(LR_Sheets.push(sheet))
-	log(LR_Sheets.value())
+	log(LR_Views.value())
+	log(LR_Views.push(sheet))
+	log(LR_Views.value())
 	
 	oncItemDo(Set_DXVPRF, function() {
 		debugOK()
@@ -2189,18 +2302,18 @@ const initDialogSheetPrefs = function(sheet) {
 		setRESULT(getItemValue(Chc_DXVPRF))
 	})
 
-	log(LR_Sheets.value())
-	log(LR_Sheets.pop())
-	log(LR_Sheets.value())
+	log(LR_Views.value())
+	log(LR_Views.pop())
+	log(LR_Views.value())
 	log("initDialogSheetPrefs >")
 }
 
 
 const initBindingScoreRoll = function(sheet) {
 	log("< initBindingScoreRoll")
-	log(LR_Sheets.value())
-	log(LR_Sheets.push(sheet))
-	log(LR_Sheets.value())
+	log(LR_Views.value())
+	log(LR_Views.push(sheet))
+	log(LR_Views.value())
 	
 	if (getItemValue(Lbl_SUCFAI) == _(Lbl_ROLSUC_)) {
 		addItemCss(Row_SUCFAI, Css_TextSuccess)
@@ -2208,8 +2321,8 @@ const initBindingScoreRoll = function(sheet) {
 		addItemCss(Row_SUCFAI, Css_TextDanger)
 	}
 	
-	log(LR_Sheets.value())
-	log(LR_Sheets.pop())
-	log(LR_Sheets.value())
+	log(LR_Views.value())
+	log(LR_Views.pop())
+	log(LR_Views.value())
 	log("initBindingScoreRoll >")
 }

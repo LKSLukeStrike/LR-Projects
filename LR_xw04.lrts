@@ -1,6 +1,58 @@
-function addFA(fct_name) { // add fct_name to debugFA
-	return addObject(Key_DEBUGFA, fct_name, Yes_Debug)
-}
-function remFA(fct_name) { // remove fct_name from debugFA
-	return remObject(Key_DEBUGFA, fct_name)
+function strThing(thing, _yes_indent, _str_indentcur, _str_indentuse) { // str a thing
+	debugFA("strThing", arguments)
+	const yes_indent    = Dft_Indent // if do indent
+	const str_indentcur = Str_None // current indentation
+	const str_indentuse = Str_Tab // indentation string
+	try  {yes_indent    = tryArg(_yes_indent)}		finally {}
+	try  {str_indentcur = tryArg(_str_indentcur)}	finally {}
+	try  {str_indentuse = tryArg(_str_indentuse)}	finally {}
+
+	const str_newline = yes_indent ? // no newline if no indentation
+		Str_Newline : Str_None
+	str_indentcur = yes_indent ? // clear str_indentcur if no indentation
+		str_indentcur : Str_None
+	const str_indentnxt = yes_indent ? // for the next indentation
+		str_indentcur + str_indentuse : Str_None
+	let result = Str_None
+	let obj_result = Str_None // result of an object entries
+	let itm_result = Str_None // result of an object entry
+	if (yesObject(thing)) {
+		if (yesNull(thing)) { // null
+			result = Str_Null
+		} else if (yesArray(thing)) { // array
+			result = sfxValue(result, Str_OArray)
+			thing.forEach(function(itm) { // recursive
+				itm_result = strThing(itm, yes_indent, str_indentnxt, str_indentuse)
+				if (nsnValue(itm_result)) {
+					obj_result = obj_result + str_newline + str_indentnxt + itm_result + Str_Comma + Str_Space
+				}
+			})
+			if (nsnValue(obj_result)) {
+				result = result + str_indentcur + obj_result + str_newline + str_indentcur
+			}
+			result = sfxValue(result, Str_CArray)
+		} else { // object
+			result = sfxValue(result, Str_OObject)
+			Object.keys(thing).forEach(function(key) { // recursive
+				itm_result = dqmValue(key) + Str_DDot + Str_Space
+				itm_result = itm_result + strThing(thing[key], yes_indent, str_indentnxt, str_indentuse)
+				if (nsnValue(itm_result)) {
+					obj_result = obj_result + str_newline + str_indentnxt + itm_result + Str_Comma + Str_Space
+				}
+			})
+			if (nsnValue(obj_result)) {
+				result = result + str_indentcur + obj_result + str_newline + str_indentcur
+			}
+			result = sfxValue(result, Str_CObject)
+		}
+	} else {
+		if (yesString(thing)) {
+			result = dqmValue(thing)
+		} else if (yesUndefined(thing)) {
+			result = Str_Undefined
+		} else {
+			result = thing
+		}
+	}
+	return result
 }

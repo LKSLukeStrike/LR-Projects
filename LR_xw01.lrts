@@ -31,24 +31,24 @@ Console
 < initMainSheet
 
 {
-  "0": "LR_Sheets.value",
+  "0": "LR_Views.value",
   "1": {}
 }
 
 Dft_DebugFA: false
 
-fct_args: LR_Sheets.value [object Arguments]
+fct_args: LR_Views.value [object Arguments]
 
-yes_debugfa: LR_Sheets.value false
+yes_debugfa: LR_Views.value false
 
-yes_debugfa: LR_Sheets.value true
+yes_debugfa: LR_Views.value true
 
-FA: LR_Sheets.value 
+FA: LR_Views.value 
 
 []
 
 {
-  "0": "LR_Sheets.push",
+  "0": "LR_Views.push",
   "1": {
     "0": {}
   }
@@ -56,49 +56,49 @@ FA: LR_Sheets.value
 
 Dft_DebugFA: false
 
-fct_args: LR_Sheets.push [object Arguments]
+fct_args: LR_Views.push [object Arguments]
 
-yes_debugfa: LR_Sheets.push false
+yes_debugfa: LR_Views.push false
 
-yes_debugfa: LR_Sheets.push true
+yes_debugfa: LR_Views.push true
 
-FA: LR_Sheets.push [object Object]
+FA: LR_Views.push [object Object]
 
 1
 
 {
-  "0": "LR_Sheets.value",
+  "0": "LR_Views.value",
   "1": {}
 }
 
 Dft_DebugFA: false
 
-fct_args: LR_Sheets.value [object Arguments]
+fct_args: LR_Views.value [object Arguments]
 
-yes_debugfa: LR_Sheets.value false
+yes_debugfa: LR_Views.value false
 
-yes_debugfa: LR_Sheets.value true
+yes_debugfa: LR_Views.value true
 
-FA: LR_Sheets.value 
+FA: LR_Views.value 
 
 [
   {}
 ]
 
 {
-  "0": "LR_Sheets.top",
+  "0": "LR_Views.top",
   "1": {}
 }
 
 Dft_DebugFA: false
 
-fct_args: LR_Sheets.top [object Arguments]
+fct_args: LR_Views.top [object Arguments]
 
-yes_debugfa: LR_Sheets.top false
+yes_debugfa: LR_Views.top false
 
-yes_debugfa: LR_Sheets.top true
+yes_debugfa: LR_Views.top true
 
-FA: LR_Sheets.top 
+FA: LR_Views.top 
 
 main
 

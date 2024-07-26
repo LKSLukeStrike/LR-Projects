@@ -1717,8 +1717,8 @@ function debugSheet() {
 }
 //endregion
 
-//region LR_Sheets Module
-const LR_Sheets = (function() {
+//region LR_Views Module
+const LR_Views = (function() {
 	//region private
 	const arr_sheets = [] // sheets stack
 	//endregion
@@ -1762,13 +1762,13 @@ init = function(sheet) {
 const initMainSheet = function(sheet) {
 
 	log("sheets")
-	log(LR_Sheets.value())
-	log(LR_Sheets.push("a"))
-	log(LR_Sheets.push("b"))
-	log(LR_Sheets.top())
-	log(LR_Sheets.pop())
-	log(LR_Sheets.value())
-	log(LR_Sheets.top())
+	log(LR_Views.value())
+	log(LR_Views.push("a"))
+	log(LR_Views.push("b"))
+	log(LR_Views.top())
+	log(LR_Views.pop())
+	log(LR_Views.value())
+	log(LR_Views.top())
 
 	const Arr_Loop = [
 		11,

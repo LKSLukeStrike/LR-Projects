@@ -1,17 +1,5 @@
 //region LR_Elems
 //whatis aka components in LR
-//region LR_Elems Sheets
-function getSheetName(_sheet) { // the proper sheet name
-	debugFA("getSheetName", arguments)
-	try {tryArg(_sheet)} catch(e) {_sheet = sheet}
-	let result = null
-	try { // skip error when no name
-		result = _sheet.properName()
-	} finally {}
-	return result
-}
-//endregion
-
 //region LR_Elems Events
 const Evt_Click  = "click"
 const Evt_Update = "update"
@@ -796,29 +784,26 @@ function chk2valElem(elem) { // chk related val elem
 //region LR_Elems Repeaters
 function rptElemDoIf(elem, _do_fct, _if_fct) { // apply fct on repeater if true
 	debugFA("rptElemDoIf", arguments)
-	if (arguments.length < 3) { // filter function
-		_if_fct = function(elem) {
-			debugFA("rptElemDoIf_if_fct", arguments)
-			return true // true to do action function
-		}
+	const do_fct = function(elem) {
+		debugFA("rptElemDoIf_do_fct", arguments)
+		debugElem(elem, Yes_Debug, Yes_Indent)
+		return true // true to continue recursive
 	}
-	if (arguments.length < 2) { // action function
-		_do_fct = function(elem) {
-			debugFA("rptElemDoIf_do_fct", arguments)
-			debugElem(elem, Yes_Debug, Yes_Indent)
-			return true // true to continue recursive
-		}
+	const if_fct = function(elem) {
+		debugFA("rptElemDoIf_if_fct", arguments)
+		return true // true to do action function
 	}
+	try  {do_fct = tryArg(_do_fct)}	finally {}
+	try  {if_fct = tryArg(_if_fct)}	finally {}
+
 	if (notElem(elem)) {return} // not an elem
-	if (_if_fct(elem)) {
-		// if (! _do_fct(elem)) {return} // /!\ repeat twice (why ?)
-		const yes_recursive = _do_fct(elem)
+	if (if_fct(elem)) {
+		const yes_recursive = do_fct(elem) // on 2 lines to avoid LR bouncing
 		if (! yes_recursive) {return} // interrupt recursive 
 	}
-	// getElemChildren(elem).forEach(function(child) // /!\ repeat twice (why ?)
-	const elm_children = getElemChildren(elem) 
+	const elm_children = getElemChildren(elem) // on 2 lines to avoid LR bouncing
 	elm_children.forEach(function(child) { // recursive
-		rptElemDoIf(getElemChild(elem, child), _do_fct, _if_fct)
+		rptElemDoIf(getElemChild(elem, child), do_fct, if_fct)
 	})
 }
 //endregion

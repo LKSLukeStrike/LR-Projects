@@ -1,0 +1,52 @@
+//region LR_Views
+//whatis aka sheets/crafts/prompts/bindings etc in LR
+//region LR_Views Attributes
+function getViewName(_view) { // the proper view name
+	debugFA("getViewName", arguments)
+	const view = LR_Views.top()
+	try {view = tryArg(_view)} finally {}
+
+	let result = null
+	try { // skip error when no proper name
+		result = view.properName()
+	} finally {}
+	return result
+}
+//endregion
+
+//region LR_Views Stack Module
+const LR_Views = (function() {
+	//region private
+	const arr_views = [] // views stack
+	//endregion
+
+	//region public
+	function push(view) { // stack view
+		debugFA("LR_Views.push", arguments)
+		return arr_views.push(view)
+	}
+	function pop() { // unstack last view
+		debugFA("LR_Views.pop", arguments)
+		return arr_views.pop()
+	}
+	function top() { // get last view (current)
+		debugFA("LR_Views.top", arguments)
+		return arr_views.slice(-1)[0]
+	}
+	function value() { // stack value
+		debugFA("LR_Views.value", arguments)
+		return arr_views
+	}
+	//endregion
+
+ 	//region publish
+	return {
+		push: push,
+		pop: pop,
+		top: top,
+		value: value,
+	}
+	//endregion
+})()
+//endregion
+//endregion

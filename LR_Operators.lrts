@@ -140,14 +140,18 @@ function rsaValue(str_value, value_one, value_two) { // replace a string all
 //region LR_Operators Generate
 function gaiValue(_int_from, _int_lenght, _int_step) { // generate array of int
 	debugFA("gaiValue", arguments)
-	try {tryArg(_int_from)}   catch(e) {_int_from   = Int_Zero}
-	try {tryArg(_int_lenght)} catch(e) {_int_lenght = Int_POne}
-	try {tryArg(_int_step)}   catch(e) {_int_step   = Int_POne}
+	const int_from   = Int_Zero
+	const int_lenght = Int_POne
+	const int_step   = Int_POne
+	try  {int_from   = tryArg(_int_from)}	finally {}
+	try  {int_lenght = tryArg(_int_lenght)}	finally {}
+	try  {int_step   = tryArg(_int_step)}	finally {}
+
 	let result = []
-	while (yppValue(_int_lenght)) {
-		result.push(_int_from)
-		_int_from   += _int_step
-		_int_lenght -= Int_POne
+	while (yppValue(int_lenght)) {
+		result.push(int_from)
+		int_from   += int_step
+		int_lenght -= Int_POne
 	}
 	return result
 }
@@ -189,8 +193,10 @@ function ucaValue(value_one) { // upper case all
 }
 function cpoValue(value_one, _yes_fromlc) { // capitalize once
 	debugFA("cpoValue", arguments)
-	if (arguments.length < 2) {_yes_fromlc = Dft_FromLC}
-	if (_yes_fromlc) {
+	const yes_fromlc = Dft_FromLC
+	try  {yes_fromlc = tryArg(_yes_fromlc)}	finally {}
+
+	if (yes_fromlc) {
 		value_one = lcaValue(value_one)
 	}
 	return value_one.replace(/(^\w{1})|(\s+\w{1})/, function(letter) {
@@ -199,8 +205,10 @@ function cpoValue(value_one, _yes_fromlc) { // capitalize once
 }
 function cpaValue(value_one, _yes_fromlc) { // capitalize all
 	debugFA("cpaValue", arguments)
-	if (arguments.length < 2) {_yes_fromlc = Dft_FromLC}
-	if (_yes_fromlc) {
+	const yes_fromlc = Dft_FromLC
+	try  {yes_fromlc = tryArg(_yes_fromlc)}	finally {}
+
+	if (yes_fromlc) {
 		value_one = lcaValue(value_one)
 	}
 	return value_one.replace(/(^\w{1})|(\s+\w{1})/g, function(letter) {
@@ -220,15 +228,19 @@ function tynValue(value_one) { // toggle yes/not (1/0)
 //region LR_Operators Stringify
 function strThing(thing, _yes_indent, _str_indentcur, _str_indentuse) { // str a thing
 	debugFA("strThing", arguments)
-	if (arguments.length < 4) {_str_indentuse = Str_Tab} // indentation string
-	if (arguments.length < 3) {_str_indentcur = Str_None} // current indentation
-	if (arguments.length < 2) {_yes_indent = Dft_Indent}
-	const str_newline = _yes_indent ? // no newline if no indentation
+	const yes_indent    = Dft_Indent // if do indent
+	const str_indentcur = Str_None // current indentation
+	const str_indentuse = Str_Tab // indentation string
+	try  {yes_indent    = tryArg(_yes_indent)}		finally {}
+	try  {str_indentcur = tryArg(_str_indentcur)}	finally {}
+	try  {str_indentuse = tryArg(_str_indentuse)}	finally {}
+
+	const str_newline = yes_indent ? // no newline if no indentation
 		Str_Newline : Str_None
-	_str_indentcur = _yes_indent ? // clear _str_indentcur if no indentation
-		_str_indentcur : Str_None
-	const str_indentnxt = _yes_indent ? // for the next indentation
-		_str_indentcur + _str_indentuse : Str_None
+	str_indentcur = yes_indent ? // clear str_indentcur if no indentation
+		str_indentcur : Str_None
+	const str_indentnxt = yes_indent ? // for the next indentation
+		str_indentcur + str_indentuse : Str_None
 	let result = Str_None
 	let obj_result = Str_None // result of an object entries
 	let itm_result = Str_None // result of an object entry
@@ -238,26 +250,26 @@ function strThing(thing, _yes_indent, _str_indentcur, _str_indentuse) { // str a
 		} else if (yesArray(thing)) { // array
 			result = sfxValue(result, Str_OArray)
 			thing.forEach(function(itm) { // recursive
-				itm_result = strThing(itm, _yes_indent, str_indentnxt, _str_indentuse)
+				itm_result = strThing(itm, yes_indent, str_indentnxt, str_indentuse)
 				if (nsnValue(itm_result)) {
 					obj_result = obj_result + str_newline + str_indentnxt + itm_result + Str_Comma + Str_Space
 				}
 			})
 			if (nsnValue(obj_result)) {
-				result = result + _str_indentcur + obj_result + str_newline + _str_indentcur
+				result = result + str_indentcur + obj_result + str_newline + str_indentcur
 			}
 			result = sfxValue(result, Str_CArray)
 		} else { // object
 			result = sfxValue(result, Str_OObject)
 			Object.keys(thing).forEach(function(key) { // recursive
 				itm_result = dqmValue(key) + Str_DDot + Str_Space
-				itm_result = itm_result + strThing(thing[key], _yes_indent, str_indentnxt, _str_indentuse)
+				itm_result = itm_result + strThing(thing[key], yes_indent, str_indentnxt, str_indentuse)
 				if (nsnValue(itm_result)) {
 					obj_result = obj_result + str_newline + str_indentnxt + itm_result + Str_Comma + Str_Space
 				}
 			})
 			if (nsnValue(obj_result)) {
-				result = result + _str_indentcur + obj_result + str_newline + _str_indentcur
+				result = result + str_indentcur + obj_result + str_newline + str_indentcur
 			}
 			result = sfxValue(result, Str_CObject)
 		}

@@ -54,8 +54,8 @@ function debugElemUpdate(elem) {
 }
 function debugSheet() {
 	debug("< SHEET >")
-	debug("> value: "		+ LR_Sheets.value())	
-	debugElem(LR_Sheets.top())
+	debug("> value: "		+ LR_Views.value())	
+	debugElem(LR_Views.top())
 }
 function addFA(fct_name) { // add fct_name to debugFA
 	return Key_DEBUGFA[fct_name] = Yes_Debug
