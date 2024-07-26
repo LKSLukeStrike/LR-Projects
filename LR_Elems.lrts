@@ -54,6 +54,10 @@ function getElemSheet(elem) {
 	} finally {}
 	return result
 }
+function getElemView(elem) { // view is the sheet (aliases)
+	debugFA("getElemView", arguments)
+	return getElemSheet(elem)
+}
 function getElemName(elem) {
 	debugFA("getElemName", arguments)
 	let result = null
