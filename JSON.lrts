@@ -1929,7 +1929,9 @@ const Vis_OBJITM  = "Vis_OBJITM"
 const Chk_HOPITM  = "Chk_HOPITM"
 const Prf_DXVPRF  = "Prf_DXVPRF"
 const Chc_DXVPRF  = "Chc_DXVPRF"
+const Lbl_SHTNAM  = "Lbl_SHTNAM"
 const Lbl_SUCFAI  = "Lbl_SUCFAI"
+const Val_SUCFAI  = "Val_SUCFAI"
 const Row_SUCFAI  = "Row_SUCFAI"
 const Set_DXVPRF  = "Set_DXVPRF"
 const Get_DXVPRF  = "Get_DXVPRF"
@@ -1951,9 +1953,9 @@ init = function(sheet) {
 	// addFA("LR_Views.value")
 	// initialize all the sheets
 	if (sheet.id() === Sht_CHRSHT) {
-		// LR_Views.push(sheet)
+		LR_Views.push(sheet)
 		initMainSheet(sheet)
-		// LR_Views.pop()
+		LR_Views.pop()
 	}
 	if (sheet.id() === Dia_SHTPRF) {
 		LR_Views.push(sheet)
@@ -1961,9 +1963,9 @@ init = function(sheet) {
 		LR_Views.pop()
 	}
 	if (sheet.id() === Bnd_SCOROL) {
-		// LR_Views.push(sheet)
+		LR_Views.push(sheet)
 		initBindingScoreRoll(sheet)
-		// LR_Views.pop()
+		LR_Views.pop()
 	}
 }
 
@@ -1971,12 +1973,6 @@ init = function(sheet) {
 // Main Sheet
 const initMainSheet = function(sheet) {
 	log("< initMainSheet")
-	log(LR_Views.value())
-	log(LR_Views.push(sheet))
-	log(LR_Views.value())
-	const top_sheet = LR_Views.top() // avoid LR bouncing
-	log(top_sheet.id())
-
 
 	const Arr_Loop = [
 		11,
@@ -2058,17 +2054,19 @@ const initMainSheet = function(sheet) {
 	setItemValue(Val_HIS, 1000)
 
 
-	oncItemDo(Bnd_SCOROL, function() {
-		// debug("oncItemDo")
-		const rol_scorol = new RollBuilder(sheet)
+	oncItemDo(Bnd_SCOROL, function(elem) {
+		const elm_view = getElemView(elem)
+		LR_Views.push(elm_view)
+		const rol_scorol = new RollBuilder(elm_view)
 			.expression("1d10")
 			.title("Score Roll")
 			.visibility("visible")
 			.onRoll(function(diceresult) {
+				const lbl_shtnam = getViewName(elm_view)
 				const val_cmasel = ":fist-raised: (PHY|MEN) :brain:"
-				const val_scoact = getItemValue(Val_SCOACT)
+				const val_scoact = getItemValue(Val_SCOACT, elm_view)
 				const val_scorol = diceresult.total
-				setItemValue(Val_SCOROL, val_scorol)
+				setItemValue(Val_SCOROL, val_scorol, elm_view)
 				const dif_scorol = val_scoact - val_scorol
 				if (dif_scorol >= 0) {
 					const lbl_sucfai = _(Lbl_ROLSUC_)
@@ -2083,6 +2081,7 @@ const initMainSheet = function(sheet) {
 				Bindings.add(bna_scorol, Val_SCOACT, Bnd_SCOROL, function() {
 					// debugOK()
 					return {
+						Lbl_SHTNAM: lbl_shtnam,
 						Lbl_SUCFAI: lbl_sucfai,
 						Val_SUCFAI: val_sucfai,
 						Val_CMASEL: val_cmasel,
@@ -2090,18 +2089,19 @@ const initMainSheet = function(sheet) {
 						Val_SCOROL: val_scorol,
 					}
 				})
-				Bindings.send(sheet, bna_scorol)
+				Bindings.send(elm_view, bna_scorol)
 			})
 			.roll()
+		LR_Views.pop()
 	})
 
 
 	oncItemDo(Dia_SHTPRF, function(elem) { // open the preferences dialog
-		LR_Views.push(getElemView(elem))
-		const elm_item = getElemItem(elem) // same item for the button and sheet
 		const elm_view = getElemView(elem)
+		LR_Views.push(elm_view)
+		const elm_item = getElemItem(elem) // same item for the button and sheet
 		elm_view.prompt("Prefs", elm_item, function(dialog) {
-			LR_Views.push(getElemView(elem))
+			LR_Views.push(elm_view)
 			setItemValue(Prf_DXVPRF, dialog[Chc_DXVPRF])
 			setRESULT(Object.entries(dialog))
 			LR_Views.pop()
@@ -2111,12 +2111,6 @@ const initMainSheet = function(sheet) {
 		LR_Views.pop()
 	})
 		
-
-	log(LR_Views.value())
-	log(LR_Views.pop())
-	log(LR_Views.value())
-	log("initMainSheet >")
-
 	return
 
 
@@ -2318,9 +2312,6 @@ const initDialogSheetPrefs = function(sheet) {
 
 const initBindingScoreRoll = function(sheet) {
 	log("< initBindingScoreRoll")
-	log(LR_Views.value())
-	log(LR_Views.push(sheet))
-	log(LR_Views.value())
 	
 	if (getItemValue(Lbl_SUCFAI) == _(Lbl_ROLSUC_)) {
 		addItemCss(Row_SUCFAI, Css_TextSuccess)
@@ -2328,8 +2319,5 @@ const initBindingScoreRoll = function(sheet) {
 		addItemCss(Row_SUCFAI, Css_TextDanger)
 	}
 	
-	log(LR_Views.value())
-	log(LR_Views.pop())
-	log(LR_Views.value())
 	log("initBindingScoreRoll >")
 }
