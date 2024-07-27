@@ -2062,11 +2062,12 @@ const initMainSheet = function(sheet) {
 			.title("Score Roll")
 			.visibility("visible")
 			.onRoll(function(diceresult) {
-				const lbl_shtnam = getViewName(elm_view)
+				LR_Views.push(elm_view)
+				const lbl_shtnam = getViewName()
 				const val_cmasel = ":fist-raised: (PHY|MEN) :brain:"
-				const val_scoact = getItemValue(Val_SCOACT, elm_view)
+				const val_scoact = getItemValue(Val_SCOACT)
 				const val_scorol = diceresult.total
-				setItemValue(Val_SCOROL, val_scorol, elm_view)
+				setItemValue(Val_SCOROL, val_scorol)
 				const dif_scorol = val_scoact - val_scorol
 				if (dif_scorol >= 0) {
 					const lbl_sucfai = _(Lbl_ROLSUC_)
@@ -2090,7 +2091,8 @@ const initMainSheet = function(sheet) {
 					}
 				})
 				Bindings.send(elm_view, bna_scorol)
-			})
+				LR_Views.pop()
+		})
 			.roll()
 		LR_Views.pop()
 	})
