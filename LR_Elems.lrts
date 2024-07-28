@@ -117,7 +117,9 @@ function setElemValue(elem, elm_value) {
 	elm_value = hasElemPlussigned(elem) // plussigned representation if any
 	&& ygtValue(elm_value, Int_Zero) ?
 		pfxValue(elm_value, Str_Plus) : elm_value
-	elem.value(elm_value)
+	if (! hasElemFakeupdated(elem)) { // avoid propagation dead loop
+		elem.value(elm_value)
+	}; remElemFakeupdated(elem)
 	setElemDotted(elem) // dotted representation if any
 	return elm_value
 }
@@ -337,7 +339,7 @@ function remElemCfk(elem, cfk) { // multiple cfk allowed in one string
 			remElemCss(val2dotElem(elem), css)
 		}
 	})
-	Object.keys(Key_CfkCss).forEach(function(cfk) { // restore any "broken" Cfk
+	Object.keys(Key_CFKCSS).forEach(function(cfk) { // restore any "broken" Cfk
 		if (hasElemCfk(elem, cfk)) {
 			addElemCfk(elem, cfk)
 		}
@@ -369,8 +371,7 @@ function getElemCfkThemeCss(elem, cfk) { // theme css if any
 	let result = Str_None
 	if (yesCfkTheme(cfk)) { // add the elem sheet theme if any
 		try { // skip error if any
-			const elm_sheet = getElemSheet(elem)
-			const prf_theme = getSheetThemePrf(elm_sheet)
+			const prf_theme = getSheetThemePrf()
 			result += Str_Space + prf_theme
 		} finally {}
 	}
@@ -418,10 +419,14 @@ const Key_CFKDOT    = { // relation between cfk_dottednn and arr_dotternn
 	Cfk_Dotted09 : Arr_Dotter09,
 	Cfk_Dotted10 : Arr_Dotter10,
 }
-const Str_DotEmpty  = ":ga_circle:"
-const Str_DotPlain  = ":ga_plain-circle:"
-const Str_DotInject = ":chevron-circle-down:"
-const Str_DotReject = ":chevron-circle-up:"
+const Str_DotEmpty     = ":ga_circle:"
+const Str_DotPlain     = ":ga_plain-circle:"
+const Str_DotIncrement = ":chevron-circle-right:"
+const Str_DotDecrement = ":chevron-circle-left:"
+const Str_DotInject    = ":chevron-circle-down:"
+const Str_DotReject    = ":chevron-circle-up:"
+const Str_DotPlus      = ":plus-circle:"
+const Str_DotMinus     = ":minus-circle:"
 //region LR_Elems Cfk Dotted Dotter/Checks
 function yesCfkDotted(cfk) { // if cfk is a dotted one
 	debugFA("yesCfkDotted", arguments)
@@ -464,7 +469,6 @@ function setElemDottedNN(elem, arr_dotternn) { // dottednn representation if any
 		setElemDottedNN(elem, arr_dotternn)
 	})} // single elem from here
 	if (notElemDotted(elem)) {return Not_Dotted} // no dotted representation
-	const elm_sheet = getElemSheet(elem)
 	const elm_value = getElemValue(elem)
 	const dot_elem  = val2dotElem(elem)
 	const dot_item  = getElemItem(dot_elem)
@@ -474,7 +478,7 @@ function setElemDottedNN(elem, arr_dotternn) { // dottednn representation if any
 	arr_dotternn.forEach(function(str_dotternn) {
 		const int_dotternn = Number(str_dotternn)
 		const dot_itemnn   = sfxValue(dot_item, str_dotternn)
-		const dot_elemnn   = getSheetItem(elm_sheet, dot_itemnn)
+		const dot_elemnn   = getElem(dot_itemnn)
 		if (ygtValue(int_dotternn, elm_value)) {
 			dot_elemnn.value(Str_DotEmpty)
 		} else if (ygtValue(int_dotternn, elm_value - eff_value)) {
@@ -756,10 +760,9 @@ function fakElemUpdate(elem) {
 function one2twoElem(elem, prefix_one, prefix_two) { // one related two elem
 	debugFA("one2twoElem", arguments)
 	try {
-		const elm_sheet = getElemSheet(elem)
 		const elm_item  = getElemItem(elem)
 		const rel_item  = one2twoItem(elm_item, prefix_one, prefix_two)
-		elem 			= getSheetItem(elm_sheet, rel_item)
+		elem 			= getElem(rel_item)
 	} finally {}
 	return elem
 }
@@ -778,6 +781,10 @@ function val2dxvElem(elem) { // val related dxv elem
 function val2chkElem(elem) { // val related chk elem
 	debugFA("val2chkElem", arguments)
 	return one2twoElem(elem, Str_PFXVAL, Str_PFXCHK)
+}
+function eff2valElem(elem) { // eff related val elem
+	debugFA("eff2valElem", arguments)
+	return one2twoElem(elem, Str_PFXEFF, Str_PFXVAL)
 }
 function chk2valElem(elem) { // chk related val elem
 	debugFA("chk2valElem", arguments)

@@ -26,11 +26,16 @@ const Infinity     = Number.MAX_SAFE_INTEGER
 //endregion
 
 //region LR_Constants Items Prefixes /!\ respect this convention for the code to work
+const Str_PFXROW = "Row_" // row item (container)
+const Str_PFXCOL = "Col_" // col item (container)
 const Str_PFXDXV = "DxV_" // dot and value item (container)
 const Str_PFXVAL = "Val_" // value item
-const Str_PFXDOT = "Dot_" // dot item
+const Str_PFXDOS = "Dos_" // dosted item
+const Str_PFXDOT = "Dot_" // dotted item
 const Str_PFXEFF = "Eff_" // effort item
 const Str_PFXMOD = "Mod_" // modifier item
+const Str_PFXMNS = "Mns_" // minus item
+const Str_PFXPLS = "Pls_" // plus item
 const Str_PFXREP = "Rep_" // repeater item
 const Str_PFXCHC = "Chc_" // choice item
 const Str_PFXCHK = "Chk_" // checkbox item (can also be a label/icon etc)
@@ -260,7 +265,9 @@ function setElemValue(elem, elm_value) {
 	elm_value = hasElemPlussigned(elem) // plussigned representation if any
 	&& ygtValue(elm_value, Int_Zero) ?
 		pfxValue(elm_value, Str_Plus) : elm_value
-	elem.value(elm_value)
+	if (! hasElemFakeupdated(elem)) { // avoid propagation dead loop
+		elem.value(elm_value)
+	}; remElemFakeupdated(elem)
 	setElemDotted(elem) // dotted representation if any
 	return elm_value
 }
@@ -480,7 +487,7 @@ function remElemCfk(elem, cfk) { // multiple cfk allowed in one string
 			remElemCss(val2dotElem(elem), css)
 		}
 	})
-	Object.keys(Key_CfkCss).forEach(function(cfk) { // restore any "broken" Cfk
+	Object.keys(Key_CFKCSS).forEach(function(cfk) { // restore any "broken" Cfk
 		if (hasElemCfk(elem, cfk)) {
 			addElemCfk(elem, cfk)
 		}
@@ -512,8 +519,7 @@ function getElemCfkThemeCss(elem, cfk) { // theme css if any
 	let result = Str_None
 	if (yesCfkTheme(cfk)) { // add the elem sheet theme if any
 		try { // skip error if any
-			const elm_sheet = getElemSheet(elem)
-			const prf_theme = getSheetThemePrf(elm_sheet)
+			const prf_theme = getSheetThemePrf()
 			result += Str_Space + prf_theme
 		} finally {}
 	}
@@ -561,10 +567,14 @@ const Key_CFKDOT    = { // relation between cfk_dottednn and arr_dotternn
 	Cfk_Dotted09 : Arr_Dotter09,
 	Cfk_Dotted10 : Arr_Dotter10,
 }
-const Str_DotEmpty  = ":ga_circle:"
-const Str_DotPlain  = ":ga_plain-circle:"
-const Str_DotInject = ":chevron-circle-down:"
-const Str_DotReject = ":chevron-circle-up:"
+const Str_DotEmpty     = ":ga_circle:"
+const Str_DotPlain     = ":ga_plain-circle:"
+const Str_DotIncrement = ":chevron-circle-right:"
+const Str_DotDecrement = ":chevron-circle-left:"
+const Str_DotInject    = ":chevron-circle-down:"
+const Str_DotReject    = ":chevron-circle-up:"
+const Str_DotPlus      = ":plus-circle:"
+const Str_DotMinus     = ":minus-circle:"
 //region LR_Elems Cfk Dotted Dotter/Checks
 function yesCfkDotted(cfk) { // if cfk is a dotted one
 	debugFA("yesCfkDotted", arguments)
@@ -607,7 +617,6 @@ function setElemDottedNN(elem, arr_dotternn) { // dottednn representation if any
 		setElemDottedNN(elem, arr_dotternn)
 	})} // single elem from here
 	if (notElemDotted(elem)) {return Not_Dotted} // no dotted representation
-	const elm_sheet = getElemSheet(elem)
 	const elm_value = getElemValue(elem)
 	const dot_elem  = val2dotElem(elem)
 	const dot_item  = getElemItem(dot_elem)
@@ -617,7 +626,7 @@ function setElemDottedNN(elem, arr_dotternn) { // dottednn representation if any
 	arr_dotternn.forEach(function(str_dotternn) {
 		const int_dotternn = Number(str_dotternn)
 		const dot_itemnn   = sfxValue(dot_item, str_dotternn)
-		const dot_elemnn   = getSheetItem(elm_sheet, dot_itemnn)
+		const dot_elemnn   = getElem(dot_itemnn)
 		if (ygtValue(int_dotternn, elm_value)) {
 			dot_elemnn.value(Str_DotEmpty)
 		} else if (ygtValue(int_dotternn, elm_value - eff_value)) {
@@ -899,10 +908,9 @@ function fakElemUpdate(elem) {
 function one2twoElem(elem, prefix_one, prefix_two) { // one related two elem
 	debugFA("one2twoElem", arguments)
 	try {
-		const elm_sheet = getElemSheet(elem)
 		const elm_item  = getElemItem(elem)
 		const rel_item  = one2twoItem(elm_item, prefix_one, prefix_two)
-		elem 			= getSheetItem(elm_sheet, rel_item)
+		elem 			= getElem(rel_item)
 	} finally {}
 	return elem
 }
@@ -921,6 +929,10 @@ function val2dxvElem(elem) { // val related dxv elem
 function val2chkElem(elem) { // val related chk elem
 	debugFA("val2chkElem", arguments)
 	return one2twoElem(elem, Str_PFXVAL, Str_PFXCHK)
+}
+function eff2valElem(elem) { // eff related val elem
+	debugFA("eff2valElem", arguments)
+	return one2twoElem(elem, Str_PFXEFF, Str_PFXVAL)
 }
 function chk2valElem(elem) { // chk related val elem
 	debugFA("chk2valElem", arguments)
@@ -1667,6 +1679,10 @@ function val2chkItem(item) { // val related chk item
 	debugFA("val2chkItem", arguments)
 	return one2twoItem(item, Str_PFXVAL, Str_PFXCHK)
 }
+function eff2valItem(item) { // eff related val item
+	debugFA("eff2valItem", arguments)
+	return one2twoItem(item, Str_PFXEFF, Str_PFXVAL)
+}
 function chk2valItem(item) { // chk related val item
 	debugFA("chk2valItem", arguments)
 	return one2twoItem(item, Str_PFXCHK, Str_PFXVAL)
@@ -1748,41 +1764,41 @@ function nawTheme(css_theme) { // if not theme allowed
 //endregion
 
 //region LR_Themes Sheet Themes
-function getSheetThemeOld(sheet) { // get previous sheet theme
+function getSheetThemeOld() { // get previous sheet theme
 	debugFA("getSheetThemeOld", arguments)
 	let result = Dft_THMDFT
 	try { // skip error when no sheet item
-		result = getElemValue(getSheetItem(sheet, REQ_THMOLD))
+		result = getElemValue(getElem(REQ_THMOLD))
 	} finally {}
 	result = yawTheme(result) ? // force to default allowed theme if any
 		result : Dft_THMDFT
 	return result
 }
-function setSheetThemeOld(sheet, css_theme) { // set previous sheet theme
+function setSheetThemeOld(css_theme) { // set previous sheet theme
 	debugFA("setSheetThemeOld", arguments)
 	css_theme = yawTheme(css_theme) ? // force to default allowed theme if any
 		css_theme : Dft_THMDFT
 	try { // skip error when no sheet item
-		setElemValue(getSheetItem(sheet, REQ_THMOLD), css_theme)
+		setElemValue(getElem(REQ_THMOLD), css_theme)
 	} finally {}
 	return css_theme
 }
-function getSheetThemePrf(sheet) { // get choosen sheet theme
+function getSheetThemePrf() { // get choosen sheet theme
 	debugFA("getSheetThemePrf", arguments)
 	let result = Dft_THMDFT
 	try { // skip error when no sheet item
-		result = getElemValue(getSheetItem(sheet, REQ_THMPRF))
+		result = getElemValue(getElem(REQ_THMPRF))
 	} finally {}
 	result = yawTheme(result) ? // force to default allowed theme if any
 		result : Dft_THMDFT
 	return result
 }
-function setSheetThemePrf(sheet, css_theme) { // set choosen sheet theme
+function setSheetThemePrf(css_theme) { // set choosen sheet theme
 	debugFA("setSheetThemePrf", arguments)
 	css_theme = yawTheme(css_theme) ? // force to default allowed theme if any
 		css_theme : Dft_THMDFT
 	try { // skip error when no sheet item
-		setElemValue(getSheetItem(sheet, REQ_THMPRF), css_theme)
+		setElemValue(getElem(REQ_THMPRF), css_theme)
 	} finally {}
 	return css_theme
 }

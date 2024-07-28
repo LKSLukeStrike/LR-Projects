@@ -25,11 +25,16 @@ const Infinity     = Number.MAX_SAFE_INTEGER
 //endregion
 
 //region LR_Constants Items Prefixes /!\ respect this convention for the code to work
+const Str_PFXROW = "Row_" // row item (container)
+const Str_PFXCOL = "Col_" // col item (container)
 const Str_PFXDXV = "DxV_" // dot and value item (container)
 const Str_PFXVAL = "Val_" // value item
-const Str_PFXDOT = "Dot_" // dot item
+const Str_PFXDOS = "Dos_" // dosted item
+const Str_PFXDOT = "Dot_" // dotted item
 const Str_PFXEFF = "Eff_" // effort item
 const Str_PFXMOD = "Mod_" // modifier item
+const Str_PFXMNS = "Mns_" // minus item
+const Str_PFXPLS = "Pls_" // plus item
 const Str_PFXREP = "Rep_" // repeater item
 const Str_PFXCHC = "Chc_" // choice item
 const Str_PFXCHK = "Chk_" // checkbox item (can also be a label/icon etc)

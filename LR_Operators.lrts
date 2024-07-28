@@ -307,6 +307,10 @@ function val2chkItem(item) { // val related chk item
 	debugFA("val2chkItem", arguments)
 	return one2twoItem(item, Str_PFXVAL, Str_PFXCHK)
 }
+function eff2valItem(item) { // eff related val item
+	debugFA("eff2valItem", arguments)
+	return one2twoItem(item, Str_PFXEFF, Str_PFXVAL)
+}
 function chk2valItem(item) { // chk related val item
 	debugFA("chk2valItem", arguments)
 	return one2twoItem(item, Str_PFXCHK, Str_PFXVAL)
