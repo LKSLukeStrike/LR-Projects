@@ -1,15 +1,5 @@
 //region LR_Items
 //whatis aka ids in LR
-//region LR_Items Elems
-function getElem(item, _view) { // returns a view item elem
-	debugFA("getElem", arguments)
-	const view = LR_Views.top()
-	try  {view = tryArg(_view)} finally {}
-
-	return view.get(item)
-}
-//endregion
-
 //region LR_Items Events
 function oncItemDo(item, do_fct, _view) {
 	debugFA("oncItemDo", arguments)

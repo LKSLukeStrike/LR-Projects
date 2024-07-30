@@ -1,5 +1,19 @@
 //region LR_Elems
 //whatis aka components in LR
+//region LR_Elems Getter
+function getElem(item, _view) { // returns a view item elem
+	debugFA("getElem", arguments)
+	const view = LR_Views.top()
+	try  {view = tryArg(_view)} finally {}
+
+	let result = null
+	try { // skip error when no item
+		result = view.get(item)
+	} finally {}
+	return result
+}
+//endregion
+
 //region LR_Elems Events
 const Evt_Click  = "click"
 const Evt_Update = "update"
@@ -270,6 +284,30 @@ function getElemCss(elem) {
 
 //region LR_Elems Cfk Classes
 const Cfk_Effort      = "Cfk_Effort"		// has an effort related item
+const Cfk_Modder      = "Cfk_Modder"		// has an modder related item
+const Cfk_Dotter      = "Cfk_Dotter"		// dotter prefix
+const Cfk_Dotter01    = "Cfk_Dotter01"		// use a dotter01
+const Cfk_Dotter02    = "Cfk_Dotter02"		// use a dotter02
+const Cfk_Dotter03    = "Cfk_Dotter03"		// use a dotter03
+const Cfk_Dotter04    = "Cfk_Dotter04"		// use a dotter04
+const Cfk_Dotter05    = "Cfk_Dotter05"		// use a dotter05
+const Cfk_Dotter06    = "Cfk_Dotter06"		// use a dotter06
+const Cfk_Dotter07    = "Cfk_Dotter07"		// use a dotter07
+const Cfk_Dotter08    = "Cfk_Dotter08"		// use a dotter08
+const Cfk_Dotter09    = "Cfk_Dotter09"		// use a dotter09
+const Cfk_Dotter10    = "Cfk_Dotter10"		// use a dotter10
+const Cfk_Dosted      = "Cfk_Dosted"		// has a dosted value representation
+const Cfk_Dosted01    = "Cfk_Dosted01"		// has a dosted01 value representation
+const Cfk_Dosted02    = "Cfk_Dosted02"		// has a dosted02 value representation
+const Cfk_Dosted03    = "Cfk_Dosted03"		// has a dosted03 value representation
+const Cfk_Dosted04    = "Cfk_Dosted04"		// has a dosted04 value representation
+const Cfk_Dosted05    = "Cfk_Dosted05"		// has a dosted05 value representation
+const Cfk_Dosted06    = "Cfk_Dosted06"		// has a dosted06 value representation
+const Cfk_Dosted07    = "Cfk_Dosted07"		// has a dosted07 value representation
+const Cfk_Dosted08    = "Cfk_Dosted08"		// has a dosted08 value representation
+const Cfk_Dosted09    = "Cfk_Dosted09"		// has a dosted09 value representation
+const Cfk_Dosted10    = "Cfk_Dosted10"		// has a dosted10 value representation
+const Cfk_Dotted      = "Cfk_Dotted"		// has a dotted value representation
 const Cfk_Dotted01    = "Cfk_Dotted01"		// has a dotted01 value representation
 const Cfk_Dotted02    = "Cfk_Dotted02"		// has a dotted02 value representation
 const Cfk_Dotted03    = "Cfk_Dotted03"		// has a dotted03 value representation
@@ -288,16 +326,40 @@ const Cfk_Selected    = "Cfk_Selected"		// allows only rej, inj
 const Cfk_Fakeupdated = "Cfk_Fakeupdated"	// avoid computations propagation
 const Key_CFKCSS      = { // relation between cfk and css /!\ space to separate
 	Cfk_Effort        : Cfk_Effort      ,
-	Cfk_Dotted01      : Cfk_Dotted01    ,
-	Cfk_Dotted02      : Cfk_Dotted02    ,
-	Cfk_Dotted03      : Cfk_Dotted03    ,
-	Cfk_Dotted04      : Cfk_Dotted04    ,
-	Cfk_Dotted05      : Cfk_Dotted05    ,
-	Cfk_Dotted06      : Cfk_Dotted06    ,
-	Cfk_Dotted07      : Cfk_Dotted07    ,
-	Cfk_Dotted08      : Cfk_Dotted08    ,
-	Cfk_Dotted09      : Cfk_Dotted09    ,
-	Cfk_Dotted10      : Cfk_Dotted10    ,
+	Cfk_Modder        : Cfk_Modder      ,
+	Cfk_Dotter        : Cfk_Dotter      ,
+	Cfk_Dotter01      : Cfk_Dotter01    ,
+	Cfk_Dotter02      : Cfk_Dotter02    ,
+	Cfk_Dotter03      : Cfk_Dotter03    ,
+	Cfk_Dotter04      : Cfk_Dotter04    ,
+	Cfk_Dotter05      : Cfk_Dotter05    ,
+	Cfk_Dotter06      : Cfk_Dotter06    ,
+	Cfk_Dotter07      : Cfk_Dotter07    ,
+	Cfk_Dotter08      : Cfk_Dotter08    ,
+	Cfk_Dotter09      : Cfk_Dotter09    ,
+	Cfk_Dotter10      : Cfk_Dotter10    ,
+	Cfk_Dosted        : Cfk_Dosted      ,
+	Cfk_Dosted01      : Cfk_Dosted      + Str_Space + Cfk_Dotter01,
+	Cfk_Dosted02      : Cfk_Dosted      + Str_Space + Cfk_Dotter02,
+	Cfk_Dosted03      : Cfk_Dosted      + Str_Space + Cfk_Dotter03,
+	Cfk_Dosted04      : Cfk_Dosted      + Str_Space + Cfk_Dotter04,
+	Cfk_Dosted05      : Cfk_Dosted      + Str_Space + Cfk_Dotter05,
+	Cfk_Dosted06      : Cfk_Dosted      + Str_Space + Cfk_Dotter06,
+	Cfk_Dosted07      : Cfk_Dosted      + Str_Space + Cfk_Dotter07,
+	Cfk_Dosted08      : Cfk_Dosted      + Str_Space + Cfk_Dotter08,
+	Cfk_Dosted09      : Cfk_Dosted      + Str_Space + Cfk_Dotter09,
+	Cfk_Dosted10      : Cfk_Dosted      + Str_Space + Cfk_Dotter10,
+	Cfk_Dotted        : Cfk_Dotted      ,
+	Cfk_Dotted01      : Cfk_Dotted      + Str_Space + Cfk_Dotter01,
+	Cfk_Dotted02      : Cfk_Dotted      + Str_Space + Cfk_Dotter02,
+	Cfk_Dotted03      : Cfk_Dotted      + Str_Space + Cfk_Dotter03,
+	Cfk_Dotted04      : Cfk_Dotted      + Str_Space + Cfk_Dotter04,
+	Cfk_Dotted05      : Cfk_Dotted      + Str_Space + Cfk_Dotter05,
+	Cfk_Dotted06      : Cfk_Dotted      + Str_Space + Cfk_Dotter06,
+	Cfk_Dotted07      : Cfk_Dotted      + Str_Space + Cfk_Dotter07,
+	Cfk_Dotted08      : Cfk_Dotted      + Str_Space + Cfk_Dotter08,
+	Cfk_Dotted09      : Cfk_Dotted      + Str_Space + Cfk_Dotter09,
+	Cfk_Dotted10      : Cfk_Dotted      + Str_Space + Cfk_Dotter10,
 	Cfk_Plussigned    : Cfk_Plussigned  ,
 	Cfk_Undisplayed   : Cfk_Undisplayed + Str_Space + Css_DNone,
 	Cfk_Clickable     : Cfk_Clickable   + Str_Space + Css_Clickable,
@@ -394,6 +456,21 @@ function hasElemEffort(elem) {
 }
 //endregion
 
+//region LR_Elems Cfk Modder
+function addElemModder(elem) {
+	debugFA("addElemModder", arguments)
+	return addElemCfk(elem, Cfk_Modder)			// normal operation
+}
+function remElemModder(elem) {
+	debugFA("remElemModder", arguments)
+	return remElemCfk(elem, Cfk_Modder)			// normal operation
+}
+function hasElemModder(elem) {
+	debugFA("hasElemModder", arguments)
+	return hasElemCfk(elem, Cfk_Modder)			// normal operation
+}
+//endregion
+
 //region LR_Elems Cfk Dotted // Fakeupdate
 const Yes_Dotted    = true
 const Not_Dotted    = false
@@ -430,7 +507,7 @@ const Str_DotMinus     = ":minus-circle:"
 //region LR_Elems Cfk Dotted Dotter/Checks
 function yesCfkDotted(cfk) { // if cfk is a dotted one
 	debugFA("yesCfkDotted", arguments)
-	return yaiValue(Arr_CFKTHM, cfk)
+	return ykiObject(Key_CFKDOT, cfk)
 }
 function notCfkDotted(cfk) { // if not cfk is a dotted one
 	debugFA("notCfkDotted", arguments)
@@ -469,22 +546,31 @@ function setElemDottedNN(elem, arr_dotternn) { // dottednn representation if any
 		setElemDottedNN(elem, arr_dotternn)
 	})} // single elem from here
 	if (notElemDotted(elem)) {return Not_Dotted} // no dotted representation
+
 	const elm_value = getElemValue(elem)
-	const dot_elem  = val2dotElem(elem)
-	const dot_item  = getElemItem(dot_elem)
-	const eff_elem  = val2effElem(elem)
 	const eff_value = hasElemEffort(elem) ? // effort representation if any
-		getElemValue(eff_elem) : Int_Zero
+		getElemValue(val2effElem(elem)) : Int_Zero
+	const mod_value = hasElemModder(elem) ? // modder representation if any
+		getElemValue(val2modElem(elem)) : Int_Zero
+	const dos_elem  = val2dosElem(elem)
+	const dot_elem  = val2dotElem(elem)
+
 	arr_dotternn.forEach(function(str_dotternn) {
 		const int_dotternn = Number(str_dotternn)
-		const dot_itemnn   = sfxValue(dot_item, str_dotternn)
-		const dot_elemnn   = getElem(dot_itemnn)
+		// compute the dot representation // TODO add modder
 		if (ygtValue(int_dotternn, elm_value)) {
-			dot_elemnn.value(Str_DotEmpty)
+			const dot_value = Str_DotEmpty
 		} else if (ygtValue(int_dotternn, elm_value - eff_value)) {
-			dot_elemnn.value(Str_DotInject)
+			const dot_value = Str_DotInject
 		} else {
-			dot_elemnn.value(Str_DotPlain)
+			const dot_value = Str_DotPlain
+		}
+		// apply to dotted item if any
+		if (dot_elem) {
+			const dot_item   = getElemItem(dot_elem)
+			const dot_itemnn = sfxValue(dot_item, str_dotternn)
+			const dot_elemnn = getElem(dot_itemnn)
+			dot_elemnn.value(dot_value)
 		}
 	})
 	return Yes_Dotted
@@ -759,12 +845,21 @@ function fakElemUpdate(elem) {
 //region LR_Elems Related
 function one2twoElem(elem, prefix_one, prefix_two) { // one related two elem
 	debugFA("one2twoElem", arguments)
+	const result = null
 	try {
 		const elm_item  = getElemItem(elem)
 		const rel_item  = one2twoItem(elm_item, prefix_one, prefix_two)
-		elem 			= getElem(rel_item)
+		result 			= getElem(rel_item)
 	} finally {}
-	return elem
+	return result
+}
+function val2dxvElem(elem) { // val related dxv elem
+	debugFA("val2dxvElem", arguments)
+	return one2twoElem(elem, Str_PFXVAL, Str_PFXDXV)
+}
+function val2dosElem(elem) { // val related dos elem
+	debugFA("val2dosElem", arguments)
+	return one2twoElem(elem, Str_PFXVAL, Str_PFXDOS)
 }
 function val2dotElem(elem) { // val related dot elem
 	debugFA("val2dotElem", arguments)
@@ -774,9 +869,9 @@ function val2effElem(elem) { // val related eff elem
 	debugFA("val2effElem", arguments)
 	return one2twoElem(elem, Str_PFXVAL, Str_PFXEFF)
 }
-function val2dxvElem(elem) { // val related dxv elem
-	debugFA("val2dxvElem", arguments)
-	return one2twoElem(elem, Str_PFXVAL, Str_PFXDXV)
+function val2modElem(elem) { // val related mod elem
+	debugFA("val2modElem", arguments)
+	return one2twoElem(elem, Str_PFXVAL, Str_PFXMOD)
 }
 function val2chkElem(elem) { // val related chk elem
 	debugFA("val2chkElem", arguments)

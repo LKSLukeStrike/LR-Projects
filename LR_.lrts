@@ -33,7 +33,7 @@ const Str_PFXVAL = "Val_" // value item
 const Str_PFXDOS = "Dos_" // dosted item
 const Str_PFXDOT = "Dot_" // dotted item
 const Str_PFXEFF = "Eff_" // effort item
-const Str_PFXMOD = "Mod_" // modifier item
+const Str_PFXMOD = "Mod_" // modder item
 const Str_PFXMNS = "Mns_" // minus item
 const Str_PFXPLS = "Pls_" // plus item
 const Str_PFXREP = "Rep_" // repeater item
@@ -148,6 +148,20 @@ function debugFAOK(fct_name, _yes_debugfa) { // use: debugFAOK("myFunction")
 
 //region LR_Elems
 //whatis aka components in LR
+//region LR_Elems Getter
+function getElem(item, _view) { // returns a view item elem
+	debugFA("getElem", arguments)
+	const view = LR_Views.top()
+	try  {view = tryArg(_view)} finally {}
+
+	let result = null
+	try { // skip error when no item
+		result = view.get(item)
+	} finally {}
+	return result
+}
+//endregion
+
 //region LR_Elems Events
 const Evt_Click  = "click"
 const Evt_Update = "update"
@@ -418,6 +432,7 @@ function getElemCss(elem) {
 
 //region LR_Elems Cfk Classes
 const Cfk_Effort      = "Cfk_Effort"		// has an effort related item
+const Cfk_Modder      = "Cfk_Modder"		// has an modder related item
 const Cfk_Dotted01    = "Cfk_Dotted01"		// has a dotted01 value representation
 const Cfk_Dotted02    = "Cfk_Dotted02"		// has a dotted02 value representation
 const Cfk_Dotted03    = "Cfk_Dotted03"		// has a dotted03 value representation
@@ -436,6 +451,7 @@ const Cfk_Selected    = "Cfk_Selected"		// allows only rej, inj
 const Cfk_Fakeupdated = "Cfk_Fakeupdated"	// avoid computations propagation
 const Key_CFKCSS      = { // relation between cfk and css /!\ space to separate
 	Cfk_Effort        : Cfk_Effort      ,
+	Cfk_Modder        : Cfk_Modder      ,
 	Cfk_Dotted01      : Cfk_Dotted01    ,
 	Cfk_Dotted02      : Cfk_Dotted02    ,
 	Cfk_Dotted03      : Cfk_Dotted03    ,
@@ -542,6 +558,21 @@ function hasElemEffort(elem) {
 }
 //endregion
 
+//region LR_Elems Cfk Modder
+function addElemModder(elem) {
+	debugFA("addElemModder", arguments)
+	return addElemCfk(elem, Cfk_Modder)			// normal operation
+}
+function remElemModder(elem) {
+	debugFA("remElemModder", arguments)
+	return remElemCfk(elem, Cfk_Modder)			// normal operation
+}
+function hasElemModder(elem) {
+	debugFA("hasElemModder", arguments)
+	return hasElemCfk(elem, Cfk_Modder)			// normal operation
+}
+//endregion
+
 //region LR_Elems Cfk Dotted // Fakeupdate
 const Yes_Dotted    = true
 const Not_Dotted    = false
@@ -578,7 +609,7 @@ const Str_DotMinus     = ":minus-circle:"
 //region LR_Elems Cfk Dotted Dotter/Checks
 function yesCfkDotted(cfk) { // if cfk is a dotted one
 	debugFA("yesCfkDotted", arguments)
-	return yaiValue(Arr_CFKTHM, cfk)
+	return ykiObject(Key_CFKDOT, cfk)
 }
 function notCfkDotted(cfk) { // if not cfk is a dotted one
 	debugFA("notCfkDotted", arguments)
@@ -617,22 +648,33 @@ function setElemDottedNN(elem, arr_dotternn) { // dottednn representation if any
 		setElemDottedNN(elem, arr_dotternn)
 	})} // single elem from here
 	if (notElemDotted(elem)) {return Not_Dotted} // no dotted representation
+
 	const elm_value = getElemValue(elem)
+	const dos_elem  = val2dosElem(elem)
 	const dot_elem  = val2dotElem(elem)
-	const dot_item  = getElemItem(dot_elem)
 	const eff_elem  = val2effElem(elem)
 	const eff_value = hasElemEffort(elem) ? // effort representation if any
 		getElemValue(eff_elem) : Int_Zero
+	const mod_elem  = val2modElem(elem)
+	const mod_value = hasElemModder(elem) ? // modder representation if any
+		getElemValue(mod_elem) : Int_Zero
+
 	arr_dotternn.forEach(function(str_dotternn) {
 		const int_dotternn = Number(str_dotternn)
-		const dot_itemnn   = sfxValue(dot_item, str_dotternn)
-		const dot_elemnn   = getElem(dot_itemnn)
+		// compute the dot representation // TODO add modder
 		if (ygtValue(int_dotternn, elm_value)) {
-			dot_elemnn.value(Str_DotEmpty)
+			const dot_value = Str_DotEmpty
 		} else if (ygtValue(int_dotternn, elm_value - eff_value)) {
-			dot_elemnn.value(Str_DotInject)
+			const dot_value = Str_DotInject
 		} else {
-			dot_elemnn.value(Str_DotPlain)
+			const dot_value = Str_DotPlain
+		}
+		// apply to dotted item if any
+		if (dot_elem) {
+			const dot_item   = getElemItem(dot_elem)
+			const dot_itemnn = sfxValue(dot_item, str_dotternn)
+			const dot_elemnn = getElem(dot_itemnn)
+			dot_elemnn.value(dot_value)
 		}
 	})
 	return Yes_Dotted
@@ -907,12 +949,21 @@ function fakElemUpdate(elem) {
 //region LR_Elems Related
 function one2twoElem(elem, prefix_one, prefix_two) { // one related two elem
 	debugFA("one2twoElem", arguments)
+	const result = null
 	try {
 		const elm_item  = getElemItem(elem)
 		const rel_item  = one2twoItem(elm_item, prefix_one, prefix_two)
-		elem 			= getElem(rel_item)
+		result 			= getElem(rel_item)
 	} finally {}
-	return elem
+	return result
+}
+function val2dxvElem(elem) { // val related dxv elem
+	debugFA("val2dxvElem", arguments)
+	return one2twoElem(elem, Str_PFXVAL, Str_PFXDXV)
+}
+function val2dosElem(elem) { // val related dos elem
+	debugFA("val2dosElem", arguments)
+	return one2twoElem(elem, Str_PFXVAL, Str_PFXDOS)
 }
 function val2dotElem(elem) { // val related dot elem
 	debugFA("val2dotElem", arguments)
@@ -922,9 +973,9 @@ function val2effElem(elem) { // val related eff elem
 	debugFA("val2effElem", arguments)
 	return one2twoElem(elem, Str_PFXVAL, Str_PFXEFF)
 }
-function val2dxvElem(elem) { // val related dxv elem
-	debugFA("val2dxvElem", arguments)
-	return one2twoElem(elem, Str_PFXVAL, Str_PFXDXV)
+function val2modElem(elem) { // val related mod elem
+	debugFA("val2modElem", arguments)
+	return one2twoElem(elem, Str_PFXVAL, Str_PFXMOD)
 }
 function val2chkElem(elem) { // val related chk elem
 	debugFA("val2chkElem", arguments)
@@ -970,16 +1021,6 @@ function rptElemDoIf(elem, _do_fct, _if_fct) { // apply fct on repeater if true
 
 //region LR_Items
 //whatis aka ids in LR
-//region LR_Items Elems
-function getElem(item, _view) { // returns a view item elem
-	debugFA("getElem", arguments)
-	const view = LR_Views.top()
-	try  {view = tryArg(_view)} finally {}
-
-	return view.get(item)
-}
-//endregion
-
 //region LR_Items Events
 function oncItemDo(item, do_fct, _view) {
 	debugFA("oncItemDo", arguments)
