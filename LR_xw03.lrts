@@ -1,8 +1,0 @@
-function ykiObject(obj, key) { // if object includes key
-	debugFA("ykiObject", arguments)
-	return obj.hasOwnProperty(key)
-}
-function nkiObject(obj, key) { // if not object includes key
-	debugFA("nkiObject", arguments)
-	return ! ykiObject(obj, key)
-}
