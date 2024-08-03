@@ -1686,6 +1686,12 @@ function fakItemUpdate(item, _view) {
 //endregion
 
 //region LR_Operators
+const Yes_Number = true
+const Not_Number = false
+const Dft_Number = Not_Number
+const Yes_FromLC = true
+const Not_FromLC = false
+const Dft_FromLC = Not_FromLC
 //region LR_Operators Random
 function rndValue(value_min, value_max) { // random value (integer, inclusive)
 	debugFA("rndValue", arguments)
@@ -1696,15 +1702,53 @@ function rndValue(value_min, value_max) { // random value (integer, inclusive)
 //endregion
 
 //region LR_Operators Min/Max
-function minValue(value_one, value_two) { // minimum value
+function minValue(value_one, value_two, _yes_number) { // minimum value
 	debugFA("minValue", arguments)
+	const yes_number = Dft_Number
+	try  {yes_number = tryArg(_yes_number)}	finally {}
+	value_one = yes_number ?
+		Number(value_one) : value_one
+	value_two = yes_number ?
+		Number(value_two) : value_two
+
 	return value_one < value_two ?
 		value_one : value_two
 }
-function maxValue(value_one, value_two) { // maximum value
+function maxValue(value_one, value_two, _yes_number) { // maximum value
 	debugFA("maxValue", arguments)
+	const yes_number = Dft_Number
+	try  {yes_number = tryArg(_yes_number)}	finally {}
+	value_one = yes_number ?
+		Number(value_one) : value_one
+	value_two = yes_number ?
+		Number(value_two) : value_two
+
 	return value_one > value_two ?
 		value_one : value_two
+}
+function mnaValue(arr_value, _yes_number) { // minimum value in an array
+	debugFA("mnaValue", arguments)
+	const yes_number = Dft_Number
+	try  {yes_number = tryArg(_yes_number)}	finally {}
+	
+	let result = null
+	arr_value.forEach(function(value_one) {
+		result = result ?
+			minValue(value_one, result, yes_number) : value_one
+	})
+	return result
+}
+function mxaValue(arr_value, _yes_number) { // maximum value in an array
+	debugFA("mxaValue", arguments)
+	const yes_number = Dft_Number
+	try  {yes_number = tryArg(_yes_number)}	finally {}
+	
+	let result = null
+	arr_value.forEach(function(value_one) {
+		result = result ?
+			maxValue(value_one, result, yes_number) : value_one
+	})
+	return result
 }
 //endregion
 
@@ -1867,9 +1911,6 @@ function dqmValue(value_one) { // double quotes
 //endregion
 
 //region LR_Operators Cases
-const Yes_FromLC        = true
-const Not_FromLC        = false
-const Dft_FromLC        = Not_FromLC
 function lcaValue(value_one) { // lower case all
 	debugFA("lcaValue", arguments)
 	return value_one.toLowerCase()
@@ -2243,8 +2284,8 @@ const Lbl_ROLSUC_ = "Lbl_ROLSUC_"
 const Lbl_ROLFAI_ = "Lbl_ROLFAI_"
 
 const Row_SCO     = "Row_SCO"
-const Val_SCOACT = "Val_SCOACT"
-const Val_SCOROL = "Val_SCOROL"
+const Val_SCOACT  = "Val_SCOACT"
+const Val_SCOROL  = "Val_SCOROL"
 
 const Prf_DXVPRF  = "Prf_DXVPRF"
 
@@ -2277,7 +2318,10 @@ const Val_SUCFAI  = "Val_SUCFAI"
 const Row_SUCFAI  = "Row_SUCFAI"
 const Set_DXVPRF  = "Set_DXVPRF"
 const Get_DXVPRF  = "Get_DXVPRF"
-const Val_CMASEL = "Val_CMASEL"
+const Val_CMASEL  = "Val_CMASEL"
+
+const Row_POP     = "Row_POP"
+const Rep_POP     = "Rep_POP"
 	
 function setRESULT(str_result) {
 	return setItemValue(Val_RESULT, str_result)
@@ -2353,43 +2397,24 @@ const initMainSheet = function(sheet) {
 	debug("start")
 	// debugSheet()
 	// log(String(10).padStart(1, "0"))
-	// return
+	log(getItemValue(Rep_PER))
+	setItemValue(Rep_PER, Obj_None)
+	setRep_PER()
+	log(getItemValue(Rep_PER))
+	log(gokObject(getItemValue(Rep_PER)))
+	log(mnaValue(gokObject(getItemValue(Rep_PER)), Yes_Number))
+	log(mxaValue(gokObject(getItemValue(Rep_PER)), Yes_Number))
+	const obj_value = getItemValue(Rep_PER)
+	const new_key = mxaValue(gokObject(obj_value), Yes_Number) + 1
+	const new_val = {
+		Val_HOPITM : "Psychorigide"
+	}
+	addObject(obj_value, new_key, new_val)
+	setItemValue(Rep_PER, obj_value)
+	log(getItemValue(Rep_PER))
+	// log(getItemValue(Rep_POP))
+	return
 
-	// function argTest(_arg1, _arg2, _arg3) {
-		// try {tryArg(_arg1)} catch(e) {_arg1 = "Hello"}
-		// try {tryArg(_arg2)} catch(e) {_arg2 = "World"}
-		// try {tryArg(_arg3)} catch(e) {_arg3 = "!"}
-		// log(_arg1 + " " + _arg2 + " " + _arg3)
-	// }
-	// argTest()
-	// argTest("John")	
-	// argTest("Bonjour")
-	// argTest("Bonjour", "Le Monde")	
-	// argTest(null, "Allan")	
-	// argTest(undefined, "Willy")	
-	// argTest("A", "B", "C")	
-	// argTest(undefined, "B", "C")	
-	// argTest("A", undefined, "C")	
-	// argTest("A", "B", undefined)
-	// tryArg()
-	
-	// log(gaiValue())
-	// log(gaiValue(undefined, Int_Zero))
-	// log(gaiValue(undefined, 10))
-	// log(gaiValue(undefined, 10, Int_MOne))
-	// log(gaiValue(Int_POne, 10))
-	// log(gaiValue(undefined, 10, 20))
-	
-	// debug(cpoValue("   this is     THE way   "))
-	// debug(cpoValue("   THIS is     THE way   "))
-	// debug(cpoValue("   THIS is     THE way   ", Yes_FromLC))
-	// debug(cpaValue("   this is     THE way   "))
-	// debug(cpaValue("   THIS is     THE way   "))
-	// debug(cpaValue("   THIS is     THE way   ", Yes_FromLC))
-	// debug(tynValue(0))
-	// debug(tynValue(1))
-	// debug(tynValue(false))
-	// debug(tynValue(true))
 	
 	// setItemValue(Val_HIS, Int_Zero)
 	setItemValue(Val_HIS, 1000)
@@ -2482,16 +2507,17 @@ const initMainSheet = function(sheet) {
 
 	
 	function setRep_PER() {
-		const rep_value = {
-			"1": {
-				Val_HOPITM: "boiteux",
+		const dft_value = {
+			1: {
+				Val_HOPITM: "borgne",
 			},
-			"2": {
-				Val_HOPITM: "génie",
+			2: {
+				Val_HOPITM: "rusé",
 			},
 		}
-		if (! getItemValue(Rep_PER)) {
-			setItemValue(Rep_PER, rep_value)
+		const rep_value = getItemValue(Rep_PER)
+		if (! rep_value || yonValue(rep_value)) {
+			setItemValue(Rep_PER, dft_value)
 		}
 		return getItemValue(Rep_PER)
 	}

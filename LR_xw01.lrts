@@ -1,1 +1,24 @@
-:ga_plain-circle::ga_plain-circle: 
+function mnaValue(arr_value, _yes_number) { // minimum value in an array
+	debugFA("mnaValue", arguments)
+	const yes_number = Dft_Number
+	try  {yes_number = tryArg(_yes_number)}	finally {}
+	
+	let result = null
+	arr_value.forEach(function(value_one) {
+		result = result ?
+			minValue(value_one, result, yes_number) : value_one
+	})
+	return result
+}
+function mxaValue(arr_value, _yes_number) { // maximum value in an array
+	debugFA("mxaValue", arguments)
+	const yes_number = Dft_Number
+	try  {yes_number = tryArg(_yes_number)}	finally {}
+	
+	let result = null
+	arr_value.forEach(function(value_one) {
+		result = result ?
+			maxValue(value_one, result, yes_number) : value_one
+	})
+	return result
+}
