@@ -1,15 +1,24 @@
 //region LR_Elems
 //whatis aka components in LR
 //region LR_Elems Getter
-function getElem(item, _view) { // returns a view item elem
+function getElem(item, _view) { // returns elem/s of a view item/s (single/array)
 	debugFA("getElem", arguments)
 	const view = LR_Views.top()
 	try  {view = tryArg(_view)} finally {}
 
 	let result = null
-	try { // skip error when no item
-		result = view.get(item)
-	} finally {}
+	if (notArray(item)) { // single elem
+		try { // skip error when no item
+			result = view.get(item)
+		} finally {}
+	} else { // array of elems
+		result = []
+		item.flat(Infinity).forEach(function(item) {
+			try { // skip error when no item
+				result.push(view.get(item))
+			} finally {}
+		})
+	}
 	return result
 }
 //endregion

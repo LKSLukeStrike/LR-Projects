@@ -149,15 +149,24 @@ function debugFAOK(fct_name, _yes_debugfa) { // use: debugFAOK("myFunction")
 //region LR_Elems
 //whatis aka components in LR
 //region LR_Elems Getter
-function getElem(item, _view) { // returns a view item elem
+function getElem(item, _view) { // returns elem/s of a view item/s (single/array)
 	debugFA("getElem", arguments)
 	const view = LR_Views.top()
 	try  {view = tryArg(_view)} finally {}
 
 	let result = null
-	try { // skip error when no item
-		result = view.get(item)
-	} finally {}
+	if (notArray(item)) { // single elem
+		try { // skip error when no item
+			result = view.get(item)
+		} finally {}
+	} else { // array of elems
+		result = []
+		item.flat(Infinity).forEach(function(item) {
+			try { // skip error when no item
+				result.push(view.get(item))
+			} finally {}
+		})
+	}
 	return result
 }
 //endregion
@@ -2395,6 +2404,24 @@ const initMainSheet = function(sheet) {
 	// setRESULT(strThing(Key_TEST, Yes_Indent))
 
 	debug("start")
+	const arr_items = [
+		Val_HIS,
+		[
+			Val_SCOACT,
+			Val_SCOROL,
+		],
+	]
+	
+	addFA("getElem")
+	log(getElem("sss"))
+	log(getElem(Val_DOT))
+	log(strThing(getElem(Val_DOT), Yes_Indent))
+	log(getElem(Arr_None))
+	log(strThing(getElem(Arr_None), Yes_Indent))
+	log(getElem(arr_items))
+	log(strThing(getElem(arr_items), Yes_Indent))
+	setItemValue(arr_items, 5)
+	return
 	// debugSheet()
 	// log(String(10).padStart(1, "0"))
 	log(getItemValue(Rep_PER))

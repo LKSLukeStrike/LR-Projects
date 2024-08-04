@@ -1,5 +1,2 @@
-recursive items/elems (getElem ?)
-
-elems >
-themes >
-
+DONE
+add getElem allows array of items
