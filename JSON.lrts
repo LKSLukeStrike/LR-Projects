@@ -2313,7 +2313,6 @@ const Clk_HOP     = "Clk_HOP"
 const Rep_HIS     = "Rep_HIS"
 const Val_HIS     = "Val_HIS"
 const Rep_OBJ     = "Rep_OBJ"
-const Rep_PER     = "Rep_PER"
 const Chk_PHYCHK  = "Chk_PHYCHK"
 const Val_PHYCHK  = "Val_PHYCHK"
 const Val_OBJITM  = "Val_OBJITM"
@@ -2328,6 +2327,8 @@ const Row_SUCFAI  = "Row_SUCFAI"
 const Set_DXVPRF  = "Set_DXVPRF"
 const Get_DXVPRF  = "Get_DXVPRF"
 const Val_CMASEL  = "Val_CMASEL"
+
+const Rep_PER     = "Rep_PER"
 
 const Row_POP     = "Row_POP"
 const Rep_POP     = "Rep_POP"
@@ -2413,15 +2414,17 @@ const initMainSheet = function(sheet) {
 	]
 	
 	addFA("getElem")
-	log(getElem("sss"))
-	log(getElem(Val_DOT))
-	log(strThing(getElem(Val_DOT), Yes_Indent))
-	log(getElem(Arr_None))
-	log(strThing(getElem(Arr_None), Yes_Indent))
-	log(getElem(arr_items))
-	log(strThing(getElem(arr_items), Yes_Indent))
-	setItemValue(arr_items, 5)
+	// log(getElem("sss"))
+	// log(getElem(Val_DOT))
+	// log(strThing(getElem(Val_DOT), Yes_Indent))
+	// log(getElem(Arr_None))
+	// log(strThing(getElem(Arr_None), Yes_Indent))
+	// log(getElem(arr_items))
+	// log(strThing(getElem(arr_items), Yes_Indent))
+	// setItemValue(arr_items, 5)
+	log(strThing(getItemValue(Rep_PER), Yes_Indent, undefined, Str_Space))
 	return
+	
 	// debugSheet()
 	// log(String(10).padStart(1, "0"))
 	log(getItemValue(Rep_PER))

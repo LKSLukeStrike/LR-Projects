@@ -1,0 +1,26 @@
+TODO
+- checkbox "MJ" pour les jets de dés (visibilité)
+- suppression dans la création d'une nouvelle caractéristique:
+de min et de max (ces valeurs sont déduites automatiquement en fct du type de jets de dés, ex 2d6 => max 12)
+- atout sous la carac a priori par défaut donc soit 1) option supprimée ou 2) cochée par défaut
+
+- plus de place ou entrées avec repeater pour les notes
+
+- idem (avec préférence pour entrées de repeater) pour l'inventaire
+
+- plus de tooltips sur les champs/boutons pour indiquer leur utilité
+
+- remplacer ce vilain "cat. social." par "Rang" ou "Rang Social" 😉
+
+- contrairment à ce que je proposais hier au lieu d'avoir une fiche qui arrive avec Physique, Mental, Social, Chance et 1d6 puis un bouton "Clean" ça pourrait partir comme actuellement vide mais avec un bouton/menu "Presets" qui remplirait donc les attributs etc avec le préset choisi
+
+- dans les atouts je ne vois pas à quoi correspond "énergie" donc je mettrais simplement "Coût" (de pts d'atout)
+
+- arf on en avait parlé hier mais aussi une case a cocher si la spécialisation s'applique comme "Forêt" (en gros +1 au score quoi)
+
+PLUS
+- lancé de dés au mj
+- tenir compte des talents (parser les caracs)
+
+DONE
+- et il y a ce problème de double ascenseur
