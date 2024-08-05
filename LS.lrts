@@ -1,20 +1,64 @@
-init =function(sheet){
-    if(sheet.id()==="main"){
+//region LR_ (LR Library)
+//region LR_Elems (LR Components)
+//region LR_Elems Getter
+function getElem(sheet, item) { // return a sheet item elem
+	return sheet.get(item)
+}
+//endregion
+
+//region LR_Elems Tooltips
+function setElemTooltip(elem, str_tooltip) { // set an elem tooltip
+	return elem.setToolTip(str_tooltip)
+}
+//endregion
+//endregion
+//endregion
+
+
+//region LS_ (LS Library)
+//region LS_Constants
+//region LS_Constants Sheets
+const Sht_Character = "main" // character sheet
+//endregion
+
+//region LS_Constants Items (IDs)
+const Ckt_Talent     = "Ckt_Talent" // tooltip
+const Ckb_Talent     = "Ckb_Talent" // checkbox
+const Ckt_Activity   = "Ckt_Activity" // tooltip
+const Ckb_Activity   = "Ckb_Activity" // checkbox
+const Ckt_SocialRank = "Ckt_SocialRank" // tooltip
+const Ckb_SocialRank = "Chk_SocialRank" // checkbox
+//endregion
+
+//region LS_Constants Tooltips
+const Tip_Apply = "Appliquer"
+//endregion
+//endregion
+//endregion
+
+
+
+init = function(sheet){
+    if (sheet.id() === Sht_Character) {
+        initTooltips(sheet);
         setName(sheet);
         switchSide(sheet);
         launchBtn(sheet);
         options(sheet);
         toggleEdit(sheet);
-        toolTips(sheet);
     }
 }
-const toolTips = function(sheet){
-    sheet.get("pvField").setToolTip("Points de Vie")
+
+function initTooltips(sheet) {
+	setElemTooltip(getElem(sheet, Ckt_Activity), Tip_Apply)
+	setElemTooltip(getElem(sheet, Ckt_SocialRank), Tip_Apply)
+	sheet.get("pvField").setToolTip("Points de Vie")
     sheet.get("narrationPoint").setToolTip("Point de Narration")
     sheet.get("switchSideSheet").setToolTip("Changer de face de fiche de perso")
     sheet.get("lockEdit").setToolTip("Verrouille les stats")
     sheet.get("unlockEdit").setToolTip("Déverrouille les stats")
 }
+
 const switchSide = function(sheet){
     sheet.get("switchSideSheet").on("click",function(){
         if(sheet.get("idIcone").hasClass("text-dark")){
