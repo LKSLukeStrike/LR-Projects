@@ -25,10 +25,11 @@ const Infinity     = Number.MAX_SAFE_INTEGER
 //endregion
 
 //region LR_Constants Items Prefixes /!\ respect this convention for the code to work
-const Str_PFXROW = "Row_" // row item (container)
-const Str_PFXCOL = "Col_" // col item (container)
-const Str_PFXDXV = "DxV_" // dot and value item (container)
+const Str_PFXROW = "Row_" // row item
+const Str_PFXCOL = "Col_" // column item
+const Str_PFXCNT = "Cnt_" // container item
 const Str_PFXVAL = "Val_" // value item
+const Str_PFXDXV = "DxV_" // dot and value item (container)
 const Str_PFXDOS = "Dos_" // dosted item
 const Str_PFXDOT = "Dot_" // dotted item
 const Str_PFXEFF = "Eff_" // effort item
@@ -37,8 +38,12 @@ const Str_PFXMNS = "Mns_" // minus item
 const Str_PFXPLS = "Pls_" // plus item
 const Str_PFXREP = "Rep_" // repeater item
 const Str_PFXCHC = "Chc_" // choice item
-const Str_PFXCHK = "Chk_" // checkbox item (can also be a label/icon etc)
-const Str_PFXFLD = "Fld_" // foldering item (can also be a label/icon etc)
+const Str_PFXCHK = "Chk_" // checkbox item
+const Str_PFXCKB = "Ckb_" // checkbox item
+const Str_PFXCKT = "Ckt_" // checkbox tooltip (container)
+const Str_PFXFLD = "Fld_" // foldering item
+const Str_PFXTAB = "Tab_" // tab item
+const Str_PFXPRF = "Prf_" // preference item
 //endregion
 
 //region LR_Constants DxV Display Modes

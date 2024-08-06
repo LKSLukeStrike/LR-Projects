@@ -1,8 +1,77 @@
 //region LR_ (LR Library)
+//region LR_Constants
+//region LR_Constants Values
+const Int_Zero     = 0
+const Int_POne     = +1
+const Int_MOne     = -1
+const Str_Zero     = "0"
+const Str_None     = ""
+const Arr_None     = []
+const Obj_None     = {}
+const Str_Space    = " "
+const Str_Tab      = "\t"
+const Str_Newline  = "\n"
+const Str_SQMark   = "'"
+const Str_DQMark   = '"'
+const Str_OObject  = "{"
+const Str_CObject  = "}"
+const Str_OArray   = "["
+const Str_CArray   = "]"
+const Str_Comma    = ","
+const Str_SDot     = "."
+const Str_DDot     = ":"
+const Str_Plus     = "+"
+const Str_Minus    = "-"
+const Infinity     = Number.MAX_SAFE_INTEGER
+//endregion
+
+//region LR_Constants Items Prefixes /!\ respect this convention for the code to work
+const Str_PFXROW = "Row_" // row item
+const Str_PFXCOL = "Col_" // column item
+const Str_PFXCNT = "Cnt_" // container item
+const Str_PFXVAL = "Val_" // value item
+const Str_PFXDXV = "DxV_" // dot and value item (container)
+const Str_PFXDOS = "Dos_" // dosted item
+const Str_PFXDOT = "Dot_" // dotted item
+const Str_PFXEFF = "Eff_" // effort item
+const Str_PFXMOD = "Mod_" // modder item
+const Str_PFXMNS = "Mns_" // minus item
+const Str_PFXPLS = "Pls_" // plus item
+const Str_PFXREP = "Rep_" // repeater item
+const Str_PFXCHC = "Chc_" // choice item
+const Str_PFXCHK = "Chk_" // checkbox item
+const Str_PFXCKB = "Ckb_" // checkbox item
+const Str_PFXCKT = "Ckt_" // checkbox tooltip (container)
+const Str_PFXFLD = "Fld_" // foldering item
+const Str_PFXTAB = "Tab_" // tab item
+const Str_PFXPRF = "Prf_" // preference item
+//endregion
+//endregion
+
 //region LR_Elems (LR Components)
 //region LR_Elems Getter
-function getElem(sheet, item) { // return a sheet item elem
+function getElem(sheet, item) { // elem of a sheet item
 	return sheet.get(item)
+}
+//endregion
+
+//region LR_Elems Attributes
+function getElemItem(elem) { // item is the id (aliases)
+	return elem.id()
+}
+//endregion
+
+//region LR_Elems Events
+const Evt_Click  = "click"
+const Evt_Update = "update"
+function oneElemDo(elem, evt, do_fct) { // on event
+	return elem.on(evt, do_fct)
+}
+function oncElemDo(elem, do_fct) { // on click
+	return oneElemDo(elem, Evt_Click, do_fct)
+}
+function onuElemDo(elem, do_fct) { // on update
+	return oneElemDo(elem, Evt_Update, do_fct)
 }
 //endregion
 
@@ -11,6 +80,36 @@ function setElemTooltip(elem, str_tooltip) { // set an elem tooltip
 	return elem.setToolTip(str_tooltip)
 }
 //endregion
+
+//region LR_Elems Css Classes
+const Css_DNone			  = "d-none"
+
+function addElemCss(elem, css) { // multiple css allowed in one string
+	css.split(Str_Space).forEach(function(css) {
+		elem.addClass(css)
+	})
+	return css
+}
+function remElemCss(elem, css) { // multiple css allowed in one string
+	css.split(Str_Space).forEach(function(css) {
+		elem.removeClass(css)
+	})
+	return css
+}
+function hasElemCss(elem, css) { // multiple css allowed in one string
+	let result = true
+	css.split(Str_Space).forEach(function(css) { // every css has to be present
+		if (! elem.hasClass(css)) {result = false}
+	})
+	return result
+}
+//endregion
+//endregion
+
+//region LR_Operators Replace
+function rsoValue(str_value, value_one, value_two) { // replace a string once
+	return str_value.replace(value_one, value_two)
+}
 //endregion
 //endregion
 
@@ -22,42 +121,116 @@ const Sht_Character = "main" // character sheet
 //endregion
 
 //region LS_Constants Items (IDs)
-const Ckt_Talent     = "Ckt_Talent" // tooltip
-const Ckb_Talent     = "Ckb_Talent" // checkbox
-const Ckt_Activity   = "Ckt_Activity" // tooltip
-const Ckb_Activity   = "Ckb_Activity" // checkbox
-const Ckt_SocialRank = "Ckt_SocialRank" // tooltip
-const Ckb_SocialRank = "Chk_SocialRank" // checkbox
+const Val_Name         = "Val_Name" // character name
+
+const Row_Bio          = "Row_Bio" // bio panel
+const Row_Gifts        = "Row_Gifts" // gifts panel
+const Row_Possessions  = "Row_Possessions" // possessions panel
+const Row_Relations    = "Row_Relations" // relations panel
+const Row_Notes        = "Row_Notes" // notes panel
+const Col_Bio          = "Col_Bio" // bio column
+const Col_Gifts        = "Col_Gifts" // gifts column
+const Col_Possessions  = "Col_Possessions" // possessions column
+const Col_Relations    = "Col_Relations" // relations column
+const Col_Notes        = "Col_Notes" // notes column
+const Prf_Bio          = "Prf_Bio" // bio preference
+const Prf_Gifts        = "Prf_Gifts" // gifts preference
+const Prf_Possessions  = "Prf_Possessions" // possessions preference
+const Prf_Relations    = "Prf_Relations" // relations preference
+const Prf_Notes        = "Prf_Notes" // notes preference
+const Tab_Bio          = "Tab_Bio" // bio tab
+const Tab_Gifts        = "Tab_Gifts" // gifts tab
+const Tab_Possessions  = "Tab_Possessions" // possessions tab
+const Tab_Relations    = "Tab_Relations" // relations tab
+const Tab_Notes        = "Tab_Notes" // notes tab
+const Key_TABROW       = { // relation between tab activated and its associed row
+	Tab_Bio            : Row_Bio,
+	Tab_Gifts          : Row_Gifts,
+	Tab_Possessions    : Row_Possessions,
+	Tab_Relations      : Row_Relations,
+	Tab_Notes          : Row_Notes,
+}
+const Arr_TAB          = Object.keys(Key_TABROW) // only tab items
+
+const Ckt_Talent       = "Ckt_Talent" // tooltip
+const Ckb_Talent       = "Ckb_Talent" // checkbox
+const Ckt_Activity     = "Ckt_Activity" // tooltip
+const Ckb_Activity     = "Ckb_Activity" // checkbox
+const Ckt_SocialRank   = "Ckt_SocialRank" // tooltip
+const Ckb_SocialRank   = "Chk_SocialRank" // checkbox
 //endregion
 
 //region LS_Constants Tooltips
 const Tip_Apply = "Appliquer"
 //endregion
-//endregion
-//endregion
 
+//region LS_Constants Css Classes
+const Css_LSLight = "bg-light text-dark"
+//endregion
+//endregion
+//endregion
 
 
 init = function(sheet){
-    if (sheet.id() === Sht_Character) {
-        initTooltips(sheet);
-        setName(sheet);
-        switchSide(sheet);
-        launchBtn(sheet);
-        options(sheet);
-        toggleEdit(sheet);
+	if (sheet.id() === Sht_Character) {
+		initName(sheet)
+		initTooltips(sheet)
+		initTabs(sheet)
+		switchSide(sheet)
+		launchBtn(sheet)
+		options(sheet)
+		toggleEdit(sheet)
+	}
+}
+
+drop = function(from, to) {
+    if (from.id() === "caracEdit" && to.id() === "main") {
+        return "caracRepeater"
+    }
+}
+
+
+function initName(sheet) { // TODO
+    if(!sheet.get(Val_Name).value()){
+        sheet.get(Val_Name).value(sheet.properName())
     }
 }
 
 function initTooltips(sheet) {
 	setElemTooltip(getElem(sheet, Ckt_Activity), Tip_Apply)
 	setElemTooltip(getElem(sheet, Ckt_SocialRank), Tip_Apply)
-	sheet.get("pvField").setToolTip("Points de Vie")
-    sheet.get("narrationPoint").setToolTip("Point de Narration")
-    sheet.get("switchSideSheet").setToolTip("Changer de face de fiche de perso")
-    sheet.get("lockEdit").setToolTip("Verrouille les stats")
-    sheet.get("unlockEdit").setToolTip("Déverrouille les stats")
 }
+
+function initTabs(sheet) {
+	Arr_TAB.forEach(function(tab_item) {
+		oncElemDo(getElem(sheet, tab_item), function(elem) {
+			const tab_item = getElemItem(elem)
+			showTab(sheet, tab_item)
+		})
+	})
+	//TODO on update tabs prf
+	showTab(sheet, Tab_Bio)
+}
+
+function showTab(sheet, tab_item) { // show only one tab
+	Arr_TAB.forEach(function(tab_item) {
+		hideTab(sheet, tab_item)
+	})
+	addElemCss(getElem(sheet, tab_item), Css_LSLight)
+	const row_item = rsoValue(tab_item, Str_PFXTAB, Str_PFXROW)
+	remElemCss(getElem(sheet, row_item), Css_DNone)
+}
+
+function hideTab(sheet, tab_item) { // hide a row tab and unlight it
+	remElemCss(getElem(sheet, tab_item), Css_LSLight)
+	const row_item = rsoValue(tab_item, Str_PFXTAB, Str_PFXROW)
+	addElemCss(getElem(sheet, row_item), Css_DNone)
+}
+
+
+
+
+
 
 const switchSide = function(sheet){
     sheet.get("switchSideSheet").on("click",function(){
@@ -250,24 +423,11 @@ const optionAct = function(sheet){
     })
 }
 const options = function(sheet){
-    optionAct(sheet);
-    sheet.get("optionRepeate").on("mouseenter",function(){
-        optionAct(sheet);
-    })
-    sheet.get("optionRepeate").on("update",function(){
-        optionAct(sheet);
-    })
-}
-
-
-const setName = function(sheet){
-    if(!sheet.get("userName").value()){
-        sheet.get("userName").value(sheet.properName())
-    }
-}
-
-drop = function(from, to) {
-    if (from.id() === "caracEdit" && to.id() === "main") {
-        return "caracRepeater"
-    }
+    // optionAct(sheet);
+    // sheet.get("optionRepeate").on("mouseenter",function(){
+        // optionAct(sheet);
+    // })
+    // sheet.get("optionRepeate").on("update",function(){
+        // optionAct(sheet);
+    // })
 }

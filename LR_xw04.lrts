@@ -1,27 +1,5 @@
-{
- "zl6b4735fk": { 
-  "Val_HOPCAT": "bonus", 
-  "Rep_HOPITM": {  
-   "gjrc9g7hwf": {   
-    "Val_HOPITM": "futé", 
-   }, 
-  }, 
- }, 
- "yk1ixq9p2k": { 
-  "Val_HOPCAT": "malus", 
-  "Rep_HOPITM": {  
-   "73x9b9b0o6": {   
-    "Val_HOPITM": "sénile", 
-   }, 
-  }, 
- }, 
- "fagmjhqo3f": { 
-  "Val_HOPCAT": "autre", 
-  "Rep_HOPITM": {  
-   "2t7j3onf1a": {   
-    "Val_HOPITM": "pauvre", 
-   }, 
-  }, 
- }, 
-}
-
+const Tab_Bio          = "Tab_Bio" // bio tab
+const Tab_Gifts        = "Tab_Gifts" // gifts tab
+const Tab_Possessions  = "Tab_Possessions" // possessions tab
+const Tab_Relations    = "Tab_Relations" // relations tab
+const Tab_Notes        = "Tab_Notes" // notes tab
