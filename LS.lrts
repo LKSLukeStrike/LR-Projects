@@ -61,6 +61,17 @@ function getElemItem(elem) { // item is the id (aliases)
 }
 //endregion
 
+//region LR_Elems Values
+function getElemValue(elem) {
+	const elm_value = elem.value()
+	return Number.isNaN(Number(elm_value)) ? // right type
+		elm_value : Number(elm_value)
+}
+function setElemValue(elem, elm_value) {
+	return elem.value(elm_value)
+}
+//endregion
+
 //region LR_Elems Events
 const Evt_Click  = "click"
 const Evt_Update = "update"
@@ -164,36 +175,69 @@ const Ckb_SocialRank   = "Chk_SocialRank" // checkbox
 const Tip_Apply = "Appliquer"
 //endregion
 
-//region LS_Constants Css Classes
+//region LS_Elems Css Classes
 const Css_LSLight = "bg-light text-dark"
+
+function addElemLSLight(elem) {
+	return addElemCss(elem, Css_LSLight)
+}
+function remElemLSLight(elem) {
+	return remElemCss(elem, Css_LSLight)
+}
+function hasElemLSLight(elem) {
+	return hasElemCss(elem, Css_LSLight)
+}
+function addElemLSDNone(elem) {
+	return addElemCss(elem, Css_DNone)
+}
+function remElemLSDNone(elem) {
+	return remElemCss(elem, Css_DNone)
+}
+function hasElemLSDNone(elem) {
+	return hasElemCss(elem, Css_DNone)
+}
 //endregion
 //endregion
 //endregion
 
 
 init = function(sheet){
-	if (sheet.id() === Sht_Character) {
-		initName(sheet)
-		initTooltips(sheet)
-		initTabs(sheet)
-		switchSide(sheet)
-		launchBtn(sheet)
-		options(sheet)
-		toggleEdit(sheet)
-	}
+	if (sheet.id() === Sht_Character) {initCharacter(sheet)}
 }
 
-drop = function(from, to) {
+drop = function(from, to) { // TODO remove ?
     if (from.id() === "caracEdit" && to.id() === "main") {
         return "caracRepeater"
     }
 }
 
 
-function initName(sheet) { // TODO
-    if(!sheet.get(Val_Name).value()){
-        sheet.get(Val_Name).value(sheet.properName())
+function initCharacter(sheet) {
+	initHead(sheet)
+	initTooltips(sheet)
+	initTabs(sheet)
+	switchSide(sheet)
+	launchBtn(sheet)
+	options(sheet)
+	toggleEdit(sheet)
+}
+
+function initHead(sheet) {
+	initPref(sheet)
+	initName(sheet)
+	initLock(sheet)
+}
+
+function initPref(sheet) {
+}
+
+function initName(sheet) {
+    if (! getElemValue(getElem(sheet, Val_Name))) {
+        setElemValue(getElem(sheet, Val_Name), sheet.properName())
     }
+}
+
+function initLock(sheet) {
 }
 
 function initTooltips(sheet) {
@@ -205,26 +249,26 @@ function initTabs(sheet) {
 	Arr_TAB.forEach(function(tab_item) {
 		oncElemDo(getElem(sheet, tab_item), function(elem) {
 			const tab_item = getElemItem(elem)
-			showTab(sheet, tab_item)
+			selectyesTab(sheet, tab_item)
 		})
 	})
 	//TODO on update tabs prf
-	showTab(sheet, Tab_Bio)
+	selectyesTab(sheet, Tab_Bio)
 }
 
-function showTab(sheet, tab_item) { // show only one tab
+function selectyesTab(sheet, tab_item) { // selectyes only one tab
 	Arr_TAB.forEach(function(tab_item) {
-		hideTab(sheet, tab_item)
+		selectnotTab(sheet, tab_item)
 	})
-	addElemCss(getElem(sheet, tab_item), Css_LSLight)
+	addElemLSLight(getElem(sheet, tab_item))
 	const row_item = rsoValue(tab_item, Str_PFXTAB, Str_PFXROW)
-	remElemCss(getElem(sheet, row_item), Css_DNone)
+	remElemLSDNone(getElem(sheet, row_item))
 }
 
-function hideTab(sheet, tab_item) { // hide a row tab and unlight it
-	remElemCss(getElem(sheet, tab_item), Css_LSLight)
+function selectnotTab(sheet, tab_item) { // selectnot a row tab and unlight it
+	remElemLSLight(getElem(sheet, tab_item))
 	const row_item = rsoValue(tab_item, Str_PFXTAB, Str_PFXROW)
-	addElemCss(getElem(sheet, row_item), Css_DNone)
+	addElemLSDNone(getElem(sheet, row_item))
 }
 
 

@@ -1,0 +1,9 @@
+function addElemLSDNone(elem) {
+	return addElemCss(elem, Css_DNone)
+}
+function remElemLSDNone(elem) {
+	return remElemCss(elem, Css_DNone)
+}
+function hasElemLSDNone(elem) {
+	return hasElemCss(elem, Css_DNone)
+}
