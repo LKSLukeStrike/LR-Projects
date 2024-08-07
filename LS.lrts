@@ -45,6 +45,7 @@ const Str_PFXCKT = "Ckt_" // checkbox tooltip (container)
 const Str_PFXFLD = "Fld_" // foldering item
 const Str_PFXTAB = "Tab_" // tab item
 const Str_PFXPRF = "Prf_" // preference item
+const Str_PFXCLK = "Clk_" // click item
 //endregion
 //endregion
 
@@ -132,7 +133,13 @@ const Sht_Character = "main" // character sheet
 //endregion
 
 //region LS_Constants Items (IDs)
+const Row_Head         = "Row_Head" // sheet heading
+const Prf_Sheet        = "Prf_Sheet" // preferences trigger
+const Row_Prefs        = "Row_Prefs" // sheet preferences
 const Val_Name         = "Val_Name" // character name
+const Lck_Sheet        = "Lck_Sheet" // locking trigger
+
+const Row_Caracs       = "Row_Caracs" // sheet caracs
 
 const Row_Bio          = "Row_Bio" // bio panel
 const Row_Gifts        = "Row_Gifts" // gifts panel
@@ -229,6 +236,44 @@ function initHead(sheet) {
 }
 
 function initPref(sheet) {
+	function yesSelected(sheet) {
+		return hasElemLSLight(getElem(sheet, Prf_Sheet))
+	}
+	function setupPref(sheet) {
+		if (yesSelected(sheet)) { // toggle
+			remElemLSDNone(getElem(sheet, Row_Prefs))
+			addElemLSDNone(getElem(sheet, Row_Caracs))
+		} else {
+			addElemLSDNone(getElem(sheet, Row_Prefs))
+			remElemLSDNone(getElem(sheet, Row_Caracs))
+		}
+		Arr_TAB.forEach(function(tab_item) { // show active tabs
+			const clk_item = rsoValue(tab_item, Str_PFXTAB, Str_PFXCLK)
+			const prf_item = rsoValue(tab_item, Str_PFXTAB, Str_PFXPRF)
+			if (getElemValue(getElem(sheet, prf_item))) {
+				addElemLSLight(getElem(sheet, clk_item))
+			} else {
+				remElemLSLight(getElem(sheet, clk_item))
+			}
+			oncElemDo(getElem(sheet, clk_item), function(elem) { // toggle related prf item
+				const elm_item = getElemItem(elem)
+				const prf_item = rsoValue(elm_item, Str_PFXCLK, Str_PFXPRF)
+				const prf_elem = getElem(sheet, prf_item)
+				setElemValue(prf_elem, ! getElemValue(prf_elem))
+				setupPref(sheet)
+			})
+		})
+	}
+	setupPref(sheet)
+	oncElemDo(getElem(sheet, Prf_Sheet), function(elem) { // toggle
+		const elm_item = getElemItem(elem)
+		if (yesSelected(sheet)) {
+			remElemLSLight(getElem(sheet, elm_item))
+		} else {
+			addElemLSLight(getElem(sheet, elm_item))
+		}
+		setupPref(sheet)
+	})
 }
 
 function initName(sheet) {
@@ -247,12 +292,21 @@ function initTooltips(sheet) {
 
 function initTabs(sheet) {
 	Arr_TAB.forEach(function(tab_item) {
+		const prf_item = rsoValue(tab_item, Str_PFXTAB, Str_PFXPRF)
 		oncElemDo(getElem(sheet, tab_item), function(elem) {
 			const tab_item = getElemItem(elem)
 			selectyesTab(sheet, tab_item)
 		})
+		onuElemDo(getElem(sheet, prf_item), function(elem) {
+			const prf_item = getElemItem(elem)
+			const col_item = rsoValue(prf_item, Str_PFXPRF, Str_PFXCOL)
+			if (getElemValue(elem)) { // show tab
+				remElemLSDNone(getElem(sheet, col_item))
+			} else { // hide tab
+				addElemLSDNone(getElem(sheet, col_item))
+			}
+		})
 	})
-	//TODO on update tabs prf
 	selectyesTab(sheet, Tab_Bio)
 }
 

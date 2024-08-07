@@ -44,6 +44,7 @@ const Str_PFXCKT = "Ckt_" // checkbox tooltip (container)
 const Str_PFXFLD = "Fld_" // foldering item
 const Str_PFXTAB = "Tab_" // tab item
 const Str_PFXPRF = "Prf_" // preference item
+const Str_PFXCLK = "Clk_" // click item
 //endregion
 
 //region LR_Constants DxV Display Modes
