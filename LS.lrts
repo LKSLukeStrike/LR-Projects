@@ -135,9 +135,11 @@ const Sht_Character = "main" // character sheet
 //region LS_Constants Items (IDs)
 const Row_Head         = "Row_Head" // sheet heading
 const Prf_Sheet        = "Prf_Sheet" // preferences trigger
-const Row_Prefs        = "Row_Prefs" // sheet preferences
 const Val_Name         = "Val_Name" // character name
 const Lck_Sheet        = "Lck_Sheet" // locking trigger
+const Row_Pref         = "Row_Pref" // sheet preferences
+const Chc_TypeDices    = "Chc_TypeDices" // dices type choice
+const Chc_RollDices    = "Chc_RollDices" // dices roll choice
 
 const Row_Caracs       = "Row_Caracs" // sheet caracs
 
@@ -185,23 +187,23 @@ const Tip_Apply = "Appliquer"
 //region LS_Elems Css Classes
 const Css_LSLight = "bg-light text-dark"
 
-function addElemLSLight(elem) {
+function addElemSelected(elem) {
 	return addElemCss(elem, Css_LSLight)
 }
-function remElemLSLight(elem) {
+function remElemSelected(elem) {
 	return remElemCss(elem, Css_LSLight)
 }
-function hasElemLSLight(elem) {
+function hasElemSelected(elem) {
 	return hasElemCss(elem, Css_LSLight)
 }
-function addElemLSDNone(elem) {
-	return addElemCss(elem, Css_DNone)
-}
-function remElemLSDNone(elem) {
+function addElemDisplayed(elem) {
 	return remElemCss(elem, Css_DNone)
 }
-function hasElemLSDNone(elem) {
-	return hasElemCss(elem, Css_DNone)
+function remElemDisplayed(elem) {
+	return addElemCss(elem, Css_DNone)
+}
+function hasElemDisplayed(elem) {
+	return ! hasElemCss(elem, Css_DNone)
 }
 //endregion
 //endregion
@@ -220,13 +222,21 @@ drop = function(from, to) { // TODO remove ?
 
 
 function initCharacter(sheet) {
-	initHead(sheet)
 	initTooltips(sheet)
+	initHead(sheet)
+	initCaracs(sheet)
 	initTabs(sheet)
+	doselectTab(sheet, Tab_Bio)
+
 	switchSide(sheet)
 	launchBtn(sheet)
 	options(sheet)
 	toggleEdit(sheet)
+}
+
+function initTooltips(sheet) {
+	setElemTooltip(getElem(sheet, Ckt_Activity), Tip_Apply)
+	setElemTooltip(getElem(sheet, Ckt_SocialRank), Tip_Apply)
 }
 
 function initHead(sheet) {
@@ -236,43 +246,38 @@ function initHead(sheet) {
 }
 
 function initPref(sheet) {
-	function yesSelected(sheet) {
-		return hasElemLSLight(getElem(sheet, Prf_Sheet))
-	}
-	function setupPref(sheet) {
-		if (yesSelected(sheet)) { // toggle
-			remElemLSDNone(getElem(sheet, Row_Prefs))
-			addElemLSDNone(getElem(sheet, Row_Caracs))
+	oncElemDo(getElem(sheet, Prf_Sheet), function(elem) { // toggle pref
+		const row_pref = getElem(sheet, Row_Pref)
+		const row_caracs = getElem(sheet, Row_Caracs)
+		if (hasElemSelected(elem)) {
+			remElemSelected(elem)
+			remElemDisplayed(row_pref)
+			addElemDisplayed(row_caracs)
+			deselectTabAll(sheet)
 		} else {
-			addElemLSDNone(getElem(sheet, Row_Prefs))
-			remElemLSDNone(getElem(sheet, Row_Caracs))
+			addElemSelected(elem)
+			addElemDisplayed(row_pref)
+			remElemDisplayed(row_caracs)
+			deselectTabAll(sheet)
 		}
-		Arr_TAB.forEach(function(tab_item) { // show active tabs
-			const clk_item = rsoValue(tab_item, Str_PFXTAB, Str_PFXCLK)
-			const prf_item = rsoValue(tab_item, Str_PFXTAB, Str_PFXPRF)
-			if (getElemValue(getElem(sheet, prf_item))) {
-				addElemLSLight(getElem(sheet, clk_item))
-			} else {
-				remElemLSLight(getElem(sheet, clk_item))
-			}
-			oncElemDo(getElem(sheet, clk_item), function(elem) { // toggle related prf item
-				const elm_item = getElemItem(elem)
-				const prf_item = rsoValue(elm_item, Str_PFXCLK, Str_PFXPRF)
-				const prf_elem = getElem(sheet, prf_item)
-				setElemValue(prf_elem, ! getElemValue(prf_elem))
-				setupPref(sheet)
-			})
+	})
+	initPrefTabs(sheet)
+}
+
+function initPrefTabs(sheet) {
+	Arr_TAB.forEach(function(tab_item) { // show active tabs
+		const clk_item = rsoValue(tab_item, Str_PFXTAB, Str_PFXCLK)
+		const clk_elem = getElem(sheet, clk_item)
+		const prf_item = rsoValue(tab_item, Str_PFXTAB, Str_PFXPRF)
+		const prf_elem = getElem(sheet, prf_item)
+		if (getElemValue(prf_elem)) {
+			addElemSelected(clk_elem)
+		} else {
+			remElemSelected(clk_elem)
+		}
+		oncElemDo(clk_elem, function(elem) { // toggle related prf elem
+			setElemValue(prf_elem, ! getElemValue(prf_elem))
 		})
-	}
-	setupPref(sheet)
-	oncElemDo(getElem(sheet, Prf_Sheet), function(elem) { // toggle
-		const elm_item = getElemItem(elem)
-		if (yesSelected(sheet)) {
-			remElemLSLight(getElem(sheet, elm_item))
-		} else {
-			addElemLSLight(getElem(sheet, elm_item))
-		}
-		setupPref(sheet)
 	})
 }
 
@@ -285,44 +290,62 @@ function initName(sheet) {
 function initLock(sheet) {
 }
 
-function initTooltips(sheet) {
-	setElemTooltip(getElem(sheet, Ckt_Activity), Tip_Apply)
-	setElemTooltip(getElem(sheet, Ckt_SocialRank), Tip_Apply)
+function initCaracs(sheet) {
 }
 
 function initTabs(sheet) {
 	Arr_TAB.forEach(function(tab_item) {
+		const tab_elem = getElem(sheet, tab_item)
 		const prf_item = rsoValue(tab_item, Str_PFXTAB, Str_PFXPRF)
-		oncElemDo(getElem(sheet, tab_item), function(elem) {
-			const tab_item = getElemItem(elem)
-			selectyesTab(sheet, tab_item)
-		})
-		onuElemDo(getElem(sheet, prf_item), function(elem) {
-			const prf_item = getElemItem(elem)
-			const col_item = rsoValue(prf_item, Str_PFXPRF, Str_PFXCOL)
-			if (getElemValue(elem)) { // show tab
-				remElemLSDNone(getElem(sheet, col_item))
-			} else { // hide tab
-				addElemLSDNone(getElem(sheet, col_item))
+		const prf_elem = getElem(sheet, prf_item)
+		const col_item = rsoValue(tab_item, Str_PFXTAB, Str_PFXCOL)
+		const col_elem = getElem(sheet, col_item)
+		oncElemDo(tab_elem, function(elem) { // toggle on click
+			if (hasElemSelected(elem)) { // toggle itself
+				deselectTab(sheet, tab_item)
+			} else { // select another one
+				deselectTabAll(sheet)
+				doselectTab(sheet, tab_item)
 			}
 		})
+		onuElemDo(prf_elem, function(elem) { // handle visibility
+			if (getElemValue(elem)) { // show tab
+				addElemDisplayed(col_elem)
+			} else { // hide tab
+				remElemDisplayed(col_elem)
+			}
+			initPrefTabs(sheet) // reflect on preferences
+		})
+		setElemValue(prf_elem, getElemValue(prf_elem)) // triggers itself on init
 	})
-	selectyesTab(sheet, Tab_Bio)
 }
 
-function selectyesTab(sheet, tab_item) { // selectyes only one tab
+function doselectTab(sheet, tab_item) { // doselect one tab
+	const tab_elem = getElem(sheet, tab_item)
+	const row_item = rsoValue(tab_item, Str_PFXTAB, Str_PFXROW)
+	const row_elem = getElem(sheet, row_item)
+	const prf_item = rsoValue(tab_item, Str_PFXTAB, Str_PFXPRF)
+	const prf_elem = getElem(sheet, prf_item)
+	if (! getElemValue(prf_elem)) {return} // ignore hidden tabs
+	addElemSelected(tab_elem)
+	addElemDisplayed(row_elem)
+}
+
+function deselectTab(sheet, tab_item) { // deselect one tab
+	const tab_elem = getElem(sheet, tab_item)
+	const row_item = rsoValue(tab_item, Str_PFXTAB, Str_PFXROW)
+	const row_elem = getElem(sheet, row_item)
+	const prf_item = rsoValue(tab_item, Str_PFXTAB, Str_PFXPRF)
+	const prf_elem = getElem(sheet, prf_item)
+	if (! getElemValue(prf_elem)) {return} // ignore hidden tabs
+	remElemSelected(tab_elem)
+	remElemDisplayed(row_elem)
+}
+
+function deselectTabAll(sheet) { // deselect all tabs
 	Arr_TAB.forEach(function(tab_item) {
-		selectnotTab(sheet, tab_item)
+		deselectTab(sheet, tab_item)
 	})
-	addElemLSLight(getElem(sheet, tab_item))
-	const row_item = rsoValue(tab_item, Str_PFXTAB, Str_PFXROW)
-	remElemLSDNone(getElem(sheet, row_item))
-}
-
-function selectnotTab(sheet, tab_item) { // selectnot a row tab and unlight it
-	remElemLSLight(getElem(sheet, tab_item))
-	const row_item = rsoValue(tab_item, Str_PFXTAB, Str_PFXROW)
-	addElemLSDNone(getElem(sheet, row_item))
 }
 
 
@@ -446,7 +469,7 @@ const launchDice = function(sheet){
         entry.find('caracViewName').on('click',function(e){
             let roll = new RollBuilder(sheet);
             //recupération du type d'action et mise en titre
-            const diceFace = sheet.get("diceType").value() || '1d4'
+            const diceFace = sheet.get(Chc_TypeDices).value() || '1d4'
             const caracVal = entry.find("caracVal").value() || "0"
             let dice =
             Dice.create(""+caracVal+"")
