@@ -316,6 +316,7 @@ function initTabs(sheet) {
 			}
 			initPrefTabs(sheet) // reflect on preferences
 		})
+		deselectTab(sheet, tab_item) // hide on init
 		setElemValue(prf_elem, getElemValue(prf_elem)) // triggers itself on init
 	})
 }
