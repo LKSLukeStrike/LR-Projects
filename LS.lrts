@@ -246,9 +246,10 @@ function initHead(sheet) {
 }
 
 function initPref(sheet) {
-	oncElemDo(getElem(sheet, Prf_Sheet), function(elem) { // toggle pref
-		const row_pref = getElem(sheet, Row_Pref)
-		const row_caracs = getElem(sheet, Row_Caracs)
+	const prf_sheet = getElem(sheet, Prf_Sheet)
+	const row_pref = getElem(sheet, Row_Pref)
+	const row_caracs = getElem(sheet, Row_Caracs)
+	oncElemDo(prf_sheet, function(elem) { // toggle pref
 		if (hasElemSelected(elem)) {
 			remElemSelected(elem)
 			remElemDisplayed(row_pref)
@@ -261,6 +262,8 @@ function initPref(sheet) {
 			deselectTabAll(sheet)
 		}
 	})
+	remElemDisplayed(row_pref) // hide pref on init
+	addElemDisplayed(row_caracs) // show caracs on init
 	initPrefTabs(sheet)
 }
 
@@ -338,7 +341,7 @@ function deselectTab(sheet, tab_item) { // deselect one tab
 	const row_elem = getElem(sheet, row_item)
 	const prf_item = rsoValue(tab_item, Str_PFXTAB, Str_PFXPRF)
 	const prf_elem = getElem(sheet, prf_item)
-	if (! getElemValue(prf_elem)) {return} // ignore hidden tabs
+	// if (! getElemValue(prf_elem)) {return} // ignore hidden tabs
 	remElemSelected(tab_elem)
 	remElemDisplayed(row_elem)
 }
