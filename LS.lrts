@@ -134,10 +134,11 @@ const Sht_Character = "main" // character sheet
 
 //region LS_Constants Items (IDs)
 const Row_Head         = "Row_Head" // sheet heading
-const Prf_Sheet        = "Prf_Sheet" // preferences trigger
+const Clk_PrefSheet    = "Clk_PrefSheet" // preferences trigger
+const Cky_PrefSheet    = "Cky_PrefSheet" // preferences state
+const Row_Pref         = "Row_Pref" // preferences panel
 const Val_Name         = "Val_Name" // character name
 const Lck_Sheet        = "Lck_Sheet" // locking trigger
-const Row_Pref         = "Row_Pref" // sheet preferences
 const Chc_TypeDices    = "Chc_TypeDices" // dices type choice
 const Chc_RollDices    = "Chc_RollDices" // dices roll choice
 
@@ -246,24 +247,27 @@ function initHead(sheet) {
 }
 
 function initPref(sheet) {
-	const prf_sheet = getElem(sheet, Prf_Sheet)
+	const clk_prefsheet = getElem(sheet, Clk_PrefSheet)
+	const cky_prefsheet = getElem(sheet, Cky_PrefSheet)
 	const row_pref = getElem(sheet, Row_Pref)
 	const row_caracs = getElem(sheet, Row_Caracs)
-	oncElemDo(prf_sheet, function(elem) { // toggle pref
-		if (hasElemSelected(elem)) {
-			remElemSelected(elem)
-			remElemDisplayed(row_pref)
-			addElemDisplayed(row_caracs)
-			deselectTabAll(sheet)
-		} else {
-			addElemSelected(elem)
+	oncElemDo(clk_prefsheet, function(elem) { // toggle pref
+		setElemValue(cky_prefsheet, ! getElemValue(cky_prefsheet))
+	})
+	onuElemDo(cky_prefsheet, function(elem) { // handle visibility
+		if (getElemValue(elem)) { // show pref
+			addElemSelected(clk_prefsheet)
 			addElemDisplayed(row_pref)
 			remElemDisplayed(row_caracs)
 			deselectTabAll(sheet)
+		} else { // hide pref
+			remElemSelected(clk_prefsheet)
+			remElemDisplayed(row_pref)
+			addElemDisplayed(row_caracs)
+			deselectTabAll(sheet)
 		}
 	})
-	remElemDisplayed(row_pref) // hide pref on init
-	addElemDisplayed(row_caracs) // show caracs on init
+	setElemValue(cky_prefsheet, getElemValue(cky_prefsheet)) // triggers itself on init
 	initPrefTabs(sheet)
 }
 
