@@ -139,6 +139,8 @@ const Cky_PrefSheet    = "Cky_PrefSheet" // preferences state
 const Row_Pref         = "Row_Pref" // preferences panel
 const Val_Name         = "Val_Name" // character name
 const Lck_Sheet        = "Lck_Sheet" // locking trigger
+const Clk_LockSheet    = "Clk_LockSheet" // locking trigger
+const Cky_LockSheet    = "Cky_LockSheet" // locking state
 const Chc_TypeDices    = "Chc_TypeDices" // dices type choice
 const Chc_RollDices    = "Chc_RollDices" // dices roll choice
 
@@ -227,7 +229,6 @@ function initCharacter(sheet) {
 	initHead(sheet)
 	initCaracs(sheet)
 	initTabs(sheet)
-	doselectTab(sheet, Tab_Bio)
 
 	switchSide(sheet)
 	launchBtn(sheet)
@@ -272,7 +273,7 @@ function initPref(sheet) {
 }
 
 function initPrefTabs(sheet) {
-	Arr_TAB.forEach(function(tab_item) { // show active tabs
+	Arr_TAB.forEach(function(tab_item) { // reflect active tabs
 		const clk_item = rsoValue(tab_item, Str_PFXTAB, Str_PFXCLK)
 		const clk_elem = getElem(sheet, clk_item)
 		const prf_item = rsoValue(tab_item, Str_PFXTAB, Str_PFXPRF)
@@ -295,12 +296,28 @@ function initName(sheet) {
 }
 
 function initLock(sheet) {
+	const clk_locksheet = getElem(sheet, Clk_LockSheet)
+	const cky_locksheet = getElem(sheet, Cky_LockSheet)
+	oncElemDo(clk_locksheet, function(elem) { // toggle lock
+		setElemValue(cky_locksheet, ! getElemValue(cky_locksheet))
+	})
+	onuElemDo(cky_locksheet, function(elem) { // handle lock
+		if (getElemValue(elem)) { // lock sheet
+			addElemSelected(clk_locksheet)
+			log("lock")
+		} else { // unlock sheet
+			remElemSelected(clk_locksheet)
+			log("unlock")
+		}
+	})
+	setElemValue(cky_locksheet, getElemValue(cky_locksheet)) // triggers itself on init
 }
 
 function initCaracs(sheet) {
 }
 
 function initTabs(sheet) {
+	const cky_prefsheet = getElem(sheet, Cky_PrefSheet)
 	Arr_TAB.forEach(function(tab_item) {
 		const tab_elem = getElem(sheet, tab_item)
 		const prf_item = rsoValue(tab_item, Str_PFXTAB, Str_PFXPRF)
@@ -315,17 +332,21 @@ function initTabs(sheet) {
 				doselectTab(sheet, tab_item)
 			}
 		})
-		onuElemDo(prf_elem, function(elem) { // handle visibility
+		onuElemDo(prf_elem, function(elem) { // handle tab visibility
 			if (getElemValue(elem)) { // show tab
 				addElemDisplayed(col_elem)
-			} else { // hide tab
+			} else { // hide tab and deselect it
 				remElemDisplayed(col_elem)
+				deselectTab(sheet, tab_item)
 			}
 			initPrefTabs(sheet) // reflect on preferences
 		})
-		deselectTab(sheet, tab_item) // hide on init
+		deselectTab(sheet, tab_item) // deselect on init
 		setElemValue(prf_elem, getElemValue(prf_elem)) // triggers itself on init
 	})
+	if (! getElemValue(cky_prefsheet)) { // select bio on init if pref is not open
+		doselectTab(sheet, Tab_Bio)
+	}
 }
 
 function doselectTab(sheet, tab_item) { // doselect one tab

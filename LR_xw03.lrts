@@ -1,9 +1,2 @@
-function addElemLSDNone(elem) {
-	return addElemCss(elem, Css_DNone)
-}
-function remElemLSDNone(elem) {
-	return remElemCss(elem, Css_DNone)
-}
-function hasElemLSDNone(elem) {
-	return hasElemCss(elem, Css_DNone)
-}
+const Clk_LockSheet    = "Clk_LockSheet" // locking trigger
+const Cky_LockSheet    = "Cky_LockSheet" // locking state
