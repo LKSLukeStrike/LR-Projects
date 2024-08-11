@@ -138,7 +138,11 @@ const Cky_LockSheet    = "Cky_LockSheet" // locking state
 const Chc_TypeDices    = "Chc_TypeDices" // dices type choice
 const Chc_RollDices    = "Chc_RollDices" // dices roll choice
 
-const Row_Caracs       = "Row_Caracs" // sheet caracs
+// TODO change this
+const Ckt_Talent       = "Ckt_Talent" // tooltip
+const Ckb_Talent       = "Ckb_Talent" // checkbox
+
+const Row_Characs      = "Row_Characs" // sheet characs
 const Ckb_Activity     = "Ckb_Activity" // activity checkbox
 const Cky_Activity     = "Cky_Activity" // activity state
 const Ckb_SocialRank   = "Ckb_SocialRank" // social rank checkbox
@@ -150,10 +154,6 @@ const Arr_AllCBoxes    = [
 	Ckb_SocialRank,
 	Ckb_Visibility,
 ]
-// TODO change this
-const Ckt_Talent       = "Ckt_Talent" // tooltip
-const Ckb_Talent       = "Ckb_Talent" // checkbox
-
 const Row_Bio          = "Row_Bio" // bio panel
 const Row_Gifts        = "Row_Gifts" // gifts panel
 const Row_Possessions  = "Row_Possessions" // possessions panel
@@ -169,12 +169,14 @@ const Prf_Gifts        = "Prf_Gifts" // gifts preference
 const Prf_Possessions  = "Prf_Possessions" // possessions preference
 const Prf_Relations    = "Prf_Relations" // relations preference
 const Prf_Notes        = "Prf_Notes" // notes preference
+const Tab_Characs      = "Tab_Characs" // bio tab
 const Tab_Bio          = "Tab_Bio" // bio tab
 const Tab_Gifts        = "Tab_Gifts" // gifts tab
 const Tab_Possessions  = "Tab_Possessions" // possessions tab
 const Tab_Relations    = "Tab_Relations" // relations tab
 const Tab_Notes        = "Tab_Notes" // notes tab
 const Key_TABROW       = { // relation between tab activated and its associed row
+	Tab_Characs        : Row_Characs,
 	Tab_Bio            : Row_Bio,
 	Tab_Gifts          : Row_Gifts,
 	Tab_Possessions    : Row_Possessions,
@@ -182,6 +184,23 @@ const Key_TABROW       = { // relation between tab activated and its associed ro
 	Tab_Notes          : Row_Notes,
 }
 const Arr_TAB          = Object.keys(Key_TABROW) // only tab items
+//endregion
+//endregion
+
+//region LS_Elems
+//region LS_Elems Values
+function triggerElem(elem) {
+	return setElemValue(elem, getElemValue(elem)) // trigger the on update event
+}
+function toggleElem(elem) {
+	return setElemValue(elem, ! getElemValue(elem))
+}
+function incrementElem(elem) {
+	return setElemValue(elem, getElemValue(elem) + 1)
+}
+function decrementElem(elem) {
+	return setElemValue(elem, getElemValue(elem) - 1)
+}
 //endregion
 
 //region LS_Elems Css Classes
@@ -225,7 +244,7 @@ function initCharacter(sheet) {
 	// initRepair(sheet)
 	initCheckboxes(sheet)
 	initHead(sheet)
-	initCaracs(sheet)
+	initCharacs(sheet)
 	initTabs(sheet)
 
 	switchSide(sheet)
@@ -245,7 +264,7 @@ function initCheckboxes(sheet) {
 		const cky_item = rsoValue(ckb_item, Str_PFXCKB, Str_PFXCKY)
 		const cky_elem = getElem(sheet, cky_item)
 		oncElemDo(ckb_elem, function(elem) { // toggle related cky elem
-			setElemValue(cky_elem, ! getElemValue(cky_elem))
+			toggleElem(cky_elem)
 		})
 		onuElemDo(cky_elem, function(elem) { // reflect checkbox state
 		// TODO trigger specific functions
@@ -256,7 +275,8 @@ function initCheckboxes(sheet) {
 			}
 		})
 	})
-	// TODO add events on caracs entries
+	triggerElem(getElem(sheet, Cky_Visibility)) // triggers on init
+	// TODO add events on characs entries
 }
 
 function initHead(sheet) {
@@ -269,24 +289,24 @@ function initPref(sheet) {
 	const clk_prefsheet = getElem(sheet, Clk_PrefSheet)
 	const cky_prefsheet = getElem(sheet, Cky_PrefSheet)
 	const row_pref = getElem(sheet, Row_Pref)
-	const row_caracs = getElem(sheet, Row_Caracs)
+	const row_characs = getElem(sheet, Row_Characs)
 	oncElemDo(clk_prefsheet, function(elem) { // toggle pref
-		setElemValue(cky_prefsheet, ! getElemValue(cky_prefsheet))
+		toggleElem(cky_prefsheet)
 	})
-	onuElemDo(cky_prefsheet, function(elem) { // handle visibility
+	onuElemDo(cky_prefsheet, function(elem) { // handle pref visibility
 		if (getElemValue(elem)) { // show pref
 			addElemSelected(clk_prefsheet)
 			addElemDisplayed(row_pref)
-			remElemDisplayed(row_caracs)
+			remElemDisplayed(row_characs)
 			deselectTabAll(sheet)
 		} else { // hide pref
 			remElemSelected(clk_prefsheet)
 			remElemDisplayed(row_pref)
-			addElemDisplayed(row_caracs)
+			addElemDisplayed(row_characs)
 			deselectTabAll(sheet)
 		}
 	})
-	setElemValue(cky_prefsheet, getElemValue(cky_prefsheet)) // triggers itself on init
+	triggerElem(cky_prefsheet) // triggers itself on init
 	initPrefTabs(sheet)
 }
 
@@ -302,7 +322,7 @@ function initPrefTabs(sheet) {
 			remElemSelected(clk_elem)
 		}
 		oncElemDo(clk_elem, function(elem) { // toggle related prf elem
-			setElemValue(prf_elem, ! getElemValue(prf_elem))
+			toggleElem(prf_elem)
 		})
 	})
 }
@@ -317,7 +337,7 @@ function initLock(sheet) {
 	const clk_locksheet = getElem(sheet, Clk_LockSheet)
 	const cky_locksheet = getElem(sheet, Cky_LockSheet)
 	oncElemDo(clk_locksheet, function(elem) { // toggle lock
-		setElemValue(cky_locksheet, ! getElemValue(cky_locksheet))
+		toggleElem(cky_locksheet)
 	})
 	onuElemDo(cky_locksheet, function(elem) { // handle lock
 		if (getElemValue(elem)) { // lock sheet
@@ -328,10 +348,10 @@ function initLock(sheet) {
 			log("unlock")
 		}
 	})
-	setElemValue(cky_locksheet, getElemValue(cky_locksheet)) // triggers itself on init
+	triggerElem(cky_locksheet) // triggers itself on init
 }
 
-function initCaracs(sheet) {
+function initCharacs(sheet) {
 }
 
 function initTabs(sheet) {
@@ -360,10 +380,10 @@ function initTabs(sheet) {
 			initPrefTabs(sheet) // reflect on preferences
 		})
 		deselectTab(sheet, tab_item) // deselect on init
-		setElemValue(prf_elem, getElemValue(prf_elem)) // triggers itself on init
+		triggerElem(prf_elem) // triggers itself on init
 	})
 	if (! getElemValue(cky_prefsheet)) { // select bio on init if pref is not open
-		doselectTab(sheet, Tab_Bio)
+		doselectTab(sheet, Tab_Characs)
 	}
 }
 
