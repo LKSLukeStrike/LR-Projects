@@ -39,9 +39,10 @@ const Str_PFXMNS = "Mns_" // minus item
 const Str_PFXPLS = "Pls_" // plus item
 const Str_PFXREP = "Rep_" // repeater item
 const Str_PFXCHC = "Chc_" // choice item
-const Str_PFXCHK = "Chk_" // checkbox item
-const Str_PFXCKB = "Ckb_" // checkbox item
-const Str_PFXCKT = "Ckt_" // checkbox tooltip (container)
+const Str_PFXCHK = "Chk_" // standard checkbox item (obsolete ?)
+const Str_PFXCKT = "Ckt_" // standard checkbox tooltip (container)
+const Str_PFXCKB = "Ckb_" // label checkbox item
+const Str_PFXCKY = "Cky_" // label checkbox state
 const Str_PFXFLD = "Fld_" // foldering item
 const Str_PFXTAB = "Tab_" // tab item
 const Str_PFXPRF = "Prf_" // preference item
@@ -84,12 +85,6 @@ function oncElemDo(elem, do_fct) { // on click
 }
 function onuElemDo(elem, do_fct) { // on update
 	return oneElemDo(elem, Evt_Update, do_fct)
-}
-//endregion
-
-//region LR_Elems Tooltips
-function setElemTooltip(elem, str_tooltip) { // set an elem tooltip
-	return elem.setToolTip(str_tooltip)
 }
 //endregion
 
@@ -138,13 +133,26 @@ const Clk_PrefSheet    = "Clk_PrefSheet" // preferences trigger
 const Cky_PrefSheet    = "Cky_PrefSheet" // preferences state
 const Row_Pref         = "Row_Pref" // preferences panel
 const Val_Name         = "Val_Name" // character name
-const Lck_Sheet        = "Lck_Sheet" // locking trigger
 const Clk_LockSheet    = "Clk_LockSheet" // locking trigger
 const Cky_LockSheet    = "Cky_LockSheet" // locking state
 const Chc_TypeDices    = "Chc_TypeDices" // dices type choice
 const Chc_RollDices    = "Chc_RollDices" // dices roll choice
 
 const Row_Caracs       = "Row_Caracs" // sheet caracs
+const Ckb_Activity     = "Ckb_Activity" // activity checkbox
+const Cky_Activity     = "Cky_Activity" // activity state
+const Ckb_SocialRank   = "Ckb_SocialRank" // social rank checkbox
+const Cky_SocialRank   = "Cky_SocialRank" // social rank state
+const Ckb_Visibility   = "Ckb_Visibility" // roll visibility checkbox
+const Cky_Visibility   = "Cky_Visibility" // roll visibility state
+const Arr_AllCBoxes    = [
+	Ckb_Activity,
+	Ckb_SocialRank,
+	Ckb_Visibility,
+]
+// TODO change this
+const Ckt_Talent       = "Ckt_Talent" // tooltip
+const Ckb_Talent       = "Ckb_Talent" // checkbox
 
 const Row_Bio          = "Row_Bio" // bio panel
 const Row_Gifts        = "Row_Gifts" // gifts panel
@@ -174,17 +182,6 @@ const Key_TABROW       = { // relation between tab activated and its associed ro
 	Tab_Notes          : Row_Notes,
 }
 const Arr_TAB          = Object.keys(Key_TABROW) // only tab items
-
-const Ckt_Talent       = "Ckt_Talent" // tooltip
-const Ckb_Talent       = "Ckb_Talent" // checkbox
-const Ckt_Activity     = "Ckt_Activity" // tooltip
-const Ckb_Activity     = "Ckb_Activity" // checkbox
-const Ckt_SocialRank   = "Ckt_SocialRank" // tooltip
-const Ckb_SocialRank   = "Chk_SocialRank" // checkbox
-//endregion
-
-//region LS_Constants Tooltips
-const Tip_Apply = "Appliquer"
 //endregion
 
 //region LS_Elems Css Classes
@@ -225,7 +222,8 @@ drop = function(from, to) { // TODO remove ?
 
 
 function initCharacter(sheet) {
-	initTooltips(sheet)
+	// initRepair(sheet)
+	initCheckboxes(sheet)
 	initHead(sheet)
 	initCaracs(sheet)
 	initTabs(sheet)
@@ -236,9 +234,29 @@ function initCharacter(sheet) {
 	toggleEdit(sheet)
 }
 
-function initTooltips(sheet) {
-	setElemTooltip(getElem(sheet, Ckt_Activity), Tip_Apply)
-	setElemTooltip(getElem(sheet, Ckt_SocialRank), Tip_Apply)
+function initRepair(sheet) {
+	setElemValue(getElem(sheet, Ckb_Activity), ":ga_check-mark:")
+	setElemValue(getElem(sheet, Ckb_SocialRank), ":ga_check-mark:")
+}
+
+function initCheckboxes(sheet) {
+	Arr_AllCBoxes.forEach(function(ckb_item) { // maintain checkboxes states
+		const ckb_elem = getElem(sheet, ckb_item)
+		const cky_item = rsoValue(ckb_item, Str_PFXCKB, Str_PFXCKY)
+		const cky_elem = getElem(sheet, cky_item)
+		oncElemDo(ckb_elem, function(elem) { // toggle related cky elem
+			setElemValue(cky_elem, ! getElemValue(cky_elem))
+		})
+		onuElemDo(cky_elem, function(elem) { // reflect checkbox state
+		// TODO trigger specific functions
+			if (getElemValue(elem)) { // doselect checkbox
+				addElemSelected(ckb_elem)
+			} else { // deselect checkbox
+				remElemSelected(ckb_elem)
+			}
+		})
+	})
+	// TODO add events on caracs entries
 }
 
 function initHead(sheet) {

@@ -1,2 +1,2 @@
-const Clk_LockSheet    = "Clk_LockSheet" // locking trigger
-const Cky_LockSheet    = "Cky_LockSheet" // locking state
+const Ckb_RollVisibility   = "Ckb_RollVisibility" // roll visibility checkbox
+const Cky_RollVisibility   = "Cky_RollVisibility" // roll visibility state
