@@ -132,7 +132,7 @@ const Row_Head         = "Row_Head" // sheet heading
 const Clk_PrefSheet    = "Clk_PrefSheet" // preferences trigger
 const Cky_PrefSheet    = "Cky_PrefSheet" // preferences state
 const Row_Pref         = "Row_Pref" // preferences panel
-const Val_Name         = "Val_Name" // character name
+const Val_CharName     = "Val_CharName" // character name
 const Clk_LockSheet    = "Clk_LockSheet" // locking trigger
 const Cky_LockSheet    = "Cky_LockSheet" // locking state
 const Chc_TypeDices    = "Chc_TypeDices" // dices type choice
@@ -226,6 +226,21 @@ function hasElemDisplayed(elem) {
 }
 //endregion
 //endregion
+
+//region LS_Repeaters
+//region LS_Repeaters Items
+const Row_Edit         = "Row_Edit" // repeater entry edit row
+const Row_View         = "Row_View" // repeater entry view row
+//endregion
+//region LS_Repeaters Characs
+const Rep_CharacsL     = "Rep_CharacsL" // characs repeater left
+const Rep_CharacsC     = "Rep_CharacsC" // characs repeater center
+const Rep_CharacsR     = "Rep_CharacsR" // characs repeater right
+//endregion
+//region LS_Repeaters Gifts
+const Rep_Gifts        = "Rep_Gifts" // gifts repeater
+//endregion
+//endregion
 //endregion
 
 
@@ -244,8 +259,9 @@ function initCharacter(sheet) {
 	// initRepair(sheet)
 	initCheckboxes(sheet)
 	initHead(sheet)
-	initCharacs(sheet)
 	initTabs(sheet)
+	initCharacs(sheet)
+	initGifts(sheet)
 
 	switchSide(sheet)
 	launchBtn(sheet)
@@ -281,7 +297,7 @@ function initCheckboxes(sheet) {
 
 function initHead(sheet) {
 	initPref(sheet)
-	initName(sheet)
+	initCharName(sheet)
 	initLock(sheet)
 }
 
@@ -327,9 +343,9 @@ function initPrefTabs(sheet) {
 	})
 }
 
-function initName(sheet) {
-    if (! getElemValue(getElem(sheet, Val_Name))) {
-        setElemValue(getElem(sheet, Val_Name), sheet.properName())
+function initCharName(sheet) {
+    if (! getElemValue(getElem(sheet, Val_CharName))) {
+        setElemValue(getElem(sheet, Val_CharName), sheet.properName())
     }
 }
 
@@ -343,15 +359,62 @@ function initLock(sheet) {
 		if (getElemValue(elem)) { // lock sheet
 			addElemSelected(clk_locksheet)
 			log("lock")
+			dolockSheet(sheet)
 		} else { // unlock sheet
 			remElemSelected(clk_locksheet)
 			log("unlock")
+			delockSheet(sheet)
 		}
 	})
 	triggerElem(cky_locksheet) // triggers itself on init
 }
 
+function dolockSheet(sheet) {
+	dolockCharacs(sheet)
+	dolockGifts(sheet)
+}
+
+function delockSheet(sheet) {
+	delockCharacs(sheet)
+	delockGifts(sheet)
+}
+
 function initCharacs(sheet) {
+}
+
+function dolockCharacs(sheet) {
+}
+
+function delockCharacs(sheet) {
+}
+
+function initGifts(sheet) {
+}
+
+function dolockGifts(sheet) {
+	const rep_elem    = getElem(sheet, Rep_Gifts)
+	const rep_value   = getElemValue(rep_elem)
+	const rep_indexes = Object.keys(rep_value)
+	rep_indexes.forEach(function(rep_index) {
+		const rep_entry = rep_elem.find(rep_index)
+		const row_edit = rep_entry.find(Row_Edit)
+		const row_view = rep_entry.find(Row_View)
+		remElemDisplayed(row_edit)
+		addElemDisplayed(row_view)
+	})
+}
+
+function delockGifts(sheet) {
+	const rep_elem    = getElem(sheet, Rep_Gifts)
+	const rep_value   = getElemValue(rep_elem)
+	const rep_indexes = Object.keys(rep_value)
+	rep_indexes.forEach(function(rep_index) {
+		const rep_entry = rep_elem.find(rep_index)
+		const row_edit = rep_entry.find(Row_Edit)
+		const row_view = rep_entry.find(Row_View)
+		addElemDisplayed(row_edit)
+		remElemDisplayed(row_view)
+	})
 }
 
 function initTabs(sheet) {
