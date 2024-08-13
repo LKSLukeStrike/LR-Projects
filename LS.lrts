@@ -143,7 +143,7 @@ function mnaValue(arr_value) { // minimum number value in an array
 		result = result ?
 			minValue(value_one, result) : value_one
 	})
-	return result
+	return Number(result)
 }
 function mxaValue(arr_value) { // maximum number value in an array
 	let result = null
@@ -151,7 +151,7 @@ function mxaValue(arr_value) { // maximum number value in an array
 		result = result ?
 			maxValue(value_one, result) : value_one
 	})
-	return result
+	return Number(result)
 }
 //endregion
 //endregion
@@ -181,6 +181,15 @@ function getRepChildren(rep) { // get a repeater children (keys)
 }
 function delRepChildren(rep) { // delete all repeater children
 	return setRepValue(rep, {})
+}
+function newRepChild(rep, tpl_child) { // add a child template at the end of rep
+	const rep_children = getRepChildren(rep)
+	const rep_value    = getRepValue(rep)
+	const max_child    = mxaValue(rep_children)
+	const new_child = max_child ?
+		max_child + 1 : 1
+	rep_value[new_child] = tpl_child
+	setRepValue(rep, rep_value)
 }
 //endregion
 
@@ -345,6 +354,11 @@ const Arr_GiftsVals    = [
 	Val_Name,
 	Val_Description,
 ]
+const Tpl_Gift         = { // new gifts entry template
+	Val_Cost           : 1,
+	Val_Name           : "",
+	Val_Description    : "",
+}
 //endregion
 //endregion
 //endregion
@@ -515,9 +529,13 @@ function initCharacsRep(sheet) {
 }
 
 function dolockCharacs(sheet) {
+	const cky_characslck = getElem(sheet, rsoValue(Ckb_CharacsLck, Str_PFXCKB, Str_PFXCKY))
+	setElemValue(cky_characslck, true)
 }
 
 function delockCharacs(sheet) {
+	const cky_characslck = getElem(sheet, rsoValue(Ckb_CharacsLck, Str_PFXCKB, Str_PFXCKY))
+	setElemValue(cky_characslck, false)
 }
 
 function initGifts(sheet) {
@@ -526,6 +544,7 @@ function initGifts(sheet) {
 	const col_giftsdel = getElem(sheet, rsoValue(Clk_GiftsDel, Str_PFXCLK, Str_PFXCOL))
 	const col_giftsnew = getElem(sheet, rsoValue(Clk_GiftsNew, Str_PFXCLK, Str_PFXCOL))
 	const clk_giftsdel = getElem(sheet, Clk_GiftsDel)
+	const clk_giftsnew = getElem(sheet, Clk_GiftsNew)
 
 	oncElemDo(ckb_giftslck, function(elem) { // toggle gifts lock
 		toggleElem(cky_giftslck)
@@ -547,6 +566,10 @@ function initGifts(sheet) {
 
 	oncElemDo(clk_giftsdel, function(elem) { // del gifts children
 		delGiftsChildren(sheet)
+	})
+
+	oncElemDo(clk_giftsnew, function(elem) { // new gifts children
+		newGiftsChild(sheet)
 	})
 	
 	triggerElem(cky_giftslck) // triggers itself on init
@@ -588,6 +611,12 @@ function doeditGifts(sheet) {
 function delGiftsChildren(sheet) {
 	const rep = getElem(sheet, Rep_Gifts)
 	delRepChildren(rep)
+}
+
+function newGiftsChild(sheet) {
+	const rep = getElem(sheet, Rep_Gifts)
+	newRepChild(rep, Tpl_Gift)
+	log(getElemValue(rep))
 }
 
 function initTabs(sheet) {

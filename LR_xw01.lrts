@@ -1,24 +1,7 @@
-function mnaValue(arr_value, _yes_number) { // minimum value in an array
-	debugFA("mnaValue", arguments)
-	const yes_number = Dft_Number
-	try  {yes_number = tryArg(_yes_number)}	finally {}
-	
-	let result = null
-	arr_value.forEach(function(value_one) {
-		result = result ?
-			minValue(value_one, result, yes_number) : value_one
-	})
-	return result
-}
-function mxaValue(arr_value, _yes_number) { // maximum value in an array
-	debugFA("mxaValue", arguments)
-	const yes_number = Dft_Number
-	try  {yes_number = tryArg(_yes_number)}	finally {}
-	
-	let result = null
-	arr_value.forEach(function(value_one) {
-		result = result ?
-			maxValue(value_one, result, yes_number) : value_one
-	})
-	return result
+function newRepChild(rep, tpl_child) { // add a child template at the end of rep
+	const rep_children = getRepChildren(rep)
+	const max_child = mxaValue(rep_children)
+	const new_child = max_child ?
+		max_child + 1 : 1
+	rep[newRepChild] = tpl_child
 }
