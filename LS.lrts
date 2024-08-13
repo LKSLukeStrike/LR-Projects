@@ -117,6 +117,7 @@ function hasElemCss(elem, css) { // multiple css allowed in one string
 //endregion
 //endregion
 
+//region LR_Operators
 //region LR_Operators Replace
 function rsoValue(str_value, value_one, value_two) { // replace a string once
 	return str_value.replace(value_one, value_two)
@@ -152,6 +153,59 @@ function mxaValue(arr_value) { // maximum number value in an array
 	})
 	return result
 }
+//endregion
+//endregion
+
+//region LR_Repeaters
+//whatis repeaters are elems, child/ren are items
+//region LR_Repeaters Items
+const Row_Edit         = "Row_Edit" // repeater entry edit row
+const Row_View         = "Row_View" // repeater entry view row
+const Del_Entry        = "Rem_Entry" // del repeater entry
+const New_Entry        = "Add_Entry" // new repeater entry
+const Inf_Entry        = "Inf_Entry" // info repeater entry
+//endregion
+
+//region LR_Repeaters Values
+function getRepValue(rep) { // get a repeater value
+	return getElemValue(rep)
+}
+function setRepValue(rep, rep_value) { // set a repeater value
+	return setElemValue(rep, rep_value)
+}
+//endregion
+
+//region LR_Repeaters Child/ren
+function getRepChildren(rep) { // get a repeater children (keys)
+	return Object.keys(getRepValue(rep))
+}
+function delRepChildren(rep) { // delete all repeater children
+	return setRepValue(rep, {})
+}
+//endregion
+
+//region LR_Repeaters Edit/View
+function doeditRep(rep) { // show only the edit row
+	const rep_children = getRepChildren(rep)
+	rep_children.forEach(function(rep_child) {
+		const rep_entry = getElemChild(rep, rep_child)
+		const row_edit  = getElemChild(rep_entry, Row_Edit)
+		const row_view  = getElemChild(rep_entry, Row_View)
+		addElemDisplayed(row_edit)
+		remElemDisplayed(row_view)
+	})
+}
+function doviewRep(rep) { // show only the view row
+	const rep_children = getRepChildren(rep)
+	rep_children.forEach(function(rep_child) {
+		const rep_entry = getElemChild(rep, rep_child)
+		const row_edit  = getElemChild(rep_entry, Row_Edit)
+		const row_view  = getElemChild(rep_entry, Row_View)
+		remElemDisplayed(row_edit)
+		addElemDisplayed(row_view)
+	})
+}
+//endregion
 //endregion
 //endregion
 
@@ -276,13 +330,6 @@ function hasElemDisplayed(elem) {
 //endregion
 
 //region LS_Repeaters
-//region LS_Repeaters Items
-const Row_Edit         = "Row_Edit" // repeater entry edit row
-const Row_View         = "Row_View" // repeater entry view row
-const Del_Entry        = "Rem_Entry" // del repeater entry
-const New_Entry        = "Add_Entry" // new repeater entry
-const Inf_Entry        = "Inf_Entry" // info repeater entry
-//endregion
 //region LS_Repeaters Characs
 const Rep_CharacsL     = "Rep_CharacsL" // characs repeater left
 const Rep_CharacsC     = "Rep_CharacsC" // characs repeater center
@@ -484,14 +531,16 @@ function initGifts(sheet) {
 	})
 
 	onuElemDo(cky_giftslck, function(elem) { // handle gifts visibility
-		if (getElemValue(elem)) { // hide gifts actions
+		if (getElemValue(elem)) { // hide gifts actions & view mode
 			addElemSelected(ckb_giftslck)
 			addElemInvisible(col_giftsdel)
 			addElemInvisible(col_giftsnew)
-		} else { // show gifts actions
+			doviewGifts(sheet)
+		} else { // show gifts actions & edit mode
 			remElemSelected(ckb_giftslck)
 			remElemInvisible(col_giftsdel)
 			remElemInvisible(col_giftsnew)
+			doeditGifts(sheet)
 		}
 	})
 	
@@ -512,29 +561,23 @@ function initGiftsRep(sheet) {
 }
 
 function dolockGifts(sheet) {
-	const rep_elem    = getElem(sheet, Rep_Gifts)
-	const rep_value   = getElemValue(rep_elem)
-	const rep_indexes = Object.keys(rep_value)
-	rep_indexes.forEach(function(rep_index) {
-		const rep_entry = getElemChild(rep_elem, rep_index)
-		const row_edit  = getElemChild(rep_entry, Row_Edit)
-		const row_view  = getElemChild(rep_entry, Row_View)
-		remElemDisplayed(row_edit)
-		addElemDisplayed(row_view)
-	})
+	const cky_giftslck = getElem(sheet, rsoValue(Ckb_GiftsLck, Str_PFXCKB, Str_PFXCKY))
+	setElemValue(cky_giftslck, true)
 }
 
 function delockGifts(sheet) {
-	const rep_elem    = getElem(sheet, Rep_Gifts)
-	const rep_value   = getElemValue(rep_elem)
-	const rep_indexes = Object.keys(rep_value)
-	rep_indexes.forEach(function(rep_index) {
-		const rep_entry = getElemChild(rep_elem, rep_index)
-		const row_edit  = getElemChild(rep_entry, Row_Edit)
-		const row_view  = getElemChild(rep_entry, Row_View)
-		addElemDisplayed(row_edit)
-		remElemDisplayed(row_view)
-	})
+	const cky_giftslck = getElem(sheet, rsoValue(Ckb_GiftsLck, Str_PFXCKB, Str_PFXCKY))
+	setElemValue(cky_giftslck, false)
+}
+
+function doviewGifts(sheet) {
+	const rep = getElem(sheet, Rep_Gifts)
+	doviewRep(rep)
+}
+
+function doeditGifts(sheet) {
+	const rep = getElem(sheet, Rep_Gifts)
+	doeditRep(rep)
 }
 
 function initTabs(sheet) {

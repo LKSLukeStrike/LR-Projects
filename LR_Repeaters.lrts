@@ -1,5 +1,13 @@
 //region LR_Repeaters
 //whatis repeaters are elems, child/ren are items
+//region LR_Repeaters Items
+const Row_Edit         = "Row_Edit" // repeater entry edit row
+const Row_View         = "Row_View" // repeater entry view row
+const Del_Entry        = "Rem_Entry" // del repeater entry
+const New_Entry        = "Add_Entry" // new repeater entry
+const Inf_Entry        = "Inf_Entry" // info repeater entry
+//endregion
+
 //region LR_Repeaters Values
 function getRepValue(rep) { // get a repeater value
 	return getElemValue(rep)
@@ -7,35 +15,37 @@ function getRepValue(rep) { // get a repeater value
 function setRepValue(rep, rep_value) { // set a repeater value
 	return setElemValue(rep, rep_value)
 }
-function delRepValue(rep) { // delete a repeater value
+//endregion
+
+//region LR_Repeaters Child/ren
+function getRepChildren(rep) { // get a repeater children (keys)
+	return Object.keys(getRepValue(rep))
+}
+function delRepChildren(rep) { // delete all repeater children
 	return setRepValue(rep, {})
 }
 //endregion
 
-//region LR_Repeaters Getters
-function getRepIndexes(rep) { // get a repeater indexes (keys)
-	return Object.keys(getElemValue(rep))
+//region LR_Repeaters Edit/View
+function doeditRep(rep) { // show only the edit row
+	const rep_children = getRepChildren(rep)
+	rep_children.forEach(function(rep_child) {
+		const rep_entry = getElemChild(rep, rep_child)
+		const row_edit  = getElemChild(rep_entry, Row_Edit)
+		const row_view  = getElemChild(rep_entry, Row_View)
+		addElemDisplayed(row_edit)
+		remElemDisplayed(row_view)
+	})
 }
-function getRepChild(rep, child) { // on repeater child click
-	return oneElemChildDo(elem, child, Evt_Click, do_fct)
-}
-//endregion
-
-//region LR_Repeaters Events
-function oneRepChildrenDo(rep, child, evt, do_fct) { // on repeater children event
-	const rep_indexes = getRepIndexes(rep)
-	rep_indexes.forEach(function(rep_index) {
-		const rep_entry = getElemChild(rep_elem, rep_index)
+function doviewRep(rep) { // show only the view row
+	const rep_children = getRepChildren(rep)
+	rep_children.forEach(function(rep_child) {
+		const rep_entry = getElemChild(rep, rep_child)
 		const row_edit  = getElemChild(rep_entry, Row_Edit)
 		const row_view  = getElemChild(rep_entry, Row_View)
 		remElemDisplayed(row_edit)
 		addElemDisplayed(row_view)
 	})
-	const rep_value = getElemValue(repeater)
-	return elem.on(evt, child, do_fct)
-}
-function oncElemChildDo(elem, child, do_fct) { // on repeater child click
-	return oneElemChildDo(elem, child, Evt_Click, do_fct)
 }
 //endregion
 //endregion
