@@ -30,6 +30,7 @@ const Str_PFXROW = "Row_" // row item
 const Str_PFXCOL = "Col_" // column item
 const Str_PFXCNT = "Cnt_" // container item
 const Str_PFXVAL = "Val_" // value item
+const Str_PFXVIS = "Vis_" // value representation
 const Str_PFXDXV = "DxV_" // dot and value item (container)
 const Str_PFXDOS = "Dos_" // dosted item
 const Str_PFXDOT = "Dot_" // dotted item
@@ -60,6 +61,9 @@ function getElem(sheet, item) { // elem of a sheet item
 //region LR_Elems Attributes
 function getElemItem(elem) { // item is the id (aliases)
 	return elem.id()
+}
+function getElemChild(elem, child) {
+	return elem.find(child)
 }
 //endregion
 
@@ -118,6 +122,37 @@ function rsoValue(str_value, value_one, value_two) { // replace a string once
 	return str_value.replace(value_one, value_two)
 }
 //endregion
+
+//region LR_Operators Min/Max
+function minValue(value_one, value_two) { // minimum number value
+	value_one = Number(value_one)
+	value_two = Number(value_two)
+	return value_one < value_two ?
+		value_one : value_two
+}
+function maxValue(value_one, value_two) { // maximum number value
+	value_one = Number(value_one)
+	value_two = Number(value_two)
+	return value_one > value_two ?
+		value_one : value_two
+}
+function mnaValue(arr_value) { // minimum number value in an array
+	let result = null
+	arr_value.forEach(function(value_one) {
+		result = result ?
+			minValue(value_one, result) : value_one
+	})
+	return result
+}
+function mxaValue(arr_value) { // maximum number value in an array
+	let result = null
+	arr_value.forEach(function(value_one) {
+		result = result ?
+			maxValue(value_one, result) : value_one
+	})
+	return result
+}
+//endregion
 //endregion
 
 
@@ -129,11 +164,11 @@ const Sht_Character = "main" // character sheet
 
 //region LS_Constants Items (IDs)
 const Row_Head         = "Row_Head" // sheet heading
-const Clk_PrefSheet    = "Clk_PrefSheet" // preferences trigger
+const Ckb_PrefSheet    = "Ckb_PrefSheet" // preferences checkbox
 const Cky_PrefSheet    = "Cky_PrefSheet" // preferences state
 const Row_Pref         = "Row_Pref" // preferences panel
 const Val_CharName     = "Val_CharName" // character name
-const Clk_LockSheet    = "Clk_LockSheet" // locking trigger
+const Ckb_LockSheet    = "Ckb_LockSheet" // locking checkbox
 const Cky_LockSheet    = "Cky_LockSheet" // locking state
 const Chc_TypeDices    = "Chc_TypeDices" // dices type choice
 const Chc_RollDices    = "Chc_RollDices" // dices roll choice
@@ -143,6 +178,9 @@ const Ckt_Talent       = "Ckt_Talent" // tooltip
 const Ckb_Talent       = "Ckb_Talent" // checkbox
 
 const Row_Characs      = "Row_Characs" // sheet characs
+const Clk_CharacsDel   = "Clk_CharacsDel" // characs del button
+const Ckb_CharacsLck   = "Ckb_CharacsLck" // characs lck checkbox
+const Clk_CharacsNew   = "Clk_CharacsNew" // characs new button
 const Ckb_Activity     = "Ckb_Activity" // activity checkbox
 const Cky_Activity     = "Cky_Activity" // activity state
 const Ckb_SocialRank   = "Ckb_SocialRank" // social rank checkbox
@@ -155,20 +193,18 @@ const Arr_AllCBoxes    = [
 	Ckb_Visibility,
 ]
 const Row_Bio          = "Row_Bio" // bio panel
+
 const Row_Gifts        = "Row_Gifts" // gifts panel
+const Clk_GiftsDel     = "Clk_GiftsDel" // gifts del button
+const Ckb_GiftsLck     = "Ckb_GiftsLck" // gifts lck checkbox
+const Clk_GiftsNew     = "Clk_GiftsNew" // gifts new button
+
 const Row_Possessions  = "Row_Possessions" // possessions panel
+
 const Row_Relations    = "Row_Relations" // relations panel
+
 const Row_Notes        = "Row_Notes" // notes panel
-const Col_Bio          = "Col_Bio" // bio column
-const Col_Gifts        = "Col_Gifts" // gifts column
-const Col_Possessions  = "Col_Possessions" // possessions column
-const Col_Relations    = "Col_Relations" // relations column
-const Col_Notes        = "Col_Notes" // notes column
-const Prf_Bio          = "Prf_Bio" // bio preference
-const Prf_Gifts        = "Prf_Gifts" // gifts preference
-const Prf_Possessions  = "Prf_Possessions" // possessions preference
-const Prf_Relations    = "Prf_Relations" // relations preference
-const Prf_Notes        = "Prf_Notes" // notes preference
+
 const Tab_Characs      = "Tab_Characs" // bio tab
 const Tab_Bio          = "Tab_Bio" // bio tab
 const Tab_Gifts        = "Tab_Gifts" // gifts tab
@@ -204,17 +240,29 @@ function decrementElem(elem) {
 //endregion
 
 //region LS_Elems Css Classes
-const Css_LSLight = "bg-light text-dark"
+const Css_LSSelected  = "bg-light text-dark"
+const Css_LSInvisible = "invisible"
 
 function addElemSelected(elem) {
-	return addElemCss(elem, Css_LSLight)
+	return addElemCss(elem, Css_LSSelected)
 }
 function remElemSelected(elem) {
-	return remElemCss(elem, Css_LSLight)
+	return remElemCss(elem, Css_LSSelected)
 }
 function hasElemSelected(elem) {
-	return hasElemCss(elem, Css_LSLight)
+	return hasElemCss(elem, Css_LSSelected)
 }
+
+function addElemInvisible(elem) {
+	return addElemCss(elem, Css_LSInvisible)
+}
+function remElemInvisible(elem) {
+	return remElemCss(elem, Css_LSInvisible)
+}
+function hasElemInvisible(elem) {
+	return hasElemCss(elem, Css_LSInvisible)
+}
+
 function addElemDisplayed(elem) {
 	return remElemCss(elem, Css_DNone)
 }
@@ -231,6 +279,9 @@ function hasElemDisplayed(elem) {
 //region LS_Repeaters Items
 const Row_Edit         = "Row_Edit" // repeater entry edit row
 const Row_View         = "Row_View" // repeater entry view row
+const Del_Entry        = "Rem_Entry" // del repeater entry
+const New_Entry        = "Add_Entry" // new repeater entry
+const Inf_Entry        = "Inf_Entry" // info repeater entry
 //endregion
 //region LS_Repeaters Characs
 const Rep_CharacsL     = "Rep_CharacsL" // characs repeater left
@@ -239,6 +290,14 @@ const Rep_CharacsR     = "Rep_CharacsR" // characs repeater right
 //endregion
 //region LS_Repeaters Gifts
 const Rep_Gifts        = "Rep_Gifts" // gifts repeater
+const Val_Cost         = "Val_Cost" // gift cost value
+const Val_Name         = "Val_Name" // gift name value
+const Val_Description  = "Val_Description" // gift description value
+const Arr_GiftsVals    = [
+	Val_Cost,
+	Val_Name,
+	Val_Description,
+]
 //endregion
 //endregion
 //endregion
@@ -302,21 +361,21 @@ function initHead(sheet) {
 }
 
 function initPref(sheet) {
-	const clk_prefsheet = getElem(sheet, Clk_PrefSheet)
+	const ckb_prefsheet = getElem(sheet, Ckb_PrefSheet)
 	const cky_prefsheet = getElem(sheet, Cky_PrefSheet)
 	const row_pref = getElem(sheet, Row_Pref)
 	const row_characs = getElem(sheet, Row_Characs)
-	oncElemDo(clk_prefsheet, function(elem) { // toggle pref
+	oncElemDo(ckb_prefsheet, function(elem) { // toggle pref
 		toggleElem(cky_prefsheet)
 	})
 	onuElemDo(cky_prefsheet, function(elem) { // handle pref visibility
 		if (getElemValue(elem)) { // show pref
-			addElemSelected(clk_prefsheet)
+			addElemSelected(ckb_prefsheet)
 			addElemDisplayed(row_pref)
 			remElemDisplayed(row_characs)
 			deselectTabAll(sheet)
 		} else { // hide pref
-			remElemSelected(clk_prefsheet)
+			remElemSelected(ckb_prefsheet)
 			remElemDisplayed(row_pref)
 			addElemDisplayed(row_characs)
 			deselectTabAll(sheet)
@@ -350,18 +409,18 @@ function initCharName(sheet) {
 }
 
 function initLock(sheet) {
-	const clk_locksheet = getElem(sheet, Clk_LockSheet)
+	const ckb_locksheet = getElem(sheet, Ckb_LockSheet)
 	const cky_locksheet = getElem(sheet, Cky_LockSheet)
-	oncElemDo(clk_locksheet, function(elem) { // toggle lock
+	oncElemDo(ckb_locksheet, function(elem) { // toggle lock
 		toggleElem(cky_locksheet)
 	})
 	onuElemDo(cky_locksheet, function(elem) { // handle lock
 		if (getElemValue(elem)) { // lock sheet
-			addElemSelected(clk_locksheet)
+			addElemSelected(ckb_locksheet)
 			log("lock")
 			dolockSheet(sheet)
 		} else { // unlock sheet
-			remElemSelected(clk_locksheet)
+			remElemSelected(ckb_locksheet)
 			log("unlock")
 			delockSheet(sheet)
 		}
@@ -380,6 +439,32 @@ function delockSheet(sheet) {
 }
 
 function initCharacs(sheet) {
+	const ckb_characslck = getElem(sheet, Ckb_CharacsLck)
+	const cky_characslck = getElem(sheet, rsoValue(Ckb_CharacsLck, Str_PFXCKB, Str_PFXCKY))
+	const col_characsdel = getElem(sheet, rsoValue(Clk_CharacsDel, Str_PFXCLK, Str_PFXCOL))
+	const col_characsnew = getElem(sheet, rsoValue(Clk_CharacsNew, Str_PFXCLK, Str_PFXCOL))
+
+	oncElemDo(ckb_characslck, function(elem) { // toggle characs lock
+		toggleElem(cky_characslck)
+	})
+
+	onuElemDo(cky_characslck, function(elem) { // handle characs visibility
+		if (getElemValue(elem)) { // hide characs actions
+			addElemSelected(ckb_characslck)
+			addElemInvisible(col_characsdel)
+			addElemInvisible(col_characsnew)
+		} else { // show characs actions
+			remElemSelected(ckb_characslck)
+			remElemInvisible(col_characsdel)
+			remElemInvisible(col_characsnew)
+		}
+	})
+	
+	triggerElem(cky_characslck) // triggers itself on init
+	initCharacsRep(sheet)
+}
+
+function initCharacsRep(sheet) {
 }
 
 function dolockCharacs(sheet) {
@@ -389,6 +474,41 @@ function delockCharacs(sheet) {
 }
 
 function initGifts(sheet) {
+	const ckb_giftslck = getElem(sheet, Ckb_GiftsLck)
+	const cky_giftslck = getElem(sheet, rsoValue(Ckb_GiftsLck, Str_PFXCKB, Str_PFXCKY))
+	const col_giftsdel = getElem(sheet, rsoValue(Clk_GiftsDel, Str_PFXCLK, Str_PFXCOL))
+	const col_giftsnew = getElem(sheet, rsoValue(Clk_GiftsNew, Str_PFXCLK, Str_PFXCOL))
+
+	oncElemDo(ckb_giftslck, function(elem) { // toggle gifts lock
+		toggleElem(cky_giftslck)
+	})
+
+	onuElemDo(cky_giftslck, function(elem) { // handle gifts visibility
+		if (getElemValue(elem)) { // hide gifts actions
+			addElemSelected(ckb_giftslck)
+			addElemInvisible(col_giftsdel)
+			addElemInvisible(col_giftsnew)
+		} else { // show gifts actions
+			remElemSelected(ckb_giftslck)
+			remElemInvisible(col_giftsdel)
+			remElemInvisible(col_giftsnew)
+		}
+	})
+	
+	triggerElem(cky_giftslck) // triggers itself on init
+	initGiftsRep(sheet)
+}
+
+function initGiftsRep(sheet) {
+	// Arr_GiftsVals.forEach(function(val_item) { // setup click on vis items
+		// const vis_item = rsoValue(val_item, Str_PFXVAL, Str_PFXVIS)
+		// const vis_elem = getElem(sheet, vis_item)
+		// oncElemDo(vis_elem, function(elem) { // use the gift TODO
+			// log("use gift")
+		// })
+		// //TODO handle del, add, info
+		// //TODO handle val to vis on update
+	// })
 }
 
 function dolockGifts(sheet) {
@@ -396,9 +516,9 @@ function dolockGifts(sheet) {
 	const rep_value   = getElemValue(rep_elem)
 	const rep_indexes = Object.keys(rep_value)
 	rep_indexes.forEach(function(rep_index) {
-		const rep_entry = rep_elem.find(rep_index)
-		const row_edit = rep_entry.find(Row_Edit)
-		const row_view = rep_entry.find(Row_View)
+		const rep_entry = getElemChild(rep_elem, rep_index)
+		const row_edit  = getElemChild(rep_entry, Row_Edit)
+		const row_view  = getElemChild(rep_entry, Row_View)
 		remElemDisplayed(row_edit)
 		addElemDisplayed(row_view)
 	})
@@ -409,9 +529,9 @@ function delockGifts(sheet) {
 	const rep_value   = getElemValue(rep_elem)
 	const rep_indexes = Object.keys(rep_value)
 	rep_indexes.forEach(function(rep_index) {
-		const rep_entry = rep_elem.find(rep_index)
-		const row_edit = rep_entry.find(Row_Edit)
-		const row_view = rep_entry.find(Row_View)
+		const rep_entry = getElemChild(rep_elem, rep_index)
+		const row_edit  = getElemChild(rep_entry, Row_Edit)
+		const row_view  = getElemChild(rep_entry, Row_View)
 		addElemDisplayed(row_edit)
 		remElemDisplayed(row_view)
 	})

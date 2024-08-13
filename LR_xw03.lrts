@@ -1,2 +1,3 @@
-const Ckb_RollVisibility   = "Ckb_RollVisibility" // roll visibility checkbox
-const Cky_RollVisibility   = "Cky_RollVisibility" // roll visibility state
+const Clk_CharacsDel   = "Clk_CharacsDel" // gifts del button
+const Ckb_CharacsLck   = "Ckb_CharacsLck" // gifts lck checkbox
+const Clk_CharacsNew   = "Clk_CharacsNew" // gifts new button

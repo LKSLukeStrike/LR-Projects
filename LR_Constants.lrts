@@ -29,6 +29,7 @@ const Str_PFXROW = "Row_" // row item
 const Str_PFXCOL = "Col_" // column item
 const Str_PFXCNT = "Cnt_" // container item
 const Str_PFXVAL = "Val_" // value item
+const Str_PFXVIS = "Vis_" // value representation
 const Str_PFXDXV = "DxV_" // dot and value item (container)
 const Str_PFXDOS = "Dos_" // dosted item
 const Str_PFXDOT = "Dot_" // dotted item

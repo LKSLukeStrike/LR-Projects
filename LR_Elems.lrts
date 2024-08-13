@@ -38,17 +38,6 @@ function onuElemDo(elem, do_fct) { // on update
 	debugFA("onuElemDo", arguments)
 	return oneElemDo(elem, Evt_Update, do_fct)
 }
-function oneElemChildDo(elem, child, evt, do_fct) { // on child event
-	debugFA("oneElemChildDo", arguments)
-	return elem.on(evt, child, do_fct)
-}
-function oncElemChildDo(elem, child, do_fct) { // on child click
-	debugFA("oncElemChildDo", arguments)
-	return oneElemChildDo(elem, child, Evt_Click, do_fct)
-}
-function onuElemChildDo(elem, child, do_fct) { // on child update
-	debugFA("onuElemChildDo", arguments)
-	return oneElemChildDo(elem, child, Evt_Update, do_fct)
 }
 //endregion
 

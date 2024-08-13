@@ -1,5 +1,21 @@
-const Tab_Bio          = "Tab_Bio" // bio tab
-const Tab_Gifts        = "Tab_Gifts" // gifts tab
-const Tab_Possessions  = "Tab_Possessions" // possessions tab
-const Tab_Relations    = "Tab_Relations" // relations tab
-const Tab_Notes        = "Tab_Notes" // notes tab
+	const ckb_characslck = getElem(sheet, Ckb_CharacsLck)
+	const cky_characslck = getElem(sheet, rsoValue(Ckb_CharacsLck, Str_PFXCKB, Str_PFXCKY))
+	const col_characsdel = getElem(sheet, rsoValue(Clk_CharacsDel, Str_PFXCLK, Str_PFXCOL))
+	const col_characsnew = getElem(sheet, rsoValue(Clk_CharacsNew, Str_PFXCLK, Str_PFXCOL))
+
+	oncElemDo(ckb_characslck, function(elem) { // toggle characs lock
+		toggleElem(cky_characslck)
+	})
+
+	onuElemDo(cky_characslck, function(elem) { // handle characs visibility
+		if (getElemValue(elem)) { // hide characs actions
+			addElemSelected(ckb_characslck)
+			addElemInvisible(col_characsdel)
+			addElemInvisible(col_characsnew)
+		} else { // show characs actions
+			remElemSelected(ckb_characslck)
+			remElemInvisible(col_characsdel)
+			remElemInvisible(col_characsnew)
+		}
+	})
+	triggerElem(cky_characslck) // triggers itself on init
