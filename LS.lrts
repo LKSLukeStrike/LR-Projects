@@ -525,6 +525,7 @@ function initGifts(sheet) {
 	const cky_giftslck = getElem(sheet, rsoValue(Ckb_GiftsLck, Str_PFXCKB, Str_PFXCKY))
 	const col_giftsdel = getElem(sheet, rsoValue(Clk_GiftsDel, Str_PFXCLK, Str_PFXCOL))
 	const col_giftsnew = getElem(sheet, rsoValue(Clk_GiftsNew, Str_PFXCLK, Str_PFXCOL))
+	const clk_giftsdel = getElem(sheet, Clk_GiftsDel)
 
 	oncElemDo(ckb_giftslck, function(elem) { // toggle gifts lock
 		toggleElem(cky_giftslck)
@@ -542,6 +543,10 @@ function initGifts(sheet) {
 			remElemInvisible(col_giftsnew)
 			doeditGifts(sheet)
 		}
+	})
+
+	oncElemDo(clk_giftsdel, function(elem) { // del gifts children
+		delGiftsChildren(sheet)
 	})
 	
 	triggerElem(cky_giftslck) // triggers itself on init
@@ -578,6 +583,11 @@ function doviewGifts(sheet) {
 function doeditGifts(sheet) {
 	const rep = getElem(sheet, Rep_Gifts)
 	doeditRep(rep)
+}
+
+function delGiftsChildren(sheet) {
+	const rep = getElem(sheet, Rep_Gifts)
+	delRepChildren(rep)
 }
 
 function initTabs(sheet) {
