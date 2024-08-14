@@ -29,15 +29,23 @@ const Str_PFXROW = "Row_" // row item
 const Str_PFXCOL = "Col_" // column item
 const Str_PFXCNT = "Cnt_" // container item
 const Str_PFXVAL = "Val_" // value item
-const Str_PFXVIS = "Vis_" // value representation
+const Str_PFXVIS = "Vis_" // value representation item
+const Str_PFXMIN = "Min_" // min value item
+const Str_PFXMAX = "Max_" // max value item
 const Str_PFXDXV = "DxV_" // dot and value item (container)
 const Str_PFXDOS = "Dos_" // dosted item
 const Str_PFXDOT = "Dot_" // dotted item
 const Str_PFXEFF = "Eff_" // effort item
+const Str_PFXINJ = "Inj_" // inject item
+const Str_PFXREJ = "Rej_" // reject item
 const Str_PFXMOD = "Mod_" // modder item
 const Str_PFXMNS = "Mns_" // minus item
 const Str_PFXPLS = "Pls_" // plus item
+const Str_PFXADJ = "Adj_" // adjuster item
+const Str_PFXDEC = "Dec_" // decrement item
+const Str_PFXINC = "Inc_" // increment item
 const Str_PFXREP = "Rep_" // repeater item
+const Str_PFXCLK = "Clk_" // click item
 const Str_PFXCHC = "Chc_" // choice item
 const Str_PFXCHK = "Chk_" // standard checkbox item (obsolete ?)
 const Str_PFXCKT = "Ckt_" // standard checkbox tooltip (container)
@@ -46,7 +54,7 @@ const Str_PFXCKY = "Cky_" // label checkbox state
 const Str_PFXFLD = "Fld_" // foldering item
 const Str_PFXTAB = "Tab_" // tab item
 const Str_PFXPRF = "Prf_" // preference item
-const Str_PFXCLK = "Clk_" // click item
+const Str_PFXLCK = "Lck_" // lock item
 //endregion
 
 //region LR_Constants DxV Display Modes
