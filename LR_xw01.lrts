@@ -1,20 +1,4 @@
-
-//region LR_Repeaters Each
-function eachRepChildrenDo(rep, do_fct) { // do on each rep child
-	const rep_children = getRepChildren(rep)
-
-	rep_children.forEach(function(child) { // loop on each child
-		const rep_child = getRepChild(rep, child)
-		do_fct(rep_child)
-	})
-}
-function eachRepItemDo(rep, item, do_fct) { // do on each rep child item
-	const rep_children = getRepChildren(rep)
-
-	rep_children.forEach(function(child) { // loop on each child
-		const rep_child = getRepChild(rep, child)
-		const elem = getElemChild(rep_child, item)
-		do_fct(elem)
-	})
-}
-//endregion
+		
+		oncRepItemDo(rep_gifts, val_item, function(val_elem) { // child del button
+			log("del")
+		})

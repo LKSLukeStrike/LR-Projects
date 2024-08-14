@@ -3,9 +3,9 @@
 //region LR_Repeaters Items
 const Row_Edit         = "Row_Edit" // repeater entry edit row
 const Row_View         = "Row_View" // repeater entry view row
-const Del_Entry        = "Rem_Entry" // del repeater entry
-const New_Entry        = "Add_Entry" // new repeater entry
-const Inf_Entry        = "Inf_Entry" // info repeater entry
+const Del_Entry        = "Del_Entry" // del repeater entry
+const New_Entry        = "New_Entry" // new repeater entry
+const Inf_Entry        = "Inf_Entry" // inf repeater entry
 //endregion
 
 //region LR_Repeaters Values
@@ -26,6 +26,11 @@ function getRepChild(rep, child) { // get a repeater child (elem)
 }
 function delRepChildren(rep) { // delete all repeater children
 	return setRepValue(rep, {})
+}
+function delRepChild(rep, child) { // delete one repeater child
+	const rep_value = getRepValue(rep)
+	delete rep_value[child]
+	return setRepValue(rep, rep_value)
 }
 function newRepChild(rep, tpl_child) { // add a child template at the end of rep
 	const rep_value    = getRepValue(rep)

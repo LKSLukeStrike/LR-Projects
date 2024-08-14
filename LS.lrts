@@ -178,9 +178,9 @@ function mxaValue(arr_value) { // maximum number value in an array
 //region LR_Repeaters Items
 const Row_Edit         = "Row_Edit" // repeater entry edit row
 const Row_View         = "Row_View" // repeater entry view row
-const Del_Entry        = "Rem_Entry" // del repeater entry
-const New_Entry        = "Add_Entry" // new repeater entry
-const Inf_Entry        = "Inf_Entry" // info repeater entry
+const Del_Entry        = "Del_Entry" // del repeater entry
+const New_Entry        = "New_Entry" // new repeater entry
+const Inf_Entry        = "Inf_Entry" // inf repeater entry
 //endregion
 
 //region LR_Repeaters Values
@@ -201,6 +201,11 @@ function getRepChild(rep, child) { // get a repeater child (elem)
 }
 function delRepChildren(rep) { // delete all repeater children
 	return setRepValue(rep, {})
+}
+function delRepChild(rep, child) { // delete one repeater child
+	const rep_value = getRepValue(rep)
+	delete rep_value[child]
+	return setRepValue(rep, rep_value)
 }
 function newRepChild(rep, tpl_child) { // add a child template at the end of rep
 	const rep_value    = getRepValue(rep)
@@ -678,10 +683,10 @@ function initGiftsRep(sheet) {
 		initGiftsRep(sheet)
 	})
 	
-	Arr_GiftsVals.forEach(function(val_item) {
+	Arr_GiftsVals.forEach(function(val_item) { // reflects val on vis
 		const vis_item  = rsoValue(val_item, Str_PFXVAL, Str_PFXVIS)
 		
-		onuRepItemDo(rep_gifts, val_item, function(val_elem) { // reflects val on vis
+		onuRepItemDo(rep_gifts, val_item, function(val_elem) {
 			const val_value = getElemValue(val_elem)
 			const val_index = getElemIndex(val_elem)
 			const rep_child = getRepChild(rep_gifts, val_index)
@@ -696,6 +701,22 @@ function initGiftsRep(sheet) {
 		eachRepItemDo(rep_gifts, val_item, function(val_elem) {
 			triggerElem(val_elem) // triggers vals to handle vals added by templates
 		})
+	})
+	
+	oncRepItemDo(rep_gifts, Del_Entry, function(elem) { // child del button
+		const child = getElemIndex(elem)
+		log("del")
+		delGiftsChild(sheet, child)
+	})
+	
+	oncRepItemDo(rep_gifts, New_Entry, function(elem) { // child new button
+		const child = getElemIndex(elem)
+		log("new")
+	})
+	
+	oncRepItemDo(rep_gifts, Inf_Entry, function(elem) { // child inf button
+		const child = getElemIndex(elem)
+		log("inf")
 	})
 }
 
@@ -722,6 +743,11 @@ function doeditGifts(sheet) {
 function delGiftsChildren(sheet) {
 	const rep = getElem(sheet, Rep_Gifts)
 	delRepChildren(rep)
+}
+
+function delGiftsChild(sheet, child) { 
+	const rep = getElem(sheet, Rep_Gifts)
+	delRepChild(rep, child)
 }
 
 function newGiftsChild(sheet) {
