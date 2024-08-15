@@ -6,4 +6,6 @@ click sur un icone reset la valeur act à max
 
 enlever tous les cky etc et les calculer par rso
 
+changer le systeme de lock
+
 

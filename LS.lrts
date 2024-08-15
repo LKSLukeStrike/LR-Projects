@@ -193,6 +193,12 @@ function setRepValue(rep, rep_value) { // set a repeater value
 //endregion
 
 //region LR_Repeaters Child/ren
+function getRepElemRelative(rep, elem, rel_item) { // get relative elem in the same child
+	const rep_index = getElemIndex(elem)
+	const rep_child = getRepChild(rep, rep_index)
+	const rel_elem  = getElemChild(rep_child, rel_item)
+	return rel_elem
+}
 function getRepChildren(rep) { // get a repeater children (keys)
 	return Object.keys(getRepValue(rep))
 }
@@ -699,7 +705,6 @@ function initGifts(sheet) {
 	})
 	
 	initGiftsRep(sheet)
-	// triggerGiftsRep(sheet)
 }
 
 function initGiftsRep(sheet) {
@@ -711,8 +716,6 @@ function initGiftsRep(sheet) {
 	const Vis_Name        = rsoValue(Val_Name, Str_PFXVAL, Str_PFXVIS)
 	const Vis_Description = rsoValue(Val_Description, Str_PFXVAL, Str_PFXVIS)
 	log("=========== initGiftsRep ===========")
-	// log(getRepValue(rep_gifts))
-	// log(pts_value)
 
 	triggerElem(cky_giftslck) // triggers lock to set edit or view mode
 
@@ -721,10 +724,8 @@ function initGiftsRep(sheet) {
 	})
 	
 	onuRepItemDo(rep_gifts, Vis_Cost, function(vis_cost) { // handle gifts usability
-		const vis_index       = getElemIndex(vis_cost)
-		const rep_child       = getRepChild(rep_gifts, vis_index)
-		const vis_name        = getElemChild(rep_child, Vis_Name)
-		const vis_description = getElemChild(rep_child, Vis_Description)
+		const vis_name        = getRepElemRelative(rep_gifts, vis_cost, Vis_Name)
+		const vis_description = getRepElemRelative(rep_gifts, vis_cost, Vis_Description)
 		const elm_value       = getElemValue(vis_cost)
 		if (elm_value <= pts_value) { // can use the gift
 			addElemUsable(vis_cost)
@@ -737,19 +738,25 @@ function initGiftsRep(sheet) {
 		}
 	})
 	
-	Arr_GiftsVals.forEach(function(val_item) { // reflects val on vis
-		const vis_item  = rsoValue(val_item, Str_PFXVAL, Str_PFXVIS)
+	Arr_GiftsVals.forEach(function(val_item) {
+		const Vis_Item = rsoValue(val_item, Str_PFXVAL, Str_PFXVIS)
 		
-		onuRepItemDo(rep_gifts, val_item, function(val_elem) {
-			const val_index = getElemIndex(val_elem)
-			const rep_child = getRepChild(rep_gifts, val_index)
+		onuRepItemDo(rep_gifts, val_item, function(val_elem) { // reflects val on vis
+			const vis_elem  = getRepElemRelative(rep_gifts, val_elem, Vis_Item)
 			const val_value = getElemValue(val_elem)
-			const vis_elem  = getElemChild(rep_child, vis_item)
 			let   vis_value = val_item == Val_Cost ?
 				0 : "" // default value
-			let   vis_value = val_value ?
+			vis_value = val_value ?
 				val_value : vis_value // no default value, val value instead
 			setElemValue(vis_elem, vis_value)
+		})
+		
+		oncRepItemDo(rep_gifts, Vis_Item, function(vis_elem) { // click on vis item
+			const val_cost = getRepElemRelative(rep_gifts, vis_elem, Val_Cost)
+			const pts_cost = getElemValue(val_cost)
+			if (! hasElemUsable(vis_elem)) {return} // cannot use
+			log("use !")
+			setElemValue(val_giftspts, pts_value - pts_cost)
 		})
 	})
 	
@@ -767,22 +774,14 @@ function initGiftsRep(sheet) {
 		const child = getElemIndex(elem)
 		log("inf")
 	})
-	// log(getRepValue(rep_gifts))
+
 	triggerGiftsRep(sheet)
 }
 
 function triggerGiftsRep(sheet) {
-log("triggerGiftsRep")
 	const rep_gifts = getElem(sheet, Rep_Gifts)
 	eachRepItemDo(rep_gifts, Val_Cost, function(val_elem) {
-		const elm_value = getElemValue(val_elem)
-		// log(typeof elm_value)
-		// log(elm_value)
-		setElemValue(val_elem, elm_value)
-		const elm_value2 = getElemValue(val_elem)
-		// log(typeof elm_value2)
-		// log(elm_value2)
-		// triggerElem(val_elem) // triggers vals to handle vals added by templates
+		triggerElem(val_elem) // triggers vals to handle vals added by templates
 	})
 }
 

@@ -1,4 +1,5 @@
 		
-		oncRepItemDo(rep_gifts, val_item, function(val_elem) { // child del button
-			log("del")
+		oncRepItemDo(rep_gifts, vis_item, function(vis_elem) { // click on vis item
+			if (! hasElemUsable(vis_elem)) {return} // cannot use
+			log("use !s")
 		})

@@ -18,6 +18,12 @@ function setRepValue(rep, rep_value) { // set a repeater value
 //endregion
 
 //region LR_Repeaters Child/ren
+function getRepElemRelative(rep, elem, rel_item) { // get relative elem in the same child
+	const rep_index = getElemIndex(elem)
+	const rep_child = getRepChild(rep, rep_index)
+	const rel_elem  = getElemChild(rep_child, rel_item)
+	return rel_elem
+}
 function getRepChildren(rep) { // get a repeater children (keys)
 	return Object.keys(getRepValue(rep))
 }
@@ -27,20 +33,47 @@ function getRepChild(rep, child) { // get a repeater child (elem)
 function delRepChildren(rep) { // delete all repeater children
 	return setRepValue(rep, {})
 }
-function delRepChild(rep, child) { // delete one repeater child
-	const rep_value = getRepValue(rep)
-	delete rep_value[child]
-	return setRepValue(rep, rep_value)
-}
-function newRepChild(rep, tpl_child) { // add a child template at the end of rep
+function delRepChildAt(rep, at_child) { // delete one repeater child
 	const rep_value    = getRepValue(rep)
 	const rep_children = getRepChildren(rep)
-	const max_child    = mxaValue(rep_children)
-	const new_child = max_child ?
-		max_child + 1 : 1
-	const tpl_clone = Object.assign({}, tpl_child) // /!\ avoid to modify the original tpl
-	rep_value[new_child] = tpl_clone
-	return setRepValue(rep, rep_value)
+	const new_value    = {}
+	let   new_child    = 1
+	rep_children.forEach(function(child) { // loop on each child
+		if (child != at_child) {
+			new_value[new_child] = rep_value[child]
+			new_child++
+		}
+	})
+	return setRepValue(rep, new_value)
+}
+function newRepChild(rep, tpl_child) { // add a child template at the end of rep
+	const tpl_clone    = Object.assign({}, tpl_child) // /!\ avoid to modify original tpl
+	const rep_value    = getRepValue(rep)
+	const rep_children = getRepChildren(rep)
+	const new_value    = {}
+	let   new_child    = 1
+	rep_children.forEach(function(child) { // loop on each child
+		new_value[new_child] = rep_value[child]
+		new_child++
+	})
+	new_value[new_child] = tpl_clone
+	return setRepValue(rep, new_value)
+}
+function newRepChildAt(rep, at_child, tpl_child) { // add a child template at a child
+	const tpl_clone    = Object.assign({}, tpl_child) // /!\ avoid to modify original tpl
+	const rep_value    = getRepValue(rep)
+	const rep_children = getRepChildren(rep)
+	const new_value    = {}
+	let   new_child    = 1
+	rep_children.forEach(function(child) { // loop on each child
+		new_value[new_child] = rep_value[child]
+		new_child++
+		if (child == at_child) {
+			new_value[new_child] = tpl_clone
+			new_child++
+		}
+	})
+	return setRepValue(rep, new_value)
 }
 //endregion
 
@@ -48,7 +81,7 @@ function newRepChild(rep, tpl_child) { // add a child template at the end of rep
 function doeditRep(rep) { // show only the edit row
 	const rep_children = getRepChildren(rep)
 	rep_children.forEach(function(child) {
-		const rep_child = getElemChild(rep, child)
+		const rep_child = getRepChild(rep, child)
 		const row_edit  = getElemChild(rep_child, Row_Edit)
 		const row_view  = getElemChild(rep_child, Row_View)
 		addElemDisplayed(row_edit)
@@ -58,7 +91,7 @@ function doeditRep(rep) { // show only the edit row
 function doviewRep(rep) { // show only the view row
 	const rep_children = getRepChildren(rep)
 	rep_children.forEach(function(child) {
-		const rep_child = getElemChild(rep, child)
+		const rep_child = getRepChild(rep, child)
 		const row_edit  = getElemChild(rep_child, Row_Edit)
 		const row_view  = getElemChild(rep_child, Row_View)
 		remElemDisplayed(row_edit)
@@ -73,8 +106,8 @@ function oneRepItemDo(rep, evt, item, do_fct) { // on event on each rep child it
 
 	rep_children.forEach(function(child) { // loop on each child
 		const rep_child = getRepChild(rep, child)
-		const elem  = getElemChild(rep_child, item)
-		elem.on(evt, do_fct)
+		const elm_child = getElemChild(rep_child, item)
+		elm_child.on(evt, do_fct)
 	})
 }
 function oncRepItemDo(rep, item, do_fct) { // on click on each rep child item
@@ -99,8 +132,8 @@ function eachRepItemDo(rep, item, do_fct) { // do on each rep child item
 
 	rep_children.forEach(function(child) { // loop on each child
 		const rep_child = getRepChild(rep, child)
-		const elem = getElemChild(rep_child, item)
-		do_fct(elem)
+		const elm_child = getElemChild(rep_child, item)
+		do_fct(elm_child)
 	})
 }
 //endregion
