@@ -1,4 +1,4 @@
-[
+border rounded h-50px[
   {
     "type": "Main",
     "craft": true,
@@ -1351,9 +1351,9 @@
                         "text": ":ban:",
                         "align": "Center",
                         "clickable": true,
-                        "quickBar": false,
+                        "quickBar": null,
                         "isTemplate": false,
-                        "computed": false,
+                        "computed": null,
                         "roll": null,
                         "tooltip": true,
                         "tooltipLabel": "Supprimer",
@@ -1409,10 +1409,10 @@
                       {
                         "text": "0",
                         "align": null,
-                        "clickable": false,
-                        "quickBar": false,
+                        "clickable": null,
+                        "quickBar": null,
                         "isTemplate": false,
-                        "computed": false,
+                        "computed": null,
                         "roll": null,
                         "id": "Cky_CharacsLck",
                         "name": "Cky_CharacsLck",
@@ -1447,9 +1447,9 @@
                         "text": ":plus-circle:",
                         "align": "Center",
                         "clickable": true,
-                        "quickBar": false,
+                        "quickBar": null,
                         "isTemplate": false,
-                        "computed": false,
+                        "computed": null,
                         "roll": null,
                         "tooltip": true,
                         "tooltipLabel": "Ajouter",
@@ -2581,9 +2581,9 @@
                         "text": ":ban:",
                         "align": "Center",
                         "clickable": true,
-                        "quickBar": false,
+                        "quickBar": null,
                         "isTemplate": false,
-                        "computed": false,
+                        "computed": null,
                         "roll": null,
                         "tooltip": true,
                         "tooltipLabel": "Supprimer",
@@ -2639,10 +2639,10 @@
                       {
                         "text": "0",
                         "align": null,
-                        "clickable": false,
-                        "quickBar": false,
+                        "clickable": null,
+                        "quickBar": null,
                         "isTemplate": false,
-                        "computed": false,
+                        "computed": null,
                         "roll": null,
                         "id": "Cky_GiftsLck",
                         "name": "Cky_GiftsLck",
@@ -2677,9 +2677,9 @@
                         "text": ":plus-circle:",
                         "align": "Center",
                         "clickable": true,
-                        "quickBar": false,
+                        "quickBar": null,
                         "isTemplate": false,
-                        "computed": false,
+                        "computed": null,
                         "roll": null,
                         "tooltip": true,
                         "tooltipLabel": "Ajouter",
@@ -2708,20 +2708,21 @@
                 "classes": "pt-2",
                 "children": [
                   {
-                    "size": 1,
+                    "size": 2,
                     "id": "cpsdqdqn",
                     "name": "Col_GiftsPts",
                     "classes": "",
                     "children": [
                       {
-                        "id": "gdjszluc",
-                        "name": "Cnt_GiftsPts",
-                        "classes": "align-items-center text-large pl-1",
+                        "id": "fmswjubv",
+                        "name": "Row_GiftsPts",
+                        "classes": "text-large text-center",
                         "children": [
                           {
-                            "id": "mtzchmmi",
-                            "name": "Cnt_MaxGifts",
-                            "classes": "",
+                            "size": 1,
+                            "id": "somjzewo",
+                            "name": "Col_GiftsPtsL",
+                            "classes": "pl-3 pr-3",
                             "children": [
                               {
                                 "text": ":hand-holding-heart:",
@@ -2734,8 +2735,8 @@
                                 "tooltip": true,
                                 "tooltipLabel": "Dons",
                                 "markdown": true,
-                                "id": "snnqdpic",
-                                "name": "Lbl_Gifts",
+                                "id": "Clk_GiftsPts",
+                                "name": "Clk_GiftsPts",
                                 "classes": "",
                                 "children": [],
                                 "className": "Label",
@@ -2743,41 +2744,13 @@
                                 "references": []
                               },
                               {
-                                "min": null,
-                                "max": null,
-                                "defaultValue": "1",
-                                "align": "Center",
-                                "computed": null,
-                                "computedValue": null,
-                                "tooltip": true,
-                                "tooltipLabel": "Max",
-                                "id": "kxujxnzk",
-                                "name": "Max_Gifts",
-                                "classes": "text-large text-bold bg-transparent w-25px",
-                                "children": [],
-                                "className": "NumberInput",
-                                "collapsed": false,
-                                "references": []
-                              }
-                            ],
-                            "className": "Container",
-                            "collapsed": true,
-                            "references": [],
-                            "layout": "horizontal"
-                          },
-                          {
-                            "id": "bxrbvqvw",
-                            "name": "Cnt_ValGifts",
-                            "classes": "",
-                            "children": [
-                              {
-                                "id": "uroshwud",
-                                "name": "Cnt_UpDown",
-                                "classes": "text-small mr-1 pl-2",
+                                "id": "Adj_GiftsPts",
+                                "name": "Adj_GiftsPts",
+                                "classes": "text-tiny pl-2 pt-1",
                                 "children": [
                                   {
-                                    "id": "wtyudvbk",
-                                    "name": "Icon",
+                                    "id": "Inc_GiftsPts",
+                                    "name": "Inc_GiftsPts",
                                     "classes": "clickable",
                                     "children": [],
                                     "className": "Icon",
@@ -2788,8 +2761,8 @@
                                     "rollTitle": null
                                   },
                                   {
-                                    "id": "aerotjro",
-                                    "name": "Icon",
+                                    "id": "Dec_GiftsPts",
+                                    "name": "Dec_GiftsPts",
                                     "classes": "clickable",
                                     "children": [],
                                     "className": "Icon",
@@ -2804,6 +2777,34 @@
                                 "collapsed": true,
                                 "references": [],
                                 "layout": "vertical"
+                              }
+                            ],
+                            "className": "Column",
+                            "collapsed": false,
+                            "references": []
+                          },
+                          {
+                            "size": null,
+                            "id": "xndgydus",
+                            "name": "Col_GiftsPtsR",
+                            "classes": "",
+                            "children": [
+                              {
+                                "min": null,
+                                "max": null,
+                                "defaultValue": "1",
+                                "align": "Center",
+                                "computed": null,
+                                "computedValue": null,
+                                "tooltip": true,
+                                "tooltipLabel": "Max",
+                                "id": "Max_GiftsPts",
+                                "name": "Max_GiftsPts",
+                                "classes": "text-large text-center text-bold border rounded",
+                                "children": [],
+                                "className": "NumberInput",
+                                "collapsed": false,
+                                "references": []
                               },
                               {
                                 "min": null,
@@ -2814,29 +2815,27 @@
                                 "computedValue": null,
                                 "tooltip": true,
                                 "tooltipLabel": "Actuel",
-                                "id": "ggqmkijr",
-                                "name": "Val_Gifts",
-                                "classes": "text-large",
+                                "id": "Val_GiftsPts",
+                                "name": "Val_GiftsPts",
+                                "classes": "text-large text-center border rounded",
                                 "children": [],
                                 "className": "NumberInput",
                                 "collapsed": false,
                                 "references": []
                               }
                             ],
-                            "className": "Container",
-                            "collapsed": true,
-                            "references": [],
-                            "layout": "horizontal"
+                            "className": "Column",
+                            "collapsed": false,
+                            "references": []
                           }
                         ],
-                        "className": "Container",
-                        "collapsed": true,
-                        "references": [],
-                        "layout": "vertical"
+                        "className": "Row",
+                        "collapsed": false,
+                        "references": []
                       }
                     ],
                     "className": "Column",
-                    "collapsed": true,
+                    "collapsed": false,
                     "references": []
                   },
                   {
@@ -2851,14 +2850,14 @@
                         "children": [],
                         "id": "Rep_Gifts",
                         "name": "Rep_Gifts",
-                        "classes": "no-edit",
+                        "classes": "no-edit no-add",
                         "className": "Repeater",
                         "collapsed": false,
                         "references": []
                       }
                     ],
                     "className": "Column",
-                    "collapsed": false,
+                    "collapsed": true,
                     "references": []
                   }
                 ],
@@ -4124,7 +4123,7 @@
             "children": [
               {
                 "placeholder": "Nom",
-                "defaultValue": "",
+                "defaultValue": null,
                 "computed": null,
                 "tooltip": true,
                 "tooltipLabel": "Nom",
@@ -4153,7 +4152,7 @@
                 "computed": null,
                 "id": "Val_Description",
                 "name": "Val_Description",
-                "classes": "h-50px",
+                "classes": "border rounded h-50px",
                 "children": [],
                 "className": "Textarea",
                 "collapsed": false,
@@ -4232,16 +4231,14 @@
               {
                 "text": "",
                 "align": "Center",
-                "clickable": true,
+                "clickable": null,
                 "quickBar": null,
                 "isTemplate": false,
-                "computed": false,
+                "computed": null,
                 "roll": null,
-                "tooltip": true,
-                "tooltipLabel": "Utiliser",
                 "id": "Vis_Cost",
                 "name": "Vis_Cost",
-                "classes": "border rounded h-50px text-medium text-center pt-2 bg-secondary",
+                "classes": "border rounded h-50px text-medium text-center pt-2",
                 "children": [],
                 "className": "Label",
                 "collapsed": false,
@@ -4261,16 +4258,14 @@
               {
                 "text": "",
                 "align": null,
-                "clickable": true,
+                "clickable": null,
                 "quickBar": null,
                 "isTemplate": false,
-                "computed": false,
+                "computed": null,
                 "roll": null,
-                "tooltip": true,
-                "tooltipLabel": "Utiliser",
                 "id": "Vis_Name",
                 "name": "Vis_Name",
-                "classes": "border rounded h-50px text-medium text-center text-capitalize pt-2 bg-secondary",
+                "classes": "border rounded h-50px text-medium text-center text-capitalize pt-2",
                 "children": [],
                 "className": "Label",
                 "collapsed": false,
@@ -4290,16 +4285,14 @@
               {
                 "text": "",
                 "align": null,
-                "clickable": true,
+                "clickable": null,
                 "quickBar": null,
                 "isTemplate": false,
-                "computed": false,
+                "computed": null,
                 "roll": null,
-                "tooltip": true,
-                "tooltipLabel": "Utiliser",
                 "id": "Vis_Description",
                 "name": "Vis_Description",
-                "classes": "h-50px",
+                "classes": "border rounded h-50px",
                 "children": [],
                 "className": "Label",
                 "collapsed": false,

@@ -202,20 +202,47 @@ function getRepChild(rep, child) { // get a repeater child (elem)
 function delRepChildren(rep) { // delete all repeater children
 	return setRepValue(rep, {})
 }
-function delRepChild(rep, child) { // delete one repeater child
-	const rep_value = getRepValue(rep)
-	delete rep_value[child]
-	return setRepValue(rep, rep_value)
-}
-function newRepChild(rep, tpl_child) { // add a child template at the end of rep
+function delRepChildAt(rep, at_child) { // delete one repeater child
 	const rep_value    = getRepValue(rep)
 	const rep_children = getRepChildren(rep)
-	const max_child    = mxaValue(rep_children)
-	const new_child = max_child ?
-		max_child + 1 : 1
-	const tpl_clone = Object.assign({}, tpl_child) // /!\ avoid to modify the original tpl
-	rep_value[new_child] = tpl_clone
-	return setRepValue(rep, rep_value)
+	const new_value    = {}
+	let   new_child    = 1
+	rep_children.forEach(function(child) { // loop on each child
+		if (child != at_child) {
+			new_value[new_child] = rep_value[child]
+			new_child++
+		}
+	})
+	return setRepValue(rep, new_value)
+}
+function newRepChild(rep, tpl_child) { // add a child template at the end of rep
+	const tpl_clone    = Object.assign({}, tpl_child) // /!\ avoid to modify original tpl
+	const rep_value    = getRepValue(rep)
+	const rep_children = getRepChildren(rep)
+	const new_value    = {}
+	let   new_child    = 1
+	rep_children.forEach(function(child) { // loop on each child
+		new_value[new_child] = rep_value[child]
+		new_child++
+	})
+	new_value[new_child] = tpl_clone
+	return setRepValue(rep, new_value)
+}
+function newRepChildAt(rep, at_child, tpl_child) { // add a child template at a child
+	const tpl_clone    = Object.assign({}, tpl_child) // /!\ avoid to modify original tpl
+	const rep_value    = getRepValue(rep)
+	const rep_children = getRepChildren(rep)
+	const new_value    = {}
+	let   new_child    = 1
+	rep_children.forEach(function(child) { // loop on each child
+		new_value[new_child] = rep_value[child]
+		new_child++
+		if (child == at_child) {
+			new_value[new_child] = tpl_clone
+			new_child++
+		}
+	})
+	return setRepValue(rep, new_value)
 }
 //endregion
 
@@ -223,7 +250,7 @@ function newRepChild(rep, tpl_child) { // add a child template at the end of rep
 function doeditRep(rep) { // show only the edit row
 	const rep_children = getRepChildren(rep)
 	rep_children.forEach(function(child) {
-		const rep_child = getElemChild(rep, child)
+		const rep_child = getRepChild(rep, child)
 		const row_edit  = getElemChild(rep_child, Row_Edit)
 		const row_view  = getElemChild(rep_child, Row_View)
 		addElemDisplayed(row_edit)
@@ -233,7 +260,7 @@ function doeditRep(rep) { // show only the edit row
 function doviewRep(rep) { // show only the view row
 	const rep_children = getRepChildren(rep)
 	rep_children.forEach(function(child) {
-		const rep_child = getElemChild(rep, child)
+		const rep_child = getRepChild(rep, child)
 		const row_edit  = getElemChild(rep_child, Row_Edit)
 		const row_view  = getElemChild(rep_child, Row_View)
 		remElemDisplayed(row_edit)
@@ -248,8 +275,8 @@ function oneRepItemDo(rep, evt, item, do_fct) { // on event on each rep child it
 
 	rep_children.forEach(function(child) { // loop on each child
 		const rep_child = getRepChild(rep, child)
-		const elem  = getElemChild(rep_child, item)
-		elem.on(evt, do_fct)
+		const elm_child = getElemChild(rep_child, item)
+		elm_child.on(evt, do_fct)
 	})
 }
 function oncRepItemDo(rep, item, do_fct) { // on click on each rep child item
@@ -274,8 +301,8 @@ function eachRepItemDo(rep, item, do_fct) { // do on each rep child item
 
 	rep_children.forEach(function(child) { // loop on each child
 		const rep_child = getRepChild(rep, child)
-		const elem = getElemChild(rep_child, item)
-		do_fct(elem)
+		const elm_child = getElemChild(rep_child, item)
+		do_fct(elm_child)
 	})
 }
 //endregion
@@ -637,12 +664,13 @@ function delockCharacs(sheet) {
 }
 
 function initGifts(sheet) {
+	const rep_gifts    = getElem(sheet, Rep_Gifts)
 	const ckb_giftslck = getElem(sheet, Ckb_GiftsLck)
 	const cky_giftslck = getElem(sheet, rsoValue(Ckb_GiftsLck, Str_PFXCKB, Str_PFXCKY))
-	const col_giftsdel = getElem(sheet, rsoValue(Clk_GiftsDel, Str_PFXCLK, Str_PFXCOL))
-	const col_giftsnew = getElem(sheet, rsoValue(Clk_GiftsNew, Str_PFXCLK, Str_PFXCOL))
 	const clk_giftsdel = getElem(sheet, Clk_GiftsDel)
 	const clk_giftsnew = getElem(sheet, Clk_GiftsNew)
+	const col_giftsdel = getElem(sheet, rsoValue(Clk_GiftsDel, Str_PFXCLK, Str_PFXCOL))
+	const col_giftsnew = getElem(sheet, rsoValue(Clk_GiftsNew, Str_PFXCLK, Str_PFXCOL))
 
 	oncElemDo(ckb_giftslck, function(elem) { // toggle gifts lock
 		toggleElem(cky_giftslck)
@@ -671,11 +699,20 @@ function initGifts(sheet) {
 	})
 	
 	initGiftsRep(sheet)
+	// triggerGiftsRep(sheet)
 }
 
 function initGiftsRep(sheet) {
-	const rep_gifts    = getElem(sheet, Rep_Gifts)
-	const cky_giftslck = getElem(sheet, rsoValue(Ckb_GiftsLck, Str_PFXCKB, Str_PFXCKY))
+	const rep_gifts       = getElem(sheet, Rep_Gifts)
+	const cky_giftslck    = getElem(sheet, rsoValue(Ckb_GiftsLck, Str_PFXCKB, Str_PFXCKY))
+	const val_giftspts    = getElem(sheet, rsoValue(Row_GiftsPts, Str_PFXROW, Str_PFXVAL))
+	const pts_value       = getElemValue(val_giftspts)
+	const Vis_Cost        = rsoValue(Val_Cost, Str_PFXVAL, Str_PFXVIS)
+	const Vis_Name        = rsoValue(Val_Name, Str_PFXVAL, Str_PFXVIS)
+	const Vis_Description = rsoValue(Val_Description, Str_PFXVAL, Str_PFXVIS)
+	log("=========== initGiftsRep ===========")
+	// log(getRepValue(rep_gifts))
+	// log(pts_value)
 
 	triggerElem(cky_giftslck) // triggers lock to set edit or view mode
 
@@ -683,13 +720,30 @@ function initGiftsRep(sheet) {
 		initGiftsRep(sheet)
 	})
 	
+	onuRepItemDo(rep_gifts, Vis_Cost, function(vis_cost) { // handle gifts usability
+		const vis_index       = getElemIndex(vis_cost)
+		const rep_child       = getRepChild(rep_gifts, vis_index)
+		const vis_name        = getElemChild(rep_child, Vis_Name)
+		const vis_description = getElemChild(rep_child, Vis_Description)
+		const elm_value       = getElemValue(vis_cost)
+		if (elm_value <= pts_value) { // can use the gift
+			addElemUsable(vis_cost)
+			addElemUsable(vis_name)
+			addElemUsable(vis_description)
+		} else { // cannot use the gift
+			remElemUsable(vis_cost)
+			remElemUsable(vis_name)
+			remElemUsable(vis_description)
+		}
+	})
+	
 	Arr_GiftsVals.forEach(function(val_item) { // reflects val on vis
 		const vis_item  = rsoValue(val_item, Str_PFXVAL, Str_PFXVIS)
 		
 		onuRepItemDo(rep_gifts, val_item, function(val_elem) {
-			const val_value = getElemValue(val_elem)
 			const val_index = getElemIndex(val_elem)
 			const rep_child = getRepChild(rep_gifts, val_index)
+			const val_value = getElemValue(val_elem)
 			const vis_elem  = getElemChild(rep_child, vis_item)
 			let   vis_value = val_item == Val_Cost ?
 				0 : "" // default value
@@ -697,26 +751,38 @@ function initGiftsRep(sheet) {
 				val_value : vis_value // no default value, val value instead
 			setElemValue(vis_elem, vis_value)
 		})
-		
-		eachRepItemDo(rep_gifts, val_item, function(val_elem) {
-			triggerElem(val_elem) // triggers vals to handle vals added by templates
-		})
 	})
 	
 	oncRepItemDo(rep_gifts, Del_Entry, function(elem) { // child del button
 		const child = getElemIndex(elem)
-		log("del")
-		delGiftsChild(sheet, child)
+		delGiftsChildAt(sheet, child)
 	})
 	
 	oncRepItemDo(rep_gifts, New_Entry, function(elem) { // child new button
 		const child = getElemIndex(elem)
-		log("new")
+		newGiftsChildAt(sheet, child)
 	})
 	
 	oncRepItemDo(rep_gifts, Inf_Entry, function(elem) { // child inf button
 		const child = getElemIndex(elem)
 		log("inf")
+	})
+	// log(getRepValue(rep_gifts))
+	triggerGiftsRep(sheet)
+}
+
+function triggerGiftsRep(sheet) {
+log("triggerGiftsRep")
+	const rep_gifts = getElem(sheet, Rep_Gifts)
+	eachRepItemDo(rep_gifts, Val_Cost, function(val_elem) {
+		const elm_value = getElemValue(val_elem)
+		// log(typeof elm_value)
+		// log(elm_value)
+		setElemValue(val_elem, elm_value)
+		const elm_value2 = getElemValue(val_elem)
+		// log(typeof elm_value2)
+		// log(elm_value2)
+		// triggerElem(val_elem) // triggers vals to handle vals added by templates
 	})
 }
 
@@ -731,28 +797,33 @@ function delockGifts(sheet) {
 }
 
 function doviewGifts(sheet) {
-	const rep = getElem(sheet, Rep_Gifts)
-	doviewRep(rep)
+	const rep_gifts = getElem(sheet, Rep_Gifts)
+	// doviewRep(rep_gifts)
 }
 
 function doeditGifts(sheet) {
-	const rep = getElem(sheet, Rep_Gifts)
-	doeditRep(rep)
+	const rep_gifts = getElem(sheet, Rep_Gifts)
+	// doeditRep(rep_gifts)
 }
 
 function delGiftsChildren(sheet) {
-	const rep = getElem(sheet, Rep_Gifts)
-	delRepChildren(rep)
+	const rep_gifts = getElem(sheet, Rep_Gifts)
+	delRepChildren(rep_gifts)
 }
 
-function delGiftsChild(sheet, child) { 
-	const rep = getElem(sheet, Rep_Gifts)
-	delRepChild(rep, child)
+function delGiftsChildAt(sheet, child) { 
+	const rep_gifts = getElem(sheet, Rep_Gifts)
+	delRepChildAt(rep_gifts, child)
 }
 
 function newGiftsChild(sheet) {
-	const rep = getElem(sheet, Rep_Gifts)
-	newRepChild(rep, Tpl_Gift)
+	const rep_gifts = getElem(sheet, Rep_Gifts)
+	newRepChild(rep_gifts, Tpl_Gift)
+}
+
+function newGiftsChildAt(sheet, child) {
+	const rep_gifts = getElem(sheet, Rep_Gifts)
+	newRepChildAt(rep_gifts, child, Tpl_Gift)
 }
 
 function initTabs(sheet) {
