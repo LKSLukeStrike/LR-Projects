@@ -704,7 +704,38 @@ function initGifts(sheet) {
 		newGiftsChild(sheet)
 	})
 	
+	initGiftsPts(sheet)
 	initGiftsRep(sheet)
+}
+
+function initGiftsPts(sheet) { //TODO setup a "row/block" package
+	const clk_giftspts = getElem(sheet, rsoValue(Row_GiftsPts, Str_PFXROW, Str_PFXCLK))
+	const max_giftspts = getElem(sheet, rsoValue(Row_GiftsPts, Str_PFXROW, Str_PFXMAX))
+	const inc_giftspts = getElem(sheet, rsoValue(Row_GiftsPts, Str_PFXROW, Str_PFXINC))
+	const dec_giftspts = getElem(sheet, rsoValue(Row_GiftsPts, Str_PFXROW, Str_PFXDEC))
+	const val_giftspts = getElem(sheet, rsoValue(Row_GiftsPts, Str_PFXROW, Str_PFXVAL))
+	
+	oncElemDo(clk_giftspts, function(elem) { // restore max value
+		setElemValue(val_giftspts, getElemValue(max_giftspts))
+	})
+	
+	onuElemDo(max_giftspts, function(elem) { // adjust current value
+		if (getElemValue(elem) < getElemValue(val_giftspts)) {
+			setElemValue(val_giftspts, getElemValue(max_giftspts))
+		}
+	})
+	
+	oncElemDo(inc_giftspts, function(elem) { // increment current value
+		incrementElem(val_giftspts, getElemValue(max_giftspts))
+	})
+	
+	oncElemDo(dec_giftspts, function(elem) { // decrement current value
+		decrementElem(val_giftspts, 0)
+	})
+	
+	onuElemDo(val_giftspts, function(elem) { // reflect on gifts rep
+		initGiftsRep(sheet)
+	})
 }
 
 function initGiftsRep(sheet) {
@@ -715,7 +746,6 @@ function initGiftsRep(sheet) {
 	const Vis_Cost        = rsoValue(Val_Cost, Str_PFXVAL, Str_PFXVIS)
 	const Vis_Name        = rsoValue(Val_Name, Str_PFXVAL, Str_PFXVIS)
 	const Vis_Description = rsoValue(Val_Description, Str_PFXVAL, Str_PFXVIS)
-	log("=========== initGiftsRep ===========")
 
 	triggerElem(cky_giftslck) // triggers lock to set edit or view mode
 
@@ -755,7 +785,6 @@ function initGiftsRep(sheet) {
 			const val_cost = getRepElemRelative(rep_gifts, vis_elem, Val_Cost)
 			const pts_cost = getElemValue(val_cost)
 			if (! hasElemUsable(vis_elem)) {return} // cannot use
-			log("use !")
 			setElemValue(val_giftspts, pts_value - pts_cost)
 		})
 	})
