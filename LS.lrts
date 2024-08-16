@@ -323,8 +323,9 @@ const Sht_Character = "main" // character sheet
 //endregion
 
 //region LS_Constants Tooltips
-const Tip_None   = ""
-const Tip_Usable = "Utiliser"
+const Tip_None    = ""
+const Tip_Usable  = "Utiliser"
+const Tip_Presets = "Presets"
 //endregion
 
 //region LS_Constants Items (IDs)
@@ -344,19 +345,25 @@ const Ckb_Talent       = "Ckb_Talent" // checkbox
 
 const Row_Characs      = "Row_Characs" // sheet characs
 const Clk_CharacsDel   = "Clk_CharacsDel" // characs del button
+const Chc_CharacsPst   = "Chc_CharacsPst" // characs presets choice
 const Ckb_CharacsLck   = "Ckb_CharacsLck" // characs lck checkbox
-const Clk_CharacsNew   = "Clk_CharacsNew" // characs new button
+const Clk_CharacsNewL  = "Clk_CharacsNewL" // characs new L button
+const Clk_CharacsNewC  = "Clk_CharacsNewC" // characs new C button
+const Clk_CharacsNewR  = "Clk_CharacsNewR" // characs new R button
 const Ckb_Activity     = "Ckb_Activity" // activity checkbox
 const Cky_Activity     = "Cky_Activity" // activity state
 const Ckb_SocialRank   = "Ckb_SocialRank" // social rank checkbox
 const Cky_SocialRank   = "Cky_SocialRank" // social rank state
 const Ckb_Visibility   = "Ckb_Visibility" // roll visibility checkbox
 const Cky_Visibility   = "Cky_Visibility" // roll visibility state
+const Row_HealthPts    = "Row_HealthPts" // health pts panel
+const Row_NarrationPts = "Row_NarrationPts" // narration pts panel
 const Arr_AllCBoxes    = [
 	Ckb_Activity,
 	Ckb_SocialRank,
 	Ckb_Visibility,
 ]
+
 const Row_Bio          = "Row_Bio" // bio panel
 
 const Row_Gifts        = "Row_Gifts" // gifts panel
@@ -505,10 +512,10 @@ function initCharacter(sheet) {
 	initCharacs(sheet)
 	initGifts(sheet)
 
-	switchSide(sheet)
-	launchBtn(sheet)
-	options(sheet)
-	toggleEdit(sheet)
+	// switchSide(sheet)
+	// launchBtn(sheet)
+	// options(sheet)
+	// toggleEdit(sheet)
 }
 
 function initRepair(sheet) {
@@ -631,29 +638,50 @@ function delockSheet(sheet) {
 }
 
 function initCharacs(sheet) {
-	const ckb_characslck = getElem(sheet, Ckb_CharacsLck)
-	const cky_characslck = getElem(sheet, rsoValue(Ckb_CharacsLck, Str_PFXCKB, Str_PFXCKY))
-	const col_characsdel = getElem(sheet, rsoValue(Clk_CharacsDel, Str_PFXCLK, Str_PFXCOL))
-	const col_characsnew = getElem(sheet, rsoValue(Clk_CharacsNew, Str_PFXCLK, Str_PFXCOL))
+	const clk_characsdel  = getElem(sheet, Clk_CharacsDel)
+	const col_characsdel  = getElem(sheet, rsoValue(Clk_CharacsDel, Str_PFXCLK, Str_PFXCOL))
+	const chc_characspst  = getElem(sheet, Chc_CharacsPst)
+	const col_characspst  = getElem(sheet, rsoValue(Chc_CharacsPst, Str_PFXCHC, Str_PFXCOL))
+	const ckb_characslck  = getElem(sheet, Ckb_CharacsLck)
+	const cky_characslck  = getElem(sheet, rsoValue(Ckb_CharacsLck, Str_PFXCKB, Str_PFXCKY))
+	const clk_characsnewl = getElem(sheet, Clk_CharacsNewL)
+	const col_characsnewl = getElem(sheet, rsoValue(Clk_CharacsNewL, Str_PFXCLK, Str_PFXCOL))
+	const clk_characsnewc = getElem(sheet, Clk_CharacsNewC)
+	const col_characsnewc = getElem(sheet, rsoValue(Clk_CharacsNewC, Str_PFXCLK, Str_PFXCOL))
+	const clk_characsnewr = getElem(sheet, Clk_CharacsNewR)
+	const col_characsnewr = getElem(sheet, rsoValue(Clk_CharacsNewR, Str_PFXCLK, Str_PFXCOL))
 
+	setElemTooltip(chc_characspst, Tip_Presets)
+	
 	oncElemDo(ckb_characslck, function(elem) { // toggle characs lock
 		toggleElem(cky_characslck)
 	})
 
 	onuElemDo(cky_characslck, function(elem) { // handle characs visibility
 		if (getElemValue(elem)) { // hide characs actions
-			addElemSelected(ckb_characslck)
 			addElemInvisible(col_characsdel)
-			addElemInvisible(col_characsnew)
+			addElemInvisible(col_characspst)
+			addElemSelected(ckb_characslck)
+			addElemInvisible(col_characsnewl)
+			addElemInvisible(col_characsnewc)
+			addElemInvisible(col_characsnewr)
 		} else { // show characs actions
-			remElemSelected(ckb_characslck)
 			remElemInvisible(col_characsdel)
-			remElemInvisible(col_characsnew)
+			remElemInvisible(col_characspst)
+			remElemSelected(ckb_characslck)
+			remElemInvisible(col_characsnewl)
+			remElemInvisible(col_characsnewc)
+			remElemInvisible(col_characsnewr)
 		}
 	})
 	
-	triggerElem(cky_characslck) // triggers itself on init
+	initCharacsPts(sheet)
 	initCharacsRep(sheet)
+}
+
+function initCharacsPts(sheet) {
+	initRowPts(sheet, Row_HealthPts)
+	initRowPts(sheet, Row_NarrationPts)
 }
 
 function initCharacsRep(sheet) {
@@ -708,34 +736,8 @@ function initGifts(sheet) {
 	initGiftsRep(sheet)
 }
 
-function initGiftsPts(sheet) { //TODO setup a "row/block" package
-	const clk_giftspts = getElem(sheet, rsoValue(Row_GiftsPts, Str_PFXROW, Str_PFXCLK))
-	const max_giftspts = getElem(sheet, rsoValue(Row_GiftsPts, Str_PFXROW, Str_PFXMAX))
-	const inc_giftspts = getElem(sheet, rsoValue(Row_GiftsPts, Str_PFXROW, Str_PFXINC))
-	const dec_giftspts = getElem(sheet, rsoValue(Row_GiftsPts, Str_PFXROW, Str_PFXDEC))
-	const val_giftspts = getElem(sheet, rsoValue(Row_GiftsPts, Str_PFXROW, Str_PFXVAL))
-	
-	oncElemDo(clk_giftspts, function(elem) { // restore max value
-		setElemValue(val_giftspts, getElemValue(max_giftspts))
-	})
-	
-	onuElemDo(max_giftspts, function(elem) { // adjust current value
-		if (getElemValue(elem) < getElemValue(val_giftspts)) {
-			setElemValue(val_giftspts, getElemValue(max_giftspts))
-		}
-	})
-	
-	oncElemDo(inc_giftspts, function(elem) { // increment current value
-		incrementElem(val_giftspts, getElemValue(max_giftspts))
-	})
-	
-	oncElemDo(dec_giftspts, function(elem) { // decrement current value
-		decrementElem(val_giftspts, 0)
-	})
-	
-	onuElemDo(val_giftspts, function(elem) { // reflect on gifts rep
-		initGiftsRep(sheet)
-	})
+function initGiftsPts(sheet) {
+	initRowPtsDo(sheet, Row_GiftsPts, initGiftsRep)
 }
 
 function initGiftsRep(sheet) {
@@ -804,11 +806,6 @@ function initGiftsRep(sheet) {
 		log("inf")
 	})
 
-	triggerGiftsRep(sheet)
-}
-
-function triggerGiftsRep(sheet) {
-	const rep_gifts = getElem(sheet, Rep_Gifts)
 	eachRepItemDo(rep_gifts, Val_Cost, function(val_elem) {
 		triggerElem(val_elem) // triggers vals to handle vals added by templates
 	})
@@ -912,6 +909,42 @@ function deselectTab(sheet, tab_item) { // deselect one tab
 function deselectTabAll(sheet) { // deselect all tabs
 	Arr_TAB.forEach(function(tab_item) {
 		deselectTab(sheet, tab_item)
+	})
+}
+
+function initRowPtsDo(sheet, row_item, do_fct) { // init a pts block (clk, max, adj, val)
+	const val_elem = getElem(sheet, rsoValue(row_item, Str_PFXROW, Str_PFXVAL))
+
+	initRowPts(sheet, row_item) // init clk, max, adj
+	
+	onuElemDo(val_elem, function(elem) { // react on val modification
+		do_fct(sheet)
+	})
+}
+
+function initRowPts(sheet, row_item) { // init a pts block (clk, max, adj)
+	const clk_elem = getElem(sheet, rsoValue(row_item, Str_PFXROW, Str_PFXCLK))
+	const max_elem = getElem(sheet, rsoValue(row_item, Str_PFXROW, Str_PFXMAX))
+	const inc_elem = getElem(sheet, rsoValue(row_item, Str_PFXROW, Str_PFXINC))
+	const dec_elem = getElem(sheet, rsoValue(row_item, Str_PFXROW, Str_PFXDEC))
+	const val_elem = getElem(sheet, rsoValue(row_item, Str_PFXROW, Str_PFXVAL))
+	
+	oncElemDo(clk_elem, function(elem) { // restore max value
+		setElemValue(val_elem, getElemValue(max_elem))
+	})
+	
+	onuElemDo(max_elem, function(elem) { // adjust current value
+		if (getElemValue(max_elem) < getElemValue(val_elem)) {
+			setElemValue(val_elem, getElemValue(max_elem))
+		}
+	})
+	
+	oncElemDo(inc_elem, function(elem) { // increment current value
+		incrementElem(val_elem, getElemValue(max_elem))
+	})
+	
+	oncElemDo(dec_elem, function(elem) { // decrement current value
+		decrementElem(val_elem, 0)
 	})
 }
 
