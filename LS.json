@@ -1,4 +1,4 @@
-border rounded h-50px[
+[
   {
     "type": "Main",
     "craft": true,
@@ -415,7 +415,7 @@ border rounded h-50px[
               }
             ],
             "className": "Column",
-            "collapsed": true,
+            "collapsed": false,
             "references": []
           },
           {
@@ -642,7 +642,7 @@ border rounded h-50px[
               {
                 "id": "gtrmorod",
                 "name": "Row_PrefDices",
-                "classes": "",
+                "classes": "d-none",
                 "children": [
                   {
                     "size": null,
@@ -793,15 +793,25 @@ border rounded h-50px[
                 "references": []
               },
               {
-                "id": "igochaor",
+                "id": "fizdrtap",
                 "name": "Row_PrefTabs",
-                "classes": "",
+                "classes": "text-medium text-center border-bottom pt-2",
                 "children": [
                   {
+                    "size": 5,
+                    "id": "cegzqmoo",
+                    "name": "_PH5_",
+                    "classes": "border-bottom",
+                    "children": [],
+                    "className": "Column",
+                    "collapsed": false,
+                    "references": []
+                  },
+                  {
                     "size": null,
-                    "id": "jayxxxmj",
+                    "id": "yrmrkxsh",
                     "name": "Col_PrefTabs",
-                    "classes": "",
+                    "classes": "text-medium text-center border-bottom",
                     "children": [
                       {
                         "text": "Tabs",
@@ -811,201 +821,211 @@ border rounded h-50px[
                         "isTemplate": false,
                         "computed": null,
                         "roll": null,
-                        "id": "dpcczmmc",
+                        "id": "hwsmmbdz",
                         "name": "Lbl_PrefTabs",
-                        "classes": "border rounded bg-secondary",
+                        "classes": "border rounded",
                         "children": [],
                         "className": "Label",
                         "collapsed": false,
                         "references": []
-                      },
+                      }
+                    ],
+                    "className": "Column",
+                    "collapsed": false,
+                    "references": []
+                  },
+                  {
+                    "size": 5,
+                    "id": "thjmuttt",
+                    "name": "_PH5_",
+                    "classes": "border-bottom",
+                    "children": [],
+                    "className": "Column",
+                    "collapsed": false,
+                    "references": []
+                  }
+                ],
+                "className": "Row",
+                "collapsed": true,
+                "references": []
+              },
+              {
+                "id": "valgknby",
+                "name": "Row_ShowTabs",
+                "classes": "pt-1",
+                "children": [
+                  {
+                    "size": null,
+                    "id": "itjawheq",
+                    "name": "Col_Characs",
+                    "classes": "",
+                    "children": [
                       {
-                        "id": "valgknby",
-                        "name": "Row_ShowTabs",
-                        "classes": "",
-                        "children": [
-                          {
-                            "size": null,
-                            "id": "itjawheq",
-                            "name": "Col_Characs",
-                            "classes": "",
-                            "children": [
-                              {
-                                "text": ":user:",
-                                "align": null,
-                                "clickable": true,
-                                "quickBar": null,
-                                "isTemplate": false,
-                                "computed": null,
-                                "roll": null,
-                                "tooltip": true,
-                                "tooltipLabel": "Montrer Caracs",
-                                "markdown": true,
-                                "id": "Clk_Characs",
-                                "name": "Clk_Characs",
-                                "classes": "border rounded",
-                                "children": [],
-                                "className": "Label",
-                                "collapsed": false,
-                                "references": []
-                              }
-                            ],
-                            "className": "Column",
-                            "collapsed": false,
-                            "references": []
-                          },
-                          {
-                            "size": null,
-                            "id": "bgpoxcxv",
-                            "name": "Col_Bio",
-                            "classes": "",
-                            "children": [
-                              {
-                                "text": ":user-edit:",
-                                "align": null,
-                                "clickable": true,
-                                "quickBar": null,
-                                "isTemplate": false,
-                                "computed": null,
-                                "roll": null,
-                                "tooltip": true,
-                                "tooltipLabel": "Montrer Bio",
-                                "markdown": true,
-                                "id": "Clk_Bio",
-                                "name": "Clk_Bio",
-                                "classes": "border rounded",
-                                "children": [],
-                                "className": "Label",
-                                "collapsed": false,
-                                "references": []
-                              }
-                            ],
-                            "className": "Column",
-                            "collapsed": true,
-                            "references": []
-                          },
-                          {
-                            "size": null,
-                            "id": "hoddjptl",
-                            "name": "Col_Gifts",
-                            "classes": "",
-                            "children": [
-                              {
-                                "text": ":hand-holding-heart:",
-                                "align": null,
-                                "clickable": true,
-                                "quickBar": null,
-                                "isTemplate": false,
-                                "computed": null,
-                                "roll": null,
-                                "tooltip": true,
-                                "tooltipLabel": "Montrer Dons",
-                                "markdown": true,
-                                "id": "Clk_Gifts",
-                                "name": "Clk_Gifts",
-                                "classes": "border rounded",
-                                "children": [],
-                                "className": "Label",
-                                "collapsed": false,
-                                "references": []
-                              }
-                            ],
-                            "className": "Column",
-                            "collapsed": false,
-                            "references": []
-                          },
-                          {
-                            "size": null,
-                            "id": "dvsfocvh",
-                            "name": "Col_Possessions",
-                            "classes": "",
-                            "children": [
-                              {
-                                "text": ":hiking:",
-                                "align": null,
-                                "clickable": true,
-                                "quickBar": null,
-                                "isTemplate": false,
-                                "computed": null,
-                                "roll": null,
-                                "tooltip": true,
-                                "tooltipLabel": "Montrer Possessions",
-                                "markdown": true,
-                                "id": "Clk_Possessions",
-                                "name": "Clk_Possessions",
-                                "classes": "border rounded",
-                                "children": [],
-                                "className": "Label",
-                                "collapsed": false,
-                                "references": []
-                              }
-                            ],
-                            "className": "Column",
-                            "collapsed": false,
-                            "references": []
-                          },
-                          {
-                            "size": null,
-                            "id": "hjdyuzqe",
-                            "name": "Col_Relations",
-                            "classes": "",
-                            "children": [
-                              {
-                                "text": ":user-friends:",
-                                "align": null,
-                                "clickable": true,
-                                "quickBar": null,
-                                "isTemplate": false,
-                                "computed": null,
-                                "roll": null,
-                                "tooltip": true,
-                                "tooltipLabel": "Montrer Relations",
-                                "markdown": true,
-                                "id": "Clk_Relations",
-                                "name": "Clk_Relations",
-                                "classes": "border rounded",
-                                "children": [],
-                                "className": "Label",
-                                "collapsed": false,
-                                "references": []
-                              }
-                            ],
-                            "className": "Column",
-                            "collapsed": false,
-                            "references": []
-                          },
-                          {
-                            "size": null,
-                            "id": "ntsofxju",
-                            "name": "Col_Notes",
-                            "classes": "",
-                            "children": [
-                              {
-                                "text": ":feather-alt:",
-                                "align": null,
-                                "clickable": true,
-                                "quickBar": null,
-                                "isTemplate": false,
-                                "computed": null,
-                                "roll": null,
-                                "tooltip": true,
-                                "tooltipLabel": "Montrer Notes",
-                                "markdown": true,
-                                "id": "Clk_Notes",
-                                "name": "Clk_Notes",
-                                "classes": "border rounded",
-                                "children": [],
-                                "className": "Label",
-                                "collapsed": false,
-                                "references": []
-                              }
-                            ],
-                            "className": "Column",
-                            "collapsed": false,
-                            "references": []
-                          }
-                        ],
-                        "className": "Row",
+                        "text": ":user:",
+                        "align": null,
+                        "clickable": true,
+                        "quickBar": null,
+                        "isTemplate": false,
+                        "computed": null,
+                        "roll": null,
+                        "tooltip": true,
+                        "tooltipLabel": "Montrer Caracs",
+                        "markdown": true,
+                        "id": "Clk_Characs",
+                        "name": "Clk_Characs",
+                        "classes": "border rounded",
+                        "children": [],
+                        "className": "Label",
+                        "collapsed": false,
+                        "references": []
+                      }
+                    ],
+                    "className": "Column",
+                    "collapsed": false,
+                    "references": []
+                  },
+                  {
+                    "size": null,
+                    "id": "bgpoxcxv",
+                    "name": "Col_Bio",
+                    "classes": "",
+                    "children": [
+                      {
+                        "text": ":user-edit:",
+                        "align": null,
+                        "clickable": true,
+                        "quickBar": null,
+                        "isTemplate": false,
+                        "computed": null,
+                        "roll": null,
+                        "tooltip": true,
+                        "tooltipLabel": "Montrer Bio",
+                        "markdown": true,
+                        "id": "Clk_Bio",
+                        "name": "Clk_Bio",
+                        "classes": "border rounded",
+                        "children": [],
+                        "className": "Label",
+                        "collapsed": false,
+                        "references": []
+                      }
+                    ],
+                    "className": "Column",
+                    "collapsed": true,
+                    "references": []
+                  },
+                  {
+                    "size": null,
+                    "id": "hoddjptl",
+                    "name": "Col_Gifts",
+                    "classes": "",
+                    "children": [
+                      {
+                        "text": ":hand-holding-heart:",
+                        "align": null,
+                        "clickable": true,
+                        "quickBar": null,
+                        "isTemplate": false,
+                        "computed": null,
+                        "roll": null,
+                        "tooltip": true,
+                        "tooltipLabel": "Montrer Dons",
+                        "markdown": true,
+                        "id": "Clk_Gifts",
+                        "name": "Clk_Gifts",
+                        "classes": "border rounded",
+                        "children": [],
+                        "className": "Label",
+                        "collapsed": false,
+                        "references": []
+                      }
+                    ],
+                    "className": "Column",
+                    "collapsed": false,
+                    "references": []
+                  },
+                  {
+                    "size": null,
+                    "id": "dvsfocvh",
+                    "name": "Col_Possessions",
+                    "classes": "",
+                    "children": [
+                      {
+                        "text": ":hiking:",
+                        "align": null,
+                        "clickable": true,
+                        "quickBar": null,
+                        "isTemplate": false,
+                        "computed": null,
+                        "roll": null,
+                        "tooltip": true,
+                        "tooltipLabel": "Montrer Possessions",
+                        "markdown": true,
+                        "id": "Clk_Possessions",
+                        "name": "Clk_Possessions",
+                        "classes": "border rounded",
+                        "children": [],
+                        "className": "Label",
+                        "collapsed": false,
+                        "references": []
+                      }
+                    ],
+                    "className": "Column",
+                    "collapsed": false,
+                    "references": []
+                  },
+                  {
+                    "size": null,
+                    "id": "hjdyuzqe",
+                    "name": "Col_Relations",
+                    "classes": "",
+                    "children": [
+                      {
+                        "text": ":user-friends:",
+                        "align": null,
+                        "clickable": true,
+                        "quickBar": null,
+                        "isTemplate": false,
+                        "computed": null,
+                        "roll": null,
+                        "tooltip": true,
+                        "tooltipLabel": "Montrer Relations",
+                        "markdown": true,
+                        "id": "Clk_Relations",
+                        "name": "Clk_Relations",
+                        "classes": "border rounded",
+                        "children": [],
+                        "className": "Label",
+                        "collapsed": false,
+                        "references": []
+                      }
+                    ],
+                    "className": "Column",
+                    "collapsed": false,
+                    "references": []
+                  },
+                  {
+                    "size": null,
+                    "id": "ntsofxju",
+                    "name": "Col_Notes",
+                    "classes": "",
+                    "children": [
+                      {
+                        "text": ":feather-alt:",
+                        "align": null,
+                        "clickable": true,
+                        "quickBar": null,
+                        "isTemplate": false,
+                        "computed": null,
+                        "roll": null,
+                        "tooltip": true,
+                        "tooltipLabel": "Montrer Notes",
+                        "markdown": true,
+                        "id": "Clk_Notes",
+                        "name": "Clk_Notes",
+                        "classes": "border rounded",
+                        "children": [],
+                        "className": "Label",
                         "collapsed": false,
                         "references": []
                       }
@@ -1016,7 +1036,7 @@ border rounded h-50px[
                   }
                 ],
                 "className": "Row",
-                "collapsed": false,
+                "collapsed": true,
                 "references": []
               }
             ],
@@ -1327,16 +1347,6 @@ border rounded h-50px[
             "classes": "",
             "children": [
               {
-                "size": 4,
-                "id": "hoxfanwx",
-                "name": "_PH4_",
-                "classes": "border-bottom",
-                "children": [],
-                "className": "Column",
-                "collapsed": false,
-                "references": []
-              },
-              {
                 "id": "hirkickg",
                 "name": "Row_CharacsLbl",
                 "classes": "text-medium text-center border-bottom",
@@ -1373,10 +1383,26 @@ border rounded h-50px[
                   },
                   {
                     "size": 4,
-                    "id": "abzulhtg",
-                    "name": "_PH4_",
+                    "id": "Col_CharacsPst",
+                    "name": "Col_CharacsPst",
                     "classes": "border-bottom",
-                    "children": [],
+                    "children": [
+                      {
+                        "id": "Chc_CharacsPst",
+                        "name": "Chc_CharacsPst",
+                        "classes": "border rounded",
+                        "children": [],
+                        "className": "Choice",
+                        "collapsed": false,
+                        "references": [],
+                        "label": "label",
+                        "tableId": "Tbl_CharacsPresets",
+                        "optional": false,
+                        "expanded": false,
+                        "multiple": false,
+                        "expandedClass": ""
+                      }
+                    ],
                     "className": "Column",
                     "collapsed": false,
                     "references": []
@@ -1424,13 +1450,13 @@ border rounded h-50px[
                       }
                     ],
                     "className": "Column",
-                    "collapsed": false,
+                    "collapsed": true,
                     "references": []
                   },
                   {
-                    "size": 4,
+                    "size": 2,
                     "id": "oaeqkwfn",
-                    "name": "_PH4_",
+                    "name": "_PH2_",
                     "classes": "border-bottom",
                     "children": [],
                     "className": "Column",
@@ -1439,8 +1465,8 @@ border rounded h-50px[
                   },
                   {
                     "size": 1,
-                    "id": "Col_CharacsNew",
-                    "name": "Col_CharacsNew",
+                    "id": "Col_CharacsNewL",
+                    "name": "Col_CharacsNewL",
                     "classes": "border-bottom",
                     "children": [
                       {
@@ -1452,10 +1478,10 @@ border rounded h-50px[
                         "computed": null,
                         "roll": null,
                         "tooltip": true,
-                        "tooltipLabel": "Ajouter",
+                        "tooltipLabel": "Ajouter G",
                         "markdown": true,
-                        "id": "Clk_CharacsNew",
-                        "name": "Clk_CharacsNew",
+                        "id": "Clk_CharacsNewL",
+                        "name": "Clk_CharacsNewL",
                         "classes": "border rounded",
                         "children": [],
                         "className": "Label",
@@ -1466,16 +1492,76 @@ border rounded h-50px[
                     "className": "Column",
                     "collapsed": false,
                     "references": []
+                  },
+                  {
+                    "size": 1,
+                    "id": "Col_CharacsNewC",
+                    "name": "Col_CharacsNewC",
+                    "classes": "border-bottom",
+                    "children": [
+                      {
+                        "text": ":plus-circle:",
+                        "align": "Center",
+                        "clickable": true,
+                        "quickBar": null,
+                        "isTemplate": false,
+                        "computed": null,
+                        "roll": null,
+                        "tooltip": true,
+                        "tooltipLabel": "Ajouter C",
+                        "markdown": true,
+                        "id": "Clk_CharacsNewC",
+                        "name": "Clk_CharacsNewC",
+                        "classes": "border rounded",
+                        "children": [],
+                        "className": "Label",
+                        "collapsed": false,
+                        "references": []
+                      }
+                    ],
+                    "className": "Column",
+                    "collapsed": true,
+                    "references": []
+                  },
+                  {
+                    "size": 1,
+                    "id": "Col_CharacsNewR",
+                    "name": "Col_CharacsNewR",
+                    "classes": "border-bottom",
+                    "children": [
+                      {
+                        "text": ":plus-circle:",
+                        "align": "Center",
+                        "clickable": true,
+                        "quickBar": null,
+                        "isTemplate": false,
+                        "computed": null,
+                        "roll": null,
+                        "tooltip": true,
+                        "tooltipLabel": "Ajouter D",
+                        "markdown": true,
+                        "id": "Clk_CharacsNewR",
+                        "name": "Clk_CharacsNewR",
+                        "classes": "border rounded",
+                        "children": [],
+                        "className": "Label",
+                        "collapsed": false,
+                        "references": []
+                      }
+                    ],
+                    "className": "Column",
+                    "collapsed": true,
+                    "references": []
                   }
                 ],
                 "className": "Row",
-                "collapsed": false,
+                "collapsed": true,
                 "references": []
               },
               {
                 "id": "lhtsphkz",
                 "name": "Row_ActivitySocialRank",
-                "classes": "text-medium text-center pb-2",
+                "classes": "text-medium text-center",
                 "children": [
                   {
                     "size": null,
@@ -1653,28 +1739,39 @@ border rounded h-50px[
               {
                 "id": "wbjltkxk",
                 "name": "Row_CharacsCols",
-                "classes": "",
+                "classes": "pt-2",
                 "children": [
                   {
                     "size": 1,
-                    "id": "jnooyfmr",
+                    "id": "kdebvepr",
+                    "name": "_PH1_",
+                    "classes": "w-25px",
+                    "children": [],
+                    "className": "Column",
+                    "collapsed": false,
+                    "references": []
+                  },
+                  {
+                    "size": 2,
+                    "id": "mycbmmwt",
                     "name": "Col_CharacsPts",
-                    "classes": "",
+                    "classes": "text-large text-center",
                     "children": [
                       {
-                        "id": "cvjfldeo",
-                        "name": "Cnt_CaracsPts",
-                        "classes": "align-items-center text-large pl-1",
+                        "id": "Row_HealthPts",
+                        "name": "Row_HealthPts",
+                        "classes": "",
                         "children": [
                           {
-                            "id": "pvField",
-                            "name": "Cnt_MaxHealth",
-                            "classes": "",
+                            "size": 1,
+                            "id": "uonilkvb",
+                            "name": "Col_HealthPtsL",
+                            "classes": "w-50px",
                             "children": [
                               {
                                 "text": ":heartbeat:",
                                 "align": null,
-                                "clickable": null,
+                                "clickable": true,
                                 "quickBar": null,
                                 "isTemplate": false,
                                 "computed": null,
@@ -1682,8 +1779,8 @@ border rounded h-50px[
                                 "tooltip": true,
                                 "tooltipLabel": "Santé",
                                 "markdown": true,
-                                "id": "wusxideb",
-                                "name": "Lbl_Health",
+                                "id": "Clk_HealthPts",
+                                "name": "Clk_HealthPts",
                                 "classes": "",
                                 "children": [],
                                 "className": "Label",
@@ -1691,41 +1788,13 @@ border rounded h-50px[
                                 "references": []
                               },
                               {
-                                "min": null,
-                                "max": null,
-                                "defaultValue": "5",
-                                "align": "Center",
-                                "computed": null,
-                                "computedValue": null,
-                                "tooltip": true,
-                                "tooltipLabel": "Max",
-                                "id": "hpMax",
-                                "name": "Max_Health",
-                                "classes": "text-large text-bold bg-transparent w-25px",
-                                "children": [],
-                                "className": "NumberInput",
-                                "collapsed": false,
-                                "references": []
-                              }
-                            ],
-                            "className": "Container",
-                            "collapsed": false,
-                            "references": [],
-                            "layout": "horizontal"
-                          },
-                          {
-                            "id": "evlriynx",
-                            "name": "Cnt_ValHealth",
-                            "classes": "",
-                            "children": [
-                              {
-                                "id": "qgboiqgi",
-                                "name": "Cnt_UpDown",
-                                "classes": "text-small mr-1 pl-2",
+                                "id": "hekbpqnf",
+                                "name": "Adj_HealthPts",
+                                "classes": "text-tiny pt-1",
                                 "children": [
                                   {
-                                    "id": "hpUpCursor",
-                                    "name": "Icon",
+                                    "id": "Inc_HealthPts",
+                                    "name": "Inc_HealthPts",
                                     "classes": "clickable",
                                     "children": [],
                                     "className": "Icon",
@@ -1736,8 +1805,8 @@ border rounded h-50px[
                                     "rollTitle": null
                                   },
                                   {
-                                    "id": "hpDownCursor",
-                                    "name": "Icon",
+                                    "id": "Dec_HealthPts",
+                                    "name": "Dec_HealthPts",
                                     "classes": "clickable",
                                     "children": [],
                                     "className": "Icon",
@@ -1749,40 +1818,40 @@ border rounded h-50px[
                                   }
                                 ],
                                 "className": "Container",
-                                "collapsed": true,
+                                "collapsed": false,
                                 "references": [],
                                 "layout": "vertical"
-                              },
+                              }
+                            ],
+                            "className": "Column",
+                            "collapsed": false,
+                            "references": []
+                          },
+                          {
+                            "size": null,
+                            "id": "bgdjence",
+                            "name": "Col_HealthPtsR",
+                            "classes": "",
+                            "children": [
                               {
-                                "min": null,
+                                "min": 0,
                                 "max": null,
                                 "defaultValue": "5",
                                 "align": "Center",
                                 "computed": null,
                                 "computedValue": null,
                                 "tooltip": true,
-                                "tooltipLabel": "Actuel",
-                                "id": "hpVal",
-                                "name": "Val_Health",
-                                "classes": "text-large",
+                                "tooltipLabel": "Max",
+                                "id": "Max_HealthPts",
+                                "name": "Max_HealthPts",
+                                "classes": "text-large text-center text-bold border rounded",
                                 "children": [],
                                 "className": "NumberInput",
                                 "collapsed": false,
                                 "references": []
-                              }
-                            ],
-                            "className": "Container",
-                            "collapsed": false,
-                            "references": [],
-                            "layout": "horizontal"
-                          },
-                          {
-                            "id": "narrationPoint",
-                            "name": "Cnt_MaxNarration",
-                            "classes": "",
-                            "children": [
+                              },
                               {
-                                "text": ":ga_book-cover-2:",
+                                "text": "5",
                                 "align": null,
                                 "clickable": null,
                                 "quickBar": null,
@@ -1790,10 +1859,49 @@ border rounded h-50px[
                                 "computed": null,
                                 "roll": null,
                                 "tooltip": true,
+                                "tooltipLabel": "Actuel",
+                                "id": "Val_HealthPts",
+                                "name": "Val_HealthPts",
+                                "classes": "text-large text-center border rounded text-bold",
+                                "children": [],
+                                "className": "Label",
+                                "collapsed": false,
+                                "references": []
+                              }
+                            ],
+                            "className": "Column",
+                            "collapsed": false,
+                            "references": []
+                          }
+                        ],
+                        "className": "Row",
+                        "collapsed": false,
+                        "references": []
+                      },
+                      {
+                        "id": "Row_NarrationPts",
+                        "name": "Row_NarrationPts",
+                        "classes": "text-large text-center",
+                        "children": [
+                          {
+                            "size": 1,
+                            "id": "wzvirkrp",
+                            "name": "Col_NarrationPtsL",
+                            "classes": "w-50px",
+                            "children": [
+                              {
+                                "text": ":ga_book-cover-2:",
+                                "align": null,
+                                "clickable": true,
+                                "quickBar": null,
+                                "isTemplate": false,
+                                "computed": null,
+                                "roll": null,
+                                "tooltip": true,
                                 "tooltipLabel": "Narration",
                                 "markdown": true,
-                                "id": "uevtlsec",
-                                "name": "Lbl_Narration",
+                                "id": "Clk_NarrationPts",
+                                "name": "Clk_NarrationPts",
                                 "classes": "",
                                 "children": [],
                                 "className": "Label",
@@ -1801,41 +1909,13 @@ border rounded h-50px[
                                 "references": []
                               },
                               {
-                                "min": null,
-                                "max": null,
-                                "defaultValue": "1",
-                                "align": "Center",
-                                "computed": null,
-                                "computedValue": null,
-                                "tooltip": true,
-                                "tooltipLabel": "Max",
-                                "id": "unwoxcqt",
-                                "name": "Max_Narration",
-                                "classes": "text-large text-bold bg-transparent w-25px",
-                                "children": [],
-                                "className": "NumberInput",
-                                "collapsed": false,
-                                "references": []
-                              }
-                            ],
-                            "className": "Container",
-                            "collapsed": false,
-                            "references": [],
-                            "layout": "horizontal"
-                          },
-                          {
-                            "id": "sfvovmzb",
-                            "name": "Cnt_ValNarration",
-                            "classes": "",
-                            "children": [
-                              {
-                                "id": "ylevuyzk",
-                                "name": "Cnt_UpDown",
-                                "classes": "text-small mr-1 pl-2",
+                                "id": "veqvhlls",
+                                "name": "Adj_NarrationPts",
+                                "classes": "text-tiny pt-1",
                                 "children": [
                                   {
-                                    "id": "storyPointUpCursor",
-                                    "name": "Icon",
+                                    "id": "Inc_NarrationPts",
+                                    "name": "Inc_NarrationPts",
                                     "classes": "clickable",
                                     "children": [],
                                     "className": "Icon",
@@ -1846,8 +1926,8 @@ border rounded h-50px[
                                     "rollTitle": null
                                   },
                                   {
-                                    "id": "storyPointDownCursor",
-                                    "name": "Icon",
+                                    "id": "Dec_NarrationPts",
+                                    "name": "Dec_NarrationPts",
                                     "classes": "clickable",
                                     "children": [],
                                     "className": "Icon",
@@ -1859,69 +1939,95 @@ border rounded h-50px[
                                   }
                                 ],
                                 "className": "Container",
-                                "collapsed": true,
+                                "collapsed": false,
                                 "references": [],
                                 "layout": "vertical"
-                              },
+                              }
+                            ],
+                            "className": "Column",
+                            "collapsed": false,
+                            "references": []
+                          },
+                          {
+                            "size": null,
+                            "id": "jrqmgjur",
+                            "name": "Col_NarrationPtsR",
+                            "classes": "",
+                            "children": [
                               {
                                 "min": 0,
-                                "max": 9,
+                                "max": null,
                                 "defaultValue": "1",
                                 "align": "Center",
                                 "computed": null,
                                 "computedValue": null,
                                 "tooltip": true,
-                                "tooltipLabel": "Actuel",
-                                "tooltipPlacement": "bottom",
-                                "id": "storyPointVal",
-                                "name": "Val_Narration",
-                                "classes": "text-large",
+                                "tooltipLabel": "Max",
+                                "id": "Max_NarrationPts",
+                                "name": "Max_NarrationPts",
+                                "classes": "text-large text-center text-bold border rounded",
                                 "children": [],
                                 "className": "NumberInput",
                                 "collapsed": false,
                                 "references": []
+                              },
+                              {
+                                "text": "1",
+                                "align": null,
+                                "clickable": null,
+                                "quickBar": null,
+                                "isTemplate": false,
+                                "computed": null,
+                                "roll": null,
+                                "tooltip": true,
+                                "tooltipLabel": "Actuel",
+                                "id": "Val_NarrationPts",
+                                "name": "Val_NarrationPts",
+                                "classes": "text-large text-center border rounded text-bold",
+                                "children": [],
+                                "className": "Label",
+                                "collapsed": false,
+                                "references": []
                               }
                             ],
-                            "className": "Container",
+                            "className": "Column",
                             "collapsed": false,
-                            "references": [],
-                            "layout": "horizontal"
+                            "references": []
                           }
                         ],
-                        "className": "Container",
-                        "collapsed": false,
-                        "references": [],
-                        "layout": "vertical"
+                        "className": "Row",
+                        "collapsed": true,
+                        "references": []
                       }
                     ],
                     "className": "Column",
-                    "collapsed": false,
+                    "collapsed": true,
                     "references": []
                   },
                   {
                     "size": null,
                     "id": "jvrsodrv",
-                    "name": "Col_CharacsReps",
+                    "name": "Col_CharacsRep",
                     "classes": "",
                     "children": [
                       {
                         "id": "vlscqiyq",
-                        "name": "Row_CharacsReps",
+                        "name": "Row_CharacsRep",
                         "classes": "text-center",
                         "children": [
                           {
                             "size": null,
                             "id": "khddbnjr",
-                            "name": "Col_CharacsRepLeft",
+                            "name": "Col_CharacsRepL",
                             "classes": "",
                             "children": [
                               {
                                 "viewId": "caracEdit",
                                 "readViewId": "caracView",
                                 "children": [],
-                                "id": "caracRepeater",
+                                "id": "Rep_CharacsL",
                                 "name": "Rep_CharacsL",
-                                "classes": "",
+                                "classes": "no-add no-edit",
                                 "className": "Repeater",
                                 "collapsed": false,
                                 "references": []
@@ -1934,7 +2040,7 @@ border rounded h-50px[
                           {
                             "size": null,
                             "id": "rmzobkhm",
-                            "name": "Col_CharacsRepCenter",
+                            "name": "Col_CharacsRepC",
                             "classes": "",
                             "children": [
                               {
@@ -1943,7 +2049,7 @@ border rounded h-50px[
                                 "children": [],
                                 "id": "Rep_CharacsC",
                                 "name": "Rep_CharacsC",
-                                "classes": "",
+                                "classes": "no-add no-edit",
                                 "className": "Repeater",
                                 "collapsed": false,
                                 "references": []
@@ -1956,7 +2062,7 @@ border rounded h-50px[
                           {
                             "size": null,
                             "id": "qujsdekq",
-                            "name": "Col_CharacsRepRight",
+                            "name": "Col_CharacsRepR",
                             "classes": "",
                             "children": [
                               {
@@ -1965,8 +2071,226 @@ border rounded h-50px[
                                 "children": [],
                                 "id": "Rep_CharacsR",
                                 "name": "Rep_CharacsR",
-                                "classes": "",
+                                "classes": "no-add no-edit",
                                 "className": "Repeater",
+                                "collapsed": false,
+                                "references": []
+                              }
+                            ],
+                            "className": "Column",
+                            "collapsed": false,
+                            "references": []
+                          }
+                        ],
+                        "className": "Row",
+                        "collapsed": false,
+                        "references": []
+                      }
+                    ],
+                    "className": "Column",
+                    "collapsed": true,
+                    "references": []
+                  },
+                  {
+                    "size": 2,
+                    "id": "wgnjsqxe",
+                    "name": "Col_CharacsRoll",
+                    "classes": "text-large text-center",
+                    "children": [
+                      {
+                        "id": "Row_RollMod",
+                        "name": "Row_RollMod",
+                        "classes": "",
+                        "children": [
+                          {
+                            "size": null,
+                            "id": "hnvznlxo",
+                            "name": "Col_RollModL",
+                            "classes": "",
+                            "children": [
+                              {
+                                "min": 0,
+                                "max": null,
+                                "defaultValue": "0",
+                                "align": "Center",
+                                "computed": null,
+                                "computedValue": null,
+                                "tooltip": true,
+                                "tooltipLabel": "Max",
+                                "id": "qntsvmzv",
+                                "name": "_PH_",
+                                "classes": "invisible text-large text-center text-bold border rounded",
+                                "children": [],
+                                "className": "NumberInput",
+                                "collapsed": false,
+                                "references": []
+                              },
+                              {
+                                "text": "0",
+                                "align": null,
+                                "clickable": null,
+                                "quickBar": null,
+                                "isTemplate": false,
+                                "computed": null,
+                                "roll": null,
+                                "tooltip": true,
+                                "tooltipLabel": "Actuel",
+                                "id": "Val_RollMod",
+                                "name": "Val_RollMod",
+                                "classes": "text-large text-center border rounded text-bold",
+                                "children": [],
+                                "className": "Label",
+                                "collapsed": false,
+                                "references": []
+                              }
+                            ],
+                            "className": "Column",
+                            "collapsed": false,
+                            "references": []
+                          },
+                          {
+                            "size": 1,
+                            "id": "lhzvqqcs",
+                            "name": "Col_RollModR",
+                            "classes": "w-50px",
+                            "children": [
+                              {
+                                "text": ":balance-scale:",
+                                "align": null,
+                                "clickable": true,
+                                "quickBar": null,
+                                "isTemplate": false,
+                                "computed": null,
+                                "roll": null,
+                                "tooltip": true,
+                                "tooltipLabel": "Modificateur du Jet",
+                                "markdown": true,
+                                "id": "Clk_RollMod",
+                                "name": "Clk_RollMod",
+                                "classes": "",
+                                "children": [],
+                                "className": "Label",
+                                "collapsed": false,
+                                "references": []
+                              },
+                              {
+                                "id": "ymvdrwjf",
+                                "name": "Adj_RollMod",
+                                "classes": "text-tiny pt-1",
+                                "children": [
+                                  {
+                                    "id": "Inc_RollMod",
+                                    "name": "Inc_RollMod",
+                                    "classes": "clickable",
+                                    "children": [],
+                                    "className": "Icon",
+                                    "collapsed": false,
+                                    "references": [],
+                                    "iconName": "angle-up",
+                                    "roll": null,
+                                    "rollTitle": null
+                                  },
+                                  {
+                                    "id": "Dec_RollMod",
+                                    "name": "Dec_RollMod",
+                                    "classes": "clickable",
+                                    "children": [],
+                                    "className": "Icon",
+                                    "collapsed": false,
+                                    "references": [],
+                                    "iconName": "angle-down",
+                                    "roll": null,
+                                    "rollTitle": null
+                                  }
+                                ],
+                                "className": "Container",
+                                "collapsed": false,
+                                "references": [],
+                                "layout": "vertical"
+                              }
+                            ],
+                            "className": "Column",
+                            "collapsed": false,
+                            "references": []
+                          }
+                        ],
+                        "className": "Row",
+                        "collapsed": false,
+                        "references": []
+                      },
+                      {
+                        "id": "Row_RollVis",
+                        "name": "Row_RollVis",
+                        "classes": "",
+                        "children": [
+                          {
+                            "size": null,
+                            "id": "lhyghnxr",
+                            "name": "Col_RollVisL",
+                            "classes": "",
+                            "children": [
+                              {
+                                "text": ":users-slash:",
+                                "align": null,
+                                "clickable": true,
+                                "quickBar": null,
+                                "isTemplate": false,
+                                "computed": null,
+                                "roll": null,
+                                "tooltip": true,
+                                "tooltipLabel": "MJ Seul",
+                                "markdown": true,
+                                "id": "Ckb_RollVis",
+                                "name": "Ckb_RollVis",
+                                "classes": "border rounded",
+                                "children": [],
+                                "className": "Label",
+                                "collapsed": false,
+                                "references": []
+                              },
+                              {
+                                "text": "0",
+                                "align": null,
+                                "clickable": null,
+                                "quickBar": null,
+                                "isTemplate": false,
+                                "computed": null,
+                                "roll": null,
+                                "id": "Cky_RollVis",
+                                "name": "Cky_RollVis",
+                                "classes": "d-none",
+                                "children": [],
+                                "className": "Label",
+                                "collapsed": false,
+                                "references": []
+                              }
+                            ],
+                            "className": "Column",
+                            "collapsed": false,
+                            "references": []
+                          },
+                          {
+                            "size": 1,
+                            "id": "zyehfxyc",
+                            "name": "Col_RollVisR",
+                            "classes": "w-50px",
+                            "children": [
+                              {
+                                "text": ":eye:",
+                                "align": null,
+                                "clickable": false,
+                                "quickBar": null,
+                                "isTemplate": false,
+                                "computed": null,
+                                "roll": null,
+                                "tooltip": true,
+                                "tooltipLabel": "Visibilité du Jet",
+                                "markdown": true,
+                                "id": "evmohpfh",
+                                "name": "Lbl_RollVis",
+                                "classes": "",
+                                "children": [],
+                                "className": "Label",
                                 "collapsed": false,
                                 "references": []
                               }
@@ -1987,197 +2311,17 @@ border rounded h-50px[
                   },
                   {
                     "size": 1,
-                    "id": "Col_Dices",
-                    "name": "Col_Dices",
-                    "classes": "",
-                    "children": [
-                      {
-                        "id": "hovnqojo",
-                        "name": "Cnt_Dices",
-                        "classes": "align-items-center text-large",
-                        "children": [
-                          {
-                            "id": "bsfijatr",
-                            "name": "Cnt_RollModifier",
-                            "classes": "",
-                            "children": [
-                              {
-                                "text": ":balance-scale:",
-                                "align": null,
-                                "clickable": null,
-                                "quickBar": null,
-                                "isTemplate": false,
-                                "computed": null,
-                                "roll": null,
-                                "tooltip": true,
-                                "tooltipLabel": "Modificateur du Jet",
-                                "markdown": true,
-                                "id": "asiidjni",
-                                "name": "Lbl_RollModifier",
-                                "classes": "",
-                                "children": [],
-                                "className": "Label",
-                                "collapsed": false,
-                                "references": []
-                              }
-                            ],
-                            "className": "Container",
-                            "collapsed": false,
-                            "references": [],
-                            "layout": "horizontal"
-                          },
-                          {
-                            "id": "bhzievvy",
-                            "name": "Cnt_ValRollModifier",
-                            "classes": "",
-                            "children": [
-                              {
-                                "min": null,
-                                "max": null,
-                                "defaultValue": "0",
-                                "align": "Center",
-                                "computed": null,
-                                "computedValue": null,
-                                "tooltip": true,
-                                "tooltipLabel": "Actuel",
-                                "id": "Val_RollModifier",
-                                "name": "Val_RollModifier",
-                                "classes": "text-large",
-                                "children": [],
-                                "className": "NumberInput",
-                                "collapsed": false,
-                                "references": []
-                              },
-                              {
-                                "id": "ndlkbyyd",
-                                "name": "Cnt_UpDown",
-                                "classes": "text-small mr-1 pl-2",
-                                "children": [
-                                  {
-                                    "id": "vbmuphwj",
-                                    "name": "Icon",
-                                    "classes": "clickable",
-                                    "children": [],
-                                    "className": "Icon",
-                                    "collapsed": false,
-                                    "references": [],
-                                    "iconName": "angle-up",
-                                    "roll": null,
-                                    "rollTitle": null
-                                  },
-                                  {
-                                    "id": "xgszfkzw",
-                                    "name": "Icon",
-                                    "classes": "clickable",
-                                    "children": [],
-                                    "className": "Icon",
-                                    "collapsed": false,
-                                    "references": [],
-                                    "iconName": "angle-down",
-                                    "roll": null,
-                                    "rollTitle": null
-                                  }
-                                ],
-                                "className": "Container",
-                                "collapsed": true,
-                                "references": [],
-                                "layout": "vertical"
-                              }
-                            ],
-                            "className": "Container",
-                            "collapsed": false,
-                            "references": [],
-                            "layout": "horizontal"
-                          },
-                          {
-                            "id": "qxrglgtz",
-                            "name": "Cnt_Visibility",
-                            "classes": "",
-                            "children": [
-                              {
-                                "text": ":eye:",
-                                "align": null,
-                                "clickable": null,
-                                "quickBar": null,
-                                "isTemplate": false,
-                                "computed": null,
-                                "roll": null,
-                                "tooltip": true,
-                                "tooltipLabel": "Visibilité du Jet",
-                                "markdown": true,
-                                "id": "fgdqsofx",
-                                "name": "Lbl_Visibility",
-                                "classes": "",
-                                "children": [],
-                                "className": "Label",
-                                "collapsed": false,
-                                "references": []
-                              }
-                            ],
-                            "className": "Container",
-                            "collapsed": false,
-                            "references": [],
-                            "layout": "horizontal"
-                          },
-                          {
-                            "id": "gnjldvjh",
-                            "name": "Cnt_Visibility",
-                            "classes": "",
-                            "children": [
-                              {
-                                "text": "MJ",
-                                "align": null,
-                                "clickable": true,
-                                "quickBar": null,
-                                "isTemplate": false,
-                                "computed": null,
-                                "roll": null,
-                                "tooltip": true,
-                                "tooltipLabel": "MJ Seul",
-                                "id": "Ckb_Visibility",
-                                "name": "Ckb_Visibility",
-                                "classes": "border rounded pl-1 pr-1",
-                                "children": [],
-                                "className": "Label",
-                                "collapsed": false,
-                                "references": []
-                              },
-                              {
-                                "text": "0",
-                                "align": null,
-                                "clickable": null,
-                                "quickBar": null,
-                                "isTemplate": false,
-                                "computed": null,
-                                "roll": null,
-                                "id": "Cky_Visibility",
-                                "name": "Cky_Visibility",
-                                "classes": "d-none",
-                                "children": [],
-                                "className": "Label",
-                                "collapsed": false,
-                                "references": []
-                              }
-                            ],
-                            "className": "Container",
-                            "collapsed": false,
-                            "references": [],
-                            "layout": "horizontal"
-                          }
-                        ],
-                        "className": "Container",
-                        "collapsed": false,
-                        "references": [],
-                        "layout": "vertical"
-                      }
-                    ],
+                    "id": "ypjlchwh",
+                    "name": "_PH1_",
+                    "classes": "w-25px",
+                    "children": [],
                     "className": "Column",
                     "collapsed": false,
                     "references": []
                   }
                 ],
                 "className": "Row",
-                "collapsed": true,
+                "collapsed": false,
                 "references": []
               }
             ],
@@ -2261,7 +2405,7 @@ border rounded h-50px[
               {
                 "id": "nxhnktsr",
                 "name": "Row_BioCols",
-                "classes": "",
+                "classes": "pt-2",
                 "children": [
                   {
                     "size": null,
@@ -2699,7 +2843,7 @@ border rounded h-50px[
                   }
                 ],
                 "className": "Row",
-                "collapsed": false,
+                "collapsed": true,
                 "references": []
               },
               {
@@ -2707,6 +2851,16 @@ border rounded h-50px[
                 "name": "Row_GiftsCols",
                 "classes": "pt-2",
                 "children": [
+                  {
+                    "size": 1,
+                    "id": "opjgmbym",
+                    "name": "_PH1_",
+                    "classes": "w-25px",
+                    "children": [],
+                    "className": "Column",
+                    "collapsed": false,
+                    "references": []
+                  },
                   {
                     "size": 2,
                     "id": "cpsdqdqn",
@@ -2722,12 +2876,12 @@ border rounded h-50px[
                             "size": 1,
                             "id": "somjzewo",
                             "name": "Col_GiftsPtsL",
-                            "classes": "pl-3 pr-3",
+                            "classes": "w-50px",
                             "children": [
                               {
                                 "text": ":hand-holding-heart:",
                                 "align": null,
-                                "clickable": null,
+                                "clickable": true,
                                 "quickBar": null,
                                 "isTemplate": false,
                                 "computed": null,
@@ -2746,7 +2900,7 @@ border rounded h-50px[
                               {
                                 "id": "Adj_GiftsPts",
                                 "name": "Adj_GiftsPts",
-                                "classes": "text-tiny pl-2 pt-1",
+                                "classes": "text-tiny pt-1",
                                 "children": [
                                   {
                                     "id": "Inc_GiftsPts",
@@ -2774,7 +2928,7 @@ border rounded h-50px[
                                   }
                                 ],
                                 "className": "Container",
-                                "collapsed": true,
+                                "collapsed": false,
                                 "references": [],
                                 "layout": "vertical"
                               }
@@ -2790,7 +2944,7 @@ border rounded h-50px[
                             "classes": "",
                             "children": [
                               {
-                                "min": null,
+                                "min": 0,
                                 "max": null,
                                 "defaultValue": "1",
                                 "align": "Center",
@@ -2807,19 +2961,20 @@ border rounded h-50px[
                                 "references": []
                               },
                               {
-                                "min": null,
-                                "max": null,
-                                "defaultValue": "1",
-                                "align": "Center",
+                                "text": "1",
+                                "align": null,
+                                "clickable": null,
+                                "quickBar": null,
+                                "isTemplate": false,
                                 "computed": null,
-                                "computedValue": null,
+                                "roll": null,
                                 "tooltip": true,
                                 "tooltipLabel": "Actuel",
                                 "id": "Val_GiftsPts",
                                 "name": "Val_GiftsPts",
-                                "classes": "text-large text-center border rounded",
+                                "classes": "text-large text-center text-bold border rounded",
                                 "children": [],
-                                "className": "NumberInput",
+                                "className": "Label",
                                 "collapsed": false,
                                 "references": []
                               }
@@ -2835,13 +2990,13 @@ border rounded h-50px[
                       }
                     ],
                     "className": "Column",
-                    "collapsed": false,
+                    "collapsed": true,
                     "references": []
                   },
                   {
                     "size": null,
                     "id": "rpbcwwqc",
-                    "name": "Col_GiftsReps",
+                    "name": "Col_GiftsRep",
                     "classes": "",
                     "children": [
                       {
@@ -2859,6 +3014,16 @@ border rounded h-50px[
                     "className": "Column",
                     "collapsed": true,
                     "references": []
+                  },
+                  {
+                    "size": 1,
+                    "id": "lqcbwvku",
+                    "name": "_PH1_",
+                    "classes": "w-25px",
+                    "children": [],
+                    "className": "Column",
+                    "collapsed": false,
+                    "references": []
                   }
                 ],
                 "className": "Row",
@@ -2872,7 +3037,7 @@ border rounded h-50px[
           }
         ],
         "className": "Row",
-        "collapsed": false,
+        "collapsed": true,
         "references": []
       },
       {
@@ -4085,13 +4250,13 @@ border rounded h-50px[
       {
         "id": "Row_Edit",
         "name": "Row_Edit",
-        "classes": "",
+        "classes": null,
         "children": [
           {
             "size": 1,
             "id": "xdioujue",
             "name": "Col_Cost",
-            "classes": "",
+            "classes": null,
             "children": [
               {
                 "min": null,
@@ -4105,7 +4270,6 @@ border rounded h-50px[
                 "id": "Val_Cost",
                 "name": "Val_Cost",
                 "classes": "border rounded h-50px text-medium text-center",
-                "children": [],
                 "className": "NumberInput",
                 "collapsed": false,
                 "references": []
@@ -4119,7 +4283,7 @@ border rounded h-50px[
             "size": 4,
             "id": "iahdrezq",
             "name": "Col_Name",
-            "classes": "",
+            "classes": null,
             "children": [
               {
                 "placeholder": "Nom",
@@ -4130,7 +4294,6 @@ border rounded h-50px[
                 "id": "Val_Name",
                 "name": "Val_Name",
                 "classes": "border rounded h-50px text-medium text-center text-capitalize",
-                "children": [],
                 "className": "TextInput",
                 "collapsed": false,
                 "references": []
@@ -4144,7 +4307,7 @@ border rounded h-50px[
             "size": 6,
             "id": "yzzijxfq",
             "name": "Col_Description",
-            "classes": "",
+            "classes": null,
             "children": [
               {
                 "placeholder": null,
@@ -4153,7 +4316,6 @@ border rounded h-50px[
                 "id": "Val_Description",
                 "name": "Val_Description",
                 "classes": "border rounded h-50px",
-                "children": [],
                 "className": "Textarea",
                 "collapsed": false,
                 "references": []
@@ -4174,7 +4336,6 @@ border rounded h-50px[
                 "align": "Center",
                 "clickable": true,
                 "quickBar": null,
-                "isTemplate": false,
                 "computed": null,
                 "roll": null,
                 "tooltip": true,
@@ -4183,7 +4344,6 @@ border rounded h-50px[
                 "id": "Del_Entry",
                 "name": "Del_Entry",
                 "classes": "h-25px pr-2",
-                "children": [],
                 "className": "Label",
                 "collapsed": false,
                 "references": []
@@ -4193,7 +4353,6 @@ border rounded h-50px[
                 "align": "Center",
                 "clickable": true,
                 "quickBar": null,
-                "isTemplate": false,
                 "computed": null,
                 "roll": null,
                 "tooltip": true,
@@ -4202,7 +4361,6 @@ border rounded h-50px[
                 "id": "New_Entry",
                 "name": "New_Entry",
                 "classes": "h-25px pr-2",
-                "children": [],
                 "className": "Label",
                 "collapsed": false,
                 "references": []
@@ -4220,26 +4378,23 @@ border rounded h-50px[
       {
         "id": "Row_View",
         "name": "Row_View",
-        "classes": "",
+        "classes": null,
         "children": [
           {
             "size": 1,
             "id": "iegdpvkn",
             "name": "Col_Cost",
-            "classes": "",
+            "classes": null,
             "children": [
               {
-                "text": "",
                 "align": "Center",
                 "clickable": null,
                 "quickBar": null,
-                "isTemplate": false,
                 "computed": null,
                 "roll": null,
                 "id": "Vis_Cost",
                 "name": "Vis_Cost",
                 "classes": "border rounded h-50px text-medium text-center pt-2",
-                "children": [],
                 "className": "Label",
                 "collapsed": false,
                 "references": []
@@ -4253,20 +4408,17 @@ border rounded h-50px[
             "size": 4,
             "id": "lhxabkqr",
             "name": "Col_Name",
-            "classes": "",
+            "classes": null,
             "children": [
               {
-                "text": "",
                 "align": null,
                 "clickable": null,
                 "quickBar": null,
-                "isTemplate": false,
                 "computed": null,
                 "roll": null,
                 "id": "Vis_Name",
                 "name": "Vis_Name",
                 "classes": "border rounded h-50px text-medium text-center text-capitalize pt-2",
-                "children": [],
                 "className": "Label",
                 "collapsed": false,
                 "references": []
@@ -4280,20 +4432,17 @@ border rounded h-50px[
             "size": 6,
             "id": "pulkmwve",
             "name": "Col_Description",
-            "classes": "",
+            "classes": null,
             "children": [
               {
-                "text": "",
                 "align": null,
                 "clickable": null,
                 "quickBar": null,
-                "isTemplate": false,
                 "computed": null,
                 "roll": null,
                 "id": "Vis_Description",
                 "name": "Vis_Description",
                 "classes": "border rounded h-50px",
-                "children": [],
                 "className": "Label",
                 "collapsed": false,
                 "references": []
@@ -4314,7 +4463,6 @@ border rounded h-50px[
                 "align": "Center",
                 "clickable": true,
                 "quickBar": null,
-                "isTemplate": false,
                 "computed": null,
                 "roll": null,
                 "tooltip": true,
@@ -4323,7 +4471,6 @@ border rounded h-50px[
                 "id": "Inf_Entry",
                 "name": "Inf_Entry",
                 "classes": "h-25px pr-2 pt-2",
-                "children": [],
                 "className": "Label",
                 "collapsed": false,
                 "references": []

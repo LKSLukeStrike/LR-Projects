@@ -501,7 +501,6 @@ drop = function(from, to) { // TODO remove ?
 
 function initCharacter(sheet) {
 	// initRepair(sheet)
-	// initCheckboxes(sheet) TODO add fcts on on/off
 	initHead(sheet)
 	initTabs(sheet)
 	initCharacs(sheet)
@@ -516,30 +515,6 @@ function initCharacter(sheet) {
 function initRepair(sheet) {
 	setElemValue(getElem(sheet, Ckb_Activity), ":ga_check-mark:")
 	setElemValue(getElem(sheet, Ckb_SocialRank), ":ga_check-mark:")
-}
-
-function initCheckboxes(sheet) {
-	Arr_AllCBoxes.forEach(function(ckb_item) { // maintain checkboxes states
-		const ckb_elem = getElem(sheet, ckb_item)
-		const cky_item = rsoValue(ckb_item, Str_PFXCKB, Str_PFXCKY)
-		const cky_elem = getElem(sheet, cky_item)
-		
-		oncElemDo(ckb_elem, function(elem) { // toggle related cky elem
-			toggleElem(cky_elem)
-		})
-		
-		onuElemDo(cky_elem, function(elem) { // reflect checkbox state
-		// TODO trigger specific functions
-			if (getElemValue(elem)) { // doselect checkbox
-				addElemSelected(ckb_elem)
-			} else { // deselect checkbox
-				remElemSelected(ckb_elem)
-			}
-		})
-	})
-	
-	triggerElem(getElem(sheet, Cky_Visibility)) // triggers on init
-	// TODO add events on characs entries
 }
 
 function initHead(sheet) {
@@ -685,7 +660,7 @@ function initCharacsRep(sheet) {
 
 function initCharacsRoll(sheet) {
 	initRowMod(sheet, Row_RollMod)
-	// initRowPts(sheet, Row_NarrationPts)
+	initCkb(sheet, Ckb_RollVis)
 }
 
 function dolockCharacs(sheet) {
@@ -966,6 +941,25 @@ function initRowMod(sheet, row_item) { // init a mod block (clk, val, adj)
 	oncElemDo(dec_elem, function(elem) { // decrement current value
 		decrementElem(val_elem)
 	})
+}
+
+function initCkb(sheet, ckb_item) { // init a checkbox
+	const ckb_elem = getElem(sheet, ckb_item)
+	const cky_elem = getElem(sheet, rsoValue(ckb_item, Str_PFXCKB, Str_PFXCKY))
+	
+	oncElemDo(ckb_elem, function(elem) { // toggle related cky elem
+		toggleElem(cky_elem)
+	})
+	
+	onuElemDo(cky_elem, function(elem) { // reflect checkbox state
+		if (getElemValue(cky_elem)) { // doselect checkbox
+			addElemSelected(ckb_elem)
+		} else { // deselect checkbox
+			remElemSelected(ckb_elem)
+		}
+	})
+	
+	triggerElem(cky_elem) // triggers on init
 }
 
 

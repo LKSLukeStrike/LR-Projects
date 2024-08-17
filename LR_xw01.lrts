@@ -1,19 +1,19 @@
 
-function initRowMod(sheet, row_item) { // init a mod block (clk, val, adj)
-	const clk_elem = getElem(sheet, rsoValue(row_item, Str_PFXROW, Str_PFXCLK))
-	const inc_elem = getElem(sheet, rsoValue(row_item, Str_PFXROW, Str_PFXINC))
-	const dec_elem = getElem(sheet, rsoValue(row_item, Str_PFXROW, Str_PFXDEC))
-	const val_elem = getElem(sheet, rsoValue(row_item, Str_PFXROW, Str_PFXVAL))
+function initCkb(sheet, ckb_item) { // init a checkbox
+	const ckb_elem = getElem(sheet, ckb_item)
+	const cky_elem = getElem(sheet, rsoValue(ckb_item, Str_PFXCKB, Str_PFXCKY))
 	
-	oncElemDo(clk_elem, function(elem) { // restore max value
-		setElemValue(val_elem, 0)
+	oncElemDo(ckb_elem, function(elem) { // toggle related cky elem
+		toggleElem(cky_elem)
 	})
 	
-	oncElemDo(inc_elem, function(elem) { // increment current value
-		incrementElem(val_elem, getElemValue(max_elem))
+	onuElemDo(cky_elem, function(elem) { // reflect checkbox state
+		if (getElemValue(cky_elem)) { // doselect checkbox
+			addElemSelected(ckb_elem)
+		} else { // deselect checkbox
+			remElemSelected(ckb_elem)
+		}
 	})
 	
-	oncElemDo(dec_elem, function(elem) { // decrement current value
-		decrementElem(val_elem, 0)
-	})
+	triggerElem(getElem(sheet, cky_elem)) // triggers on init
 }
