@@ -1,12 +1,6 @@
-	initCkbDoDe(sheet, Ckb_LockSheet
+	initCkbDoDe(sheet, Ckb_LockSheet // toggle
 		, function(ckb_elem) {
-			addElemDolocked(ckb_elem)
-			dolockCharacs(sheet)
-			dolockGifts(sheet)
 		}
 		, function(ckb_elem) {
-			remElemDolocked(ckb_elem)
-			delockCharacs(sheet)
-			delockGifts(sheet)
 		}
 	)

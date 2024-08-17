@@ -322,6 +322,10 @@ const Row_NarrationPts = "Row_NarrationPts" // narration pts panel
 const Row_RollMod      = "Row_RollMod" // roll modifier panel
 const Row_RollVis      = "Row_RollVis" // roll visibility panel
 const Ckb_RollVis      = "Ckb_RollVis" // roll visibility state
+const Arr_CharacsRolls = [ // characs roll modifiers
+	Ckb_Activity,
+	Ckb_SocialRank,
+]
 
 const Row_Bio          = "Row_Bio" // bio panel
 
@@ -484,10 +488,11 @@ drop = function(from, to) { // TODO remove ?
 
 
 function initCharacter(sheet) {
-	initRepair(sheet)
+	initPreset(sheet)
 	initHead(sheet)
 	initTabs(sheet)
 	initCharacs(sheet)
+	initRoll(sheet)
 	initGifts(sheet)
 
 	// switchSide(sheet)
@@ -496,7 +501,7 @@ function initCharacter(sheet) {
 	// toggleEdit(sheet)
 }
 
-function initRepair(sheet) {
+function initPreset(sheet) {
 	setElemValue(getElem(sheet, Ckb_Activity), ":ga_check-mark:")
 	setElemValue(getElem(sheet, Ckb_SocialRank), ":ga_check-mark:")
 	setElemValue(getElem(sheet, Ckb_CharacsLck), ":lock: Caracs :lock:")
@@ -603,6 +608,17 @@ function initCharacs(sheet) {
 			remElemInvisible(col_characsnewr)
 		}
 	)
+
+	Arr_CharacsRolls.forEach(function(ckb_item) { // toggle activity & socialrank
+		initCkbDoDe(sheet, ckb_item
+			, function(ckb_elem) {
+				incrementRollMod(sheet)
+			}
+			, function(ckb_elem) {
+				decrementRollMod(sheet)
+			}
+		)
+	})
 	
 	initCharacsPts(sheet)
 	initCharacsRep(sheet)
@@ -618,7 +634,11 @@ function initCharacsRep(sheet) {
 }
 
 function initCharacsRoll(sheet) {
-	initRowMod(sheet, Row_RollMod)
+	initRowModDo(sheet, Row_RollMod
+		, function(clk_elem) {
+			initRoll(sheet)
+		}
+	)
 	initCkb(sheet, Ckb_RollVis)
 }
 
@@ -630,6 +650,29 @@ function dolockCharacs(sheet) {
 function delockCharacs(sheet) {
 	const cky_characslck = getElem(sheet, rsoValue(Ckb_CharacsLck, Str_PFXCKB, Str_PFXCKY))
 	setElemValue(cky_characslck, false)
+}
+
+function incrementRollMod(sheet) {
+	const val_rollmod = getElem(sheet, rsoValue(Row_RollMod, Str_PFXROW, Str_PFXVAL))
+	incrementElem(val_rollmod)
+}
+
+function decrementRollMod(sheet) {
+	const val_rollmod = getElem(sheet, rsoValue(Row_RollMod, Str_PFXROW, Str_PFXVAL))
+	decrementElem(val_rollmod)
+}
+
+function initRoll(sheet) {
+	const val_rollmod = getElem(sheet, rsoValue(Row_RollMod, Str_PFXROW, Str_PFXVAL))
+
+	Arr_CharacsRolls.forEach(function(ckb_item) { // cleanup activity & socialrank
+		const cky_elem = getElem(sheet, rsoValue(ckb_item, Str_PFXCKB, Str_PFXCKY))
+		setElemValue(cky_elem, false)
+	})
+	
+	//TODO cleanup all repeaters
+	
+	setElemValue(val_rollmod, 0) // cleanup roll modifier
 }
 
 function initGifts(sheet) {
@@ -881,14 +924,14 @@ function initRowPts(sheet, row_item) { // init a pts block (clk, max, adj)
 	})
 }
 
-function initRowMod(sheet, row_item) { // init a mod block (clk, val, adj)
+function initRowModDo(sheet, row_item, do_fct) { // init a mod block (clk, val, adj)
 	const clk_elem = getElem(sheet, rsoValue(row_item, Str_PFXROW, Str_PFXCLK))
 	const inc_elem = getElem(sheet, rsoValue(row_item, Str_PFXROW, Str_PFXINC))
 	const dec_elem = getElem(sheet, rsoValue(row_item, Str_PFXROW, Str_PFXDEC))
 	const val_elem = getElem(sheet, rsoValue(row_item, Str_PFXROW, Str_PFXVAL))
 	
-	oncElemDo(clk_elem, function(elem) { // restore max value
-		setElemValue(val_elem, 0)
+	oncElemDo(clk_elem, function(clk_elem) { // triggers fct on click
+		do_fct(clk_elem)
 	})
 	
 	oncElemDo(inc_elem, function(elem) { // increment current value
