@@ -139,36 +139,8 @@ function hasElemCss(elem, css) { // multiple css allowed in one string
 function rsoValue(str_value, value_one, value_two) { // replace a string once
 	return str_value.replace(value_one, value_two)
 }
-//endregion
-
-//region LR_Operators Min/Max
-function minValue(value_one, value_two) { // minimum number value
-	value_one = Number(value_one)
-	value_two = Number(value_two)
-	return value_one < value_two ?
-		value_one : value_two
-}
-function maxValue(value_one, value_two) { // maximum number value
-	value_one = Number(value_one)
-	value_two = Number(value_two)
-	return value_one > value_two ?
-		value_one : value_two
-}
-function mnaValue(arr_value) { // minimum number value in an array
-	let result = null
-	arr_value.forEach(function(value_one) {
-		result = result ?
-			minValue(value_one, result) : value_one
-	})
-	return Number(result)
-}
-function mxaValue(arr_value) { // maximum number value in an array
-	let result = null
-	arr_value.forEach(function(value_one) {
-		result = result ?
-			maxValue(value_one, result) : value_one
-	})
-	return Number(result)
+function rsaValue(str_value, value_one, value_two) { // replace a string all
+	return str_value.replaceAll(value_one, value_two)
 }
 //endregion
 //endregion
@@ -331,10 +303,8 @@ const Tip_Presets = "Presets"
 //region LS_Constants Items (IDs)
 const Row_Head         = "Row_Head" // sheet heading
 const Ckb_PrefSheet    = "Ckb_PrefSheet" // preferences checkbox
-const Cky_PrefSheet    = "Cky_PrefSheet" // preferences state
 const Val_CharName     = "Val_CharName" // character name
 const Ckb_LockSheet    = "Ckb_LockSheet" // locking checkbox
-const Cky_LockSheet    = "Cky_LockSheet" // locking state
 
 const Row_Pref         = "Row_Pref" // preferences panel
 
@@ -417,6 +387,8 @@ function decrementElemMin(elem, min_value) {
 const Css_LSSelected  = "bg-light text-dark"
 const Css_LSInvisible = "invisible"
 const Css_LSUsable    = "clickable bg-secondary"
+const Str_LSDolocked  = ":lock:"
+const Str_LSDelocked  = ":unlock:"
 
 function addElemSelected(elem) {
 	return addElemCss(elem, Css_LSSelected)
@@ -426,6 +398,18 @@ function remElemSelected(elem) {
 }
 function hasElemSelected(elem) {
 	return hasElemCss(elem, Css_LSSelected)
+}
+
+function addElemDolocked(elem) {
+	setElemValue(elem, rsaValue(getElemValue(elem), Str_LSDelocked, Str_LSDolocked))
+	return remElemCss(elem, Css_LSSelected)
+}
+function remElemDolocked(elem) {
+	setElemValue(elem, rsaValue(getElemValue(elem), Str_LSDolocked, Str_LSDelocked))
+	return addElemCss(elem, Css_LSSelected)
+}
+function hasElemDolocked(elem) {
+	return ! hasElemCss(elem, Css_LSSelected)
 }
 
 function addElemInvisible(elem) {
@@ -524,30 +508,22 @@ function initHead(sheet) {
 }
 
 function initPref(sheet) {
-	const ckb_prefsheet = getElem(sheet, Ckb_PrefSheet)
-	const cky_prefsheet = getElem(sheet, Cky_PrefSheet)
-	const row_pref = getElem(sheet, Row_Pref)
+	const row_pref    = getElem(sheet, Row_Pref)
 	const row_characs = getElem(sheet, Row_Characs)
-	
-	oncElemDo(ckb_prefsheet, function(elem) { // toggle pref
-		toggleElem(cky_prefsheet)
-	})
-	
-	onuElemDo(cky_prefsheet, function(elem) { // handle pref visibility
-		if (getElemValue(elem)) { // show pref
-			addElemSelected(ckb_prefsheet)
+
+	initCkbDoDe(sheet, Ckb_PrefSheet
+		, function(sheet) {
 			addElemDisplayed(row_pref)
 			remElemDisplayed(row_characs)
 			deselectTabAll(sheet)
-		} else { // hide pref
-			remElemSelected(ckb_prefsheet)
+		}
+		, function(sheet) {
 			remElemDisplayed(row_pref)
 			addElemDisplayed(row_characs)
 			deselectTabAll(sheet)
 		}
-	})
-	
-	triggerElem(cky_prefsheet) // triggers itself on init
+	)
+
 	initPrefTabs(sheet)
 }
 
@@ -577,32 +553,17 @@ function initCharName(sheet) {
 }
 
 function initLock(sheet) {
-	const ckb_locksheet = getElem(sheet, Ckb_LockSheet)
-	const cky_locksheet = getElem(sheet, Cky_LockSheet)
-	
-	oncElemDo(ckb_locksheet, function(elem) { // toggle lock
-		toggleElem(cky_locksheet)
-	})
-	
-	onuElemDo(cky_locksheet, function(elem) { // handle lock
-		if (getElemValue(elem)) { // lock sheet
-			addElemSelected(ckb_locksheet)
-			dolockSheet(sheet)
-		} else { // unlock sheet
-			remElemSelected(ckb_locksheet)
-			delockSheet(sheet)
-		}
-	})
-	
-	triggerElem(cky_locksheet) // triggers itself on init
+	initCkbDoDe(sheet, Ckb_LockSheet, dolockSheet, delockSheet)
 }
 
 function dolockSheet(sheet) {
+	addElemDolocked(getElem(sheet, Ckb_LockSheet))
 	dolockCharacs(sheet)
 	dolockGifts(sheet)
 }
 
 function delockSheet(sheet) {
+	remElemDolocked(getElem(sheet, Ckb_LockSheet))
 	delockCharacs(sheet)
 	delockGifts(sheet)
 }
@@ -828,7 +789,8 @@ function newGiftsChildAt(sheet, child) {
 }
 
 function initTabs(sheet) {
-	const cky_prefsheet = getElem(sheet, Cky_PrefSheet)
+	const cky_prefsheet = getElem(sheet, rsoValue(Ckb_PrefSheet, Str_PFXCKB, Str_PFXCKY))
+
 	Arr_TAB.forEach(function(tab_item) {
 		const tab_elem = getElem(sheet, tab_item)
 		const prf_item = rsoValue(tab_item, Str_PFXTAB, Str_PFXPRF)
@@ -956,6 +918,27 @@ function initCkb(sheet, ckb_item) { // init a checkbox
 			addElemSelected(ckb_elem)
 		} else { // deselect checkbox
 			remElemSelected(ckb_elem)
+		}
+	})
+	
+	triggerElem(cky_elem) // triggers on init
+}
+
+function initCkbDoDe(sheet, ckb_item, do_fct, de_fct) { // init a checkbox + fct on do/de
+	const ckb_elem = getElem(sheet, ckb_item)
+	const cky_elem = getElem(sheet, rsoValue(ckb_item, Str_PFXCKB, Str_PFXCKY))
+	
+	oncElemDo(ckb_elem, function(elem) { // toggle related cky elem
+		toggleElem(cky_elem)
+	})
+	
+	onuElemDo(cky_elem, function(elem) { // reflect checkbox state
+		if (getElemValue(cky_elem)) { // doselect checkbox
+			addElemSelected(ckb_elem)
+			do_fct(sheet) // triggers the doselect fct
+		} else { // deselect checkbox
+			remElemSelected(ckb_elem)
+			de_fct(sheet) // triggers the deselect fct
 		}
 	})
 	

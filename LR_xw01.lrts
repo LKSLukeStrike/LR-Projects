@@ -1,5 +1,5 @@
 
-function initCkb(sheet, ckb_item) { // init a checkbox
+function initCkbDoDe(sheet, ckb_item, do_fct, de_fct) { // init a checkbox + fct on do/de
 	const ckb_elem = getElem(sheet, ckb_item)
 	const cky_elem = getElem(sheet, rsoValue(ckb_item, Str_PFXCKB, Str_PFXCKY))
 	
@@ -10,8 +10,10 @@ function initCkb(sheet, ckb_item) { // init a checkbox
 	onuElemDo(cky_elem, function(elem) { // reflect checkbox state
 		if (getElemValue(cky_elem)) { // doselect checkbox
 			addElemSelected(ckb_elem)
+			do_fct(sheet) // triggers the doselect fct
 		} else { // deselect checkbox
 			remElemSelected(ckb_elem)
+			de_fct(sheet) // triggers the deselect fct
 		}
 	})
 	

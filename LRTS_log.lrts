@@ -1,0 +1,3331 @@
+Principal
+Chat
+Historique des jets
+Raccourcis
+Scène
+Ordre des tours
+Outils
+Mesures
+Dessins
+Console
+Éclairage Dynamique
+Contenu
+Journal
+Création de contenu
+Livre
+Bibliothèque PDF
+Gestionnaire de médias
+Audio
+Musique
+Effets spéciaux
+Autres
+Quitter
+ Menu
+Rechercher dans vos créations...
+
+Tout
+Créations : 0
+Créer un
+
+Character
+An error occured during scripting init function
+{
+  "trace": [
+    {
+      "type": "Identifier",
+      "name": "Cky_PrefSheet",
+      "loc": {
+        "start": {
+          "line": 527,
+          "column": 38
+        },
+        "end": {
+          "line": 527,
+          "column": 51
+        }
+      }
+    },
+    {
+      "type": "CallExpression",
+      "callee": {
+        "type": "Identifier",
+        "name": "getElem",
+        "loc": {
+          "start": {
+            "line": 527,
+            "column": 23
+          },
+          "end": {
+            "line": 527,
+            "column": 30
+          }
+        }
+      },
+      "arguments": [
+        {
+          "type": "Identifier",
+          "name": "sheet",
+          "loc": {
+            "start": {
+              "line": 527,
+              "column": 31
+            },
+            "end": {
+              "line": 527,
+              "column": 36
+            }
+          }
+        },
+        {
+          "type": "Identifier",
+          "name": "Cky_PrefSheet",
+          "loc": {
+            "start": {
+              "line": 527,
+              "column": 38
+            },
+            "end": {
+              "line": 527,
+              "column": 51
+            }
+          }
+        }
+      ],
+      "loc": {
+        "start": {
+          "line": 527,
+          "column": 23
+        },
+        "end": {
+          "line": 527,
+          "column": 52
+        }
+      }
+    },
+    {
+      "type": "VariableDeclaration",
+      "declarations": [
+        {
+          "type": "VariableDeclarator",
+          "id": {
+            "type": "Identifier",
+            "name": "cky_prefsheet",
+            "loc": {
+              "start": {
+                "line": 527,
+                "column": 7
+              },
+              "end": {
+                "line": 527,
+                "column": 20
+              }
+            }
+          },
+          "init": {
+            "type": "CallExpression",
+            "callee": {
+              "type": "Identifier",
+              "name": "getElem",
+              "loc": {
+                "start": {
+                  "line": 527,
+                  "column": 23
+                },
+                "end": {
+                  "line": 527,
+                  "column": 30
+                }
+              }
+            },
+            "arguments": [
+              {
+                "type": "Identifier",
+                "name": "sheet",
+                "loc": {
+                  "start": {
+                    "line": 527,
+                    "column": 31
+                  },
+                  "end": {
+                    "line": 527,
+                    "column": 36
+                  }
+                }
+              },
+              {
+                "type": "Identifier",
+                "name": "Cky_PrefSheet",
+                "loc": {
+                  "start": {
+                    "line": 527,
+                    "column": 38
+                  },
+                  "end": {
+                    "line": 527,
+                    "column": 51
+                  }
+                }
+              }
+            ],
+            "loc": {
+              "start": {
+                "line": 527,
+                "column": 23
+              },
+              "end": {
+                "line": 527,
+                "column": 52
+              }
+            }
+          },
+          "loc": {
+            "start": {
+              "line": 527,
+              "column": 7
+            },
+            "end": {
+              "line": 527,
+              "column": 52
+            }
+          }
+        }
+      ],
+      "kind": "const",
+      "loc": {
+        "start": {
+          "line": 527,
+          "column": 1
+        },
+        "end": {
+          "line": 528,
+          "column": 1
+        }
+      }
+    },
+    {
+      "type": "BlockStatement",
+      "body": [
+        {
+          "type": "VariableDeclaration",
+          "kind": "var",
+          "declarations": [
+            {
+              "type": "VariableDeclarator",
+              "id": {
+                "type": "Identifier",
+                "name": "ckb_prefsheet",
+                "loc": {
+                  "start": {
+                    "line": 526,
+                    "column": 7
+                  },
+                  "end": {
+                    "line": 526,
+                    "column": 20
+                  }
+                }
+              },
+              "init": null
+            },
+            {
+              "type": "VariableDeclarator",
+              "id": {
+                "type": "Identifier",
+                "name": "cky_prefsheet",
+                "loc": {
+                  "start": {
+                    "line": 527,
+                    "column": 7
+                  },
+                  "end": {
+                    "line": 527,
+                    "column": 20
+                  }
+                }
+              },
+              "init": null
+            },
+            {
+              "type": "VariableDeclarator",
+              "id": {
+                "type": "Identifier",
+                "name": "row_pref",
+                "loc": {
+                  "start": {
+                    "line": 528,
+                    "column": 7
+                  },
+                  "end": {
+                    "line": 528,
+                    "column": 15
+                  }
+                }
+              },
+              "init": null
+            },
+            {
+              "type": "VariableDeclarator",
+              "id": {
+                "type": "Identifier",
+                "name": "row_characs",
+                "loc": {
+                  "start": {
+                    "line": 529,
+                    "column": 7
+                  },
+                  "end": {
+                    "line": 529,
+                    "column": 18
+                  }
+                }
+              },
+              "init": null
+            }
+          ]
+        },
+        {
+          "type": "VariableDeclaration",
+          "declarations": [
+            {
+              "type": "VariableDeclarator",
+              "id": {
+                "type": "Identifier",
+                "name": "ckb_prefsheet",
+                "loc": {
+                  "start": {
+                    "line": 526,
+                    "column": 7
+                  },
+                  "end": {
+                    "line": 526,
+                    "column": 20
+                  }
+                }
+              },
+              "init": {
+                "type": "CallExpression",
+                "callee": {
+                  "type": "Identifier",
+                  "name": "getElem",
+                  "loc": {
+                    "start": {
+                      "line": 526,
+                      "column": 23
+                    },
+                    "end": {
+                      "line": 526,
+                      "column": 30
+                    }
+                  }
+                },
+                "arguments": [
+                  {
+                    "type": "Identifier",
+                    "name": "sheet",
+                    "loc": {
+                      "start": {
+                        "line": 526,
+                        "column": 31
+                      },
+                      "end": {
+                        "line": 526,
+                        "column": 36
+                      }
+                    }
+                  },
+                  {
+                    "type": "Identifier",
+                    "name": "Ckb_PrefSheet",
+                    "loc": {
+                      "start": {
+                        "line": 526,
+                        "column": 38
+                      },
+                      "end": {
+                        "line": 526,
+                        "column": 51
+                      }
+                    }
+                  }
+                ],
+                "loc": {
+                  "start": {
+                    "line": 526,
+                    "column": 23
+                  },
+                  "end": {
+                    "line": 526,
+                    "column": 52
+                  }
+                }
+              },
+              "loc": {
+                "start": {
+                  "line": 526,
+                  "column": 7
+                },
+                "end": {
+                  "line": 526,
+                  "column": 52
+                }
+              }
+            }
+          ],
+          "kind": "const",
+          "loc": {
+            "start": {
+              "line": 526,
+              "column": 1
+            },
+            "end": {
+              "line": 527,
+              "column": 1
+            }
+          }
+        },
+        {
+          "type": "VariableDeclaration",
+          "declarations": [
+            {
+              "type": "VariableDeclarator",
+              "id": {
+                "type": "Identifier",
+                "name": "cky_prefsheet",
+                "loc": {
+                  "start": {
+                    "line": 527,
+                    "column": 7
+                  },
+                  "end": {
+                    "line": 527,
+                    "column": 20
+                  }
+                }
+              },
+              "init": {
+                "type": "CallExpression",
+                "callee": {
+                  "type": "Identifier",
+                  "name": "getElem",
+                  "loc": {
+                    "start": {
+                      "line": 527,
+                      "column": 23
+                    },
+                    "end": {
+                      "line": 527,
+                      "column": 30
+                    }
+                  }
+                },
+                "arguments": [
+                  {
+                    "type": "Identifier",
+                    "name": "sheet",
+                    "loc": {
+                      "start": {
+                        "line": 527,
+                        "column": 31
+                      },
+                      "end": {
+                        "line": 527,
+                        "column": 36
+                      }
+                    }
+                  },
+                  {
+                    "type": "Identifier",
+                    "name": "Cky_PrefSheet",
+                    "loc": {
+                      "start": {
+                        "line": 527,
+                        "column": 38
+                      },
+                      "end": {
+                        "line": 527,
+                        "column": 51
+                      }
+                    }
+                  }
+                ],
+                "loc": {
+                  "start": {
+                    "line": 527,
+                    "column": 23
+                  },
+                  "end": {
+                    "line": 527,
+                    "column": 52
+                  }
+                }
+              },
+              "loc": {
+                "start": {
+                  "line": 527,
+                  "column": 7
+                },
+                "end": {
+                  "line": 527,
+                  "column": 52
+                }
+              }
+            }
+          ],
+          "kind": "const",
+          "loc": {
+            "start": {
+              "line": 527,
+              "column": 1
+            },
+            "end": {
+              "line": 528,
+              "column": 1
+            }
+          }
+        },
+        {
+          "type": "VariableDeclaration",
+          "declarations": [
+            {
+              "type": "VariableDeclarator",
+              "id": {
+                "type": "Identifier",
+                "name": "row_pref",
+                "loc": {
+                  "start": {
+                    "line": 528,
+                    "column": 7
+                  },
+                  "end": {
+                    "line": 528,
+                    "column": 15
+                  }
+                }
+              },
+              "init": {
+                "type": "CallExpression",
+                "callee": {
+                  "type": "Identifier",
+                  "name": "getElem",
+                  "loc": {
+                    "start": {
+                      "line": 528,
+                      "column": 18
+                    },
+                    "end": {
+                      "line": 528,
+                      "column": 25
+                    }
+                  }
+                },
+                "arguments": [
+                  {
+                    "type": "Identifier",
+                    "name": "sheet",
+                    "loc": {
+                      "start": {
+                        "line": 528,
+                        "column": 26
+                      },
+                      "end": {
+                        "line": 528,
+                        "column": 31
+                      }
+                    }
+                  },
+                  {
+                    "type": "Identifier",
+                    "name": "Row_Pref",
+                    "loc": {
+                      "start": {
+                        "line": 528,
+                        "column": 33
+                      },
+                      "end": {
+                        "line": 528,
+                        "column": 41
+                      }
+                    }
+                  }
+                ],
+                "loc": {
+                  "start": {
+                    "line": 528,
+                    "column": 18
+                  },
+                  "end": {
+                    "line": 528,
+                    "column": 42
+                  }
+                }
+              },
+              "loc": {
+                "start": {
+                  "line": 528,
+                  "column": 7
+                },
+                "end": {
+                  "line": 528,
+                  "column": 42
+                }
+              }
+            }
+          ],
+          "kind": "const",
+          "loc": {
+            "start": {
+              "line": 528,
+              "column": 1
+            },
+            "end": {
+              "line": 529,
+              "column": 1
+            }
+          }
+        },
+        {
+          "type": "VariableDeclaration",
+          "declarations": [
+            {
+              "type": "VariableDeclarator",
+              "id": {
+                "type": "Identifier",
+                "name": "row_characs",
+                "loc": {
+                  "start": {
+                    "line": 529,
+                    "column": 7
+                  },
+                  "end": {
+                    "line": 529,
+                    "column": 18
+                  }
+                }
+              },
+              "init": {
+                "type": "CallExpression",
+                "callee": {
+                  "type": "Identifier",
+                  "name": "getElem",
+                  "loc": {
+                    "start": {
+                      "line": 529,
+                      "column": 21
+                    },
+                    "end": {
+                      "line": 529,
+                      "column": 28
+                    }
+                  }
+                },
+                "arguments": [
+                  {
+                    "type": "Identifier",
+                    "name": "sheet",
+                    "loc": {
+                      "start": {
+                        "line": 529,
+                        "column": 29
+                      },
+                      "end": {
+                        "line": 529,
+                        "column": 34
+                      }
+                    }
+                  },
+                  {
+                    "type": "Identifier",
+                    "name": "Row_Characs",
+                    "loc": {
+                      "start": {
+                        "line": 529,
+                        "column": 36
+                      },
+                      "end": {
+                        "line": 529,
+                        "column": 47
+                      }
+                    }
+                  }
+                ],
+                "loc": {
+                  "start": {
+                    "line": 529,
+                    "column": 21
+                  },
+                  "end": {
+                    "line": 529,
+                    "column": 48
+                  }
+                }
+              },
+              "loc": {
+                "start": {
+                  "line": 529,
+                  "column": 7
+                },
+                "end": {
+                  "line": 529,
+                  "column": 48
+                }
+              }
+            }
+          ],
+          "kind": "const",
+          "loc": {
+            "start": {
+              "line": 529,
+              "column": 1
+            },
+            "end": {
+              "line": 563,
+              "column": 1
+            }
+          }
+        },
+        {
+          "type": "ExpressionStatement",
+          "expression": {
+            "type": "CallExpression",
+            "callee": {
+              "type": "Identifier",
+              "name": "initPrefTabs",
+              "loc": {
+                "start": {
+                  "line": 563,
+                  "column": 1
+                },
+                "end": {
+                  "line": 563,
+                  "column": 13
+                }
+              }
+            },
+            "arguments": [
+              {
+                "type": "Identifier",
+                "name": "sheet",
+                "loc": {
+                  "start": {
+                    "line": 563,
+                    "column": 14
+                  },
+                  "end": {
+                    "line": 563,
+                    "column": 19
+                  }
+                }
+              }
+            ],
+            "loc": {
+              "start": {
+                "line": 563,
+                "column": 1
+              },
+              "end": {
+                "line": 563,
+                "column": 20
+              }
+            }
+          },
+          "loc": {
+            "start": {
+              "line": 563,
+              "column": 1
+            },
+            "end": {
+              "line": 564,
+              "column": 0
+            }
+          }
+        }
+      ],
+      "loc": {
+        "start": {
+          "line": 525,
+          "column": 25
+        },
+        "end": {
+          "line": 564,
+          "column": 1
+        }
+      }
+    },
+    {
+      "type": "FunctionDeclaration",
+      "id": {
+        "type": "Identifier",
+        "name": "initPref",
+        "loc": {
+          "start": {
+            "line": 525,
+            "column": 9
+          },
+          "end": {
+            "line": 525,
+            "column": 17
+          }
+        }
+      },
+      "params": [
+        {
+          "type": "Identifier",
+          "name": "sheet",
+          "loc": {
+            "start": {
+              "line": 525,
+              "column": 18
+            },
+            "end": {
+              "line": 525,
+              "column": 23
+            }
+          }
+        }
+      ],
+      "defaults": [],
+      "body": {
+        "type": "BlockStatement",
+        "body": [
+          {
+            "type": "VariableDeclaration",
+            "kind": "var",
+            "declarations": [
+              {
+                "type": "VariableDeclarator",
+                "id": {
+                  "type": "Identifier",
+                  "name": "ckb_prefsheet",
+                  "loc": {
+                    "start": {
+                      "line": 526,
+                      "column": 7
+                    },
+                    "end": {
+                      "line": 526,
+                      "column": 20
+                    }
+                  }
+                },
+                "init": null
+              },
+              {
+                "type": "VariableDeclarator",
+                "id": {
+                  "type": "Identifier",
+                  "name": "cky_prefsheet",
+                  "loc": {
+                    "start": {
+                      "line": 527,
+                      "column": 7
+                    },
+                    "end": {
+                      "line": 527,
+                      "column": 20
+                    }
+                  }
+                },
+                "init": null
+              },
+              {
+                "type": "VariableDeclarator",
+                "id": {
+                  "type": "Identifier",
+                  "name": "row_pref",
+                  "loc": {
+                    "start": {
+                      "line": 528,
+                      "column": 7
+                    },
+                    "end": {
+                      "line": 528,
+                      "column": 15
+                    }
+                  }
+                },
+                "init": null
+              },
+              {
+                "type": "VariableDeclarator",
+                "id": {
+                  "type": "Identifier",
+                  "name": "row_characs",
+                  "loc": {
+                    "start": {
+                      "line": 529,
+                      "column": 7
+                    },
+                    "end": {
+                      "line": 529,
+                      "column": 18
+                    }
+                  }
+                },
+                "init": null
+              }
+            ]
+          },
+          {
+            "type": "VariableDeclaration",
+            "declarations": [
+              {
+                "type": "VariableDeclarator",
+                "id": {
+                  "type": "Identifier",
+                  "name": "ckb_prefsheet",
+                  "loc": {
+                    "start": {
+                      "line": 526,
+                      "column": 7
+                    },
+                    "end": {
+                      "line": 526,
+                      "column": 20
+                    }
+                  }
+                },
+                "init": {
+                  "type": "CallExpression",
+                  "callee": {
+                    "type": "Identifier",
+                    "name": "getElem",
+                    "loc": {
+                      "start": {
+                        "line": 526,
+                        "column": 23
+                      },
+                      "end": {
+                        "line": 526,
+                        "column": 30
+                      }
+                    }
+                  },
+                  "arguments": [
+                    {
+                      "type": "Identifier",
+                      "name": "sheet",
+                      "loc": {
+                        "start": {
+                          "line": 526,
+                          "column": 31
+                        },
+                        "end": {
+                          "line": 526,
+                          "column": 36
+                        }
+                      }
+                    },
+                    {
+                      "type": "Identifier",
+                      "name": "Ckb_PrefSheet",
+                      "loc": {
+                        "start": {
+                          "line": 526,
+                          "column": 38
+                        },
+                        "end": {
+                          "line": 526,
+                          "column": 51
+                        }
+                      }
+                    }
+                  ],
+                  "loc": {
+                    "start": {
+                      "line": 526,
+                      "column": 23
+                    },
+                    "end": {
+                      "line": 526,
+                      "column": 52
+                    }
+                  }
+                },
+                "loc": {
+                  "start": {
+                    "line": 526,
+                    "column": 7
+                  },
+                  "end": {
+                    "line": 526,
+                    "column": 52
+                  }
+                }
+              }
+            ],
+            "kind": "const",
+            "loc": {
+              "start": {
+                "line": 526,
+                "column": 1
+              },
+              "end": {
+                "line": 527,
+                "column": 1
+              }
+            }
+          },
+          {
+            "type": "VariableDeclaration",
+            "declarations": [
+              {
+                "type": "VariableDeclarator",
+                "id": {
+                  "type": "Identifier",
+                  "name": "cky_prefsheet",
+                  "loc": {
+                    "start": {
+                      "line": 527,
+                      "column": 7
+                    },
+                    "end": {
+                      "line": 527,
+                      "column": 20
+                    }
+                  }
+                },
+                "init": {
+                  "type": "CallExpression",
+                  "callee": {
+                    "type": "Identifier",
+                    "name": "getElem",
+                    "loc": {
+                      "start": {
+                        "line": 527,
+                        "column": 23
+                      },
+                      "end": {
+                        "line": 527,
+                        "column": 30
+                      }
+                    }
+                  },
+                  "arguments": [
+                    {
+                      "type": "Identifier",
+                      "name": "sheet",
+                      "loc": {
+                        "start": {
+                          "line": 527,
+                          "column": 31
+                        },
+                        "end": {
+                          "line": 527,
+                          "column": 36
+                        }
+                      }
+                    },
+                    {
+                      "type": "Identifier",
+                      "name": "Cky_PrefSheet",
+                      "loc": {
+                        "start": {
+                          "line": 527,
+                          "column": 38
+                        },
+                        "end": {
+                          "line": 527,
+                          "column": 51
+                        }
+                      }
+                    }
+                  ],
+                  "loc": {
+                    "start": {
+                      "line": 527,
+                      "column": 23
+                    },
+                    "end": {
+                      "line": 527,
+                      "column": 52
+                    }
+                  }
+                },
+                "loc": {
+                  "start": {
+                    "line": 527,
+                    "column": 7
+                  },
+                  "end": {
+                    "line": 527,
+                    "column": 52
+                  }
+                }
+              }
+            ],
+            "kind": "const",
+            "loc": {
+              "start": {
+                "line": 527,
+                "column": 1
+              },
+              "end": {
+                "line": 528,
+                "column": 1
+              }
+            }
+          },
+          {
+            "type": "VariableDeclaration",
+            "declarations": [
+              {
+                "type": "VariableDeclarator",
+                "id": {
+                  "type": "Identifier",
+                  "name": "row_pref",
+                  "loc": {
+                    "start": {
+                      "line": 528,
+                      "column": 7
+                    },
+                    "end": {
+                      "line": 528,
+                      "column": 15
+                    }
+                  }
+                },
+                "init": {
+                  "type": "CallExpression",
+                  "callee": {
+                    "type": "Identifier",
+                    "name": "getElem",
+                    "loc": {
+                      "start": {
+                        "line": 528,
+                        "column": 18
+                      },
+                      "end": {
+                        "line": 528,
+                        "column": 25
+                      }
+                    }
+                  },
+                  "arguments": [
+                    {
+                      "type": "Identifier",
+                      "name": "sheet",
+                      "loc": {
+                        "start": {
+                          "line": 528,
+                          "column": 26
+                        },
+                        "end": {
+                          "line": 528,
+                          "column": 31
+                        }
+                      }
+                    },
+                    {
+                      "type": "Identifier",
+                      "name": "Row_Pref",
+                      "loc": {
+                        "start": {
+                          "line": 528,
+                          "column": 33
+                        },
+                        "end": {
+                          "line": 528,
+                          "column": 41
+                        }
+                      }
+                    }
+                  ],
+                  "loc": {
+                    "start": {
+                      "line": 528,
+                      "column": 18
+                    },
+                    "end": {
+                      "line": 528,
+                      "column": 42
+                    }
+                  }
+                },
+                "loc": {
+                  "start": {
+                    "line": 528,
+                    "column": 7
+                  },
+                  "end": {
+                    "line": 528,
+                    "column": 42
+                  }
+                }
+              }
+            ],
+            "kind": "const",
+            "loc": {
+              "start": {
+                "line": 528,
+                "column": 1
+              },
+              "end": {
+                "line": 529,
+                "column": 1
+              }
+            }
+          },
+          {
+            "type": "VariableDeclaration",
+            "declarations": [
+              {
+                "type": "VariableDeclarator",
+                "id": {
+                  "type": "Identifier",
+                  "name": "row_characs",
+                  "loc": {
+                    "start": {
+                      "line": 529,
+                      "column": 7
+                    },
+                    "end": {
+                      "line": 529,
+                      "column": 18
+                    }
+                  }
+                },
+                "init": {
+                  "type": "CallExpression",
+                  "callee": {
+                    "type": "Identifier",
+                    "name": "getElem",
+                    "loc": {
+                      "start": {
+                        "line": 529,
+                        "column": 21
+                      },
+                      "end": {
+                        "line": 529,
+                        "column": 28
+                      }
+                    }
+                  },
+                  "arguments": [
+                    {
+                      "type": "Identifier",
+                      "name": "sheet",
+                      "loc": {
+                        "start": {
+                          "line": 529,
+                          "column": 29
+                        },
+                        "end": {
+                          "line": 529,
+                          "column": 34
+                        }
+                      }
+                    },
+                    {
+                      "type": "Identifier",
+                      "name": "Row_Characs",
+                      "loc": {
+                        "start": {
+                          "line": 529,
+                          "column": 36
+                        },
+                        "end": {
+                          "line": 529,
+                          "column": 47
+                        }
+                      }
+                    }
+                  ],
+                  "loc": {
+                    "start": {
+                      "line": 529,
+                      "column": 21
+                    },
+                    "end": {
+                      "line": 529,
+                      "column": 48
+                    }
+                  }
+                },
+                "loc": {
+                  "start": {
+                    "line": 529,
+                    "column": 7
+                  },
+                  "end": {
+                    "line": 529,
+                    "column": 48
+                  }
+                }
+              }
+            ],
+            "kind": "const",
+            "loc": {
+              "start": {
+                "line": 529,
+                "column": 1
+              },
+              "end": {
+                "line": 563,
+                "column": 1
+              }
+            }
+          },
+          {
+            "type": "ExpressionStatement",
+            "expression": {
+              "type": "CallExpression",
+              "callee": {
+                "type": "Identifier",
+                "name": "initPrefTabs",
+                "loc": {
+                  "start": {
+                    "line": 563,
+                    "column": 1
+                  },
+                  "end": {
+                    "line": 563,
+                    "column": 13
+                  }
+                }
+              },
+              "arguments": [
+                {
+                  "type": "Identifier",
+                  "name": "sheet",
+                  "loc": {
+                    "start": {
+                      "line": 563,
+                      "column": 14
+                    },
+                    "end": {
+                      "line": 563,
+                      "column": 19
+                    }
+                  }
+                }
+              ],
+              "loc": {
+                "start": {
+                  "line": 563,
+                  "column": 1
+                },
+                "end": {
+                  "line": 563,
+                  "column": 20
+                }
+              }
+            },
+            "loc": {
+              "start": {
+                "line": 563,
+                "column": 1
+              },
+              "end": {
+                "line": 564,
+                "column": 0
+              }
+            }
+          }
+        ],
+        "loc": {
+          "start": {
+            "line": 525,
+            "column": 25
+          },
+          "end": {
+            "line": 564,
+            "column": 1
+          }
+        }
+      },
+      "rest": null,
+      "generator": false,
+      "expression": false,
+      "loc": {
+        "start": {
+          "line": 525,
+          "column": 0
+        },
+        "end": {
+          "line": 564,
+          "column": 1
+        }
+      }
+    },
+    {
+      "type": "CallExpression",
+      "callee": {
+        "type": "Identifier",
+        "name": "initPref",
+        "loc": {
+          "start": {
+            "line": 520,
+            "column": 1
+          },
+          "end": {
+            "line": 520,
+            "column": 9
+          }
+        }
+      },
+      "arguments": [
+        {
+          "type": "Identifier",
+          "name": "sheet",
+          "loc": {
+            "start": {
+              "line": 520,
+              "column": 10
+            },
+            "end": {
+              "line": 520,
+              "column": 15
+            }
+          }
+        }
+      ],
+      "loc": {
+        "start": {
+          "line": 520,
+          "column": 1
+        },
+        "end": {
+          "line": 520,
+          "column": 16
+        }
+      }
+    },
+    {
+      "type": "ExpressionStatement",
+      "expression": {
+        "type": "CallExpression",
+        "callee": {
+          "type": "Identifier",
+          "name": "initPref",
+          "loc": {
+            "start": {
+              "line": 520,
+              "column": 1
+            },
+            "end": {
+              "line": 520,
+              "column": 9
+            }
+          }
+        },
+        "arguments": [
+          {
+            "type": "Identifier",
+            "name": "sheet",
+            "loc": {
+              "start": {
+                "line": 520,
+                "column": 10
+              },
+              "end": {
+                "line": 520,
+                "column": 15
+              }
+            }
+          }
+        ],
+        "loc": {
+          "start": {
+            "line": 520,
+            "column": 1
+          },
+          "end": {
+            "line": 520,
+            "column": 16
+          }
+        }
+      },
+      "loc": {
+        "start": {
+          "line": 520,
+          "column": 1
+        },
+        "end": {
+          "line": 521,
+          "column": 1
+        }
+      }
+    },
+    {
+      "type": "BlockStatement",
+      "body": [
+        {
+          "type": "ExpressionStatement",
+          "expression": {
+            "type": "CallExpression",
+            "callee": {
+              "type": "Identifier",
+              "name": "initPref",
+              "loc": {
+                "start": {
+                  "line": 520,
+                  "column": 1
+                },
+                "end": {
+                  "line": 520,
+                  "column": 9
+                }
+              }
+            },
+            "arguments": [
+              {
+                "type": "Identifier",
+                "name": "sheet",
+                "loc": {
+                  "start": {
+                    "line": 520,
+                    "column": 10
+                  },
+                  "end": {
+                    "line": 520,
+                    "column": 15
+                  }
+                }
+              }
+            ],
+            "loc": {
+              "start": {
+                "line": 520,
+                "column": 1
+              },
+              "end": {
+                "line": 520,
+                "column": 16
+              }
+            }
+          },
+          "loc": {
+            "start": {
+              "line": 520,
+              "column": 1
+            },
+            "end": {
+              "line": 521,
+              "column": 1
+            }
+          }
+        },
+        {
+          "type": "ExpressionStatement",
+          "expression": {
+            "type": "CallExpression",
+            "callee": {
+              "type": "Identifier",
+              "name": "initCharName",
+              "loc": {
+                "start": {
+                  "line": 521,
+                  "column": 1
+                },
+                "end": {
+                  "line": 521,
+                  "column": 13
+                }
+              }
+            },
+            "arguments": [
+              {
+                "type": "Identifier",
+                "name": "sheet",
+                "loc": {
+                  "start": {
+                    "line": 521,
+                    "column": 14
+                  },
+                  "end": {
+                    "line": 521,
+                    "column": 19
+                  }
+                }
+              }
+            ],
+            "loc": {
+              "start": {
+                "line": 521,
+                "column": 1
+              },
+              "end": {
+                "line": 521,
+                "column": 20
+              }
+            }
+          },
+          "loc": {
+            "start": {
+              "line": 521,
+              "column": 1
+            },
+            "end": {
+              "line": 522,
+              "column": 1
+            }
+          }
+        },
+        {
+          "type": "ExpressionStatement",
+          "expression": {
+            "type": "CallExpression",
+            "callee": {
+              "type": "Identifier",
+              "name": "initLock",
+              "loc": {
+                "start": {
+                  "line": 522,
+                  "column": 1
+                },
+                "end": {
+                  "line": 522,
+                  "column": 9
+                }
+              }
+            },
+            "arguments": [
+              {
+                "type": "Identifier",
+                "name": "sheet",
+                "loc": {
+                  "start": {
+                    "line": 522,
+                    "column": 10
+                  },
+                  "end": {
+                    "line": 522,
+                    "column": 15
+                  }
+                }
+              }
+            ],
+            "loc": {
+              "start": {
+                "line": 522,
+                "column": 1
+              },
+              "end": {
+                "line": 522,
+                "column": 16
+              }
+            }
+          },
+          "loc": {
+            "start": {
+              "line": 522,
+              "column": 1
+            },
+            "end": {
+              "line": 523,
+              "column": 0
+            }
+          }
+        }
+      ],
+      "loc": {
+        "start": {
+          "line": 519,
+          "column": 25
+        },
+        "end": {
+          "line": 523,
+          "column": 1
+        }
+      }
+    },
+    {
+      "type": "FunctionDeclaration",
+      "id": {
+        "type": "Identifier",
+        "name": "initHead",
+        "loc": {
+          "start": {
+            "line": 519,
+            "column": 9
+          },
+          "end": {
+            "line": 519,
+            "column": 17
+          }
+        }
+      },
+      "params": [
+        {
+          "type": "Identifier",
+          "name": "sheet",
+          "loc": {
+            "start": {
+              "line": 519,
+              "column": 18
+            },
+            "end": {
+              "line": 519,
+              "column": 23
+            }
+          }
+        }
+      ],
+      "defaults": [],
+      "body": {
+        "type": "BlockStatement",
+        "body": [
+          {
+            "type": "ExpressionStatement",
+            "expression": {
+              "type": "CallExpression",
+              "callee": {
+                "type": "Identifier",
+                "name": "initPref",
+                "loc": {
+                  "start": {
+                    "line": 520,
+                    "column": 1
+                  },
+                  "end": {
+                    "line": 520,
+                    "column": 9
+                  }
+                }
+              },
+              "arguments": [
+                {
+                  "type": "Identifier",
+                  "name": "sheet",
+                  "loc": {
+                    "start": {
+                      "line": 520,
+                      "column": 10
+                    },
+                    "end": {
+                      "line": 520,
+                      "column": 15
+                    }
+                  }
+                }
+              ],
+              "loc": {
+                "start": {
+                  "line": 520,
+                  "column": 1
+                },
+                "end": {
+                  "line": 520,
+                  "column": 16
+                }
+              }
+            },
+            "loc": {
+              "start": {
+                "line": 520,
+                "column": 1
+              },
+              "end": {
+                "line": 521,
+                "column": 1
+              }
+            }
+          },
+          {
+            "type": "ExpressionStatement",
+            "expression": {
+              "type": "CallExpression",
+              "callee": {
+                "type": "Identifier",
+                "name": "initCharName",
+                "loc": {
+                  "start": {
+                    "line": 521,
+                    "column": 1
+                  },
+                  "end": {
+                    "line": 521,
+                    "column": 13
+                  }
+                }
+              },
+              "arguments": [
+                {
+                  "type": "Identifier",
+                  "name": "sheet",
+                  "loc": {
+                    "start": {
+                      "line": 521,
+                      "column": 14
+                    },
+                    "end": {
+                      "line": 521,
+                      "column": 19
+                    }
+                  }
+                }
+              ],
+              "loc": {
+                "start": {
+                  "line": 521,
+                  "column": 1
+                },
+                "end": {
+                  "line": 521,
+                  "column": 20
+                }
+              }
+            },
+            "loc": {
+              "start": {
+                "line": 521,
+                "column": 1
+              },
+              "end": {
+                "line": 522,
+                "column": 1
+              }
+            }
+          },
+          {
+            "type": "ExpressionStatement",
+            "expression": {
+              "type": "CallExpression",
+              "callee": {
+                "type": "Identifier",
+                "name": "initLock",
+                "loc": {
+                  "start": {
+                    "line": 522,
+                    "column": 1
+                  },
+                  "end": {
+                    "line": 522,
+                    "column": 9
+                  }
+                }
+              },
+              "arguments": [
+                {
+                  "type": "Identifier",
+                  "name": "sheet",
+                  "loc": {
+                    "start": {
+                      "line": 522,
+                      "column": 10
+                    },
+                    "end": {
+                      "line": 522,
+                      "column": 15
+                    }
+                  }
+                }
+              ],
+              "loc": {
+                "start": {
+                  "line": 522,
+                  "column": 1
+                },
+                "end": {
+                  "line": 522,
+                  "column": 16
+                }
+              }
+            },
+            "loc": {
+              "start": {
+                "line": 522,
+                "column": 1
+              },
+              "end": {
+                "line": 523,
+                "column": 0
+              }
+            }
+          }
+        ],
+        "loc": {
+          "start": {
+            "line": 519,
+            "column": 25
+          },
+          "end": {
+            "line": 523,
+            "column": 1
+          }
+        }
+      },
+      "rest": null,
+      "generator": false,
+      "expression": false,
+      "loc": {
+        "start": {
+          "line": 519,
+          "column": 0
+        },
+        "end": {
+          "line": 523,
+          "column": 1
+        }
+      }
+    },
+    {
+      "type": "CallExpression",
+      "callee": {
+        "type": "Identifier",
+        "name": "initHead",
+        "loc": {
+          "start": {
+            "line": 503,
+            "column": 1
+          },
+          "end": {
+            "line": 503,
+            "column": 9
+          }
+        }
+      },
+      "arguments": [
+        {
+          "type": "Identifier",
+          "name": "sheet",
+          "loc": {
+            "start": {
+              "line": 503,
+              "column": 10
+            },
+            "end": {
+              "line": 503,
+              "column": 15
+            }
+          }
+        }
+      ],
+      "loc": {
+        "start": {
+          "line": 503,
+          "column": 1
+        },
+        "end": {
+          "line": 503,
+          "column": 16
+        }
+      }
+    },
+    {
+      "type": "ExpressionStatement",
+      "expression": {
+        "type": "CallExpression",
+        "callee": {
+          "type": "Identifier",
+          "name": "initHead",
+          "loc": {
+            "start": {
+              "line": 503,
+              "column": 1
+            },
+            "end": {
+              "line": 503,
+              "column": 9
+            }
+          }
+        },
+        "arguments": [
+          {
+            "type": "Identifier",
+            "name": "sheet",
+            "loc": {
+              "start": {
+                "line": 503,
+                "column": 10
+              },
+              "end": {
+                "line": 503,
+                "column": 15
+              }
+            }
+          }
+        ],
+        "loc": {
+          "start": {
+            "line": 503,
+            "column": 1
+          },
+          "end": {
+            "line": 503,
+            "column": 16
+          }
+        }
+      },
+      "loc": {
+        "start": {
+          "line": 503,
+          "column": 1
+        },
+        "end": {
+          "line": 504,
+          "column": 1
+        }
+      }
+    },
+    {
+      "type": "BlockStatement",
+      "body": [
+        {
+          "type": "ExpressionStatement",
+          "expression": {
+            "type": "CallExpression",
+            "callee": {
+              "type": "Identifier",
+              "name": "initHead",
+              "loc": {
+                "start": {
+                  "line": 503,
+                  "column": 1
+                },
+                "end": {
+                  "line": 503,
+                  "column": 9
+                }
+              }
+            },
+            "arguments": [
+              {
+                "type": "Identifier",
+                "name": "sheet",
+                "loc": {
+                  "start": {
+                    "line": 503,
+                    "column": 10
+                  },
+                  "end": {
+                    "line": 503,
+                    "column": 15
+                  }
+                }
+              }
+            ],
+            "loc": {
+              "start": {
+                "line": 503,
+                "column": 1
+              },
+              "end": {
+                "line": 503,
+                "column": 16
+              }
+            }
+          },
+          "loc": {
+            "start": {
+              "line": 503,
+              "column": 1
+            },
+            "end": {
+              "line": 504,
+              "column": 1
+            }
+          }
+        },
+        {
+          "type": "ExpressionStatement",
+          "expression": {
+            "type": "CallExpression",
+            "callee": {
+              "type": "Identifier",
+              "name": "initTabs",
+              "loc": {
+                "start": {
+                  "line": 504,
+                  "column": 1
+                },
+                "end": {
+                  "line": 504,
+                  "column": 9
+                }
+              }
+            },
+            "arguments": [
+              {
+                "type": "Identifier",
+                "name": "sheet",
+                "loc": {
+                  "start": {
+                    "line": 504,
+                    "column": 10
+                  },
+                  "end": {
+                    "line": 504,
+                    "column": 15
+                  }
+                }
+              }
+            ],
+            "loc": {
+              "start": {
+                "line": 504,
+                "column": 1
+              },
+              "end": {
+                "line": 504,
+                "column": 16
+              }
+            }
+          },
+          "loc": {
+            "start": {
+              "line": 504,
+              "column": 1
+            },
+            "end": {
+              "line": 505,
+              "column": 1
+            }
+          }
+        },
+        {
+          "type": "ExpressionStatement",
+          "expression": {
+            "type": "CallExpression",
+            "callee": {
+              "type": "Identifier",
+              "name": "initCharacs",
+              "loc": {
+                "start": {
+                  "line": 505,
+                  "column": 1
+                },
+                "end": {
+                  "line": 505,
+                  "column": 12
+                }
+              }
+            },
+            "arguments": [
+              {
+                "type": "Identifier",
+                "name": "sheet",
+                "loc": {
+                  "start": {
+                    "line": 505,
+                    "column": 13
+                  },
+                  "end": {
+                    "line": 505,
+                    "column": 18
+                  }
+                }
+              }
+            ],
+            "loc": {
+              "start": {
+                "line": 505,
+                "column": 1
+              },
+              "end": {
+                "line": 505,
+                "column": 19
+              }
+            }
+          },
+          "loc": {
+            "start": {
+              "line": 505,
+              "column": 1
+            },
+            "end": {
+              "line": 506,
+              "column": 1
+            }
+          }
+        },
+        {
+          "type": "ExpressionStatement",
+          "expression": {
+            "type": "CallExpression",
+            "callee": {
+              "type": "Identifier",
+              "name": "initGifts",
+              "loc": {
+                "start": {
+                  "line": 506,
+                  "column": 1
+                },
+                "end": {
+                  "line": 506,
+                  "column": 10
+                }
+              }
+            },
+            "arguments": [
+              {
+                "type": "Identifier",
+                "name": "sheet",
+                "loc": {
+                  "start": {
+                    "line": 506,
+                    "column": 11
+                  },
+                  "end": {
+                    "line": 506,
+                    "column": 16
+                  }
+                }
+              }
+            ],
+            "loc": {
+              "start": {
+                "line": 506,
+                "column": 1
+              },
+              "end": {
+                "line": 506,
+                "column": 17
+              }
+            }
+          },
+          "loc": {
+            "start": {
+              "line": 506,
+              "column": 1
+            },
+            "end": {
+              "line": 512,
+              "column": 0
+            }
+          }
+        }
+      ],
+      "loc": {
+        "start": {
+          "line": 501,
+          "column": 30
+        },
+        "end": {
+          "line": 512,
+          "column": 1
+        }
+      }
+    },
+    {
+      "type": "FunctionDeclaration",
+      "id": {
+        "type": "Identifier",
+        "name": "initCharacter",
+        "loc": {
+          "start": {
+            "line": 501,
+            "column": 9
+          },
+          "end": {
+            "line": 501,
+            "column": 22
+          }
+        }
+      },
+      "params": [
+        {
+          "type": "Identifier",
+          "name": "sheet",
+          "loc": {
+            "start": {
+              "line": 501,
+              "column": 23
+            },
+            "end": {
+              "line": 501,
+              "column": 28
+            }
+          }
+        }
+      ],
+      "defaults": [],
+      "body": {
+        "type": "BlockStatement",
+        "body": [
+          {
+            "type": "ExpressionStatement",
+            "expression": {
+              "type": "CallExpression",
+              "callee": {
+                "type": "Identifier",
+                "name": "initHead",
+                "loc": {
+                  "start": {
+                    "line": 503,
+                    "column": 1
+                  },
+                  "end": {
+                    "line": 503,
+                    "column": 9
+                  }
+                }
+              },
+              "arguments": [
+                {
+                  "type": "Identifier",
+                  "name": "sheet",
+                  "loc": {
+                    "start": {
+                      "line": 503,
+                      "column": 10
+                    },
+                    "end": {
+                      "line": 503,
+                      "column": 15
+                    }
+                  }
+                }
+              ],
+              "loc": {
+                "start": {
+                  "line": 503,
+                  "column": 1
+                },
+                "end": {
+                  "line": 503,
+                  "column": 16
+                }
+              }
+            },
+            "loc": {
+              "start": {
+                "line": 503,
+                "column": 1
+              },
+              "end": {
+                "line": 504,
+                "column": 1
+              }
+            }
+          },
+          {
+            "type": "ExpressionStatement",
+            "expression": {
+              "type": "CallExpression",
+              "callee": {
+                "type": "Identifier",
+                "name": "initTabs",
+                "loc": {
+                  "start": {
+                    "line": 504,
+                    "column": 1
+                  },
+                  "end": {
+                    "line": 504,
+                    "column": 9
+                  }
+                }
+              },
+              "arguments": [
+                {
+                  "type": "Identifier",
+                  "name": "sheet",
+                  "loc": {
+                    "start": {
+                      "line": 504,
+                      "column": 10
+                    },
+                    "end": {
+                      "line": 504,
+                      "column": 15
+                    }
+                  }
+                }
+              ],
+              "loc": {
+                "start": {
+                  "line": 504,
+                  "column": 1
+                },
+                "end": {
+                  "line": 504,
+                  "column": 16
+                }
+              }
+            },
+            "loc": {
+              "start": {
+                "line": 504,
+                "column": 1
+              },
+              "end": {
+                "line": 505,
+                "column": 1
+              }
+            }
+          },
+          {
+            "type": "ExpressionStatement",
+            "expression": {
+              "type": "CallExpression",
+              "callee": {
+                "type": "Identifier",
+                "name": "initCharacs",
+                "loc": {
+                  "start": {
+                    "line": 505,
+                    "column": 1
+                  },
+                  "end": {
+                    "line": 505,
+                    "column": 12
+                  }
+                }
+              },
+              "arguments": [
+                {
+                  "type": "Identifier",
+                  "name": "sheet",
+                  "loc": {
+                    "start": {
+                      "line": 505,
+                      "column": 13
+                    },
+                    "end": {
+                      "line": 505,
+                      "column": 18
+                    }
+                  }
+                }
+              ],
+              "loc": {
+                "start": {
+                  "line": 505,
+                  "column": 1
+                },
+                "end": {
+                  "line": 505,
+                  "column": 19
+                }
+              }
+            },
+            "loc": {
+              "start": {
+                "line": 505,
+                "column": 1
+              },
+              "end": {
+                "line": 506,
+                "column": 1
+              }
+            }
+          },
+          {
+            "type": "ExpressionStatement",
+            "expression": {
+              "type": "CallExpression",
+              "callee": {
+                "type": "Identifier",
+                "name": "initGifts",
+                "loc": {
+                  "start": {
+                    "line": 506,
+                    "column": 1
+                  },
+                  "end": {
+                    "line": 506,
+                    "column": 10
+                  }
+                }
+              },
+              "arguments": [
+                {
+                  "type": "Identifier",
+                  "name": "sheet",
+                  "loc": {
+                    "start": {
+                      "line": 506,
+                      "column": 11
+                    },
+                    "end": {
+                      "line": 506,
+                      "column": 16
+                    }
+                  }
+                }
+              ],
+              "loc": {
+                "start": {
+                  "line": 506,
+                  "column": 1
+                },
+                "end": {
+                  "line": 506,
+                  "column": 17
+                }
+              }
+            },
+            "loc": {
+              "start": {
+                "line": 506,
+                "column": 1
+              },
+              "end": {
+                "line": 512,
+                "column": 0
+              }
+            }
+          }
+        ],
+        "loc": {
+          "start": {
+            "line": 501,
+            "column": 30
+          },
+          "end": {
+            "line": 512,
+            "column": 1
+          }
+        }
+      },
+      "rest": null,
+      "generator": false,
+      "expression": false,
+      "loc": {
+        "start": {
+          "line": 501,
+          "column": 0
+        },
+        "end": {
+          "line": 512,
+          "column": 1
+        }
+      }
+    },
+    {
+      "type": "CallExpression",
+      "callee": {
+        "type": "Identifier",
+        "name": "initCharacter",
+        "loc": {
+          "start": {
+            "line": 491,
+            "column": 36
+          },
+          "end": {
+            "line": 491,
+            "column": 49
+          }
+        }
+      },
+      "arguments": [
+        {
+          "type": "Identifier",
+          "name": "sheet",
+          "loc": {
+            "start": {
+              "line": 491,
+              "column": 50
+            },
+            "end": {
+              "line": 491,
+              "column": 55
+            }
+          }
+        }
+      ],
+      "loc": {
+        "start": {
+          "line": 491,
+          "column": 36
+        },
+        "end": {
+          "line": 491,
+          "column": 56
+        }
+      }
+    },
+    {
+      "type": "ExpressionStatement",
+      "expression": {
+        "type": "CallExpression",
+        "callee": {
+          "type": "Identifier",
+          "name": "initCharacter",
+          "loc": {
+            "start": {
+              "line": 491,
+              "column": 36
+            },
+            "end": {
+              "line": 491,
+              "column": 49
+            }
+          }
+        },
+        "arguments": [
+          {
+            "type": "Identifier",
+            "name": "sheet",
+            "loc": {
+              "start": {
+                "line": 491,
+                "column": 50
+              },
+              "end": {
+                "line": 491,
+                "column": 55
+              }
+            }
+          }
+        ],
+        "loc": {
+          "start": {
+            "line": 491,
+            "column": 36
+          },
+          "end": {
+            "line": 491,
+            "column": 56
+          }
+        }
+      },
+      "loc": {
+        "start": {
+          "line": 491,
+          "column": 36
+        },
+        "end": {
+          "line": 491,
+          "column": 56
+        }
+      }
+    },
+    {
+      "type": "BlockStatement",
+      "body": [
+        {
+          "type": "ExpressionStatement",
+          "expression": {
+            "type": "CallExpression",
+            "callee": {
+              "type": "Identifier",
+              "name": "initCharacter",
+              "loc": {
+                "start": {
+                  "line": 491,
+                  "column": 36
+                },
+                "end": {
+                  "line": 491,
+                  "column": 49
+                }
+              }
+            },
+            "arguments": [
+              {
+                "type": "Identifier",
+                "name": "sheet",
+                "loc": {
+                  "start": {
+                    "line": 491,
+                    "column": 50
+                  },
+                  "end": {
+                    "line": 491,
+                    "column": 55
+                  }
+                }
+              }
+            ],
+            "loc": {
+              "start": {
+                "line": 491,
+                "column": 36
+              },
+              "end": {
+                "line": 491,
+                "column": 56
+              }
+            }
+          },
+          "loc": {
+            "start": {
+              "line": 491,
+              "column": 36
+            },
+            "end": {
+              "line": 491,
+              "column": 56
+            }
+          }
+        }
+      ],
+      "loc": {
+        "start": {
+          "line": 491,
+          "column": 35
+        },
+        "end": {
+          "line": 491,
+          "column": 57
+        }
+      }
+    },
+    {
+      "type": "IfStatement",
+      "test": {
+        "type": "BinaryExpression",
+        "operator": "===",
+        "left": {
+          "type": "CallExpression",
+          "callee": {
+            "type": "MemberExpression",
+            "computed": false,
+            "object": {
+              "type": "Identifier",
+              "name": "sheet",
+              "loc": {
+                "start": {
+                  "line": 491,
+                  "column": 5
+                },
+                "end": {
+                  "line": 491,
+                  "column": 10
+                }
+              }
+            },
+            "property": {
+              "type": "Identifier",
+              "name": "id",
+              "loc": {
+                "start": {
+                  "line": 491,
+                  "column": 11
+                },
+                "end": {
+                  "line": 491,
+                  "column": 13
+                }
+              }
+            },
+            "loc": {
+              "start": {
+                "line": 491,
+                "column": 5
+              },
+              "end": {
+                "line": 491,
+                "column": 13
+              }
+            }
+          },
+          "arguments": [],
+          "loc": {
+            "start": {
+              "line": 491,
+              "column": 5
+            },
+            "end": {
+              "line": 491,
+              "column": 15
+            }
+          }
+        },
+        "right": {
+          "type": "Identifier",
+          "name": "Sht_Character",
+          "loc": {
+            "start": {
+              "line": 491,
+              "column": 20
+            },
+            "end": {
+              "line": 491,
+              "column": 33
+            }
+          }
+        },
+        "loc": {
+          "start": {
+            "line": 491,
+            "column": 5
+          },
+          "end": {
+            "line": 491,
+            "column": 33
+          }
+        }
+      },
+      "consequent": {
+        "type": "BlockStatement",
+        "body": [
+          {
+            "type": "ExpressionStatement",
+            "expression": {
+              "type": "CallExpression",
+              "callee": {
+                "type": "Identifier",
+                "name": "initCharacter",
+                "loc": {
+                  "start": {
+                    "line": 491,
+                    "column": 36
+                  },
+                  "end": {
+                    "line": 491,
+                    "column": 49
+                  }
+                }
+              },
+              "arguments": [
+                {
+                  "type": "Identifier",
+                  "name": "sheet",
+                  "loc": {
+                    "start": {
+                      "line": 491,
+                      "column": 50
+                    },
+                    "end": {
+                      "line": 491,
+                      "column": 55
+                    }
+                  }
+                }
+              ],
+              "loc": {
+                "start": {
+                  "line": 491,
+                  "column": 36
+                },
+                "end": {
+                  "line": 491,
+                  "column": 56
+                }
+              }
+            },
+            "loc": {
+              "start": {
+                "line": 491,
+                "column": 36
+              },
+              "end": {
+                "line": 491,
+                "column": 56
+              }
+            }
+          }
+        ],
+        "loc": {
+          "start": {
+            "line": 491,
+            "column": 35
+          },
+          "end": {
+            "line": 491,
+            "column": 57
+          }
+        }
+      },
+      "alternate": null,
+      "loc": {
+        "start": {
+          "line": 491,
+          "column": 1
+        },
+        "end": {
+          "line": 491,
+          "column": 57
+        }
+      }
+    },
+    {
+      "type": "BlockStatement",
+      "body": [
+        {
+          "type": "IfStatement",
+          "test": {
+            "type": "BinaryExpression",
+            "operator": "===",
+            "left": {
+              "type": "CallExpression",
+              "callee": {
+                "type": "MemberExpression",
+                "computed": false,
+                "object": {
+                  "type": "Identifier",
+                  "name": "sheet",
+                  "loc": {
+                    "start": {
+                      "line": 491,
+                      "column": 5
+                    },
+                    "end": {
+                      "line": 491,
+                      "column": 10
+                    }
+                  }
+                },
+                "property": {
+                  "type": "Identifier",
+                  "name": "id",
+                  "loc": {
+                    "start": {
+                      "line": 491,
+                      "column": 11
+                    },
+                    "end": {
+                      "line": 491,
+                      "column": 13
+                    }
+                  }
+                },
+                "loc": {
+                  "start": {
+                    "line": 491,
+                    "column": 5
+                  },
+                  "end": {
+                    "line": 491,
+                    "column": 13
+                  }
+                }
+              },
+              "arguments": [],
+              "loc": {
+                "start": {
+                  "line": 491,
+                  "column": 5
+                },
+                "end": {
+                  "line": 491,
+                  "column": 15
+                }
+              }
+            },
+            "right": {
+              "type": "Identifier",
+              "name": "Sht_Character",
+              "loc": {
+                "start": {
+                  "line": 491,
+                  "column": 20
+                },
+                "end": {
+                  "line": 491,
+                  "column": 33
+                }
+              }
+            },
+            "loc": {
+              "start": {
+                "line": 491,
+                "column": 5
+              },
+              "end": {
+                "line": 491,
+                "column": 33
+              }
+            }
+          },
+          "consequent": {
+            "type": "BlockStatement",
+            "body": [
+              {
+                "type": "ExpressionStatement",
+                "expression": {
+                  "type": "CallExpression",
+                  "callee": {
+                    "type": "Identifier",
+                    "name": "initCharacter",
+                    "loc": {
+                      "start": {
+                        "line": 491,
+                        "column": 36
+                      },
+                      "end": {
+                        "line": 491,
+                        "column": 49
+                      }
+                    }
+                  },
+                  "arguments": [
+                    {
+                      "type": "Identifier",
+                      "name": "sheet",
+                      "loc": {
+                        "start": {
+                          "line": 491,
+                          "column": 50
+                        },
+                        "end": {
+                          "line": 491,
+                          "column": 55
+                        }
+                      }
+                    }
+                  ],
+                  "loc": {
+                    "start": {
+                      "line": 491,
+                      "column": 36
+                    },
+                    "end": {
+                      "line": 491,
+                      "column": 56
+                    }
+                  }
+                },
+                "loc": {
+                  "start": {
+                    "line": 491,
+                    "column": 36
+                  },
+                  "end": {
+                    "line": 491,
+                    "column": 56
+                  }
+                }
+              }
+            ],
+            "loc": {
+              "start": {
+                "line": 491,
+                "column": 35
+              },
+              "end": {
+                "line": 491,
+                "column": 57
+              }
+            }
+          },
+          "alternate": null,
+          "loc": {
+            "start": {
+              "line": 491,
+              "column": 1
+            },
+            "end": {
+              "line": 491,
+              "column": 57
+            }
+          }
+        }
+      ],
+      "loc": {
+        "start": {
+          "line": 490,
+          "column": 22
+        },
+        "end": {
+          "line": 492,
+          "column": 1
+        }
+      }
+    },
+    {
+      "type": "FunctionExpression",
+      "id": null,
+      "params": [
+        {
+          "type": "Identifier",
+          "name": "sheet",
+          "loc": {
+            "start": {
+              "line": 490,
+              "column": 16
+            },
+            "end": {
+              "line": 490,
+              "column": 21
+            }
+          }
+        }
+      ],
+      "defaults": [],
+      "body": {
+        "type": "BlockStatement",
+        "body": [
+          {
+            "type": "IfStatement",
+            "test": {
+              "type": "BinaryExpression",
+              "operator": "===",
+              "left": {
+                "type": "CallExpression",
+                "callee": {
+                  "type": "MemberExpression",
+                  "computed": false,
+                  "object": {
+                    "type": "Identifier",
+                    "name": "sheet",
+                    "loc": {
+                      "start": {
+                        "line": 491,
+                        "column": 5
+                      },
+                      "end": {
+                        "line": 491,
+                        "column": 10
+                      }
+                    }
+                  },
+                  "property": {
+                    "type": "Identifier",
+                    "name": "id",
+                    "loc": {
+                      "start": {
+                        "line": 491,
+                        "column": 11
+                      },
+                      "end": {
+                        "line": 491,
+                        "column": 13
+                      }
+                    }
+                  },
+                  "loc": {
+                    "start": {
+                      "line": 491,
+                      "column": 5
+                    },
+                    "end": {
+                      "line": 491,
+                      "column": 13
+                    }
+                  }
+                },
+                "arguments": [],
+                "loc": {
+                  "start": {
+                    "line": 491,
+                    "column": 5
+                  },
+                  "end": {
+                    "line": 491,
+                    "column": 15
+                  }
+                }
+              },
+              "right": {
+                "type": "Identifier",
+                "name": "Sht_Character",
+                "loc": {
+                  "start": {
+                    "line": 491,
+                    "column": 20
+                  },
+                  "end": {
+                    "line": 491,
+                    "column": 33
+                  }
+                }
+              },
+              "loc": {
+                "start": {
+                  "line": 491,
+                  "column": 5
+                },
+                "end": {
+                  "line": 491,
+                  "column": 33
+                }
+              }
+            },
+            "consequent": {
+              "type": "BlockStatement",
+              "body": [
+                {
+                  "type": "ExpressionStatement",
+                  "expression": {
+                    "type": "CallExpression",
+                    "callee": {
+                      "type": "Identifier",
+                      "name": "initCharacter",
+                      "loc": {
+                        "start": {
+                          "line": 491,
+                          "column": 36
+                        },
+                        "end": {
+                          "line": 491,
+                          "column": 49
+                        }
+                      }
+                    },
+                    "arguments": [
+                      {
+                        "type": "Identifier",
+                        "name": "sheet",
+                        "loc": {
+                          "start": {
+                            "line": 491,
+                            "column": 50
+                          },
+                          "end": {
+                            "line": 491,
+                            "column": 55
+                          }
+                        }
+                      }
+                    ],
+                    "loc": {
+                      "start": {
+                        "line": 491,
+                        "column": 36
+                      },
+                      "end": {
+                        "line": 491,
+                        "column": 56
+                      }
+                    }
+                  },
+                  "loc": {
+                    "start": {
+                      "line": 491,
+                      "column": 36
+                    },
+                    "end": {
+                      "line": 491,
+                      "column": 56
+                    }
+                  }
+                }
+              ],
+              "loc": {
+                "start": {
+                  "line": 491,
+                  "column": 35
+                },
+                "end": {
+                  "line": 491,
+                  "column": 57
+                }
+              }
+            },
+            "alternate": null,
+            "loc": {
+              "start": {
+                "line": 491,
+                "column": 1
+              },
+              "end": {
+                "line": 491,
+                "column": 57
+              }
+            }
+          }
+        ],
+        "loc": {
+          "start": {
+            "line": 490,
+            "column": 22
+          },
+          "end": {
+            "line": 492,
+            "column": 1
+          }
+        }
+      },
+      "rest": null,
+      "generator": false,
+      "expression": false,
+      "loc": {
+        "start": {
+          "line": 490,
+          "column": 7
+        },
+        "end": {
+          "line": 492,
+          "column": 1
+        }
+      }
+    }
+  ]
+}
+
+
+
+
+
+
+
+Character 1
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Fermier
+
+
+Prolétaire
+
+
+50
+
+
+2
+
+
+
+
+
+
+
+
+
+
+dddd
+dddd
+ddddddd
+
+
+xxx
+xxxx
+xxxxxx
+
+
+
+
+
+
+5
+
+1
+
+
+
+
+1
+
+
+
+
+
+
+Epéé 2 mains (+2)
+Bouclize (-1)
+Amulette du Démon
+
+Chemise propre
+
+zzzz
+zzzzxxx
+xxx
+xxx
+xxx
+aaa
+
+
+
+
+
+
+
+
+
