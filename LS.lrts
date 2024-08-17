@@ -401,11 +401,11 @@ function hasElemSelected(elem) {
 }
 
 function addElemDolocked(elem) {
-	setElemValue(elem, rsaValue(getElemValue(elem), Str_LSDelocked, Str_LSDolocked))
+	setElemValue(elem, _(rsaValue(getElemValue(elem), Str_LSDelocked, Str_LSDolocked)))
 	return remElemCss(elem, Css_LSSelected)
 }
 function remElemDolocked(elem) {
-	setElemValue(elem, rsaValue(getElemValue(elem), Str_LSDolocked, Str_LSDelocked))
+	setElemValue(elem, _(rsaValue(getElemValue(elem), Str_LSDolocked, Str_LSDelocked)))
 	return addElemCss(elem, Css_LSSelected)
 }
 function hasElemDolocked(elem) {
@@ -484,7 +484,7 @@ drop = function(from, to) { // TODO remove ?
 
 
 function initCharacter(sheet) {
-	// initRepair(sheet)
+	initRepair(sheet)
 	initHead(sheet)
 	initTabs(sheet)
 	initCharacs(sheet)
@@ -499,6 +499,8 @@ function initCharacter(sheet) {
 function initRepair(sheet) {
 	setElemValue(getElem(sheet, Ckb_Activity), ":ga_check-mark:")
 	setElemValue(getElem(sheet, Ckb_SocialRank), ":ga_check-mark:")
+	setElemValue(getElem(sheet, Ckb_CharacsLck), ":lock: Caracs :lock:")
+	setElemValue(getElem(sheet, Ckb_GiftsLck), ":lock: Dons :lock:")
 }
 
 function initHead(sheet) {
@@ -512,12 +514,12 @@ function initPref(sheet) {
 	const row_characs = getElem(sheet, Row_Characs)
 
 	initCkbDoDe(sheet, Ckb_PrefSheet
-		, function(sheet) {
+		, function(ckb_elem) {
 			addElemDisplayed(row_pref)
 			remElemDisplayed(row_characs)
 			deselectTabAll(sheet)
 		}
-		, function(sheet) {
+		, function(ckb_elem) {
 			remElemDisplayed(row_pref)
 			addElemDisplayed(row_characs)
 			deselectTabAll(sheet)
@@ -553,19 +555,18 @@ function initCharName(sheet) {
 }
 
 function initLock(sheet) {
-	initCkbDoDe(sheet, Ckb_LockSheet, dolockSheet, delockSheet)
-}
-
-function dolockSheet(sheet) {
-	addElemDolocked(getElem(sheet, Ckb_LockSheet))
-	dolockCharacs(sheet)
-	dolockGifts(sheet)
-}
-
-function delockSheet(sheet) {
-	remElemDolocked(getElem(sheet, Ckb_LockSheet))
-	delockCharacs(sheet)
-	delockGifts(sheet)
+	initCkbDoDe(sheet, Ckb_LockSheet
+		, function(ckb_elem) {
+			addElemDolocked(ckb_elem)
+			dolockCharacs(sheet)
+			dolockGifts(sheet)
+		}
+		, function(ckb_elem) {
+			remElemDolocked(ckb_elem)
+			delockCharacs(sheet)
+			delockGifts(sheet)
+		}
+	)
 }
 
 function initCharacs(sheet) {
@@ -583,28 +584,25 @@ function initCharacs(sheet) {
 	const col_characsnewr = getElem(sheet, rsoValue(Clk_CharacsNewR, Str_PFXCLK, Str_PFXCOL))
 
 	setElemTooltip(chc_characspst, Tip_Presets)
-	
-	oncElemDo(ckb_characslck, function(elem) { // toggle characs lock
-		toggleElem(cky_characslck)
-	})
 
-	onuElemDo(cky_characslck, function(elem) { // handle characs visibility
-		if (getElemValue(elem)) { // hide characs actions
+	initCkbDoDe(sheet, Ckb_CharacsLck // toggle characs lock
+		, function(ckb_elem) {
+			addElemDolocked(ckb_elem)
 			addElemInvisible(col_characsdel)
 			addElemInvisible(col_characspst)
-			addElemSelected(ckb_characslck)
 			addElemInvisible(col_characsnewl)
 			addElemInvisible(col_characsnewc)
 			addElemInvisible(col_characsnewr)
-		} else { // show characs actions
+		}
+		, function(ckb_elem) {
+			remElemDolocked(ckb_elem)
 			remElemInvisible(col_characsdel)
 			remElemInvisible(col_characspst)
-			remElemSelected(ckb_characslck)
 			remElemInvisible(col_characsnewl)
 			remElemInvisible(col_characsnewc)
 			remElemInvisible(col_characsnewr)
 		}
-	})
+	)
 	
 	initCharacsPts(sheet)
 	initCharacsRep(sheet)
@@ -643,23 +641,20 @@ function initGifts(sheet) {
 	const col_giftsdel = getElem(sheet, rsoValue(Clk_GiftsDel, Str_PFXCLK, Str_PFXCOL))
 	const col_giftsnew = getElem(sheet, rsoValue(Clk_GiftsNew, Str_PFXCLK, Str_PFXCOL))
 
-	oncElemDo(ckb_giftslck, function(elem) { // toggle gifts lock
-		toggleElem(cky_giftslck)
-	})
-
-	onuElemDo(cky_giftslck, function(elem) { // handle gifts visibility
-		if (getElemValue(elem)) { // hide gifts actions & view mode
-			addElemSelected(ckb_giftslck)
+	initCkbDoDe(sheet, Ckb_GiftsLck // toggle gifts losk
+		, function(ckb_elem) {
+			addElemDolocked(ckb_elem)
 			addElemInvisible(col_giftsdel)
 			addElemInvisible(col_giftsnew)
 			doviewGifts(sheet)
-		} else { // show gifts actions & edit mode
-			remElemSelected(ckb_giftslck)
+		}
+		, function(ckb_elem) {
+			remElemDolocked(ckb_elem)
 			remElemInvisible(col_giftsdel)
 			remElemInvisible(col_giftsnew)
 			doeditGifts(sheet)
 		}
-	})
+	)
 
 	oncElemDo(clk_giftsdel, function(elem) { // del gifts children
 		delGiftsChildren(sheet)
@@ -760,12 +755,12 @@ function delockGifts(sheet) {
 
 function doviewGifts(sheet) {
 	const rep_gifts = getElem(sheet, Rep_Gifts)
-	// doviewRep(rep_gifts)
+	doviewRep(rep_gifts)
 }
 
 function doeditGifts(sheet) {
 	const rep_gifts = getElem(sheet, Rep_Gifts)
-	// doeditRep(rep_gifts)
+	doeditRep(rep_gifts)
 }
 
 function delGiftsChildren(sheet) {
@@ -935,10 +930,10 @@ function initCkbDoDe(sheet, ckb_item, do_fct, de_fct) { // init a checkbox + fct
 	onuElemDo(cky_elem, function(elem) { // reflect checkbox state
 		if (getElemValue(cky_elem)) { // doselect checkbox
 			addElemSelected(ckb_elem)
-			do_fct(sheet) // triggers the doselect fct
+			do_fct(ckb_elem) // triggers the doselect fct
 		} else { // deselect checkbox
 			remElemSelected(ckb_elem)
-			de_fct(sheet) // triggers the deselect fct
+			de_fct(ckb_elem) // triggers the deselect fct
 		}
 	})
 	
