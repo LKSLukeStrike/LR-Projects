@@ -332,16 +332,11 @@ const Tip_Presets = "Presets"
 const Row_Head         = "Row_Head" // sheet heading
 const Ckb_PrefSheet    = "Ckb_PrefSheet" // preferences checkbox
 const Cky_PrefSheet    = "Cky_PrefSheet" // preferences state
-const Row_Pref         = "Row_Pref" // preferences panel
 const Val_CharName     = "Val_CharName" // character name
 const Ckb_LockSheet    = "Ckb_LockSheet" // locking checkbox
 const Cky_LockSheet    = "Cky_LockSheet" // locking state
-const Chc_TypeDices    = "Chc_TypeDices" // dices type choice
-const Chc_RollDices    = "Chc_RollDices" // dices roll choice
 
-// TODO change this
-const Ckt_Talent       = "Ckt_Talent" // tooltip
-const Ckb_Talent       = "Ckb_Talent" // checkbox
+const Row_Pref         = "Row_Pref" // preferences panel
 
 const Row_Characs      = "Row_Characs" // sheet characs
 const Clk_CharacsDel   = "Clk_CharacsDel" // characs del button
@@ -351,18 +346,12 @@ const Clk_CharacsNewL  = "Clk_CharacsNewL" // characs new L button
 const Clk_CharacsNewC  = "Clk_CharacsNewC" // characs new C button
 const Clk_CharacsNewR  = "Clk_CharacsNewR" // characs new R button
 const Ckb_Activity     = "Ckb_Activity" // activity checkbox
-const Cky_Activity     = "Cky_Activity" // activity state
 const Ckb_SocialRank   = "Ckb_SocialRank" // social rank checkbox
-const Cky_SocialRank   = "Cky_SocialRank" // social rank state
-const Ckb_Visibility   = "Ckb_Visibility" // roll visibility checkbox
-const Cky_Visibility   = "Cky_Visibility" // roll visibility state
 const Row_HealthPts    = "Row_HealthPts" // health pts panel
 const Row_NarrationPts = "Row_NarrationPts" // narration pts panel
-const Arr_AllCBoxes    = [
-	Ckb_Activity,
-	Ckb_SocialRank,
-	Ckb_Visibility,
-]
+const Row_RollMod      = "Row_RollMod" // roll modifier panel
+const Row_RollVis      = "Row_RollVis" // roll visibility panel
+const Ckb_RollVis      = "Ckb_RollVis" // roll visibility state
 
 const Row_Bio          = "Row_Bio" // bio panel
 
@@ -404,17 +393,23 @@ function triggerElem(elem) {
 function toggleElem(elem) {
 	return setElemValue(elem, ! getElemValue(elem))
 }
-function incrementElem(elem, max_value) {
+function incrementElem(elem) {
 	const elm_value = getElemValue(elem)
-	const new_value = elm_value < max_value ?
-		elm_value + 1 : elm_value
-	return setElemValue(elem, new_value)
+	return setElemValue(elem, elm_value + 1)
 }
-function decrementElem(elem, min_value) {
+function incrementElemMax(elem, max_value) {
 	const elm_value = getElemValue(elem)
-	const new_value = elm_value > min_value ?
-		elm_value - 1 : elm_value
-	return setElemValue(elem, new_value)
+	if (elm_value >= max_value) {return elm_value}
+	return incrementElem(elem)
+}
+function decrementElem(elem) {
+	const elm_value = getElemValue(elem)
+	return setElemValue(elem, elm_value - 1)
+}
+function decrementElemMin(elem, min_value) {
+	const elm_value = getElemValue(elem)
+	if (elm_value <= min_value) {return elm_value}
+	return decrementElem(elem)
 }
 //endregion
 
@@ -506,7 +501,7 @@ drop = function(from, to) { // TODO remove ?
 
 function initCharacter(sheet) {
 	// initRepair(sheet)
-	initCheckboxes(sheet)
+	// initCheckboxes(sheet) TODO add fcts on on/off
 	initHead(sheet)
 	initTabs(sheet)
 	initCharacs(sheet)
@@ -677,6 +672,7 @@ function initCharacs(sheet) {
 	
 	initCharacsPts(sheet)
 	initCharacsRep(sheet)
+	initCharacsRoll(sheet)
 }
 
 function initCharacsPts(sheet) {
@@ -685,6 +681,11 @@ function initCharacsPts(sheet) {
 }
 
 function initCharacsRep(sheet) {
+}
+
+function initCharacsRoll(sheet) {
+	initRowMod(sheet, Row_RollMod)
+	// initRowPts(sheet, Row_NarrationPts)
 }
 
 function dolockCharacs(sheet) {
@@ -940,11 +941,30 @@ function initRowPts(sheet, row_item) { // init a pts block (clk, max, adj)
 	})
 	
 	oncElemDo(inc_elem, function(elem) { // increment current value
-		incrementElem(val_elem, getElemValue(max_elem))
+		incrementElemMax(val_elem, getElemValue(max_elem))
 	})
 	
 	oncElemDo(dec_elem, function(elem) { // decrement current value
-		decrementElem(val_elem, 0)
+		decrementElemMin(val_elem, 0)
+	})
+}
+
+function initRowMod(sheet, row_item) { // init a mod block (clk, val, adj)
+	const clk_elem = getElem(sheet, rsoValue(row_item, Str_PFXROW, Str_PFXCLK))
+	const inc_elem = getElem(sheet, rsoValue(row_item, Str_PFXROW, Str_PFXINC))
+	const dec_elem = getElem(sheet, rsoValue(row_item, Str_PFXROW, Str_PFXDEC))
+	const val_elem = getElem(sheet, rsoValue(row_item, Str_PFXROW, Str_PFXVAL))
+	
+	oncElemDo(clk_elem, function(elem) { // restore max value
+		setElemValue(val_elem, 0)
+	})
+	
+	oncElemDo(inc_elem, function(elem) { // increment current value
+		incrementElem(val_elem)
+	})
+	
+	oncElemDo(dec_elem, function(elem) { // decrement current value
+		decrementElem(val_elem)
 	})
 }
 

@@ -1,29 +1,12 @@
 
-function initRowPtsDo(sheet, row_item, do_fct) { // init a pts block (clk, max, adj, val)
-	const val_elem = getElem(sheet, rsoValue(row_item, Str_PFXROW, Str_PFXVAL))
-
-	initRowPts(sheet, row_item) // init clk, max, adj
-	
-	onuElemDo(val_elem, function(elem) { // react on val modification
-		do_fct(sheet)
-	})
-}
-
-function initRowPts(sheet, row_item) { // init a pts block (clk, max, adj)
+function initRowMod(sheet, row_item) { // init a mod block (clk, val, adj)
 	const clk_elem = getElem(sheet, rsoValue(row_item, Str_PFXROW, Str_PFXCLK))
-	const max_elem = getElem(sheet, rsoValue(row_item, Str_PFXROW, Str_PFXMAX))
 	const inc_elem = getElem(sheet, rsoValue(row_item, Str_PFXROW, Str_PFXINC))
 	const dec_elem = getElem(sheet, rsoValue(row_item, Str_PFXROW, Str_PFXDEC))
 	const val_elem = getElem(sheet, rsoValue(row_item, Str_PFXROW, Str_PFXVAL))
 	
 	oncElemDo(clk_elem, function(elem) { // restore max value
-		setElemValue(val_elem, getElemValue(max_elem))
-	})
-	
-	onuElemDo(max_elem, function(elem) { // adjust current value
-		if (getElemValue(max_elem) < getElemValue(val_elem)) {
-			setElemValue(val_elem, getElemValue(max_elem))
-		}
+		setElemValue(val_elem, 0)
 	})
 	
 	oncElemDo(inc_elem, function(elem) { // increment current value
