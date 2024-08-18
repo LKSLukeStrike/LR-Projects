@@ -858,7 +858,6 @@ function initGiftsRep(sheet) {
 	})
 	
 	oncRepItemDo(rep_gifts, Inf_Entry, function(elem) { // child inf button
-		log("inf")
 		const child           = getElemIndex(elem)
 		const vis_cost        = getRepElemRelative(rep_gifts, elem, Vis_Cost)
 		const vis_name        = getRepElemRelative(rep_gifts, elem, Vis_Name)

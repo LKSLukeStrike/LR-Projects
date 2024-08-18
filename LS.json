@@ -415,7 +415,7 @@
               }
             ],
             "className": "Column",
-            "collapsed": false,
+            "collapsed": true,
             "references": []
           },
           {
@@ -595,7 +595,7 @@
           }
         ],
         "className": "Row",
-        "collapsed": true,
+        "collapsed": false,
         "references": []
       },
       {
@@ -1397,10 +1397,10 @@
                         "references": [],
                         "label": "label",
                         "tableId": "Tbl_CharacsPresets",
-                        "optional": false,
-                        "expanded": false,
-                        "multiple": false,
-                        "expandedClass": ""
+                        "optional": null,
+                        "expanded": null,
+                        "multiple": null,
+                        "expandedClass": null
                       }
                     ],
                     "className": "Column",
@@ -1450,7 +1450,7 @@
                       }
                     ],
                     "className": "Column",
-                    "collapsed": true,
+                    "collapsed": false,
                     "references": []
                   },
                   {
@@ -1490,7 +1490,7 @@
                       }
                     ],
                     "className": "Column",
-                    "collapsed": false,
+                    "collapsed": true,
                     "references": []
                   },
                   {
@@ -1555,7 +1555,7 @@
                   }
                 ],
                 "className": "Row",
-                "collapsed": true,
+                "collapsed": false,
                 "references": []
               },
               {
@@ -2278,7 +2278,7 @@
                               {
                                 "text": ":eye:",
                                 "align": null,
-                                "clickable": false,
+                                "clickable": null,
                                 "quickBar": null,
                                 "isTemplate": false,
                                 "computed": null,
@@ -2843,7 +2843,7 @@
                   }
                 ],
                 "className": "Row",
-                "collapsed": true,
+                "collapsed": false,
                 "references": []
               },
               {
@@ -3027,7 +3027,7 @@
                   }
                 ],
                 "className": "Row",
-                "collapsed": false,
+                "collapsed": true,
                 "references": []
               }
             ],
@@ -3037,7 +3037,7 @@
           }
         ],
         "className": "Row",
-        "collapsed": true,
+        "collapsed": false,
         "references": []
       },
       {
@@ -3862,12 +3862,12 @@
     "height": 400,
     "id": "viewOption",
     "name": "viewOption",
-    "classes": null,
+    "classes": "",
     "children": [
       {
         "id": "alvzcstp",
         "name": "Container",
-        "classes": null,
+        "classes": "",
         "children": [
           {
             "id": "cwlrxxvr",
@@ -3884,11 +3884,13 @@
                     "align": "Center",
                     "clickable": null,
                     "quickBar": null,
+                    "isTemplate": false,
                     "computed": true,
                     "roll": null,
                     "id": "infoCost",
                     "name": "Label",
                     "classes": "text-medium w-100",
+                    "children": [],
                     "className": "Label",
                     "collapsed": false,
                     "references": []
@@ -3898,11 +3900,13 @@
                     "align": null,
                     "clickable": null,
                     "quickBar": null,
+                    "isTemplate": false,
                     "computed": null,
                     "roll": null,
                     "id": "hmnnoazb",
                     "name": "Label",
                     "classes": "text-tiny text-center w-100",
+                    "children": [],
                     "className": "Label",
                     "collapsed": false,
                     "references": []
@@ -3918,11 +3922,13 @@
                 "align": null,
                 "clickable": null,
                 "quickBar": null,
+                "isTemplate": false,
                 "computed": true,
                 "roll": null,
                 "id": "infoName",
                 "name": "Label",
                 "classes": "p-2 text-medium border-bottom w-300px text-center",
+                "children": [],
                 "className": "Label",
                 "collapsed": false,
                 "references": []
@@ -3938,11 +3944,13 @@
             "align": null,
             "clickable": null,
             "quickBar": null,
+            "isTemplate": false,
             "computed": true,
             "roll": null,
             "id": "infoDescription",
             "name": "Label",
             "classes": "p-2",
+            "children": [],
             "className": "Label",
             "collapsed": false,
             "references": []
@@ -4372,7 +4380,7 @@
           }
         ],
         "className": "Row",
-        "collapsed": false,
+        "collapsed": true,
         "references": []
       },
       {
@@ -4482,6 +4490,124 @@
           }
         ],
         "className": "Row",
+        "collapsed": true,
+        "references": []
+      }
+    ],
+    "className": "View",
+    "collapsed": false,
+    "references": []
+  },
+  {
+    "type": "Main",
+    "craft": null,
+    "tokenizable": null,
+    "droppable": null,
+    "width": 650,
+    "height": 400,
+    "id": "Bnd_Gift",
+    "name": "Bnd_Gift",
+    "classes": "",
+    "children": [
+      {
+        "text": "Coût",
+        "align": null,
+        "clickable": false,
+        "quickBar": false,
+        "isTemplate": false,
+        "computed": false,
+        "roll": null,
+        "id": "eyzdhttl",
+        "name": "Lbl_Cost",
+        "classes": "text-center border-bottom pt-1",
+        "children": [],
+        "className": "Label",
+        "collapsed": false,
+        "references": []
+      },
+      {
+        "text": "#Vis_Cost",
+        "align": "Center",
+        "clickable": null,
+        "quickBar": null,
+        "isTemplate": false,
+        "computed": true,
+        "roll": null,
+        "tooltip": true,
+        "tooltipLabel": "Coût",
+        "id": "Vis_Cost",
+        "name": "Vis_Cost",
+        "classes": "text-center border rounded bg-secondary",
+        "children": [],
+        "className": "Label",
+        "collapsed": false,
+        "references": []
+      },
+      {
+        "text": "Nom",
+        "align": null,
+        "clickable": false,
+        "quickBar": false,
+        "isTemplate": false,
+        "computed": false,
+        "roll": null,
+        "id": "chgecmfu",
+        "name": "Lbl_Name",
+        "classes": "text-center border-bottom pt-1",
+        "children": [],
+        "className": "Label",
+        "collapsed": false,
+        "references": []
+      },
+      {
+        "text": "if(#Vis_Name = 0, \"\", #Vis_Name)",
+        "align": "Center",
+        "clickable": null,
+        "quickBar": null,
+        "isTemplate": false,
+        "computed": true,
+        "roll": null,
+        "tooltip": true,
+        "tooltipLabel": "Nom",
+        "id": "Vis_Name",
+        "name": "Vis_Name",
+        "classes": "text-center border rounded bg-secondary text-capitalize",
+        "children": [],
+        "className": "Label",
+        "collapsed": false,
+        "references": []
+      },
+      {
+        "text": "Description",
+        "align": null,
+        "clickable": false,
+        "quickBar": false,
+        "isTemplate": false,
+        "computed": false,
+        "roll": null,
+        "id": "zkjvsyic",
+        "name": "Lbl_Description",
+        "classes": "text-center border-bottom pt-1",
+        "children": [],
+        "className": "Label",
+        "collapsed": false,
+        "references": []
+      },
+      {
+        "text": "if(#Vis_Description = 0, \"\", #Vis_Description)",
+        "align": null,
+        "clickable": null,
+        "quickBar": null,
+        "isTemplate": false,
+        "computed": true,
+        "roll": null,
+        "tooltip": true,
+        "tooltipLabel": "Description",
+        "id": "Vis_Description",
+        "name": "Vis_Description",
+        "classes": "border rounded bg-secondary",
+        "children": [],
+        "className": "Label",
         "collapsed": false,
         "references": []
       }
