@@ -1,11 +1,18 @@
-centrer les icones dans les barres latérales
+enlever tous les cky etc et les calculer par rso (tabs ?)
 
-automatiser le check min/max
+restaurer le tab actif après preferences
 
-click sur un icone reset la valeur act à max
+binding des infos sur les dons
 
-enlever tous les cky etc et les calculer par rso
+3 repeaters caracs
 
-changer le systeme de lock
+presets caracs
+
+jet de dé et reset
+
+diminution des tailles dans les outils droite/gauche ?
+
+drop de carac ?
+
 
 

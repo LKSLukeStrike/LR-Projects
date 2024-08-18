@@ -292,6 +292,7 @@ function eachRepItemDo(rep, item, do_fct) { // do on each rep child item
 //region LS_Constants
 //region LS_Constants Sheets
 const Sht_Character = "main" // character sheet
+const Bnd_Gift      = "Bnd_Gift" // gift binding
 //endregion
 
 //region LS_Constants Tooltips
@@ -501,19 +502,24 @@ function initCharacter(sheet) {
 	// toggleEdit(sheet)
 }
 
+//region Preset
 function initPreset(sheet) {
 	setElemValue(getElem(sheet, Ckb_Activity), ":ga_check-mark:")
 	setElemValue(getElem(sheet, Ckb_SocialRank), ":ga_check-mark:")
 	setElemValue(getElem(sheet, Ckb_CharacsLck), ":lock: Caracs :lock:")
 	setElemValue(getElem(sheet, Ckb_GiftsLck), ":lock: Dons :lock:")
 }
+//endregion
 
+//region Head
 function initHead(sheet) {
 	initPref(sheet)
 	initCharName(sheet)
 	initLock(sheet)
 }
+//endregion
 
+//region Head Pref
 function initPref(sheet) {
 	const row_pref    = getElem(sheet, Row_Pref)
 	const row_characs = getElem(sheet, Row_Characs)
@@ -552,13 +558,17 @@ function initPrefTabs(sheet) {
 		})
 	})
 }
+//endregion
 
+//region Head Name
 function initCharName(sheet) {
     if (! getElemValue(getElem(sheet, Val_CharName))) {
         setElemValue(getElem(sheet, Val_CharName), sheet.properName())
     }
 }
+//endregion
 
+//region Head Lock
 function initLock(sheet) {
 	initCkbDoDe(sheet, Ckb_LockSheet
 		, function(ckb_elem) {
@@ -573,7 +583,73 @@ function initLock(sheet) {
 		}
 	)
 }
+//endregion
 
+//region Tabs
+function initTabs(sheet) {
+	const cky_prefsheet = getElem(sheet, rsoValue(Ckb_PrefSheet, Str_PFXCKB, Str_PFXCKY))
+
+	Arr_TAB.forEach(function(tab_item) {
+		const tab_elem = getElem(sheet, tab_item)
+		const prf_item = rsoValue(tab_item, Str_PFXTAB, Str_PFXPRF)
+		const prf_elem = getElem(sheet, prf_item)
+		const col_item = rsoValue(tab_item, Str_PFXTAB, Str_PFXCOL)
+		const col_elem = getElem(sheet, col_item)
+		oncElemDo(tab_elem, function(elem) { // toggle on click
+			if (hasElemSelected(elem)) { // toggle itself
+				deselectTab(sheet, tab_item)
+			} else { // select another one
+				deselectTabAll(sheet)
+				doselectTab(sheet, tab_item)
+			}
+		})
+		onuElemDo(prf_elem, function(elem) { // handle tab visibility
+			if (getElemValue(elem)) { // show tab
+				addElemDisplayed(col_elem)
+			} else { // hide tab and deselect it
+				remElemDisplayed(col_elem)
+				deselectTab(sheet, tab_item)
+			}
+			initPrefTabs(sheet) // reflect on preferences
+		})
+		deselectTab(sheet, tab_item) // deselect on init
+		triggerElem(prf_elem) // triggers itself on init
+	})
+	if (! getElemValue(cky_prefsheet)) { // select bio on init if pref is not open
+		doselectTab(sheet, Tab_Characs)
+	}
+}
+
+function doselectTab(sheet, tab_item) { // doselect one tab
+	const tab_elem = getElem(sheet, tab_item)
+	const row_item = rsoValue(tab_item, Str_PFXTAB, Str_PFXROW)
+	const row_elem = getElem(sheet, row_item)
+	const prf_item = rsoValue(tab_item, Str_PFXTAB, Str_PFXPRF)
+	const prf_elem = getElem(sheet, prf_item)
+	if (! getElemValue(prf_elem)) {return} // ignore hidden tabs
+	addElemSelected(tab_elem)
+	addElemDisplayed(row_elem)
+}
+
+function deselectTab(sheet, tab_item) { // deselect one tab
+	const tab_elem = getElem(sheet, tab_item)
+	const row_item = rsoValue(tab_item, Str_PFXTAB, Str_PFXROW)
+	const row_elem = getElem(sheet, row_item)
+	const prf_item = rsoValue(tab_item, Str_PFXTAB, Str_PFXPRF)
+	const prf_elem = getElem(sheet, prf_item)
+	// if (! getElemValue(prf_elem)) {return} // ignore hidden tabs
+	remElemSelected(tab_elem)
+	remElemDisplayed(row_elem)
+}
+
+function deselectTabAll(sheet) { // deselect all tabs
+	Arr_TAB.forEach(function(tab_item) {
+		deselectTab(sheet, tab_item)
+	})
+}
+//endregion
+
+//region Characs
 function initCharacs(sheet) {
 	const clk_characsdel  = getElem(sheet, Clk_CharacsDel)
 	const col_characsdel  = getElem(sheet, rsoValue(Clk_CharacsDel, Str_PFXCLK, Str_PFXCOL))
@@ -651,17 +727,9 @@ function delockCharacs(sheet) {
 	const cky_characslck = getElem(sheet, rsoValue(Ckb_CharacsLck, Str_PFXCKB, Str_PFXCKY))
 	setElemValue(cky_characslck, false)
 }
+//endregion
 
-function incrementRollMod(sheet) {
-	const val_rollmod = getElem(sheet, rsoValue(Row_RollMod, Str_PFXROW, Str_PFXVAL))
-	incrementElem(val_rollmod)
-}
-
-function decrementRollMod(sheet) {
-	const val_rollmod = getElem(sheet, rsoValue(Row_RollMod, Str_PFXROW, Str_PFXVAL))
-	decrementElem(val_rollmod)
-}
-
+//region Roll
 function initRoll(sheet) {
 	const val_rollmod = getElem(sheet, rsoValue(Row_RollMod, Str_PFXROW, Str_PFXVAL))
 
@@ -675,6 +743,18 @@ function initRoll(sheet) {
 	setElemValue(val_rollmod, 0) // cleanup roll modifier
 }
 
+function incrementRollMod(sheet) {
+	const val_rollmod = getElem(sheet, rsoValue(Row_RollMod, Str_PFXROW, Str_PFXVAL))
+	incrementElem(val_rollmod)
+}
+
+function decrementRollMod(sheet) {
+	const val_rollmod = getElem(sheet, rsoValue(Row_RollMod, Str_PFXROW, Str_PFXVAL))
+	decrementElem(val_rollmod)
+}
+//endregion
+
+//region Gifts
 function initGifts(sheet) {
 	const rep_gifts    = getElem(sheet, Rep_Gifts)
 	const ckb_giftslck = getElem(sheet, Ckb_GiftsLck)
@@ -825,69 +905,9 @@ function newGiftsChildAt(sheet, child) {
 	const rep_gifts = getElem(sheet, Rep_Gifts)
 	newRepChildAt(rep_gifts, child, Tpl_Gift)
 }
+//endregion
 
-function initTabs(sheet) {
-	const cky_prefsheet = getElem(sheet, rsoValue(Ckb_PrefSheet, Str_PFXCKB, Str_PFXCKY))
-
-	Arr_TAB.forEach(function(tab_item) {
-		const tab_elem = getElem(sheet, tab_item)
-		const prf_item = rsoValue(tab_item, Str_PFXTAB, Str_PFXPRF)
-		const prf_elem = getElem(sheet, prf_item)
-		const col_item = rsoValue(tab_item, Str_PFXTAB, Str_PFXCOL)
-		const col_elem = getElem(sheet, col_item)
-		oncElemDo(tab_elem, function(elem) { // toggle on click
-			if (hasElemSelected(elem)) { // toggle itself
-				deselectTab(sheet, tab_item)
-			} else { // select another one
-				deselectTabAll(sheet)
-				doselectTab(sheet, tab_item)
-			}
-		})
-		onuElemDo(prf_elem, function(elem) { // handle tab visibility
-			if (getElemValue(elem)) { // show tab
-				addElemDisplayed(col_elem)
-			} else { // hide tab and deselect it
-				remElemDisplayed(col_elem)
-				deselectTab(sheet, tab_item)
-			}
-			initPrefTabs(sheet) // reflect on preferences
-		})
-		deselectTab(sheet, tab_item) // deselect on init
-		triggerElem(prf_elem) // triggers itself on init
-	})
-	if (! getElemValue(cky_prefsheet)) { // select bio on init if pref is not open
-		doselectTab(sheet, Tab_Characs)
-	}
-}
-
-function doselectTab(sheet, tab_item) { // doselect one tab
-	const tab_elem = getElem(sheet, tab_item)
-	const row_item = rsoValue(tab_item, Str_PFXTAB, Str_PFXROW)
-	const row_elem = getElem(sheet, row_item)
-	const prf_item = rsoValue(tab_item, Str_PFXTAB, Str_PFXPRF)
-	const prf_elem = getElem(sheet, prf_item)
-	if (! getElemValue(prf_elem)) {return} // ignore hidden tabs
-	addElemSelected(tab_elem)
-	addElemDisplayed(row_elem)
-}
-
-function deselectTab(sheet, tab_item) { // deselect one tab
-	const tab_elem = getElem(sheet, tab_item)
-	const row_item = rsoValue(tab_item, Str_PFXTAB, Str_PFXROW)
-	const row_elem = getElem(sheet, row_item)
-	const prf_item = rsoValue(tab_item, Str_PFXTAB, Str_PFXPRF)
-	const prf_elem = getElem(sheet, prf_item)
-	// if (! getElemValue(prf_elem)) {return} // ignore hidden tabs
-	remElemSelected(tab_elem)
-	remElemDisplayed(row_elem)
-}
-
-function deselectTabAll(sheet) { // deselect all tabs
-	Arr_TAB.forEach(function(tab_item) {
-		deselectTab(sheet, tab_item)
-	})
-}
-
+//region Utilities
 function initRowPtsDo(sheet, row_item, do_fct) { // init a pts block (clk, max, adj, val)
 	const val_elem = getElem(sheet, rsoValue(row_item, Str_PFXROW, Str_PFXVAL))
 
@@ -982,7 +1002,7 @@ function initCkbDoDe(sheet, ckb_item, do_fct, de_fct) { // init a checkbox + fct
 	
 	triggerElem(cky_elem) // triggers on init
 }
-
+//endregion
 
 
 
