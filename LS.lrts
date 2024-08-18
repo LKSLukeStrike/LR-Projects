@@ -858,8 +858,22 @@ function initGiftsRep(sheet) {
 	})
 	
 	oncRepItemDo(rep_gifts, Inf_Entry, function(elem) { // child inf button
-		const child = getElemIndex(elem)
 		log("inf")
+		const child           = getElemIndex(elem)
+		const vis_cost        = getRepElemRelative(rep_gifts, elem, Vis_Cost)
+		const vis_name        = getRepElemRelative(rep_gifts, elem, Vis_Name)
+		const vis_description = getRepElemRelative(rep_gifts, elem, Vis_Description)
+		const bna_gift        = "Truc"
+
+		Bindings.clear(Inf_Entry)
+		Bindings.add(bna_gift, Inf_Entry, Bnd_Gift, function() {
+			return {
+				Vis_Cost        : getElemValue(vis_cost),
+				Vis_Name        : getElemValue(vis_name),
+				Vis_Description : getElemValue(vis_description),
+			}
+		})
+		Bindings.send(sheet, bna_gift)
 	})
 
 	eachRepItemDo(rep_gifts, Val_Description, function(val_elem) {

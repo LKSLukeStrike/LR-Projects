@@ -1,6 +1,15 @@
-	initCkbDoDe(sheet, Ckb_LockSheet // toggle
-		, function(ckb_elem) {
-		}
-		, function(ckb_elem) {
-		}
-	)
+				const bna_scorol = "Truc"
+		
+				Bindings.clear(Val_SCOACT)
+				Bindings.add(bna_scorol, Val_SCOACT, Bnd_SCOROL, function() {
+					// debugOK()
+					return {
+						Lbl_SHTNAM: lbl_shtnam,
+						Lbl_SUCFAI: lbl_sucfai,
+						Val_SUCFAI: val_sucfai,
+						Val_CMASEL: val_cmasel,
+						Val_SCOACT: val_scoact,
+						Val_SCOROL: val_scorol,
+					}
+				})
+				Bindings.send(elm_view, bna_scorol)
