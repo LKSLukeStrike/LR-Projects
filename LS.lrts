@@ -296,9 +296,10 @@ const Bnd_Gift      = "Bnd_Gift" // gift binding
 //endregion
 
 //region LS_Constants Tooltips
-const Tip_None    = ""
-const Tip_Usable  = "Utiliser"
-const Tip_Presets = "Presets"
+const Tip_None        = ""
+const Tip_Usable      = "Utiliser"
+const Tip_Presets     = "Presets"
+const Tip_Description = "Description"
 //endregion
 
 //region LS_Constants Items (IDs)
@@ -859,6 +860,10 @@ function initGiftsRep(sheet) {
 	oncRepItemDo(rep_gifts, Inf_Entry, function(elem) { // child inf button
 		const child = getElemIndex(elem)
 		log("inf")
+	})
+
+	eachRepItemDo(rep_gifts, Val_Description, function(val_elem) {
+		setElemTooltip(val_elem, Tip_Description) // add a description tooltip
 	})
 
 	eachRepItemDo(rep_gifts, Val_Cost, function(val_elem) {
