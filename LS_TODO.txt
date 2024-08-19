@@ -1,6 +1,5 @@
-enlever tous les cky etc et les calculer par rso (tabs ?)
-
 restaurer le tab actif après preferences
+revoir complètement le systeme de tabs
 
 3 repeaters caracs
 

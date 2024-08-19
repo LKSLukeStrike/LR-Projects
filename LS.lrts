@@ -457,7 +457,13 @@ function hasElemUsable(elem) {
 const Rep_CharacsL     = "Rep_CharacsL" // characs repeater left
 const Rep_CharacsC     = "Rep_CharacsC" // characs repeater center
 const Rep_CharacsR     = "Rep_CharacsR" // characs repeater right
+const Arr_CharacsReps  = [
+	Rep_CharacsL,
+	Rep_CharacsC,
+	Rep_CharacsR,
+]
 //endregion
+
 //region LS_Repeaters Gifts
 const Rep_Gifts        = "Rep_Gifts" // gifts repeater
 const Val_Cost         = "Val_Cost" // gift cost value
@@ -628,6 +634,7 @@ function doselectTab(sheet, tab_item) { // doselect one tab
 	const prf_item = rsoValue(tab_item, Str_PFXTAB, Str_PFXPRF)
 	const prf_elem = getElem(sheet, prf_item)
 	if (! getElemValue(prf_elem)) {return} // ignore hidden tabs
+
 	addElemSelected(tab_elem)
 	addElemDisplayed(row_elem)
 }
@@ -638,7 +645,7 @@ function deselectTab(sheet, tab_item) { // deselect one tab
 	const row_elem = getElem(sheet, row_item)
 	const prf_item = rsoValue(tab_item, Str_PFXTAB, Str_PFXPRF)
 	const prf_elem = getElem(sheet, prf_item)
-	// if (! getElemValue(prf_elem)) {return} // ignore hidden tabs
+
 	remElemSelected(tab_elem)
 	remElemDisplayed(row_elem)
 }
