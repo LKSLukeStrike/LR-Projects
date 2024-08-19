@@ -462,6 +462,11 @@ const Arr_CharacsReps  = [
 	Rep_CharacsC,
 	Rep_CharacsR,
 ]
+const Tpl_Charac       = { // new characs entry template
+	Val_Name           : "",
+	Max_CharacPts      : 0,
+	Val_Talent         : "",
+}
 //endregion
 
 //region LS_Repeaters Gifts
@@ -703,10 +708,48 @@ function initCharacs(sheet) {
 			}
 		)
 	})
+
+	oncElemDo(clk_characsdel, function(elem) { // del characs children
+		delCharacsChildren(sheet)
+	})
+
+	oncElemDo(clk_characsnewl, function(elem) { // new characs children L
+		newCharacsChildL(sheet)
+	})
+
+	oncElemDo(clk_characsnewc, function(elem) { // new characs children C
+		newCharacsChildC(sheet)
+	})
+
+	oncElemDo(clk_characsnewr, function(elem) { // new characs children R
+		newCharacsChildR(sheet)
+	})
 	
 	initCharacsPts(sheet)
 	initCharacsRep(sheet)
 	initCharacsRoll(sheet)
+}
+
+function delCharacsChildren(sheet) {
+	Arr_CharacsReps.forEach(function (rep_item) {
+		const rep_elem = getElem(sheet, rep_item)
+		delRepChildren(rep_elem)
+	})
+}
+
+function newCharacsChildL(sheet) {
+	const rep_characsl = getElem(sheet, Rep_CharacsL)
+	newRepChild(rep_characsl, Tpl_Charac)
+}
+
+function newCharacsChildC(sheet) {
+	const rep_characsc = getElem(sheet, Rep_CharacsC)
+	newRepChild(rep_characsc, Tpl_Charac)
+}
+
+function newCharacsChildR(sheet) {
+	const rep_characsr = getElem(sheet, Rep_CharacsR)
+	newRepChild(rep_characsr, Tpl_Charac)
 }
 
 function initCharacsPts(sheet) {

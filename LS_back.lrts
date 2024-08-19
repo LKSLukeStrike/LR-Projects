@@ -292,12 +292,14 @@ function eachRepItemDo(rep, item, do_fct) { // do on each rep child item
 //region LS_Constants
 //region LS_Constants Sheets
 const Sht_Character = "main" // character sheet
+const Bnd_Gift      = "Bnd_Gift" // gift binding
 //endregion
 
 //region LS_Constants Tooltips
-const Tip_None    = ""
-const Tip_Usable  = "Utiliser"
-const Tip_Presets = "Presets"
+const Tip_None        = ""
+const Tip_Usable      = "Utiliser"
+const Tip_Presets     = "Presets"
+const Tip_Description = "Description"
 //endregion
 
 //region LS_Constants Items (IDs)
@@ -322,6 +324,10 @@ const Row_NarrationPts = "Row_NarrationPts" // narration pts panel
 const Row_RollMod      = "Row_RollMod" // roll modifier panel
 const Row_RollVis      = "Row_RollVis" // roll visibility panel
 const Ckb_RollVis      = "Ckb_RollVis" // roll visibility state
+const Arr_CharacsRolls = [ // characs roll modifiers
+	Ckb_Activity,
+	Ckb_SocialRank,
+]
 
 const Row_Bio          = "Row_Bio" // bio panel
 
@@ -401,11 +407,11 @@ function hasElemSelected(elem) {
 }
 
 function addElemDolocked(elem) {
-	setElemValue(elem, rsaValue(getElemValue(elem), Str_LSDelocked, Str_LSDolocked))
+	setElemValue(elem, _(rsaValue(getElemValue(elem), Str_LSDelocked, Str_LSDolocked)))
 	return remElemCss(elem, Css_LSSelected)
 }
 function remElemDolocked(elem) {
-	setElemValue(elem, rsaValue(getElemValue(elem), Str_LSDolocked, Str_LSDelocked))
+	setElemValue(elem, _(rsaValue(getElemValue(elem), Str_LSDolocked, Str_LSDelocked)))
 	return addElemCss(elem, Css_LSSelected)
 }
 function hasElemDolocked(elem) {
@@ -451,7 +457,18 @@ function hasElemUsable(elem) {
 const Rep_CharacsL     = "Rep_CharacsL" // characs repeater left
 const Rep_CharacsC     = "Rep_CharacsC" // characs repeater center
 const Rep_CharacsR     = "Rep_CharacsR" // characs repeater right
+const Arr_CharacsReps  = [
+	Rep_CharacsL,
+	Rep_CharacsC,
+	Rep_CharacsR,
+]
+const Tpl_Charac       = { // new characs entry template
+	Val_Name           : "",
+	Max_CharacPts      : 0,
+	Val_Talent         : "",
+}
 //endregion
+
 //region LS_Repeaters Gifts
 const Rep_Gifts        = "Rep_Gifts" // gifts repeater
 const Val_Cost         = "Val_Cost" // gift cost value
@@ -484,10 +501,11 @@ drop = function(from, to) { // TODO remove ?
 
 
 function initCharacter(sheet) {
-	// initRepair(sheet)
+	initPreset(sheet)
 	initHead(sheet)
 	initTabs(sheet)
 	initCharacs(sheet)
+	initRoll(sheet)
 	initGifts(sheet)
 
 	// switchSide(sheet)
@@ -496,17 +514,24 @@ function initCharacter(sheet) {
 	// toggleEdit(sheet)
 }
 
-function initRepair(sheet) {
+//region Preset
+function initPreset(sheet) {
 	setElemValue(getElem(sheet, Ckb_Activity), ":ga_check-mark:")
 	setElemValue(getElem(sheet, Ckb_SocialRank), ":ga_check-mark:")
+	setElemValue(getElem(sheet, Ckb_CharacsLck), ":lock: Caracs :lock:")
+	setElemValue(getElem(sheet, Ckb_GiftsLck), ":lock: Dons :lock:")
 }
+//endregion
 
+//region Head
 function initHead(sheet) {
 	initPref(sheet)
 	initCharName(sheet)
 	initLock(sheet)
 }
+//endregion
 
+//region Head Pref
 function initPref(sheet) {
 	const row_pref    = getElem(sheet, Row_Pref)
 	const row_characs = getElem(sheet, Row_Characs)
@@ -545,13 +570,17 @@ function initPrefTabs(sheet) {
 		})
 	})
 }
+//endregion
 
+//region Head Name
 function initCharName(sheet) {
     if (! getElemValue(getElem(sheet, Val_CharName))) {
         setElemValue(getElem(sheet, Val_CharName), sheet.properName())
     }
 }
+//endregion
 
+//region Head Lock
 function initLock(sheet) {
 	initCkbDoDe(sheet, Ckb_LockSheet
 		, function(ckb_elem) {
@@ -566,7 +595,74 @@ function initLock(sheet) {
 		}
 	)
 }
+//endregion
 
+//region Tabs
+function initTabs(sheet) {
+	const cky_prefsheet = getElem(sheet, rsoValue(Ckb_PrefSheet, Str_PFXCKB, Str_PFXCKY))
+
+	Arr_TAB.forEach(function(tab_item) {
+		const tab_elem = getElem(sheet, tab_item)
+		const prf_item = rsoValue(tab_item, Str_PFXTAB, Str_PFXPRF)
+		const prf_elem = getElem(sheet, prf_item)
+		const col_item = rsoValue(tab_item, Str_PFXTAB, Str_PFXCOL)
+		const col_elem = getElem(sheet, col_item)
+		oncElemDo(tab_elem, function(elem) { // toggle on click
+			if (hasElemSelected(elem)) { // toggle itself
+				deselectTab(sheet, tab_item)
+			} else { // select another one
+				deselectTabAll(sheet)
+				doselectTab(sheet, tab_item)
+			}
+		})
+		onuElemDo(prf_elem, function(elem) { // handle tab visibility
+			if (getElemValue(elem)) { // show tab
+				addElemDisplayed(col_elem)
+			} else { // hide tab and deselect it
+				remElemDisplayed(col_elem)
+				deselectTab(sheet, tab_item)
+			}
+			initPrefTabs(sheet) // reflect on preferences
+		})
+		deselectTab(sheet, tab_item) // deselect on init
+		triggerElem(prf_elem) // triggers itself on init
+	})
+	if (! getElemValue(cky_prefsheet)) { // select bio on init if pref is not open
+		doselectTab(sheet, Tab_Characs)
+	}
+}
+
+function doselectTab(sheet, tab_item) { // doselect one tab
+	const tab_elem = getElem(sheet, tab_item)
+	const row_item = rsoValue(tab_item, Str_PFXTAB, Str_PFXROW)
+	const row_elem = getElem(sheet, row_item)
+	const prf_item = rsoValue(tab_item, Str_PFXTAB, Str_PFXPRF)
+	const prf_elem = getElem(sheet, prf_item)
+	if (! getElemValue(prf_elem)) {return} // ignore hidden tabs
+
+	addElemSelected(tab_elem)
+	addElemDisplayed(row_elem)
+}
+
+function deselectTab(sheet, tab_item) { // deselect one tab
+	const tab_elem = getElem(sheet, tab_item)
+	const row_item = rsoValue(tab_item, Str_PFXTAB, Str_PFXROW)
+	const row_elem = getElem(sheet, row_item)
+	const prf_item = rsoValue(tab_item, Str_PFXTAB, Str_PFXPRF)
+	const prf_elem = getElem(sheet, prf_item)
+
+	remElemSelected(tab_elem)
+	remElemDisplayed(row_elem)
+}
+
+function deselectTabAll(sheet) { // deselect all tabs
+	Arr_TAB.forEach(function(tab_item) {
+		deselectTab(sheet, tab_item)
+	})
+}
+//endregion
+
+//region Characs
 function initCharacs(sheet) {
 	const clk_characsdel  = getElem(sheet, Clk_CharacsDel)
 	const col_characsdel  = getElem(sheet, rsoValue(Clk_CharacsDel, Str_PFXCLK, Str_PFXCOL))
@@ -582,27 +678,35 @@ function initCharacs(sheet) {
 	const col_characsnewr = getElem(sheet, rsoValue(Clk_CharacsNewR, Str_PFXCLK, Str_PFXCOL))
 
 	setElemTooltip(chc_characspst, Tip_Presets)
-	
-	oncElemDo(ckb_characslck, function(elem) { // toggle characs lock
-		toggleElem(cky_characslck)
-	})
 
-	onuElemDo(cky_characslck, function(elem) { // handle characs visibility
-		if (getElemValue(elem)) { // hide characs actions
+	initCkbDoDe(sheet, Ckb_CharacsLck // toggle characs lock
+		, function(ckb_elem) {
+			addElemDolocked(ckb_elem)
 			addElemInvisible(col_characsdel)
 			addElemInvisible(col_characspst)
-			addElemSelected(ckb_characslck)
 			addElemInvisible(col_characsnewl)
 			addElemInvisible(col_characsnewc)
 			addElemInvisible(col_characsnewr)
-		} else { // show characs actions
+		}
+		, function(ckb_elem) {
+			remElemDolocked(ckb_elem)
 			remElemInvisible(col_characsdel)
 			remElemInvisible(col_characspst)
-			remElemSelected(ckb_characslck)
 			remElemInvisible(col_characsnewl)
 			remElemInvisible(col_characsnewc)
 			remElemInvisible(col_characsnewr)
 		}
+	)
+
+	Arr_CharacsRolls.forEach(function(ckb_item) { // toggle activity & socialrank
+		initCkbDoDe(sheet, ckb_item
+			, function(ckb_elem) {
+				incrementRollMod(sheet)
+			}
+			, function(ckb_elem) {
+				decrementRollMod(sheet)
+			}
+		)
 	})
 	
 	initCharacsPts(sheet)
@@ -619,7 +723,11 @@ function initCharacsRep(sheet) {
 }
 
 function initCharacsRoll(sheet) {
-	initRowMod(sheet, Row_RollMod)
+	initRowModDo(sheet, Row_RollMod
+		, function(clk_elem) {
+			initRoll(sheet)
+		}
+	)
 	initCkb(sheet, Ckb_RollVis)
 }
 
@@ -632,7 +740,34 @@ function delockCharacs(sheet) {
 	const cky_characslck = getElem(sheet, rsoValue(Ckb_CharacsLck, Str_PFXCKB, Str_PFXCKY))
 	setElemValue(cky_characslck, false)
 }
+//endregion
 
+//region Roll
+function initRoll(sheet) {
+	const val_rollmod = getElem(sheet, rsoValue(Row_RollMod, Str_PFXROW, Str_PFXVAL))
+
+	Arr_CharacsRolls.forEach(function(ckb_item) { // cleanup activity & socialrank
+		const cky_elem = getElem(sheet, rsoValue(ckb_item, Str_PFXCKB, Str_PFXCKY))
+		setElemValue(cky_elem, false)
+	})
+	
+	//TODO cleanup all repeaters
+	
+	setElemValue(val_rollmod, 0) // cleanup roll modifier
+}
+
+function incrementRollMod(sheet) {
+	const val_rollmod = getElem(sheet, rsoValue(Row_RollMod, Str_PFXROW, Str_PFXVAL))
+	incrementElem(val_rollmod)
+}
+
+function decrementRollMod(sheet) {
+	const val_rollmod = getElem(sheet, rsoValue(Row_RollMod, Str_PFXROW, Str_PFXVAL))
+	decrementElem(val_rollmod)
+}
+//endregion
+
+//region Gifts
 function initGifts(sheet) {
 	const rep_gifts    = getElem(sheet, Rep_Gifts)
 	const ckb_giftslck = getElem(sheet, Ckb_GiftsLck)
@@ -642,23 +777,20 @@ function initGifts(sheet) {
 	const col_giftsdel = getElem(sheet, rsoValue(Clk_GiftsDel, Str_PFXCLK, Str_PFXCOL))
 	const col_giftsnew = getElem(sheet, rsoValue(Clk_GiftsNew, Str_PFXCLK, Str_PFXCOL))
 
-	oncElemDo(ckb_giftslck, function(elem) { // toggle gifts lock
-		toggleElem(cky_giftslck)
-	})
-
-	onuElemDo(cky_giftslck, function(elem) { // handle gifts visibility
-		if (getElemValue(elem)) { // hide gifts actions & view mode
-			addElemSelected(ckb_giftslck)
+	initCkbDoDe(sheet, Ckb_GiftsLck // toggle gifts losk
+		, function(ckb_elem) {
+			addElemDolocked(ckb_elem)
 			addElemInvisible(col_giftsdel)
 			addElemInvisible(col_giftsnew)
 			doviewGifts(sheet)
-		} else { // show gifts actions & edit mode
-			remElemSelected(ckb_giftslck)
+		}
+		, function(ckb_elem) {
+			remElemDolocked(ckb_elem)
 			remElemInvisible(col_giftsdel)
 			remElemInvisible(col_giftsnew)
 			doeditGifts(sheet)
 		}
-	})
+	)
 
 	oncElemDo(clk_giftsdel, function(elem) { // del gifts children
 		delGiftsChildren(sheet)
@@ -738,8 +870,25 @@ function initGiftsRep(sheet) {
 	})
 	
 	oncRepItemDo(rep_gifts, Inf_Entry, function(elem) { // child inf button
-		const child = getElemIndex(elem)
-		log("inf")
+		const child           = getElemIndex(elem)
+		const vis_cost        = getRepElemRelative(rep_gifts, elem, Vis_Cost)
+		const vis_name        = getRepElemRelative(rep_gifts, elem, Vis_Name)
+		const vis_description = getRepElemRelative(rep_gifts, elem, Vis_Description)
+		const bna_gift        = "Truc"
+
+		Bindings.clear(Inf_Entry)
+		Bindings.add(bna_gift, Inf_Entry, Bnd_Gift, function() {
+			return {
+				Vis_Cost        : getElemValue(vis_cost),
+				Vis_Name        : getElemValue(vis_name),
+				Vis_Description : getElemValue(vis_description),
+			}
+		})
+		Bindings.send(sheet, bna_gift)
+	})
+
+	eachRepItemDo(rep_gifts, Val_Description, function(val_elem) {
+		setElemTooltip(val_elem, Tip_Description) // add a description tooltip
 	})
 
 	eachRepItemDo(rep_gifts, Val_Cost, function(val_elem) {
@@ -759,12 +908,12 @@ function delockGifts(sheet) {
 
 function doviewGifts(sheet) {
 	const rep_gifts = getElem(sheet, Rep_Gifts)
-	// doviewRep(rep_gifts)
+	doviewRep(rep_gifts)
 }
 
 function doeditGifts(sheet) {
 	const rep_gifts = getElem(sheet, Rep_Gifts)
-	// doeditRep(rep_gifts)
+	doeditRep(rep_gifts)
 }
 
 function delGiftsChildren(sheet) {
@@ -786,69 +935,9 @@ function newGiftsChildAt(sheet, child) {
 	const rep_gifts = getElem(sheet, Rep_Gifts)
 	newRepChildAt(rep_gifts, child, Tpl_Gift)
 }
+//endregion
 
-function initTabs(sheet) {
-	const cky_prefsheet = getElem(sheet, rsoValue(Ckb_PrefSheet, Str_PFXCKB, Str_PFXCKY))
-
-	Arr_TAB.forEach(function(tab_item) {
-		const tab_elem = getElem(sheet, tab_item)
-		const prf_item = rsoValue(tab_item, Str_PFXTAB, Str_PFXPRF)
-		const prf_elem = getElem(sheet, prf_item)
-		const col_item = rsoValue(tab_item, Str_PFXTAB, Str_PFXCOL)
-		const col_elem = getElem(sheet, col_item)
-		oncElemDo(tab_elem, function(elem) { // toggle on click
-			if (hasElemSelected(elem)) { // toggle itself
-				deselectTab(sheet, tab_item)
-			} else { // select another one
-				deselectTabAll(sheet)
-				doselectTab(sheet, tab_item)
-			}
-		})
-		onuElemDo(prf_elem, function(elem) { // handle tab visibility
-			if (getElemValue(elem)) { // show tab
-				addElemDisplayed(col_elem)
-			} else { // hide tab and deselect it
-				remElemDisplayed(col_elem)
-				deselectTab(sheet, tab_item)
-			}
-			initPrefTabs(sheet) // reflect on preferences
-		})
-		deselectTab(sheet, tab_item) // deselect on init
-		triggerElem(prf_elem) // triggers itself on init
-	})
-	if (! getElemValue(cky_prefsheet)) { // select bio on init if pref is not open
-		doselectTab(sheet, Tab_Characs)
-	}
-}
-
-function doselectTab(sheet, tab_item) { // doselect one tab
-	const tab_elem = getElem(sheet, tab_item)
-	const row_item = rsoValue(tab_item, Str_PFXTAB, Str_PFXROW)
-	const row_elem = getElem(sheet, row_item)
-	const prf_item = rsoValue(tab_item, Str_PFXTAB, Str_PFXPRF)
-	const prf_elem = getElem(sheet, prf_item)
-	if (! getElemValue(prf_elem)) {return} // ignore hidden tabs
-	addElemSelected(tab_elem)
-	addElemDisplayed(row_elem)
-}
-
-function deselectTab(sheet, tab_item) { // deselect one tab
-	const tab_elem = getElem(sheet, tab_item)
-	const row_item = rsoValue(tab_item, Str_PFXTAB, Str_PFXROW)
-	const row_elem = getElem(sheet, row_item)
-	const prf_item = rsoValue(tab_item, Str_PFXTAB, Str_PFXPRF)
-	const prf_elem = getElem(sheet, prf_item)
-	// if (! getElemValue(prf_elem)) {return} // ignore hidden tabs
-	remElemSelected(tab_elem)
-	remElemDisplayed(row_elem)
-}
-
-function deselectTabAll(sheet) { // deselect all tabs
-	Arr_TAB.forEach(function(tab_item) {
-		deselectTab(sheet, tab_item)
-	})
-}
-
+//region Utilities
 function initRowPtsDo(sheet, row_item, do_fct) { // init a pts block (clk, max, adj, val)
 	const val_elem = getElem(sheet, rsoValue(row_item, Str_PFXROW, Str_PFXVAL))
 
@@ -885,14 +974,14 @@ function initRowPts(sheet, row_item) { // init a pts block (clk, max, adj)
 	})
 }
 
-function initRowMod(sheet, row_item) { // init a mod block (clk, val, adj)
+function initRowModDo(sheet, row_item, do_fct) { // init a mod block (clk, val, adj)
 	const clk_elem = getElem(sheet, rsoValue(row_item, Str_PFXROW, Str_PFXCLK))
 	const inc_elem = getElem(sheet, rsoValue(row_item, Str_PFXROW, Str_PFXINC))
 	const dec_elem = getElem(sheet, rsoValue(row_item, Str_PFXROW, Str_PFXDEC))
 	const val_elem = getElem(sheet, rsoValue(row_item, Str_PFXROW, Str_PFXVAL))
 	
-	oncElemDo(clk_elem, function(elem) { // restore max value
-		setElemValue(val_elem, 0)
+	oncElemDo(clk_elem, function(clk_elem) { // triggers fct on click
+		do_fct(clk_elem)
 	})
 	
 	oncElemDo(inc_elem, function(elem) { // increment current value
@@ -943,7 +1032,7 @@ function initCkbDoDe(sheet, ckb_item, do_fct, de_fct) { // init a checkbox + fct
 	
 	triggerElem(cky_elem) // triggers on init
 }
-
+//endregion
 
 
 
