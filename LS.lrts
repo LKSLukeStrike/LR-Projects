@@ -309,6 +309,8 @@ const Val_CharName     = "Val_CharName" // character name
 const Ckb_LockSheet    = "Ckb_LockSheet" // locking checkbox
 
 const Row_Pref         = "Row_Pref" // preferences panel
+const Dft_TypeDices    = "1d10" // default dices type
+const Chc_TypeDices    = "Chc_TypeDices" // dices type choice
 
 const Row_Characs      = "Row_Characs" // sheet characs
 const Clk_CharacsDel   = "Clk_CharacsDel" // characs del button
@@ -322,6 +324,7 @@ const Ckb_SocialRank   = "Ckb_SocialRank" // social rank checkbox
 const Row_HealthPts    = "Row_HealthPts" // health pts panel
 const Row_NarrationPts = "Row_NarrationPts" // narration pts panel
 const Row_RollMod      = "Row_RollMod" // roll modifier panel
+const Val_TypeDices    = "Val_TypeDices" // dices type value
 const Row_RollVis      = "Row_RollVis" // roll visibility panel
 const Ckb_RollVis      = "Ckb_RollVis" // roll visibility state
 const Arr_CharacsRolls = [ // characs roll modifiers
@@ -535,6 +538,8 @@ function initHead(sheet) {
 function initPref(sheet) {
 	const row_pref    = getElem(sheet, Row_Pref)
 	const row_characs = getElem(sheet, Row_Characs)
+	const chc_typedices = getElem(sheet, Chc_TypeDices)
+	const val_typedices = getElem(sheet, Val_TypeDices)
 
 	initCkbDoDe(sheet, Ckb_PrefSheet
 		, function(ckb_elem) {
@@ -548,6 +553,14 @@ function initPref(sheet) {
 			deselectTabAll(sheet)
 		}
 	)
+	
+	onuElemDo(chc_typedices, function(elem) { // adjust the dices type
+		setElemValue(val_typedices, getElemValue(chc_typedices))
+		//TODO setup the according roll modifier
+	})
+	if (! getElemValue(val_typedices)) {
+		setElemValue(chc_typedices, Dft_TypeDices)
+	}
 
 	initPrefTabs(sheet)
 }
