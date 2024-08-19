@@ -1,20 +1,55 @@
 Source,Translation
-Tip_HLPSHT_,Help
-Tip_PRFSHT_,Preferences
-Txt_BIONAM_,Name
-Txt_BIOCMS_,Size (cm)
-Txt_BIOAGE_,Age
-Txt_BIOKGS_,Weigtht (kg)
-Txt_BIODSC_,Description
-Tip_YLCKSHTY_,Lock Sheet
-Tip_NLCKSHTN_,Unlock Sheet
-Tip_YFLDBIOY_,Fold BIO
-Tip_NFLDBION_,Unfold BIO
-Tip_YFLDMAXY_,Fold MAX
-Tip_NFLDMAXN_,Unfold MAX
-Tip_YFLDACTY_,Fold ACT
-Tip_NFLDACTN_,Unfold ACT
-Tip_YFLDSCOY_,Fold SCO
-Tip_NFLDSCON_,Unfold SCO
-Tip_YFLDHOPY_,Fold HOP
-Tip_NFLDHOPN_,Unfold HOP
+Utiliser,Use
+Nom,Name
+Coût,Cost
+:unlock: Dons :unlock:,:unlock: Gifts :unlock:
+:unlock: Caracs :unlock:,:unlock: Characs :unlock:
+Ajouter D,New R
+Ajouter C,New C
+Ajouter G,New L
+:lock: Dons :lock:,:lock: Gifts :lock:
+Ajouter,New
+:lock: Caracs :lock:,:lock: Characs :lock:
+Supprimer,Delete
+Montrer Caracs,Show Characs
+Faiblesses,Weaknesses
+Forces,Forces
+Description,Description
+Poids (kg),Weight (kg)
+Age,Age
+Taille (cm),Size (cm)
+Caracs,Characs
+Actuel,Current
+MJ Seul,GM Only
+Visibilité du Jet,Roll Visibility
+Modificateur du Jet,Roll Modifier
+Activité,Activity
+Rang Social,Social Rank
+Jets:,Roll:
+Type:,Type:
+Montrer Notes,Show Notes
+Montrer Relations,Show Relationships
+Montrer Possessions,Show Possessions
+Montrer Dons,Show Gifts
+Montrer Bio,Show Bio
+Dés,Dices
+Tabs,Tabs
+Personnel,Personal
+Scénario,Scenario
+Campagne,Campaign
+Mauvaises,Bad
+Neutres,Neutral
+Bonnes,Good
+Ailleurs,Elsewhere
+Porté,Luggage
+Equipé,Oneself
+Verrouillage,Locking
+Préférences,Preferences
+Narration,Narration
+Santé,Health
+Bio,Bio
+Dons,Gifts
+Possessions,Possessions
+Relations,Relationships
+Notes,Notes
+Appliquer,Apply

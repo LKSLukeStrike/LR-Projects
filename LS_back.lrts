@@ -309,6 +309,8 @@ const Val_CharName     = "Val_CharName" // character name
 const Ckb_LockSheet    = "Ckb_LockSheet" // locking checkbox
 
 const Row_Pref         = "Row_Pref" // preferences panel
+const Dft_TypeDices    = "1d10" // default dices type
+const Chc_TypeDices    = "Chc_TypeDices" // dices type choice
 
 const Row_Characs      = "Row_Characs" // sheet characs
 const Clk_CharacsDel   = "Clk_CharacsDel" // characs del button
@@ -322,6 +324,7 @@ const Ckb_SocialRank   = "Ckb_SocialRank" // social rank checkbox
 const Row_HealthPts    = "Row_HealthPts" // health pts panel
 const Row_NarrationPts = "Row_NarrationPts" // narration pts panel
 const Row_RollMod      = "Row_RollMod" // roll modifier panel
+const Val_TypeDices    = "Val_TypeDices" // dices type value
 const Row_RollVis      = "Row_RollVis" // roll visibility panel
 const Ckb_RollVis      = "Ckb_RollVis" // roll visibility state
 const Arr_CharacsRolls = [ // characs roll modifiers
@@ -462,6 +465,12 @@ const Arr_CharacsReps  = [
 	Rep_CharacsC,
 	Rep_CharacsR,
 ]
+const Val_Name         = "Val_Name" // charac name value
+const Val_Talent       = "Val_Talent" // charac talent value
+const Arr_CharacsVals  = [
+	Val_Name,
+	Val_Talent,
+]
 const Tpl_Charac       = { // new characs entry template
 	Val_Name           : "",
 	Max_CharacPts      : 0,
@@ -535,6 +544,8 @@ function initHead(sheet) {
 function initPref(sheet) {
 	const row_pref    = getElem(sheet, Row_Pref)
 	const row_characs = getElem(sheet, Row_Characs)
+	const chc_typedices = getElem(sheet, Chc_TypeDices)
+	const val_typedices = getElem(sheet, Val_TypeDices)
 
 	initCkbDoDe(sheet, Ckb_PrefSheet
 		, function(ckb_elem) {
@@ -548,6 +559,14 @@ function initPref(sheet) {
 			deselectTabAll(sheet)
 		}
 	)
+	
+	onuElemDo(chc_typedices, function(elem) { // adjust the dices type
+		setElemValue(val_typedices, getElemValue(chc_typedices))
+		//TODO setup the according roll modifier
+	})
+	if (! getElemValue(val_typedices)) {
+		setElemValue(chc_typedices, Dft_TypeDices)
+	}
 
 	initPrefTabs(sheet)
 }
@@ -708,10 +727,52 @@ function initCharacs(sheet) {
 			}
 		)
 	})
+
+	oncElemDo(clk_characsdel, function(elem) { // del characs children
+		delCharacsChildren(sheet)
+	})
+
+	oncElemDo(clk_characsnewl, function(elem) { // new characs children L
+		newCharacsChildL(sheet)
+	})
+
+	oncElemDo(clk_characsnewc, function(elem) { // new characs children C
+		newCharacsChildC(sheet)
+	})
+
+	oncElemDo(clk_characsnewr, function(elem) { // new characs children R
+		newCharacsChildR(sheet)
+	})
 	
 	initCharacsPts(sheet)
 	initCharacsRep(sheet)
 	initCharacsRoll(sheet)
+}
+
+function delCharacsChildren(sheet) {
+	Arr_CharacsReps.forEach(function (rep_item) {
+		const rep_elem = getElem(sheet, rep_item)
+		delRepChildren(rep_elem)
+	})
+}
+
+function newCharacsChild(sheet, rep_charac) {
+	newRepChild(rep_charac, Tpl_Charac)
+}
+
+function newCharacsChildL(sheet) {
+	const rep_characsl = getElem(sheet, Rep_CharacsL)
+	newCharacsChild(sheet, rep_characsl)
+}
+
+function newCharacsChildC(sheet) {
+	const rep_characsc = getElem(sheet, Rep_CharacsC)
+	newCharacsChild(sheet, rep_characsc)
+}
+
+function newCharacsChildR(sheet) {
+	const rep_characsr = getElem(sheet, Rep_CharacsR)
+	newCharacsChild(sheet, rep_characsr)
 }
 
 function initCharacsPts(sheet) {

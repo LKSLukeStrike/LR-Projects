@@ -1,1 +1,6 @@
-border rounded h-50px text-medium text-center pt-2
+const Val_Name         = "Val_Name" // charac name value
+const Val_Talent       = "Val_Talent" // charac talent value
+const Arr_CharacsVals  = [
+	Val_Name,
+	Val_Talent,
+]

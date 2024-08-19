@@ -1,4 +1,14 @@
 //region LR_ (LR Library)
+//region LR_Debug
+const Yes_Debug   = true
+const Not_Debug   = false
+const Dft_Debug   = Yes_Debug
+
+function debug(str_debug) {
+	if (Dft_Debug) {log(str_debug)}
+}
+//endregion
+
 //region LR_Constants
 //region LR_Constants Values
 const Int_Zero     = 0
@@ -465,6 +475,12 @@ const Arr_CharacsReps  = [
 	Rep_CharacsC,
 	Rep_CharacsR,
 ]
+const Val_Name         = "Val_Name" // charac name value
+const Val_Talent       = "Val_Talent" // charac talent value
+const Arr_CharacsVals  = [
+	Val_Name,
+	Val_Talent,
+]
 const Tpl_Charac       = { // new characs entry template
 	Val_Name           : "",
 	Max_CharacPts      : 0,
@@ -519,6 +535,7 @@ function initCharacter(sheet) {
 
 //region Preset
 function initPreset(sheet) {
+	debug("initPreset")
 	setElemValue(getElem(sheet, Ckb_Activity), ":ga_check-mark:")
 	setElemValue(getElem(sheet, Ckb_SocialRank), ":ga_check-mark:")
 	setElemValue(getElem(sheet, Ckb_CharacsLck), ":lock: Caracs :lock:")
@@ -528,6 +545,7 @@ function initPreset(sheet) {
 
 //region Head
 function initHead(sheet) {
+	debug("initHead")
 	initPref(sheet)
 	initCharName(sheet)
 	initLock(sheet)
@@ -536,6 +554,7 @@ function initHead(sheet) {
 
 //region Head Pref
 function initPref(sheet) {
+	debug("initPref")
 	const row_pref    = getElem(sheet, Row_Pref)
 	const row_characs = getElem(sheet, Row_Characs)
 	const chc_typedices = getElem(sheet, Chc_TypeDices)
@@ -566,6 +585,7 @@ function initPref(sheet) {
 }
 
 function initPrefTabs(sheet) {
+	debug("initPrefTabs")
 	Arr_TAB.forEach(function(tab_item) { // reflect active tabs
 		const clk_item = rsoValue(tab_item, Str_PFXTAB, Str_PFXCLK)
 		const clk_elem = getElem(sheet, clk_item)
@@ -587,14 +607,16 @@ function initPrefTabs(sheet) {
 
 //region Head Name
 function initCharName(sheet) {
-    if (! getElemValue(getElem(sheet, Val_CharName))) {
-        setElemValue(getElem(sheet, Val_CharName), sheet.properName())
-    }
+ 	debug("initCharName")
+	if (! getElemValue(getElem(sheet, Val_CharName))) {
+		setElemValue(getElem(sheet, Val_CharName), sheet.properName())
+	}
 }
 //endregion
 
 //region Head Lock
 function initLock(sheet) {
+	debug("initLock")
 	initCkbDoDe(sheet, Ckb_LockSheet
 		, function(ckb_elem) {
 			addElemDolocked(ckb_elem)
@@ -612,6 +634,7 @@ function initLock(sheet) {
 
 //region Tabs
 function initTabs(sheet) {
+	debug("initTabs")
 	const cky_prefsheet = getElem(sheet, rsoValue(Ckb_PrefSheet, Str_PFXCKB, Str_PFXCKY))
 
 	Arr_TAB.forEach(function(tab_item) {
@@ -677,6 +700,7 @@ function deselectTabAll(sheet) { // deselect all tabs
 
 //region Characs
 function initCharacs(sheet) {
+	debug("initCharacs")
 	const clk_characsdel  = getElem(sheet, Clk_CharacsDel)
 	const col_characsdel  = getElem(sheet, rsoValue(Clk_CharacsDel, Str_PFXCLK, Str_PFXCOL))
 	const chc_characspst  = getElem(sheet, Chc_CharacsPst)
@@ -750,30 +774,72 @@ function delCharacsChildren(sheet) {
 	})
 }
 
+function newCharacsChild(sheet, rep_charac) {
+	newRepChild(rep_charac, Tpl_Charac)
+}
+
 function newCharacsChildL(sheet) {
 	const rep_characsl = getElem(sheet, Rep_CharacsL)
-	newRepChild(rep_characsl, Tpl_Charac)
+	newCharacsChild(sheet, rep_characsl)
 }
 
 function newCharacsChildC(sheet) {
 	const rep_characsc = getElem(sheet, Rep_CharacsC)
-	newRepChild(rep_characsc, Tpl_Charac)
+	newCharacsChild(sheet, rep_characsc)
 }
 
 function newCharacsChildR(sheet) {
 	const rep_characsr = getElem(sheet, Rep_CharacsR)
-	newRepChild(rep_characsr, Tpl_Charac)
+	newCharacsChild(sheet, rep_characsr)
 }
 
 function initCharacsPts(sheet) {
+	debug("initCharacsPts")
 	initRowPts(sheet, Row_HealthPts)
 	initRowPts(sheet, Row_NarrationPts)
 }
 
 function initCharacsRep(sheet) {
+	debug("initCharacsRep")
+	const cky_characslck  = getElem(sheet, rsoValue(Ckb_CharacsLck, Str_PFXCKB, Str_PFXCKY))
+
+	triggerElem(cky_characslck) // triggers lock to set edit or view mode
+
+	Arr_CharacsReps.forEach(function(rep_item) {
+		debug("rep_item")
+		const rep_characs = getElem(sheet, rep_item)
+
+		onuElemDo(rep_characs, function(elem) { // handle characs rep modifications
+			initCharacsRep(sheet)
+		})
+	
+		Arr_CharacsVals.forEach(function(val_item) {
+			debug("val_item")
+			const Vis_Item = rsoValue(val_item, Str_PFXVAL, Str_PFXVIS)
+			
+			onuRepItemDo(rep_characs, val_item, function(val_elem) { // reflects val on vis
+				const vis_elem  = getRepElemRelative(rep_characs, val_elem, Vis_Item)
+				const val_value = getElemValue(val_elem)
+				let   vis_value = ""
+				vis_value = val_value ?
+					val_value : vis_value // no default value, val value instead
+				setElemValue(vis_elem, vis_value)
+			})
+			
+			oncRepItemDo(rep_characs, Vis_Item, function(vis_elem) { // click on vis item
+				if (! hasElemUsable(vis_elem)) {return} // cannot use
+				log("roll") //TODO
+			})
+		})
+
+		eachRepItemDo(rep_characs, Val_Name, function(val_elem) {
+			triggerElem(val_elem) // triggers vals to handle vals added by templates
+		})
+	})
 }
 
 function initCharacsRoll(sheet) {
+	debug("initCharacsRoll")
 	initRowModDo(sheet, Row_RollMod
 		, function(clk_elem) {
 			initRoll(sheet)
@@ -783,11 +849,13 @@ function initCharacsRoll(sheet) {
 }
 
 function dolockCharacs(sheet) {
+	debug("dolockCharacs")
 	const cky_characslck = getElem(sheet, rsoValue(Ckb_CharacsLck, Str_PFXCKB, Str_PFXCKY))
 	setElemValue(cky_characslck, true)
 }
 
 function delockCharacs(sheet) {
+	debug("delockCharacs")
 	const cky_characslck = getElem(sheet, rsoValue(Ckb_CharacsLck, Str_PFXCKB, Str_PFXCKY))
 	setElemValue(cky_characslck, false)
 }
@@ -795,6 +863,7 @@ function delockCharacs(sheet) {
 
 //region Roll
 function initRoll(sheet) {
+	debug("initRoll")
 	const val_rollmod = getElem(sheet, rsoValue(Row_RollMod, Str_PFXROW, Str_PFXVAL))
 
 	Arr_CharacsRolls.forEach(function(ckb_item) { // cleanup activity & socialrank

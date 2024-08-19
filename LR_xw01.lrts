@@ -1,5 +1,90 @@
+function initCharacsRep(sheet) {
+	debug("initCharacsRep")
+	const cky_characslck  = getElem(sheet, rsoValue(Ckb_CharacsLck, Str_PFXCKB, Str_PFXCKY))
+	// const val_characspts  = getElem(sheet, rsoValue(Row_CharacsPts, Str_PFXROW, Str_PFXVAL))
+	// const pts_value       = getElemValue(val_characspts)
+	// const Vis_Cost        = rsoValue(Val_Cost, Str_PFXVAL, Str_PFXVIS)
+	// const Vis_Name        = rsoValue(Val_Name, Str_PFXVAL, Str_PFXVIS)
+	// const Vis_Description = rsoValue(Val_Description, Str_PFXVAL, Str_PFXVIS)
 
-function newCharacsChildL(sheet) {
-	const rep_characsl = getElem(sheet, Rep_CharacsL)
-	newRepChild(rep_characsl, Tpl_Charac)
+	triggerElem(cky_characslck) // triggers lock to set edit or view mode
+
+	Arr_CharacsReps.forEach(function (rep_item) {
+		debug("rep_item")
+		const rep_characs = getElem(sheet, rep_item)
+
+		onuElemDo(rep_characs, function(elem) { // handle characs rep modifications
+			initCharacsRep(sheet)
+		})
+		
+		// onuRepItemDo(rep_characs, Vis_Cost, function(vis_cost) { // handle characs usability
+			// const vis_name        = getRepElemRelative(rep_characs, vis_cost, Vis_Name)
+			// const vis_description = getRepElemRelative(rep_characs, vis_cost, Vis_Description)
+			// const elm_value       = getElemValue(vis_cost)
+			// if (elm_value <= pts_value) { // can use the charac
+				// addElemUsable(vis_cost)
+				// addElemUsable(vis_name)
+				// addElemUsable(vis_description)
+			// } else { // cannot use the charac
+				// remElemUsable(vis_cost)
+				// remElemUsable(vis_name)
+				// remElemUsable(vis_description)
+			// }
+		// })
+	
+		Arr_CharacsVals.forEach(function(val_item) {
+			debug("val_item")
+			const Vis_Item = rsoValue(val_item, Str_PFXVAL, Str_PFXVIS)
+			
+			onuRepItemDo(rep_characs, val_item, function(val_elem) { // reflects val on vis
+				const vis_elem  = getRepElemRelative(rep_characs, val_elem, Vis_Item)
+				const val_value = getElemValue(val_elem)
+				let   vis_value = ""
+				vis_value = val_value ?
+					val_value : vis_value // no default value, val value instead
+				setElemValue(vis_elem, vis_value)
+			})
+			
+			oncRepItemDo(rep_characs, Vis_Item, function(vis_elem) { // click on vis item
+				if (! hasElemUsable(vis_elem)) {return} // cannot use
+				log("roll") //TODO
+			})
+		})
+	
+		// oncRepItemDo(rep_characs, Del_Entry, function(elem) { // child del button
+			// const child = getElemIndex(elem)
+			// delCharacsChildAt(sheet, child)
+		// })
+	
+		// oncRepItemDo(rep_characs, New_Entry, function(elem) { // child new button
+			// const child = getElemIndex(elem)
+			// newCharacsChildAt(sheet, child)
+		// })
+	
+		// oncRepItemDo(rep_characs, Inf_Entry, function(elem) { // child inf button
+			// const child           = getElemIndex(elem)
+			// const vis_cost        = getRepElemRelative(rep_characs, elem, Vis_Cost)
+			// const vis_name        = getRepElemRelative(rep_characs, elem, Vis_Name)
+			// const vis_description = getRepElemRelative(rep_characs, elem, Vis_Description)
+			// const bna_charac        = "Truc"
+
+			// Bindings.clear(Inf_Entry)
+			// Bindings.add(bna_charac, Inf_Entry, Bnd_Gift, function() {
+				// return {
+					// Vis_Cost        : getElemValue(vis_cost),
+					// Vis_Name        : getElemValue(vis_name),
+					// Vis_Description : getElemValue(vis_description),
+				// }
+			// })
+			// Bindings.send(sheet, bna_charac)
+		// })
+
+		// eachRepItemDo(rep_characs, Val_Description, function(val_elem) {
+			// setElemTooltip(val_elem, Tip_Description) // add a description tooltip
+		// })
+
+		eachRepItemDo(rep_characs, Val_Name, function(val_elem) {
+			triggerElem(val_elem) // triggers vals to handle vals added by templates
+		})
+	})
 }
