@@ -485,14 +485,16 @@ const Arr_CharacsReps  = [
 	Rep_CharacsR,
 ]
 const Val_Name         = "Val_Name" // charac name value
+const Val_CharacPts    = "Val_CharacPts" // charac max value
 const Val_Talent       = "Val_Talent" // charac talent value
 const Arr_CharacsVals  = [
 	Val_Name,
+	Val_CharacPts,
 	Val_Talent,
 ]
 const Tpl_Charac       = { // new characs entry template
 	Val_Name           : "",
-	Max_CharacPts      : 0,
+	Val_CharacPts      : 0,
 	Val_Talent         : "",
 }
 //endregion
@@ -811,38 +813,43 @@ function initCharacsPts(sheet) {
 function initCharacsRep(sheet) {
 	debug("initCharacsRep")
 	const cky_characslck  = getElem(sheet, rsoValue(Ckb_CharacsLck, Str_PFXCKB, Str_PFXCKY))
+	const Vis_Name        = rsoValue(Val_Name, Str_PFXVAL, Str_PFXVIS)
 
 	triggerElem(cky_characslck) // triggers lock to set edit or view mode
 
 	Arr_CharacsReps.forEach(function(rep_item) {
-		debug("rep_item")
 		const rep_characs = getElem(sheet, rep_item)
 
 		onuElemDo(rep_characs, function(elem) { // handle characs rep modifications
 			initCharacsRep(sheet)
 		})
 	
+		onuRepItemDo(rep_characs, Vis_Name, function(vis_name) { // handle characs usability
+			addElemUsable(vis_name)
+			
+			oncRepItemDo(rep_characs, Vis_Name, function(vis_name) { // click on vis item
+				log("roll") //TODO
+			})
+		})
+	
 		Arr_CharacsVals.forEach(function(val_item) {
-			debug("val_item")
 			const Vis_Item = rsoValue(val_item, Str_PFXVAL, Str_PFXVIS)
 			
 			onuRepItemDo(rep_characs, val_item, function(val_elem) { // reflects val on vis
 				const vis_elem  = getRepElemRelative(rep_characs, val_elem, Vis_Item)
 				const val_value = getElemValue(val_elem)
-				let   vis_value = ""
+				let   vis_value = val_item == Val_CharacPts ?
+					0 : "" // default value
 				vis_value = val_value ?
 					val_value : vis_value // no default value, val value instead
 				setElemValue(vis_elem, vis_value)
 			})
-			
-			oncRepItemDo(rep_characs, Vis_Item, function(vis_elem) { // click on vis item
-				if (! hasElemUsable(vis_elem)) {return} // cannot use
-				log("roll") //TODO
-			})
 		})
 
-		eachRepItemDo(rep_characs, Val_Name, function(val_elem) {
-			triggerElem(val_elem) // triggers vals to handle vals added by templates
+		Object.keys(Tpl_Charac).forEach(function(val_item) {
+			eachRepItemDo(rep_characs, val_item, function(val_elem) {
+				triggerElem(val_elem) // triggers vals to handle vals added by templates
+			})
 		})
 	})
 }
