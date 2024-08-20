@@ -484,17 +484,17 @@ const Arr_CharacsReps  = [
 	Rep_CharacsC,
 	Rep_CharacsR,
 ]
+const Row_CharacPts    = "Row_CharacPts" // charac pts panel
 const Val_Name         = "Val_Name" // charac name value
-const Val_CharacPts    = "Val_CharacPts" // charac max value
+const Max_CharacPts    = "Max_CharacPts" // charac max value
 const Val_Talent       = "Val_Talent" // charac talent value
 const Arr_CharacsVals  = [
 	Val_Name,
-	Val_CharacPts,
 	Val_Talent,
 ]
 const Tpl_Charac       = { // new characs entry template
 	Val_Name           : "",
-	Val_CharacPts      : 0,
+	Max_CharacPts      : 0,
 	Val_Talent         : "",
 }
 //endregion
@@ -785,8 +785,16 @@ function delCharacsChildren(sheet) {
 	})
 }
 
-function newCharacsChild(sheet, rep_charac) {
-	newRepChild(rep_charac, Tpl_Charac)
+function delCharacsChildAt(sheet, rep_characs, child) { 
+	delRepChildAt(rep_characs, child)
+}
+
+function newCharacsChild(sheet, rep_characs) {
+	newRepChild(rep_characs, Tpl_Charac)
+}
+
+function newCharacsChildAt(sheet, rep_characs, child) {
+	newRepChildAt(rep_characs, child, Tpl_Charac)
 }
 
 function newCharacsChildL(sheet) {
@@ -817,11 +825,25 @@ function initCharacsRep(sheet) {
 
 	triggerElem(cky_characslck) // triggers lock to set edit or view mode
 
-	Arr_CharacsReps.forEach(function(rep_item) {
+	Arr_CharacsReps.forEach(function(rep_item) { // loop on repeaters
 		const rep_characs = getElem(sheet, rep_item)
 
 		onuElemDo(rep_characs, function(elem) { // handle characs rep modifications
 			initCharacsRep(sheet)
+		})
+	
+		Arr_CharacsVals.forEach(function(val_item) { // reflects val on vis
+			const Vis_Item = rsoValue(val_item, Str_PFXVAL, Str_PFXVIS)
+			
+			onuRepItemDo(rep_characs, val_item, function(val_elem) {
+				const vis_elem  = getRepElemRelative(rep_characs, val_elem, Vis_Item)
+				const val_value = getElemValue(val_elem)
+				let   vis_value = false ?
+					0 : "" // default value
+				vis_value = val_value ?
+					val_value : vis_value // no default value, val value instead
+				setElemValue(vis_elem, vis_value)
+			})
 		})
 	
 		onuRepItemDo(rep_characs, Vis_Name, function(vis_name) { // handle characs usability
@@ -831,19 +853,20 @@ function initCharacsRep(sheet) {
 				log("roll") //TODO
 			})
 		})
-	
-		Arr_CharacsVals.forEach(function(val_item) {
-			const Vis_Item = rsoValue(val_item, Str_PFXVAL, Str_PFXVIS)
-			
-			onuRepItemDo(rep_characs, val_item, function(val_elem) { // reflects val on vis
-				const vis_elem  = getRepElemRelative(rep_characs, val_elem, Vis_Item)
-				const val_value = getElemValue(val_elem)
-				let   vis_value = val_item == Val_CharacPts ?
-					0 : "" // default value
-				vis_value = val_value ?
-					val_value : vis_value // no default value, val value instead
-				setElemValue(vis_elem, vis_value)
-			})
+		
+		oncRepItemDo(rep_characs, Del_Entry, function(elem) { // child del button
+			const child = getElemIndex(elem)
+			delCharacsChildAt(sheet, rep_characs, child)
+		})
+		
+		oncRepItemDo(rep_characs, New_Entry, function(elem) { // child new button
+			const child = getElemIndex(elem)
+			newCharacsChildAt(sheet, rep_characs, child)
+		})
+		
+		oncRepItemDo(rep_characs, Inf_Entry, function(elem) { // child inf button
+			const child = getElemIndex(elem)
+			log("inf") //TODO
 		})
 
 		Object.keys(Tpl_Charac).forEach(function(val_item) {
@@ -865,13 +888,11 @@ function initCharacsRoll(sheet) {
 }
 
 function dolockCharacs(sheet) {
-	debug("dolockCharacs")
 	const cky_characslck = getElem(sheet, rsoValue(Ckb_CharacsLck, Str_PFXCKB, Str_PFXCKY))
 	setElemValue(cky_characslck, true)
 }
 
 function delockCharacs(sheet) {
-	debug("delockCharacs")
 	const cky_characslck = getElem(sheet, rsoValue(Ckb_CharacsLck, Str_PFXCKB, Str_PFXCKY))
 	setElemValue(cky_characslck, false)
 }
