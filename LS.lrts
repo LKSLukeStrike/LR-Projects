@@ -153,6 +153,15 @@ function rsaValue(str_value, value_one, value_two) { // replace a string all
 	return str_value.replaceAll(value_one, value_two)
 }
 //endregion
+
+//region LR_Operators Cases
+function cpaValue(value_one) { // capitalize all
+	value_one = value_one.toLowerCase()
+	return value_one.replace(/(^\w{1})|(\s+\w{1})/g, function(letter) {
+		return letter.toUpperCase()
+	})
+}
+//endregion
 //endregion
 
 //region LR_Repeaters
@@ -994,7 +1003,7 @@ function initGiftsRep(sheet) {
 		const vis_cost        = getRepElemRelative(rep_gifts, elem, Vis_Cost)
 		const vis_name        = getRepElemRelative(rep_gifts, elem, Vis_Name)
 		const vis_description = getRepElemRelative(rep_gifts, elem, Vis_Description)
-		const bna_gift        = "Truc"
+		const bna_gift        = cpaValue(getElemValue(vis_name))
 
 		Bindings.clear(Inf_Entry)
 		Bindings.add(bna_gift, Inf_Entry, Bnd_Gift, function() {
@@ -1011,8 +1020,10 @@ function initGiftsRep(sheet) {
 		setElemTooltip(val_elem, Tip_Description) // add a description tooltip
 	})
 
-	eachRepItemDo(rep_gifts, Val_Cost, function(val_elem) {
-		triggerElem(val_elem) // triggers vals to handle vals added by templates
+	Object.keys(Tpl_Gift).forEach(function(val_item) {
+		eachRepItemDo(rep_gifts, val_item, function(val_elem) {
+			triggerElem(val_elem) // triggers vals to handle vals added by templates
+		})
 	})
 }
 

@@ -1,21 +1,8 @@
-	const ckb_characslck = getElem(sheet, Ckb_CharacsLck)
-	const cky_characslck = getElem(sheet, rsoValue(Ckb_CharacsLck, Str_PFXCKB, Str_PFXCKY))
-	const col_characsdel = getElem(sheet, rsoValue(Clk_CharacsDel, Str_PFXCLK, Str_PFXCOL))
-	const col_characsnew = getElem(sheet, rsoValue(Clk_CharacsNew, Str_PFXCLK, Str_PFXCOL))
-
-	oncElemDo(ckb_characslck, function(elem) { // toggle characs lock
-		toggleElem(cky_characslck)
+//region LR_Operators Cases
+function cpaValue(value_one) { // capitalize all
+	value_one = value_one.toLowerCase()
+	return value_one.replace(/(^\w{1})|(\s+\w{1})/g, function(letter) {
+		return letter.toUpperCase()
 	})
-
-	onuElemDo(cky_characslck, function(elem) { // handle characs visibility
-		if (getElemValue(elem)) { // hide characs actions
-			addElemSelected(ckb_characslck)
-			addElemInvisible(col_characsdel)
-			addElemInvisible(col_characsnew)
-		} else { // show characs actions
-			remElemSelected(ckb_characslck)
-			remElemInvisible(col_characsdel)
-			remElemInvisible(col_characsnew)
-		}
-	})
-	triggerElem(cky_characslck) // triggers itself on init
+}
+//endregion
