@@ -11,5 +11,6 @@ diminution des tailles dans les outils droite/gauche ?
 
 drop de carac ?
 
+setElemUsable en btn-truc ?
 
 

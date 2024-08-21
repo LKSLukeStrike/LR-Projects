@@ -315,6 +315,11 @@ const Bnd_Gift      = "Bnd_Gift" // gift binding
 const Bnd_Charac    = "Bnd_Charac" // charac binding
 //endregion
 
+//region LS_Constants Tables
+const Tbl_TypeDices = "Tbl_TypeDices" // dices types table
+const Tbc_RollAdj   = "rolladj" // roll mod adjuster
+//endregion
+
 //region LS_Constants Tooltips
 const Tip_None        = ""
 const Tip_Usable      = "Utiliser"
@@ -394,18 +399,24 @@ function triggerElem(elem) {
 function toggleElem(elem) {
 	return setElemValue(elem, ! getElemValue(elem))
 }
-function incrementElem(elem) {
+function incrementElemAdj(elem, adj) {
 	const elm_value = getElemValue(elem)
-	return setElemValue(elem, elm_value + 1)
+	return setElemValue(elem, elm_value + Number(adj))
+}
+function incrementElem(elem) {
+	return incrementElemAdj(elem, 1)
 }
 function incrementElemMax(elem, max_value) {
 	const elm_value = getElemValue(elem)
 	if (elm_value >= max_value) {return elm_value}
 	return incrementElem(elem)
 }
-function decrementElem(elem) {
+function decrementElemAdj(elem, adj) {
 	const elm_value = getElemValue(elem)
-	return setElemValue(elem, elm_value - 1)
+	return setElemValue(elem, elm_value - Number(adj))
+}
+function decrementElem(elem) {
+	return decrementElemAdj(elem, 1)
 }
 function decrementElemMin(elem, min_value) {
 	const elm_value = getElemValue(elem)
@@ -475,6 +486,12 @@ function hasElemUsable(elem) {
 	return hasElemCss(elem, Css_LSUsable)
 }
 //endregion
+//endregion
+
+//region LS_Tables
+function getTableLineTbc(table, line, tbc) { // get a table line (id) column value
+	return Tables.get(table).get(line)[tbc]
+}
 //endregion
 
 //region LS_Repeaters
@@ -570,10 +587,11 @@ function initHead(sheet) {
 //region Head Pref
 function initPref(sheet) {
 	debug("initPref")
-	const row_pref    = getElem(sheet, Row_Pref)
-	const row_characs = getElem(sheet, Row_Characs)
+	const row_pref      = getElem(sheet, Row_Pref)
+	const row_characs   = getElem(sheet, Row_Characs)
 	const chc_typedices = getElem(sheet, Chc_TypeDices)
 	const val_typedices = getElem(sheet, Val_TypeDices)
+	const val_rolladj   = getElem(sheet, Val_RollAdj)
 
 	initCkbDoDe(sheet, Ckb_PrefSheet
 		, function(ckb_elem) {
@@ -589,10 +607,12 @@ function initPref(sheet) {
 	)
 	
 	onuElemDo(chc_typedices, function(elem) { // adjust the dices type
-		setElemValue(val_typedices, getElemValue(chc_typedices))
-		//TODO setup the according roll modifier
+		const typedices = getElemValue(chc_typedices)
+		setElemValue(val_typedices, typedices)
+		setElemValue(val_rolladj, getTableLineTbc(Tbl_TypeDices, typedices, Tbc_RollAdj))
 	})
-	if (! getElemValue(val_typedices)) {
+	
+	if (! getElemValue(val_typedices)) { // default dices type
 		setElemValue(chc_typedices, Dft_TypeDices)
 	}
 
@@ -938,12 +958,14 @@ function initRoll(sheet) {
 
 function incrementRollMod(sheet) {
 	const val_rollmod = getElem(sheet, rsoValue(Row_RollMod, Str_PFXROW, Str_PFXVAL))
-	incrementElem(val_rollmod)
+	const val_rolladj = getElem(sheet, Val_RollAdj)
+	incrementElemAdj(val_rollmod, getElemValue(val_rolladj))
 }
 
 function decrementRollMod(sheet) {
 	const val_rollmod = getElem(sheet, rsoValue(Row_RollMod, Str_PFXROW, Str_PFXVAL))
-	decrementElem(val_rollmod)
+	const val_rolladj = getElem(sheet, Val_RollAdj)
+	decrementElemAdj(val_rollmod, getElemValue(val_rolladj))
 }
 //endregion
 
