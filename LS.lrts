@@ -312,6 +312,7 @@ function eachRepItemDo(rep, item, do_fct) { // do on each rep child item
 //region LS_Constants Sheets
 const Sht_Character = "main" // character sheet
 const Bnd_Gift      = "Bnd_Gift" // gift binding
+const Bnd_Charac    = "Bnd_Charac" // charac binding
 //endregion
 
 //region LS_Constants Tooltips
@@ -344,6 +345,8 @@ const Row_HealthPts    = "Row_HealthPts" // health pts panel
 const Row_NarrationPts = "Row_NarrationPts" // narration pts panel
 const Row_RollMod      = "Row_RollMod" // roll modifier panel
 const Val_TypeDices    = "Val_TypeDices" // dices type value
+const Val_RollAdj      = "Val_RollAdj" // dices mod adjuster value
+const Val_RollMod      = "Val_RollMod" // dices mod value
 const Row_RollVis      = "Row_RollVis" // roll visibility panel
 const Ckb_RollVis      = "Ckb_RollVis" // roll visibility state
 const Arr_CharacsRolls = [ // characs roll modifiers
@@ -487,6 +490,7 @@ const Arr_CharacsReps  = [
 const Row_CharacPts    = "Row_CharacPts" // charac pts panel
 const Val_Name         = "Val_Name" // charac name value
 const Max_CharacPts    = "Max_CharacPts" // charac max value
+const Val_CharacPts    = "Val_CharacPts" // charac actual value
 const Val_Talent       = "Val_Talent" // charac talent value
 const Arr_CharacsVals  = [
 	Val_Name,
@@ -838,7 +842,7 @@ function initCharacsRep(sheet) {
 			onuRepItemDo(rep_characs, val_item, function(val_elem) {
 				const vis_elem  = getRepElemRelative(rep_characs, val_elem, Vis_Item)
 				const val_value = getElemValue(val_elem)
-				let   vis_value = false ?
+				let   vis_value = val_item == Max_CharacPts ?
 					0 : "" // default value
 				vis_value = val_value ?
 					val_value : vis_value // no default value, val value instead
@@ -865,8 +869,27 @@ function initCharacsRep(sheet) {
 		})
 		
 		oncRepItemDo(rep_characs, Inf_Entry, function(elem) { // child inf button
-			const child = getElemIndex(elem)
-			log("inf") //TODO
+			const child           = getElemIndex(elem)
+			const val_charname    = getElem(sheet, Val_CharName)
+			const val_name        = getRepElemRelative(rep_characs, elem, Val_Name)
+			const max_characpts   = getRepElemRelative(rep_characs, elem, Max_CharacPts)
+			const val_characpts   = getRepElemRelative(rep_characs, elem, Val_CharacPts)
+			const val_talent      = getRepElemRelative(rep_characs, elem, Val_Talent)
+			const val_rolladj     = getElem(sheet, Val_RollAdj)
+			const bna_charac      = getElemValue(val_charname)
+								  + " [" + cpaValue(getElemValue(val_name)) + "]"
+
+			Bindings.clear(Inf_Entry)
+			Bindings.add(bna_charac, Inf_Entry, Bnd_Charac, function() {
+				return {
+					Val_Name      : getElemValue(val_name),
+					Max_CharacPts : getElemValue(max_characpts),
+					Val_CharacPts : getElemValue(val_characpts),
+					Val_Talent    : getElemValue(val_talent),
+					Val_RollAdj   : getElemValue(val_rolladj),
+				}
+			})
+			Bindings.send(sheet, bna_charac)
 		})
 
 		Object.keys(Tpl_Charac).forEach(function(val_item) {
@@ -1028,10 +1051,12 @@ function initGiftsRep(sheet) {
 	
 	oncRepItemDo(rep_gifts, Inf_Entry, function(elem) { // child inf button
 		const child           = getElemIndex(elem)
+		const val_charname    = getElem(sheet, Val_CharName)
 		const vis_cost        = getRepElemRelative(rep_gifts, elem, Vis_Cost)
 		const vis_name        = getRepElemRelative(rep_gifts, elem, Vis_Name)
 		const vis_description = getRepElemRelative(rep_gifts, elem, Vis_Description)
-		const bna_gift        = cpaValue(getElemValue(vis_name))
+		const bna_gift        = getElemValue(val_charname)
+						      + " [" + cpaValue(getElemValue(vis_name)) + "]"
 
 		Bindings.clear(Inf_Entry)
 		Bindings.add(bna_gift, Inf_Entry, Bnd_Gift, function() {
