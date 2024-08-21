@@ -2,7 +2,7 @@
 //region LR_Debug
 const Yes_Debug   = true
 const Not_Debug   = false
-const Dft_Debug   = Yes_Debug
+const Dft_Debug   = Not_Debug
 
 function debug(str_debug) {
 	if (Dft_Debug) {log(str_debug)}
@@ -160,6 +160,13 @@ function cpaValue(value_one) { // capitalize all
 	return value_one.replace(/(^\w{1})|(\s+\w{1})/g, function(letter) {
 		return letter.toUpperCase()
 	})
+}
+//endregion
+
+//region LR_Operators Sign
+function psiValue(value_one) { // plus sign if any
+	return value_one >= 0 ?
+		"+" + value_one : value_one
 }
 //endregion
 //endregion
@@ -874,7 +881,28 @@ function initCharacsRep(sheet) {
 			addElemUsable(vis_name)
 			
 			oncRepItemDo(rep_characs, Vis_Name, function(vis_name) { // click on vis item
-				log("roll") //TODO
+				const val_charname   = getElem(sheet, Val_CharName)
+				const val_characpts  = getRepElemRelative(rep_characs, vis_name, Val_CharacPts)
+				const val_typedices  = getElem(sheet, Val_TypeDices)
+				const val_rollmod    = getElem(sheet, Val_RollMod)
+				const Cky_RollVis    = rsoValue(Ckb_RollVis, Str_PFXCKB, Str_PFXCKY)
+				const str_visibility = getElemValue(getElem(sheet, Cky_RollVis)) ?
+					"gmonly" : "visible"
+				const rna_charac     = getElemValue(val_charname)
+						             + " [" + cpaValue(getElemValue(vis_name))
+						             + " [" + psiValue(getElemValue(val_rollmod))
+									 + "]"
+									 + "]"
+
+				const dice = Dice.create("" + getElemValue(val_characpts) + "")
+					.add(getElemValue(val_rollmod))
+					.minus(getElemValue(val_typedices))
+
+				const roll = new RollBuilder(sheet)
+					.visibility(str_visibility)
+					.expression(dice)
+					.title(rna_charac)
+					.roll()
 			})
 		})
 		

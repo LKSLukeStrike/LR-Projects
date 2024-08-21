@@ -1,10 +1,8 @@
-            let roll = new RollBuilder(sheet);
-            //recupération du type d'action et mise en titre
-            const diceFace = sheet.get(Chc_TypeDices).value() || '1d4'
-            const caracVal = entry.find("caracVal").value() || "0"
-            let dice =
-            Dice.create(""+caracVal+"")
-                .minus(diceFace)
-            roll.expression(dice)
-            roll.title(e.value())
-            roll.roll()
+			const val_charname    = getElem(sheet, Val_CharName)
+			const val_characpts   = getRepElemRelative(rep_characs, vis_name, Val_CharacPts)
+			const dice = Dice.create(""+caracVal+"")
+				.minus(diceFace)
+			const roll = new RollBuilder(sheet)
+			roll.expression(dice)
+			roll.title(e.value())
+			roll.roll()
