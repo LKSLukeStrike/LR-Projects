@@ -2,7 +2,7 @@
 //region LR_Debug
 const Yes_Debug   = true
 const Not_Debug   = false
-const Dft_Debug   = Yes_Debug
+const Dft_Debug   = Not_Debug
 
 function debug(str_debug) {
 	if (Dft_Debug) {log(str_debug)}
@@ -162,6 +162,13 @@ function cpaValue(value_one) { // capitalize all
 	})
 }
 //endregion
+
+//region LR_Operators Sign
+function psiValue(value_one) { // plus sign if any
+	return value_one >= 0 ?
+		"+" + value_one : value_one
+}
+//endregion
 //endregion
 
 //region LR_Repeaters
@@ -312,6 +319,12 @@ function eachRepItemDo(rep, item, do_fct) { // do on each rep child item
 //region LS_Constants Sheets
 const Sht_Character = "main" // character sheet
 const Bnd_Gift      = "Bnd_Gift" // gift binding
+const Bnd_Charac    = "Bnd_Charac" // charac binding
+//endregion
+
+//region LS_Constants Tables
+const Tbl_TypeDices = "Tbl_TypeDices" // dices types table
+const Tbc_RollAdj   = "rolladj" // roll mod adjuster
 //endregion
 
 //region LS_Constants Tooltips
@@ -344,6 +357,8 @@ const Row_HealthPts    = "Row_HealthPts" // health pts panel
 const Row_NarrationPts = "Row_NarrationPts" // narration pts panel
 const Row_RollMod      = "Row_RollMod" // roll modifier panel
 const Val_TypeDices    = "Val_TypeDices" // dices type value
+const Val_RollAdj      = "Val_RollAdj" // dices mod adjuster value
+const Val_RollMod      = "Val_RollMod" // dices mod value
 const Row_RollVis      = "Row_RollVis" // roll visibility panel
 const Ckb_RollVis      = "Ckb_RollVis" // roll visibility state
 const Arr_CharacsRolls = [ // characs roll modifiers
@@ -391,18 +406,24 @@ function triggerElem(elem) {
 function toggleElem(elem) {
 	return setElemValue(elem, ! getElemValue(elem))
 }
-function incrementElem(elem) {
+function incrementElemAdj(elem, adj) {
 	const elm_value = getElemValue(elem)
-	return setElemValue(elem, elm_value + 1)
+	return setElemValue(elem, elm_value + Number(adj))
+}
+function incrementElem(elem) {
+	return incrementElemAdj(elem, 1)
 }
 function incrementElemMax(elem, max_value) {
 	const elm_value = getElemValue(elem)
 	if (elm_value >= max_value) {return elm_value}
 	return incrementElem(elem)
 }
-function decrementElem(elem) {
+function decrementElemAdj(elem, adj) {
 	const elm_value = getElemValue(elem)
-	return setElemValue(elem, elm_value - 1)
+	return setElemValue(elem, elm_value - Number(adj))
+}
+function decrementElem(elem) {
+	return decrementElemAdj(elem, 1)
 }
 function decrementElemMin(elem, min_value) {
 	const elm_value = getElemValue(elem)
@@ -474,6 +495,12 @@ function hasElemUsable(elem) {
 //endregion
 //endregion
 
+//region LS_Tables
+function getTableLineTbc(table, line, tbc) { // get a table line (id) column value
+	return Tables.get(table).get(line)[tbc]
+}
+//endregion
+
 //region LS_Repeaters
 //region LS_Repeaters Characs
 const Rep_CharacsL     = "Rep_CharacsL" // characs repeater left
@@ -484,7 +511,10 @@ const Arr_CharacsReps  = [
 	Rep_CharacsC,
 	Rep_CharacsR,
 ]
+const Row_CharacPts    = "Row_CharacPts" // charac pts panel
 const Val_Name         = "Val_Name" // charac name value
+const Max_CharacPts    = "Max_CharacPts" // charac max value
+const Val_CharacPts    = "Val_CharacPts" // charac actual value
 const Val_Talent       = "Val_Talent" // charac talent value
 const Arr_CharacsVals  = [
 	Val_Name,
@@ -564,10 +594,11 @@ function initHead(sheet) {
 //region Head Pref
 function initPref(sheet) {
 	debug("initPref")
-	const row_pref    = getElem(sheet, Row_Pref)
-	const row_characs = getElem(sheet, Row_Characs)
+	const row_pref      = getElem(sheet, Row_Pref)
+	const row_characs   = getElem(sheet, Row_Characs)
 	const chc_typedices = getElem(sheet, Chc_TypeDices)
 	const val_typedices = getElem(sheet, Val_TypeDices)
+	const val_rolladj   = getElem(sheet, Val_RollAdj)
 
 	initCkbDoDe(sheet, Ckb_PrefSheet
 		, function(ckb_elem) {
@@ -583,10 +614,12 @@ function initPref(sheet) {
 	)
 	
 	onuElemDo(chc_typedices, function(elem) { // adjust the dices type
-		setElemValue(val_typedices, getElemValue(chc_typedices))
-		//TODO setup the according roll modifier
+		const typedices = getElemValue(chc_typedices)
+		setElemValue(val_typedices, typedices)
+		setElemValue(val_rolladj, getTableLineTbc(Tbl_TypeDices, typedices, Tbc_RollAdj))
 	})
-	if (! getElemValue(val_typedices)) {
+	
+	if (! getElemValue(val_typedices)) { // default dices type
 		setElemValue(chc_typedices, Dft_TypeDices)
 	}
 
@@ -783,8 +816,16 @@ function delCharacsChildren(sheet) {
 	})
 }
 
-function newCharacsChild(sheet, rep_charac) {
-	newRepChild(rep_charac, Tpl_Charac)
+function delCharacsChildAt(sheet, rep_characs, child) { 
+	delRepChildAt(rep_characs, child)
+}
+
+function newCharacsChild(sheet, rep_characs) {
+	newRepChild(rep_characs, Tpl_Charac)
+}
+
+function newCharacsChildAt(sheet, rep_characs, child) {
+	newRepChildAt(rep_characs, child, Tpl_Charac)
 }
 
 function newCharacsChildL(sheet) {
@@ -811,38 +852,100 @@ function initCharacsPts(sheet) {
 function initCharacsRep(sheet) {
 	debug("initCharacsRep")
 	const cky_characslck  = getElem(sheet, rsoValue(Ckb_CharacsLck, Str_PFXCKB, Str_PFXCKY))
+	const Vis_Name        = rsoValue(Val_Name, Str_PFXVAL, Str_PFXVIS)
 
 	triggerElem(cky_characslck) // triggers lock to set edit or view mode
 
-	Arr_CharacsReps.forEach(function(rep_item) {
-		debug("rep_item")
+	Arr_CharacsReps.forEach(function(rep_item) { // loop on repeaters
 		const rep_characs = getElem(sheet, rep_item)
 
 		onuElemDo(rep_characs, function(elem) { // handle characs rep modifications
 			initCharacsRep(sheet)
 		})
 	
-		Arr_CharacsVals.forEach(function(val_item) {
-			debug("val_item")
+		Arr_CharacsVals.forEach(function(val_item) { // reflects val on vis
 			const Vis_Item = rsoValue(val_item, Str_PFXVAL, Str_PFXVIS)
 			
-			onuRepItemDo(rep_characs, val_item, function(val_elem) { // reflects val on vis
+			onuRepItemDo(rep_characs, val_item, function(val_elem) {
 				const vis_elem  = getRepElemRelative(rep_characs, val_elem, Vis_Item)
 				const val_value = getElemValue(val_elem)
-				let   vis_value = ""
+				let   vis_value = val_item == Max_CharacPts ?
+					0 : "" // default value
 				vis_value = val_value ?
 					val_value : vis_value // no default value, val value instead
 				setElemValue(vis_elem, vis_value)
 			})
+		})
+	
+		onuRepItemDo(rep_characs, Vis_Name, function(vis_name) { // handle characs usability
+			addElemUsable(vis_name)
 			
-			oncRepItemDo(rep_characs, Vis_Item, function(vis_elem) { // click on vis item
-				if (! hasElemUsable(vis_elem)) {return} // cannot use
-				log("roll") //TODO
+			oncRepItemDo(rep_characs, Vis_Name, function(vis_name) { // click on vis item
+				const val_charname   = getElem(sheet, Val_CharName)
+				const val_characpts  = getRepElemRelative(rep_characs, vis_name, Val_CharacPts)
+				const val_typedices  = getElem(sheet, Val_TypeDices)
+				const val_rollmod    = getElem(sheet, Val_RollMod)
+				const Cky_RollVis    = rsoValue(Ckb_RollVis, Str_PFXCKB, Str_PFXCKY)
+				const str_visibility = getElemValue(getElem(sheet, Cky_RollVis)) ?
+					"gmonly" : "visible"
+				const rna_charac     = getElemValue(val_charname)
+						             + " [" + cpaValue(getElemValue(vis_name))
+						             + " [" + psiValue(getElemValue(val_rollmod))
+									 + "]"
+									 + "]"
+
+				const dice = Dice.create("" + getElemValue(val_characpts) + "")
+					.add(getElemValue(val_rollmod))
+					.minus(getElemValue(val_typedices))
+
+				const roll = new RollBuilder(sheet)
+					.visibility(str_visibility)
+					.expression(dice)
+					.title(rna_charac)
+					.roll()
+					
+				initRoll(sheet)
 			})
 		})
+		
+		oncRepItemDo(rep_characs, Del_Entry, function(elem) { // child del button
+			const child = getElemIndex(elem)
+			delCharacsChildAt(sheet, rep_characs, child)
+		})
+		
+		oncRepItemDo(rep_characs, New_Entry, function(elem) { // child new button
+			const child = getElemIndex(elem)
+			newCharacsChildAt(sheet, rep_characs, child)
+		})
+		
+		oncRepItemDo(rep_characs, Inf_Entry, function(elem) { // child inf button
+			const child           = getElemIndex(elem)
+			const val_charname    = getElem(sheet, Val_CharName)
+			const val_name        = getRepElemRelative(rep_characs, elem, Val_Name)
+			const max_characpts   = getRepElemRelative(rep_characs, elem, Max_CharacPts)
+			const val_characpts   = getRepElemRelative(rep_characs, elem, Val_CharacPts)
+			const val_talent      = getRepElemRelative(rep_characs, elem, Val_Talent)
+			const val_rolladj     = getElem(sheet, Val_RollAdj)
+			const bna_charac      = getElemValue(val_charname)
+								  + " [" + cpaValue(getElemValue(val_name)) + "]"
 
-		eachRepItemDo(rep_characs, Val_Name, function(val_elem) {
-			triggerElem(val_elem) // triggers vals to handle vals added by templates
+			Bindings.clear(Inf_Entry)
+			Bindings.add(bna_charac, Inf_Entry, Bnd_Charac, function() {
+				return {
+					Val_Name      : getElemValue(val_name),
+					Max_CharacPts : getElemValue(max_characpts),
+					Val_CharacPts : getElemValue(val_characpts),
+					Val_Talent    : getElemValue(val_talent),
+					Val_RollAdj   : getElemValue(val_rolladj),
+				}
+			})
+			Bindings.send(sheet, bna_charac)
+		})
+
+		Object.keys(Tpl_Charac).forEach(function(val_item) {
+			eachRepItemDo(rep_characs, val_item, function(val_elem) {
+				triggerElem(val_elem) // triggers vals to handle vals added by templates
+			})
 		})
 	})
 }
@@ -858,13 +961,11 @@ function initCharacsRoll(sheet) {
 }
 
 function dolockCharacs(sheet) {
-	debug("dolockCharacs")
 	const cky_characslck = getElem(sheet, rsoValue(Ckb_CharacsLck, Str_PFXCKB, Str_PFXCKY))
 	setElemValue(cky_characslck, true)
 }
 
 function delockCharacs(sheet) {
-	debug("delockCharacs")
 	const cky_characslck = getElem(sheet, rsoValue(Ckb_CharacsLck, Str_PFXCKB, Str_PFXCKY))
 	setElemValue(cky_characslck, false)
 }
@@ -887,12 +988,14 @@ function initRoll(sheet) {
 
 function incrementRollMod(sheet) {
 	const val_rollmod = getElem(sheet, rsoValue(Row_RollMod, Str_PFXROW, Str_PFXVAL))
-	incrementElem(val_rollmod)
+	const val_rolladj = getElem(sheet, Val_RollAdj)
+	incrementElemAdj(val_rollmod, getElemValue(val_rolladj))
 }
 
 function decrementRollMod(sheet) {
 	const val_rollmod = getElem(sheet, rsoValue(Row_RollMod, Str_PFXROW, Str_PFXVAL))
-	decrementElem(val_rollmod)
+	const val_rolladj = getElem(sheet, Val_RollAdj)
+	decrementElemAdj(val_rollmod, getElemValue(val_rolladj))
 }
 //endregion
 
@@ -1000,10 +1103,12 @@ function initGiftsRep(sheet) {
 	
 	oncRepItemDo(rep_gifts, Inf_Entry, function(elem) { // child inf button
 		const child           = getElemIndex(elem)
+		const val_charname    = getElem(sheet, Val_CharName)
 		const vis_cost        = getRepElemRelative(rep_gifts, elem, Vis_Cost)
 		const vis_name        = getRepElemRelative(rep_gifts, elem, Vis_Name)
 		const vis_description = getRepElemRelative(rep_gifts, elem, Vis_Description)
-		const bna_gift        = cpaValue(getElemValue(vis_name))
+		const bna_gift        = getElemValue(val_charname)
+						      + " [" + cpaValue(getElemValue(vis_name)) + "]"
 
 		Bindings.clear(Inf_Entry)
 		Bindings.add(bna_gift, Inf_Entry, Bnd_Gift, function() {
@@ -1091,9 +1196,7 @@ function initRowPts(sheet, row_item) { // init a pts block (clk, max, adj)
 	})
 	
 	onuElemDo(max_elem, function(elem) { // adjust current value
-		if (getElemValue(max_elem) < getElemValue(val_elem)) {
-			setElemValue(val_elem, getElemValue(max_elem))
-		}
+		setElemValue(val_elem, getElemValue(max_elem))
 	})
 	
 	oncElemDo(inc_elem, function(elem) { // increment current value

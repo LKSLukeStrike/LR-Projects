@@ -903,8 +903,12 @@ function initCharacsRep(sheet) {
 					.expression(dice)
 					.title(rna_charac)
 					.roll()
+					
+				initRoll(sheet)
 			})
 		})
+
+		initRepRowPts(rep_characs, Row_CharacPts) // init all pts blocks
 		
 		oncRepItemDo(rep_characs, Del_Entry, function(elem) { // child del button
 			const child = getElemIndex(elem)
@@ -1263,6 +1267,38 @@ function initCkbDoDe(sheet, ckb_item, do_fct, de_fct) { // init a checkbox + fct
 	})
 	
 	triggerElem(cky_elem) // triggers on init
+}
+
+function initRepRowPts(rep, row_item) { // init a pts block (clk, max, adj) in a repeater
+	const clk_item = rsoValue(row_item, Str_PFXROW, Str_PFXCLK)
+	const max_item = rsoValue(row_item, Str_PFXROW, Str_PFXMAX)
+	const inc_item = rsoValue(row_item, Str_PFXROW, Str_PFXINC)
+	const dec_item = rsoValue(row_item, Str_PFXROW, Str_PFXDEC)
+	const val_item = rsoValue(row_item, Str_PFXROW, Str_PFXVAL)
+
+	eachRepItemDo(rep, row_item, function(elem) {
+		const clk_elem = getRepElemRelative(rep, elem, clk_item)
+		const max_elem = getRepElemRelative(rep, elem, max_item)
+		const inc_elem = getRepElemRelative(rep, elem, inc_item)
+		const dec_elem = getRepElemRelative(rep, elem, dec_item)
+		const val_elem = getRepElemRelative(rep, elem, val_item)
+		
+		oncElemDo(clk_elem, function(elem) { // restore max value
+			setElemValue(val_elem, getElemValue(max_elem))
+		})
+		
+		onuElemDo(max_elem, function(elem) { // adjust current value
+			setElemValue(val_elem, getElemValue(max_elem))
+		})
+		
+		oncElemDo(inc_elem, function(elem) { // increment current value
+			incrementElemMax(val_elem, getElemValue(max_elem))
+		})
+		
+		oncElemDo(dec_elem, function(elem) { // decrement current value
+			decrementElemMin(val_elem, 0)
+		})
+	})
 }
 //endregion
 
