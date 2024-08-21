@@ -1144,9 +1144,7 @@ function initRowPts(sheet, row_item) { // init a pts block (clk, max, adj)
 	})
 	
 	onuElemDo(max_elem, function(elem) { // adjust current value
-		if (getElemValue(max_elem) < getElemValue(val_elem)) {
-			setElemValue(val_elem, getElemValue(max_elem))
-		}
+		setElemValue(val_elem, getElemValue(max_elem))
 	})
 	
 	oncElemDo(inc_elem, function(elem) { // increment current value
