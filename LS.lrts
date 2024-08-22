@@ -812,7 +812,7 @@ function initCharacs(sheet) {
 }
 
 function delCharacsChildren(sheet) {
-	Arr_CharacsReps.forEach(function (rep_item) {
+	Arr_CharacsReps.forEach(function(rep_item) {
 		const rep_elem = getElem(sheet, rep_item)
 		delRepChildren(rep_elem)
 	})
@@ -994,7 +994,14 @@ function initRoll(sheet) {
 		setElemValue(cky_elem, false)
 	})
 	
-	//TODO cleanup all repeaters
+	Arr_CharacsReps.forEach(function(rep_item) { // cleanup all talent checkboxes
+		const rep_elem   = getElem(sheet, rep_item)
+		const Cky_Talent = rsoValue(Ckb_Talent, Str_PFXCKB, Str_PFXCKY)
+
+		eachRepItemDo(rep_elem, Cky_Talent, function(cky_talent) {
+			setElemValue(cky_talent, false)
+		})
+	})
 	
 	setElemValue(val_rollmod, 0) // cleanup roll modifier
 }
