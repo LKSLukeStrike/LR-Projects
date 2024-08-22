@@ -313,10 +313,16 @@ const Bnd_Charac    = "Bnd_Charac" // charac binding
 //endregion
 
 //region LS_Constants Tables
-const Tbc_Id            = "id" // tables common id
-const Tbl_TypeDices     = "Tbl_TypeDices" // dices types table
-const Tbc_RollAdj       = "rolladj" // roll mod adjuster
-const Tbl_CharacsColors = "Tbl_CharacsColors" // caracs colors table
+const Tbc_Id             = "id" // tables common id
+const Tbl_TypeDices      = "Tbl_TypeDices" // dices types table
+const Tbc_RollAdj        = "rolladj" // roll mod adjuster
+const Tbl_CharacsColors  = "Tbl_CharacsColors" // caracs colors table
+const Tbl_CharacsPresets = "Tbl_CharacsPresets" // caracs presets table
+//endregion
+
+//region LS_Constants Presets
+const Pst_None = "Pst_None" // none preset
+const Pst_PMSC = "Pst_PMSC" // pmsc preset
 //endregion
 
 //region LS_Constants Tooltips
@@ -519,6 +525,41 @@ const Tpl_Charac       = { // new characs entry template
 	Val_Name           : "",
 	Max_CharacPts      : 0,
 	Val_Talent         : "",
+	Chc_CharacColor    : "text-light border-light",
+}
+const Pst_Characs      = { // characs presets
+	Pst_PMSC : { // physique, mental, social, chance preset
+		Rep_CharacsL : {
+			1 : {
+				Val_Name           : "physique",
+				Max_CharacPts      : 0,
+				Val_Talent         : "",
+				Chc_CharacColor    : "text-danger border-danger",
+			},
+		},
+		Rep_CharacsC : {
+			1 : {
+				Val_Name           : "mental",
+				Max_CharacPts      : 0,
+				Val_Talent         : "",
+				Chc_CharacColor    : "text-primary border-primary",
+			},
+			2 : {
+				Val_Name           : "chance",
+				Max_CharacPts      : 0,
+				Val_Talent         : "",
+				Chc_CharacColor    : "text-warning border-warning",
+			},
+		},
+		Rep_CharacsR : {
+			1 : {
+				Val_Name           : "social",
+				Max_CharacPts      : 0,
+				Val_Talent         : "",
+				Chc_CharacColor    : "text-success border-success",
+			},
+		},
+	},
 }
 //endregion
 
@@ -733,6 +774,19 @@ function initCharacs(sheet) {
 	const col_characsnewr = getElem(sheet, rsoValue(Clk_CharacsNewR, Str_PFXCLK, Str_PFXCOL))
 
 	setElemTooltip(chc_characspst, Tip_Presets)
+	
+	onuElemDo(chc_characspst, function(chc_characspst) {
+		const pst_characs = getElemValue(chc_characspst)
+		if (pst_characs == Pst_None) {return} // do nothing
+
+		Object.keys(Pst_Characs[pst_characs]).forEach(function(rep_item) { // loop on reps
+			const rep_elem = getElem(sheet, rep_item)
+			delRepChildren(rep_elem) // cleanup the repeater
+			Object.keys(Pst_Characs[pst_characs][rep_item]).forEach(function(key_item) {
+				newRepChild(rep_elem, Pst_Characs[pst_characs][rep_item][key_item])
+			})
+		})
+	})
 
 	initCkbDoDe(sheet, Ckb_CharacsLck // toggle characs lock
 		, function(ckb_elem) {

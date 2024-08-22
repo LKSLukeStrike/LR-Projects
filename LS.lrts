@@ -775,7 +775,7 @@ function initCharacs(sheet) {
 
 	setElemTooltip(chc_characspst, Tip_Presets)
 	
-	onuElemDo(chc_characspst, function(chc_characspst) {
+	onuElemDo(chc_characspst, function(chc_characspst) { // fillout a preset
 		const pst_characs = getElemValue(chc_characspst)
 		if (pst_characs == Pst_None) {return} // do nothing
 
@@ -796,6 +796,7 @@ function initCharacs(sheet) {
 			addElemInvisible(col_characsnewl)
 			addElemInvisible(col_characsnewc)
 			addElemInvisible(col_characsnewr)
+			doviewCharacs(sheet)
 		}
 		, function(ckb_elem) {
 			remElemDolocked(ckb_elem)
@@ -804,6 +805,7 @@ function initCharacs(sheet) {
 			remElemInvisible(col_characsnewl)
 			remElemInvisible(col_characsnewc)
 			remElemInvisible(col_characsnewr)
+			doeditCharacs(sheet)
 		}
 	)
 
@@ -1035,6 +1037,20 @@ function dolockCharacs(sheet) {
 function delockCharacs(sheet) {
 	const cky_characslck = getElem(sheet, rsoValue(Ckb_CharacsLck, Str_PFXCKB, Str_PFXCKY))
 	setElemValue(cky_characslck, false)
+}
+
+function doviewCharacs(sheet) {
+	Arr_CharacsReps.forEach(function(rep_item) { // loop on repeaters
+		const rep_characs = getElem(sheet, rep_item)
+		doviewRep(rep_characs)
+	})
+}
+
+function doeditCharacs(sheet) {
+	Arr_CharacsReps.forEach(function(rep_item) { // loop on repeaters
+		const rep_characs = getElem(sheet, rep_item)
+		doeditRep(rep_characs)
+	})
 }
 //endregion
 
