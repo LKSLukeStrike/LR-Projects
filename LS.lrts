@@ -313,8 +313,10 @@ const Bnd_Charac    = "Bnd_Charac" // charac binding
 //endregion
 
 //region LS_Constants Tables
-const Tbl_TypeDices = "Tbl_TypeDices" // dices types table
-const Tbc_RollAdj   = "rolladj" // roll mod adjuster
+const Tbc_Id            = "id" // tables common id
+const Tbl_TypeDices     = "Tbl_TypeDices" // dices types table
+const Tbc_RollAdj       = "rolladj" // roll mod adjuster
+const Tbl_CharacsColors = "Tbl_CharacsColors" // caracs colors table
 //endregion
 
 //region LS_Constants Tooltips
@@ -508,6 +510,7 @@ const Max_CharacPts    = "Max_CharacPts" // charac max value
 const Val_CharacPts    = "Val_CharacPts" // charac actual value
 const Val_Talent       = "Val_Talent" // charac talent value
 const Ckb_Talent       = "Ckb_Talent" // charac talent checkbox
+const Chc_CharacColor  = "Chc_CharacColor" // charac color choice
 const Arr_CharacsVals  = [
 	Val_Name,
 	Val_Talent,
@@ -543,12 +546,6 @@ init = function(sheet){
 	if (sheet.id() === Sht_Character) {initCharacter(sheet)}
 }
 
-drop = function(from, to) { // TODO remove ?
-    if (from.id() === "caracEdit" && to.id() === "main") {
-        return "caracRepeater"
-    }
-}
-
 
 function initCharacter(sheet) {
 	initPreset(sheet)
@@ -557,11 +554,6 @@ function initCharacter(sheet) {
 	initCharacs(sheet)
 	initRoll(sheet)
 	initGifts(sheet)
-
-	// switchSide(sheet)
-	// launchBtn(sheet)
-	// options(sheet)
-	// toggleEdit(sheet)
 }
 
 //region Preset
@@ -860,7 +852,23 @@ function initCharacsRep(sheet) {
 		})
 	
 		onuRepItemDo(rep_characs, Vis_Name, function(vis_name) { // handle characs usability
+			function setCharacColor() { // set the carac vis name color
+				const chc_characcolor  = getRepElemRelative(rep_characs, vis_name, Chc_CharacColor)
+				
+				Tables.get(Tbl_CharacsColors).each(function(line) { // remove all colors
+					const css_color = line[Tbc_Id]
+					remElemCss(vis_name, css_color)
+				})
+				
+				addElemCss(vis_name, getElemValue(chc_characcolor)) // set the current color
+			}
+
 			addElemUsable(vis_name)
+			setCharacColor()
+			
+			onuRepItemDo(rep_characs, Chc_CharacColor, function(chc_characcolor) {
+				setCharacColor()
+			})
 			
 			oncRepItemDo(rep_characs, Vis_Name, function(vis_name) { // click on vis item
 				const val_charname   = getElem(sheet, Val_CharName)

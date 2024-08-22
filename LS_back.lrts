@@ -1,14 +1,4 @@
 //region LR_ (LR Library)
-//region LR_Debug
-const Yes_Debug   = true
-const Not_Debug   = false
-const Dft_Debug   = Not_Debug
-
-function debug(str_debug) {
-	if (Dft_Debug) {log(str_debug)}
-}
-//endregion
-
 //region LR_Constants
 //region LR_Constants Values
 const Int_Zero     = 0
@@ -576,7 +566,6 @@ function initCharacter(sheet) {
 
 //region Preset
 function initPreset(sheet) {
-	debug("initPreset")
 	setElemValue(getElem(sheet, Ckb_Activity), ":ga_check-mark:")
 	setElemValue(getElem(sheet, Ckb_SocialRank), ":ga_check-mark:")
 	setElemValue(getElem(sheet, Ckb_CharacsLck), ":lock: Caracs :lock:")
@@ -586,7 +575,6 @@ function initPreset(sheet) {
 
 //region Head
 function initHead(sheet) {
-	debug("initHead")
 	initPref(sheet)
 	initCharName(sheet)
 	initLock(sheet)
@@ -595,7 +583,6 @@ function initHead(sheet) {
 
 //region Head Pref
 function initPref(sheet) {
-	debug("initPref")
 	const row_pref      = getElem(sheet, Row_Pref)
 	const row_characs   = getElem(sheet, Row_Characs)
 	const chc_typedices = getElem(sheet, Chc_TypeDices)
@@ -629,12 +616,11 @@ function initPref(sheet) {
 }
 
 function initPrefTabs(sheet) {
-	debug("initPrefTabs")
 	Arr_TAB.forEach(function(tab_item) { // reflect active tabs
-		const clk_item = rsoValue(tab_item, Str_PFXTAB, Str_PFXCLK)
-		const clk_elem = getElem(sheet, clk_item)
-		const prf_item = rsoValue(tab_item, Str_PFXTAB, Str_PFXPRF)
-		const prf_elem = getElem(sheet, prf_item)
+		const Clk_Item = rsoValue(tab_item, Str_PFXTAB, Str_PFXCLK)
+		const clk_elem = getElem(sheet, Clk_Item)
+		const Prf_Item = rsoValue(tab_item, Str_PFXTAB, Str_PFXPRF)
+		const prf_elem = getElem(sheet, Prf_Item)
 		
 		if (getElemValue(prf_elem)) {
 			addElemSelected(clk_elem)
@@ -651,7 +637,6 @@ function initPrefTabs(sheet) {
 
 //region Head Name
 function initCharName(sheet) {
- 	debug("initCharName")
 	if (! getElemValue(getElem(sheet, Val_CharName))) {
 		setElemValue(getElem(sheet, Val_CharName), sheet.properName())
 	}
@@ -660,7 +645,6 @@ function initCharName(sheet) {
 
 //region Head Lock
 function initLock(sheet) {
-	debug("initLock")
 	initCkbDoDe(sheet, Ckb_LockSheet
 		, function(ckb_elem) {
 			addElemDolocked(ckb_elem)
@@ -678,15 +662,14 @@ function initLock(sheet) {
 
 //region Tabs
 function initTabs(sheet) {
-	debug("initTabs")
 	const cky_prefsheet = getElem(sheet, rsoValue(Ckb_PrefSheet, Str_PFXCKB, Str_PFXCKY))
 
 	Arr_TAB.forEach(function(tab_item) {
 		const tab_elem = getElem(sheet, tab_item)
-		const prf_item = rsoValue(tab_item, Str_PFXTAB, Str_PFXPRF)
-		const prf_elem = getElem(sheet, prf_item)
-		const col_item = rsoValue(tab_item, Str_PFXTAB, Str_PFXCOL)
-		const col_elem = getElem(sheet, col_item)
+		const Prf_Item = rsoValue(tab_item, Str_PFXTAB, Str_PFXPRF)
+		const prf_elem = getElem(sheet, Prf_Item)
+		const Col_Item = rsoValue(tab_item, Str_PFXTAB, Str_PFXCOL)
+		const col_elem = getElem(sheet, Col_Item)
 		oncElemDo(tab_elem, function(elem) { // toggle on click
 			if (hasElemSelected(elem)) { // toggle itself
 				deselectTab(sheet, tab_item)
@@ -714,10 +697,10 @@ function initTabs(sheet) {
 
 function doselectTab(sheet, tab_item) { // doselect one tab
 	const tab_elem = getElem(sheet, tab_item)
-	const row_item = rsoValue(tab_item, Str_PFXTAB, Str_PFXROW)
-	const row_elem = getElem(sheet, row_item)
-	const prf_item = rsoValue(tab_item, Str_PFXTAB, Str_PFXPRF)
-	const prf_elem = getElem(sheet, prf_item)
+	const Row_Item = rsoValue(tab_item, Str_PFXTAB, Str_PFXROW)
+	const row_elem = getElem(sheet, Row_Item)
+	const Prf_Item = rsoValue(tab_item, Str_PFXTAB, Str_PFXPRF)
+	const prf_elem = getElem(sheet, Prf_Item)
 	if (! getElemValue(prf_elem)) {return} // ignore hidden tabs
 
 	addElemSelected(tab_elem)
@@ -726,10 +709,10 @@ function doselectTab(sheet, tab_item) { // doselect one tab
 
 function deselectTab(sheet, tab_item) { // deselect one tab
 	const tab_elem = getElem(sheet, tab_item)
-	const row_item = rsoValue(tab_item, Str_PFXTAB, Str_PFXROW)
-	const row_elem = getElem(sheet, row_item)
-	const prf_item = rsoValue(tab_item, Str_PFXTAB, Str_PFXPRF)
-	const prf_elem = getElem(sheet, prf_item)
+	const Row_Item = rsoValue(tab_item, Str_PFXTAB, Str_PFXROW)
+	const row_elem = getElem(sheet, Row_Item)
+	const Prf_Item = rsoValue(tab_item, Str_PFXTAB, Str_PFXPRF)
+	const prf_elem = getElem(sheet, Prf_Item)
 
 	remElemSelected(tab_elem)
 	remElemDisplayed(row_elem)
@@ -744,7 +727,6 @@ function deselectTabAll(sheet) { // deselect all tabs
 
 //region Characs
 function initCharacs(sheet) {
-	debug("initCharacs")
 	const clk_characsdel  = getElem(sheet, Clk_CharacsDel)
 	const col_characsdel  = getElem(sheet, rsoValue(Clk_CharacsDel, Str_PFXCLK, Str_PFXCOL))
 	const chc_characspst  = getElem(sheet, Chc_CharacsPst)
@@ -846,13 +828,11 @@ function newCharacsChildR(sheet) {
 }
 
 function initCharacsPts(sheet) {
-	debug("initCharacsPts")
 	initRowPts(sheet, Row_HealthPts)
 	initRowPts(sheet, Row_NarrationPts)
 }
 
 function initCharacsRep(sheet) {
-	debug("initCharacsRep")
 	const cky_characslck  = getElem(sheet, rsoValue(Ckb_CharacsLck, Str_PFXCKB, Str_PFXCKY))
 	const Vis_Name        = rsoValue(Val_Name, Str_PFXVAL, Str_PFXVIS)
 
@@ -964,7 +944,6 @@ function initCharacsRep(sheet) {
 }
 
 function initCharacsRoll(sheet) {
-	debug("initCharacsRoll")
 	initRowModDo(sheet, Row_RollMod // reset roll mod and checkboxes
 		, function(clk_elem) {
 			initRoll(sheet)
@@ -986,7 +965,6 @@ function delockCharacs(sheet) {
 
 //region Roll
 function initRoll(sheet) {
-	debug("initRoll")
 	const val_rollmod = getElem(sheet, rsoValue(Row_RollMod, Str_PFXROW, Str_PFXVAL))
 
 	Arr_CharacsRolls.forEach(function(ckb_item) { // cleanup activity & socialrank
