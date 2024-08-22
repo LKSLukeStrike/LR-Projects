@@ -1,24 +1,30 @@
-
-function initRepCkbDoDe(rep, ckb_item, do_fct, de_fct) { // init a rep ckb + fct on do/de
-	const Cky_Item = rsoValue(ckb_item, Str_PFXCKB, Str_PFXCKY)
-
-	eachRepItemDo(rep, ckb_item, function(ckb_elem) {
-		const cky_elem = getRepElemRelative(rep, ckb_elem, Cky_Item)
-		
-		oncElemDo(ckb_elem, function(ckb_elem) { // toggle related cky elem
-			toggleElem(cky_elem)
-		})
-		
-		onuElemDo(cky_elem, function(cky_elem) { // reflect checkbox state
-			if (getElemValue(cky_elem)) { // doselect checkbox
-				addElemSelected(ckb_elem)
-				do_fct(ckb_elem) // triggers the doselect fct
-			} else { // deselect checkbox
-				remElemSelected(ckb_elem)
-				de_fct(ckb_elem) // triggers the deselect fct
-			}
-		})
-		
-		triggerElem(cky_elem) // triggers on init
-	})
+const Pst_Characs      = { // characs presets
+	Pst_PMSC : { // physique, mental, social, chance preset
+		Rep_CharacsL : {
+			1 : {
+				Val_Name           : "physique",
+				Max_CharacPts      : 0,
+				Val_Talent         : "",
+			},
+		},
+		Rep_CharacsC : {
+			1 : {
+				Val_Name           : "mental",
+				Max_CharacPts      : 0,
+				Val_Talent         : "",
+			},
+			2 : {
+				Val_Name           : "chance",
+				Max_CharacPts      : 0,
+				Val_Talent         : "",
+			},
+		},
+		Rep_CharacsR : {
+			1 : {
+				Val_Name           : "social",
+				Max_CharacPts      : 0,
+				Val_Talent         : "",
+			},
+		},
+	},
 }
