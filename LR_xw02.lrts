@@ -1,6 +1,24 @@
-const Val_Name         = "Val_Name" // charac name value
-const Val_Talent       = "Val_Talent" // charac talent value
-const Arr_CharacsVals  = [
-	Val_Name,
-	Val_Talent,
-]
+
+function initRepCkbDoDe(rep, ckb_item, do_fct, de_fct) { // init a rep ckb + fct on do/de
+	const Cky_Item = rsoValue(ckb_item, Str_PFXCKB, Str_PFXCKY)
+
+	eachRepItemDo(rep, ckb_item, function(ckb_elem) {
+		const cky_elem = getRepElemRelative(rep, ckb_elem, Cky_Item)
+		
+		oncElemDo(ckb_elem, function(ckb_elem) { // toggle related cky elem
+			toggleElem(cky_elem)
+		})
+		
+		onuElemDo(cky_elem, function(cky_elem) { // reflect checkbox state
+			if (getElemValue(cky_elem)) { // doselect checkbox
+				addElemSelected(ckb_elem)
+				do_fct(ckb_elem) // triggers the doselect fct
+			} else { // deselect checkbox
+				remElemSelected(ckb_elem)
+				de_fct(ckb_elem) // triggers the deselect fct
+			}
+		})
+		
+		triggerElem(cky_elem) // triggers on init
+	})
+}

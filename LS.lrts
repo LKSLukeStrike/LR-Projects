@@ -332,6 +332,7 @@ const Tip_None        = ""
 const Tip_Usable      = "Utiliser"
 const Tip_Presets     = "Presets"
 const Tip_Description = "Description"
+const Tip_Color       = "Couleur"
 //endregion
 
 //region LS_Constants Items (IDs)
@@ -516,6 +517,7 @@ const Val_Name         = "Val_Name" // charac name value
 const Max_CharacPts    = "Max_CharacPts" // charac max value
 const Val_CharacPts    = "Val_CharacPts" // charac actual value
 const Val_Talent       = "Val_Talent" // charac talent value
+const Ckb_Talent       = "Ckb_Talent" // charac talent checkbox
 const Arr_CharacsVals  = [
 	Val_Name,
 	Val_Talent,
@@ -909,6 +911,15 @@ function initCharacsRep(sheet) {
 		})
 
 		initRepRowPts(rep_characs, Row_CharacPts) // init all pts blocks
+
+		initRepCkbDoDe(rep_characs, Ckb_Talent // init all talent checkboxes
+			, function(ckb_elem) {
+				incrementRollMod(sheet)
+			}
+			, function(ckb_elem) {
+				decrementRollMod(sheet)
+			}
+		)
 		
 		oncRepItemDo(rep_characs, Del_Entry, function(elem) { // child del button
 			const child = getElemIndex(elem)
@@ -954,12 +965,12 @@ function initCharacsRep(sheet) {
 
 function initCharacsRoll(sheet) {
 	debug("initCharacsRoll")
-	initRowModDo(sheet, Row_RollMod
+	initRowModDo(sheet, Row_RollMod // reset roll mod and checkboxes
 		, function(clk_elem) {
 			initRoll(sheet)
 		}
 	)
-	initCkb(sheet, Ckb_RollVis)
+	initCkb(sheet, Ckb_RollVis) // roll visibility gm/all
 }
 
 function dolockCharacs(sheet) {
@@ -1270,34 +1281,58 @@ function initCkbDoDe(sheet, ckb_item, do_fct, de_fct) { // init a checkbox + fct
 }
 
 function initRepRowPts(rep, row_item) { // init a pts block (clk, max, adj) in a repeater
-	const clk_item = rsoValue(row_item, Str_PFXROW, Str_PFXCLK)
-	const max_item = rsoValue(row_item, Str_PFXROW, Str_PFXMAX)
-	const inc_item = rsoValue(row_item, Str_PFXROW, Str_PFXINC)
-	const dec_item = rsoValue(row_item, Str_PFXROW, Str_PFXDEC)
-	const val_item = rsoValue(row_item, Str_PFXROW, Str_PFXVAL)
+	const Clk_Item = rsoValue(row_item, Str_PFXROW, Str_PFXCLK)
+	const Max_Item = rsoValue(row_item, Str_PFXROW, Str_PFXMAX)
+	const Inc_Item = rsoValue(row_item, Str_PFXROW, Str_PFXINC)
+	const Dec_Item = rsoValue(row_item, Str_PFXROW, Str_PFXDEC)
+	const Val_Item = rsoValue(row_item, Str_PFXROW, Str_PFXVAL)
 
-	eachRepItemDo(rep, row_item, function(elem) {
-		const clk_elem = getRepElemRelative(rep, elem, clk_item)
-		const max_elem = getRepElemRelative(rep, elem, max_item)
-		const inc_elem = getRepElemRelative(rep, elem, inc_item)
-		const dec_elem = getRepElemRelative(rep, elem, dec_item)
-		const val_elem = getRepElemRelative(rep, elem, val_item)
+	eachRepItemDo(rep, row_item, function(row_elem) {
+		const clk_elem = getRepElemRelative(rep, row_elem, Clk_Item)
+		const max_elem = getRepElemRelative(rep, row_elem, Max_Item)
+		const inc_elem = getRepElemRelative(rep, row_elem, Inc_Item)
+		const dec_elem = getRepElemRelative(rep, row_elem, Dec_Item)
+		const val_elem = getRepElemRelative(rep, row_elem, Val_Item)
 		
-		oncElemDo(clk_elem, function(elem) { // restore max value
+		oncElemDo(clk_elem, function(clk_elem) { // restore max value
 			setElemValue(val_elem, getElemValue(max_elem))
 		})
 		
-		onuElemDo(max_elem, function(elem) { // adjust current value
+		onuElemDo(max_elem, function(max_elem) { // adjust current value
 			setElemValue(val_elem, getElemValue(max_elem))
 		})
 		
-		oncElemDo(inc_elem, function(elem) { // increment current value
+		oncElemDo(inc_elem, function(inc_elem) { // increment current value
 			incrementElemMax(val_elem, getElemValue(max_elem))
 		})
 		
-		oncElemDo(dec_elem, function(elem) { // decrement current value
+		oncElemDo(dec_elem, function(dec_elem) { // decrement current value
 			decrementElemMin(val_elem, 0)
 		})
+	})
+}
+
+function initRepCkbDoDe(rep, ckb_item, do_fct, de_fct) { // init a rep ckb + fct on do/de
+	const Cky_Item = rsoValue(ckb_item, Str_PFXCKB, Str_PFXCKY)
+
+	eachRepItemDo(rep, ckb_item, function(ckb_elem) {
+		const cky_elem = getRepElemRelative(rep, ckb_elem, Cky_Item)
+		
+		oncElemDo(ckb_elem, function(ckb_elem) { // toggle related cky elem
+			toggleElem(cky_elem)
+		})
+		
+		onuElemDo(cky_elem, function(cky_elem) { // reflect checkbox state
+			if (getElemValue(cky_elem)) { // doselect checkbox
+				addElemSelected(ckb_elem)
+				do_fct(ckb_elem) // triggers the doselect fct
+			} else { // deselect checkbox
+				remElemSelected(ckb_elem)
+				de_fct(ckb_elem) // triggers the deselect fct
+			}
+		})
+		
+		triggerElem(cky_elem) // triggers on init
 	})
 }
 //endregion
