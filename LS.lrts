@@ -836,8 +836,12 @@ function initCharacsRep(sheet) {
 		onuElemDo(rep_characs, function(elem) { // handle characs rep modifications
 			initCharacsRep(sheet)
 		})
+
+		eachRepItemDo(rep_characs, Chc_CharacColor, function(chc_characcolor) {
+			setElemTooltip(chc_characcolor, Tip_Color) // tooltip for color choices
+		})
 	
-		Arr_CharacsVals.forEach(function(val_item) { // reflects val on vis
+		Arr_CharacsVals.forEach(function(val_item) { // reflects vals on vis
 			const Vis_Item = rsoValue(val_item, Str_PFXVAL, Str_PFXVIS)
 			
 			onuRepItemDo(rep_characs, val_item, function(val_elem) {
@@ -852,22 +856,29 @@ function initCharacsRep(sheet) {
 		})
 	
 		onuRepItemDo(rep_characs, Vis_Name, function(vis_name) { // handle characs usability
-			function setCharacColor() { // set the carac vis name color
-				const chc_characcolor  = getRepElemRelative(rep_characs, vis_name, Chc_CharacColor)
+			const val_name  = getRepElemRelative(rep_characs, vis_name, Val_Name)
+
+			function setCharacColor(elem) { // set a carac elem color
+				const chc_characcolor  = getRepElemRelative(rep_characs, elem, Chc_CharacColor)
 				
 				Tables.get(Tbl_CharacsColors).each(function(line) { // remove all colors
 					const css_color = line[Tbc_Id]
-					remElemCss(vis_name, css_color)
+					remElemCss(elem, css_color)
 				})
 				
-				addElemCss(vis_name, getElemValue(chc_characcolor)) // set the current color
+				addElemCss(elem, getElemValue(chc_characcolor)) // set the current color
 			}
 
 			addElemUsable(vis_name)
-			setCharacColor()
+			setCharacColor(val_name)
+			setCharacColor(vis_name)
 			
 			onuRepItemDo(rep_characs, Chc_CharacColor, function(chc_characcolor) {
-				setCharacColor()
+				const val_name  = getRepElemRelative(rep_characs, chc_characcolor, Val_Name)
+				const vis_name  = getRepElemRelative(rep_characs, chc_characcolor, Vis_Name)
+
+				setCharacColor(val_name)
+				setCharacColor(vis_name)
 			})
 			
 			oncRepItemDo(rep_characs, Vis_Name, function(vis_name) { // click on vis item
