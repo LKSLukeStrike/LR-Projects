@@ -829,7 +829,7 @@ function initCharacsRep(sheet) {
 	const Vis_Name        = rsoValue(Val_Name, Str_PFXVAL, Str_PFXVIS)
 
 	triggerElem(cky_characslck) // triggers lock to set edit or view mode
-
+	
 	Arr_CharacsReps.forEach(function(rep_item) { // loop on repeaters
 		const rep_characs = getElem(sheet, rep_item)
 
@@ -960,6 +960,8 @@ function initCharacsRep(sheet) {
 			})
 		})
 	})
+
+	initRoll(sheet) // cleanup roll modifiers
 }
 
 function initCharacsRoll(sheet) {

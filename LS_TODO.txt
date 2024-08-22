@@ -1,16 +1,6 @@
 restaurer le tab actif après preferences
 revoir complètement le systeme de tabs
 
-3 repeaters caracs
-
 presets caracs
-
-jet de dé et reset
-
-diminution des tailles dans les outils droite/gauche ?
-
-drop de carac ?
-
-setElemUsable en btn-truc ?
 
 
