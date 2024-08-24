@@ -613,6 +613,9 @@ function initPreset(sheet) {
 	setElemValue(getElem(sheet, Ckb_CharacsLck), ":lock: Caracs :lock:")
 	setElemValue(getElem(sheet, Ckb_GiftsLck), ":lock: Dons :lock:")
 	setElemValue(getElem(sheet, Chc_CharacsPst), Pst_None) // reset the preset choice
+// setElemValue(getElem(sheet, Rep_CharacsL), {})
+// setElemValue(getElem(sheet, Rep_CharacsC), {})
+// setElemValue(getElem(sheet, Rep_CharacsR), {})
 }
 //endregion
 
@@ -690,15 +693,12 @@ function initCharName(sheet) {
 function initLock(sheet) {
 	initCkbDoDe(sheet, Ckb_LockSheet
 		, function(ckb_elem) {
-// log("DO")
-// log(ckb_elem.id())
 			addElemDolocked(ckb_elem)
 			dolockCharacs(sheet)
 			dolockGifts(sheet)
 		}
 		, function(ckb_elem) {
-// log("DE")
-// log(ckb_elem.id())
+
 			remElemDolocked(ckb_elem)
 			delockCharacs(sheet)
 			delockGifts(sheet)
@@ -800,9 +800,11 @@ function initCharacs(sheet) {
 			Object.keys(Pst_Characs[pst_characs][rep_item]).forEach(function(key_item) {
 				newRepChild(rep_elem, Pst_Characs[pst_characs][rep_item][key_item])
 			})
-			
+
 			triggerElem(rep_elem) // fix (?) all new repeaters entries
 		})
+		
+		setElemValue(getElem(sheet, Chc_CharacsPst), Pst_None) // reset the preset choice
 	})
 
 	initCkbDoDe(sheet, Ckb_CharacsLck // toggle characs lock
@@ -1051,15 +1053,11 @@ function initCharacsRoll(sheet) {
 
 function dolockCharacs(sheet) {
 	const cky_characslck = getElem(sheet, rsoValue(Ckb_CharacsLck, Str_PFXCKB, Str_PFXCKY))
-// log("DOLOCKCHARACS")
-// log(cky_characslck.id())
 	setElemValue(cky_characslck, true)
 }
 
 function delockCharacs(sheet) {
 	const cky_characslck = getElem(sheet, rsoValue(Ckb_CharacsLck, Str_PFXCKB, Str_PFXCKY))
-// log("DELOCKCHARACS")
-// log(cky_characslck.id())
 	setElemValue(cky_characslck, false)
 }
 
@@ -1436,207 +1434,3 @@ function initRepCkbDoDe(rep, ckb_item, do_fct, de_fct) { // init a rep ckb + fct
 	})
 }
 //endregion
-
-
-
-
-
-const switchSide = function(sheet){
-    sheet.get("switchSideSheet").on("click",function(){
-        if(sheet.get("idIcone").hasClass("text-dark")){
-
-            sheet.get("idIcone").removeClass("bg-light")
-            sheet.get("idIcone").removeClass("text-dark")
-
-            sheet.get("skillIcone").addClass("bg-light")
-            sheet.get("skillIcone").addClass("text-dark")
-
-            sheet.get('idSheet').addClass("invisible")
-            sheet.get('idSheet').addClass("position-absolute")
-            sheet.get('idSheet').addClass("h-25px")
-
-            sheet.get('skillSheet').removeClass("invisible")
-            sheet.get('skillSheet').removeClass("position-absolute")
-            sheet.get('skillSheet').removeClass("h-25px")
-
-            sheet.get('optionRepeate').removeClass("h-25px")
-
-        }else{
-
-            sheet.get("skillIcone").removeClass("bg-light")
-            sheet.get("skillIcone").removeClass("text-dark")
-
-            sheet.get("idIcone").addClass("bg-light")
-            sheet.get("idIcone").addClass("text-dark")
-
-            sheet.get('idSheet').removeClass("invisible")
-            sheet.get('idSheet').removeClass("position-absolute")
-            sheet.get('idSheet').removeClass("h-25px")
-
-            sheet.get('skillSheet').addClass("invisible")
-            sheet.get('skillSheet').addClass("position-absolute")
-            sheet.get('skillSheet').addClass("h-25px")
-
-            sheet.get('optionRepeate').addClass("h-25px")
-
-        }
-    }
-)}
-const toggleEdit = function(sheet){
-    sheet.get("lockEdit").on("click",function(e){
-        sheet.get("caracRepeater").addClass('no-edit')
-        sheet.get("caracRepeater").addClass('no-add')
-        sheet.get("caracRepeater").removeClass('h-200px')
-        sheet.get("caracRepeater").addClass('h-150px')
-        sheet.get("boxOptionRepeater").removeClass('h-100px')
-        sheet.get("boxOptionRepeater").addClass('h-150px')
-        sheet.get('optionRepeate').addClass('no-edit')
-        sheet.get('optionRepeate').addClass('no-add')
-        e.addClass("d-none")
-        sheet.get("unlockEdit").removeClass("d-none")
-        sheet.get("persoFields").addClass('mt-n5')
-        const repeater = sheet.get("caracRepeater")
-        each(repeater.value(),function(val,lineId){
-            let entry = repeater.find(lineId)
-            entry.find("arrowsBtn").addClass("invisible")
-            entry.find("caracVal").addClass("d-none")
-            entry.find("caracValView").removeClass("d-none")
-        })
-
-    })
-    sheet.get("unlockEdit").on("click",function(e){
-        sheet.get("caracRepeater").removeClass('no-edit')
-        sheet.get("caracRepeater").removeClass('no-add')
-        sheet.get("caracRepeater").removeClass('h-150px')
-        sheet.get("caracRepeater").addClass('h-200px')
-        sheet.get("boxOptionRepeater").addClass('h-100px')
-        sheet.get("boxOptionRepeater").removeClass('h-150px')
-        sheet.get('optionRepeate').removeClass('no-edit')
-        sheet.get('optionRepeate').removeClass('no-add')
-        e.addClass("d-none")
-        sheet.get("lockEdit").removeClass("d-none")
-        sheet.get("persoFields").removeClass('mt-n5')
-        const repeater = sheet.get("caracRepeater")
-        each(repeater.value(),function(val,lineId){
-            let entry = repeater.find(lineId)
-            entry.find("arrowsBtn").removeClass("invisible")
-            entry.find("caracVal").removeClass("d-none")
-            entry.find("caracValView").addClass("d-none")
-        })
-    })
-}
-
-const setValView = function(sheet){
-    const repeater = sheet.get("caracRepeater")
-    each(repeater.value(),function(val,lineId){
-        let entry = repeater.find(lineId)
-        entry.find("caracValView").value(entry.find("caracVal").value())
-        entry.find("caracVal").on("update",function(e){
-            entry.find("caracValView").value(e.value())
-        })
-    })
-}
-
-const launchBtn = function(sheet){
-    upDownChange(sheet)
-    launchDice(sheet)
-    setValView(sheet)
-    sheet.get("caracRepeater").on("update",function(){
-        launchDice(sheet)
-        upDownChange(sheet)
-        setValView(sheet)
-    })
-}
-
-const launchDice = function(sheet){
-    const repeaterComponent = sheet.get("caracRepeater")
-    each (repeaterComponent.value(), function(entryValues, uniqueRandomEntryId){
-        let entry = repeaterComponent.find(uniqueRandomEntryId);
-        const color = Tables.get("color").get(entry.find("colorView").value()).classBtn
-        entry.find("caracViewName").addClass(color)
-        entry.find('caracViewName').on('click',function(e){
-            let roll = new RollBuilder(sheet);
-            //recupération du type d'action et mise en titre
-            const diceFace = sheet.get(Chc_TypeDices).value() || '1d4'
-            const caracVal = entry.find("caracVal").value() || "0"
-            let dice =
-            Dice.create(""+caracVal+"")
-                .minus(diceFace)
-            roll.expression(dice)
-            roll.title(e.value())
-            roll.roll()
-        })
-    })
-    
-}
-
-const upDownChange = function(sheet){
-    const repeaterComponent = sheet.get("caracRepeater")
-    each (repeaterComponent.value(), function(entryValues, uniqueRandomEntryId){
-        let entry = repeaterComponent.find(uniqueRandomEntryId);
-
-        entry.find("caracUpCursor").on("click",function(){
-            entry.find("caracVal").value(entry.find("caracVal").value()+1)
-        })
-
-        entry.find("caracDownCursor").on("click",function(){
-            entry.find("caracVal").value(entry.find("caracVal").value()-1)
-             
-        })
-    })
-
-    const fields = ["hp","storyPoint","energy"]
-    each(fields,function(f){
-        sheet.get(f+"UpCursor").on("click",function(e){
-            const val = Math.max(sheet.get(f+"Val").value(),0)
-            sheet.get(f+"Val").value(val+1)
-        })
-
-        sheet.get(f+"DownCursor").on("click",function(){
-            const val = Math.max(sheet.get(f+"Val").value(),0)
-            sheet.get(f+"Val").value(Math.max(val-1,0))
-        })
-    })
-}
-
-const optionAct = function(sheet){
-    const repeaterComponent = sheet.get("optionRepeate")
-    each (repeaterComponent.value(), function(entryValues, uniqueRandomEntryId){
-        let entry = repeaterComponent.find(uniqueRandomEntryId);
-        entry.find("optionActivation").setToolTip("Utiliser pour un coût de "+entry.find("optionCost").value())
-        Bindings.clear(entry.id())
-        const nameOption = entry.find("optionName").value()
-        Bindings.add(nameOption,entry.id(),"viewOption",function(){
-            return {
-                "name":entry.find("optionName").value(),
-                "cost":entry.find("optionCost").value(),
-                "description":entry.find("optionDescription").value()
-            }
-        })
-        entry.find('optionTrigger').on("click",function(){
-            Bindings.send(sheet,nameOption)
-        })
-        entry.find('optionActivation').on("click",function(){
-            if(sheet.get('energyVal').value()>=entry.find("optionCost").value()){
-                sheet.get('energyVal').value(sheet.get('energyVal').value()-entry.find("optionCost").value())
-                let roll = new RollBuilder(sheet);
-                let dice = Dice.create("0d1")
-                                .add(entry.find("optionCost").value())
-                                .tag("option")
-                roll.expression(dice)
-                roll.title ("Utilisation de "+entry.find("optionName").value())
-                roll.onRoll(function(){})
-                roll.roll();
-            }
-        })
-    })
-}
-const options = function(sheet){
-    // optionAct(sheet);
-    // sheet.get("optionRepeate").on("mouseenter",function(){
-        // optionAct(sheet);
-    // })
-    // sheet.get("optionRepeate").on("update",function(){
-        // optionAct(sheet);
-    // })
-}
