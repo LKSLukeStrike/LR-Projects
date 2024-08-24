@@ -457,14 +457,8 @@ function hasElemSelected(elem) {
 }
 
 function addElemDolocked(elem) {
-// log("addElemDolocked")
-// log(elem.id())
 	setElemValue(elem, _(rsaValue(getElemValue(elem), Str_LSDelocked, Str_LSDolocked)))
-// log("addElemDolocked SET")
-// log(elem.id())
 	return remElemCss(elem, Css_LSSelected)
-	// remElemCss(elem, Css_LSSelected)
-// log("oooooookkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkk")
 }
 function remElemDolocked(elem) {
 	setElemValue(elem, _(rsaValue(getElemValue(elem), Str_LSDolocked, Str_LSDelocked)))
@@ -615,6 +609,7 @@ function initCharacter(sheet) {
 function initPreset(sheet) {
 	setElemValue(getElem(sheet, Ckb_Activity), ":ga_check-mark:")
 	setElemValue(getElem(sheet, Ckb_SocialRank), ":ga_check-mark:")
+	setElemValue(getElem(sheet, Ckb_LockSheet), ":lock:")
 	setElemValue(getElem(sheet, Ckb_CharacsLck), ":lock: Caracs :lock:")
 	setElemValue(getElem(sheet, Ckb_GiftsLck), ":lock: Dons :lock:")
 	setElemValue(getElem(sheet, Chc_CharacsPst), Pst_None) // reset the preset choice
@@ -693,23 +688,22 @@ function initCharName(sheet) {
 
 //region Head Lock
 function initLock(sheet) {
-	// initCkbDoDe(sheet, Ckb_LockSheet
-		// , function(ckb_elem) {
-// log("do")
+	initCkbDoDe(sheet, Ckb_LockSheet
+		, function(ckb_elem) {
+// log("DO")
 // log(ckb_elem.id())
-			// addElemDolocked(ckb_elem)
-// log("do")
-			// dolockCharacs(sheet)
-// log("do")
-			// dolockGifts(sheet)
-// log("do")
-		// }
-		// , function(ckb_elem) {
-			// remElemDolocked(ckb_elem)
-			// delockCharacs(sheet)
-			// delockGifts(sheet)
-		// }
-	// )
+			addElemDolocked(ckb_elem)
+			dolockCharacs(sheet)
+			dolockGifts(sheet)
+		}
+		, function(ckb_elem) {
+// log("DE")
+// log(ckb_elem.id())
+			remElemDolocked(ckb_elem)
+			delockCharacs(sheet)
+			delockGifts(sheet)
+		}
+	)
 }
 //endregion
 
@@ -1056,14 +1050,16 @@ function initCharacsRoll(sheet) {
 }
 
 function dolockCharacs(sheet) {
-log("dolockCharacs")
 	const cky_characslck = getElem(sheet, rsoValue(Ckb_CharacsLck, Str_PFXCKB, Str_PFXCKY))
+// log("DOLOCKCHARACS")
+// log(cky_characslck.id())
 	setElemValue(cky_characslck, true)
 }
 
 function delockCharacs(sheet) {
-log("delockCharacs")
 	const cky_characslck = getElem(sheet, rsoValue(Ckb_CharacsLck, Str_PFXCKB, Str_PFXCKY))
+// log("DELOCKCHARACS")
+// log(cky_characslck.id())
 	setElemValue(cky_characslck, false)
 }
 
