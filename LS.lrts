@@ -80,9 +80,13 @@ function getElemIndex(elem) {
 
 //region LR_Elems Values
 function getElemValue(elem) {
-	const elm_value = elem.value()
-	return Number.isNaN(Number(elm_value)) ? // right type
-		elm_value : Number(elm_value)
+	let result = null
+	try { // skip error when no value
+		const elm_value = elem.value()
+		result = Number.isNaN(Number(elm_value)) ? // right type
+			elm_value : Number(elm_value)
+	} finally {}
+	return result
 }
 function setElemValue(elem, elm_value) {
 	return elem.value(elm_value)
@@ -188,7 +192,11 @@ function getRepElemRelative(rep, elem, rel_item) { // get relative elem in the s
 	return rel_elem
 }
 function getRepChildren(rep) { // get a repeater children (keys)
-	return Object.keys(getRepValue(rep))
+	let result = []
+	try {
+		result = Object.keys(getRepValue(rep))
+	} finally {}
+	return result
 }
 function getRepChild(rep, child) { // get a repeater child (elem)
 	return getElemChild(rep, child)
@@ -449,8 +457,14 @@ function hasElemSelected(elem) {
 }
 
 function addElemDolocked(elem) {
+// log("addElemDolocked")
+// log(elem.id())
 	setElemValue(elem, _(rsaValue(getElemValue(elem), Str_LSDelocked, Str_LSDolocked)))
+// log("addElemDolocked SET")
+// log(elem.id())
 	return remElemCss(elem, Css_LSSelected)
+	// remElemCss(elem, Css_LSSelected)
+// log("oooooookkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkk")
 }
 function remElemDolocked(elem) {
 	setElemValue(elem, _(rsaValue(getElemValue(elem), Str_LSDolocked, Str_LSDelocked)))
@@ -593,7 +607,7 @@ function initCharacter(sheet) {
 	initHead(sheet)
 	initTabs(sheet)
 	initCharacs(sheet)
-	initRoll(sheet)
+	initDicesRoll(sheet)
 	initGifts(sheet)
 }
 
@@ -603,6 +617,7 @@ function initPreset(sheet) {
 	setElemValue(getElem(sheet, Ckb_SocialRank), ":ga_check-mark:")
 	setElemValue(getElem(sheet, Ckb_CharacsLck), ":lock: Caracs :lock:")
 	setElemValue(getElem(sheet, Ckb_GiftsLck), ":lock: Dons :lock:")
+	setElemValue(getElem(sheet, Chc_CharacsPst), Pst_None) // reset the preset choice
 }
 //endregion
 
@@ -678,18 +693,23 @@ function initCharName(sheet) {
 
 //region Head Lock
 function initLock(sheet) {
-	initCkbDoDe(sheet, Ckb_LockSheet
-		, function(ckb_elem) {
-			addElemDolocked(ckb_elem)
-			dolockCharacs(sheet)
-			dolockGifts(sheet)
-		}
-		, function(ckb_elem) {
-			remElemDolocked(ckb_elem)
-			delockCharacs(sheet)
-			delockGifts(sheet)
-		}
-	)
+	// initCkbDoDe(sheet, Ckb_LockSheet
+		// , function(ckb_elem) {
+// log("do")
+// log(ckb_elem.id())
+			// addElemDolocked(ckb_elem)
+// log("do")
+			// dolockCharacs(sheet)
+// log("do")
+			// dolockGifts(sheet)
+// log("do")
+		// }
+		// , function(ckb_elem) {
+			// remElemDolocked(ckb_elem)
+			// delockCharacs(sheet)
+			// delockGifts(sheet)
+		// }
+	// )
 }
 //endregion
 
@@ -781,10 +801,13 @@ function initCharacs(sheet) {
 
 		Object.keys(Pst_Characs[pst_characs]).forEach(function(rep_item) { // loop on reps
 			const rep_elem = getElem(sheet, rep_item)
+
 			delRepChildren(rep_elem) // cleanup the repeater
 			Object.keys(Pst_Characs[pst_characs][rep_item]).forEach(function(key_item) {
 				newRepChild(rep_elem, Pst_Characs[pst_characs][rep_item][key_item])
 			})
+			
+			triggerElem(rep_elem) // fix (?) all new repeaters entries
 		})
 	})
 
@@ -946,8 +969,11 @@ function initCharacsRep(sheet) {
 				const str_visibility = getElemValue(getElem(sheet, Cky_RollVis)) ?
 					"gmonly" : "visible"
 				const rna_charac     = getElemValue(val_charname)
-						             + " [" + cpaValue(getElemValue(vis_name))
-						             + " [" + psiValue(getElemValue(val_rollmod))
+						             + " ["
+									 + cpaValue(getElemValue(vis_name))
+						             + " ["
+									 + "" + getElemValue(val_characpts) + ""
+									 + psiValue(getElemValue(val_rollmod))
 									 + "]"
 									 + "]"
 
@@ -961,7 +987,7 @@ function initCharacsRep(sheet) {
 					.title(rna_charac)
 					.roll()
 					
-				initRoll(sheet)
+				initDicesRoll(sheet)
 			})
 		})
 
@@ -1017,24 +1043,26 @@ function initCharacsRep(sheet) {
 		})
 	})
 
-	initRoll(sheet) // cleanup roll modifiers
+	initDicesRoll(sheet) // cleanup roll modifiers
 }
 
 function initCharacsRoll(sheet) {
 	initRowModDo(sheet, Row_RollMod // reset roll mod and checkboxes
 		, function(clk_elem) {
-			initRoll(sheet)
+			initDicesRoll(sheet)
 		}
 	)
 	initCkb(sheet, Ckb_RollVis) // roll visibility gm/all
 }
 
 function dolockCharacs(sheet) {
+log("dolockCharacs")
 	const cky_characslck = getElem(sheet, rsoValue(Ckb_CharacsLck, Str_PFXCKB, Str_PFXCKY))
 	setElemValue(cky_characslck, true)
 }
 
 function delockCharacs(sheet) {
+log("delockCharacs")
 	const cky_characslck = getElem(sheet, rsoValue(Ckb_CharacsLck, Str_PFXCKB, Str_PFXCKY))
 	setElemValue(cky_characslck, false)
 }
@@ -1055,7 +1083,7 @@ function doeditCharacs(sheet) {
 //endregion
 
 //region Roll
-function initRoll(sheet) {
+function initDicesRoll(sheet) {
 	const val_rollmod = getElem(sheet, rsoValue(Row_RollMod, Str_PFXROW, Str_PFXVAL))
 
 	Arr_CharacsRolls.forEach(function(ckb_item) { // cleanup activity & socialrank

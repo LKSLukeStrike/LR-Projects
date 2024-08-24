@@ -3,4 +3,12 @@ revoir complètement le systeme de tabs
 
 presets caracs
 
+changer initRoll en autre chose (fct réservée)
+
+ajouter le score en carac dans le jet de dé score+mod
+
+BUG presets
+BUG lock sheet
+BUG bonus
+
 
