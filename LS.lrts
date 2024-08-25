@@ -363,7 +363,7 @@ const Ckb_SocialRank   = "Ckb_SocialRank" // social rank checkbox
 const Row_HealthPts    = "Row_HealthPts" // health pts panel
 const Row_NarrationPts = "Row_NarrationPts" // narration pts panel
 const Row_RollInf      = "Row_RollInf" // roll infos panel
-const Tot_CharacPts    = "Tot_CharacPts" // total characs points
+const Tot_CharacMax    = "Tot_CharacMax" // total charac max points
 const Val_TypeDices    = "Val_TypeDices" // dices type value
 const Val_RollAdj      = "Val_RollAdj" // dices mod adjuster value
 const Row_RollMod      = "Row_RollMod" // roll modifier panel
@@ -907,6 +907,22 @@ function initCharacs(sheet) {
 	initCharacsRoll(sheet)
 }
 
+function computeTotCharacMax(sheet) { // compute the charac max total
+	const tot_characmax = getElem(sheet, Tot_CharacMax)
+	
+	let result = 0
+	
+	Arr_CharacsReps.forEach(function(rep_item) { // compute all charac max pts
+		const rep_elem   = getElem(sheet, rep_item)
+
+		eachRepItemDo(rep_elem, Max_CharacPts, function(max_characpts) {
+			result += getElemValue(max_characpts)
+		})
+	})
+	
+	return setElemValue(tot_characmax, result) // set charac max total
+}
+
 function delCharacsChildren(sheet) {
 	Arr_CharacsReps.forEach(function(rep_item) {
 		const rep_elem = getElem(sheet, rep_item)
@@ -1034,7 +1050,11 @@ function initCharacsRep(sheet) {
 			})
 		})
 
-		initRepRowPts(rep_characs, Row_CharacPts) // init all pts blocks
+		initRepRowPtsDoMax(rep_characs, Row_CharacPts // init all pts blocks
+			, function(max_elem) {
+				computeTotCharacMax(sheet)
+			}
+		)
 
 		initRepCkbDoDe(rep_characs, Ckb_Talent // init all talent checkboxes
 			, function(ckb_elem) {
@@ -1453,7 +1473,7 @@ function initCkbDoDe(sheet, ckb_item, do_fct, de_fct) { // init a checkbox + fct
 	triggerElem(cky_elem) // triggers on init
 }
 
-function initRepRowPts(rep, row_item) { // init a pts block (clk, max, adj) in a repeater
+function initRepRowPtsDoMax(rep, row_item, do_max) { // init a pts block in a rep + do_max
 	const Clk_Item = rsoValue(row_item, Str_PFXROW, Str_PFXCLK)
 	const Max_Item = rsoValue(row_item, Str_PFXROW, Str_PFXMAX)
 	const Inc_Item = rsoValue(row_item, Str_PFXROW, Str_PFXINC)
@@ -1473,6 +1493,7 @@ function initRepRowPts(rep, row_item) { // init a pts block (clk, max, adj) in a
 		
 		onuElemDo(max_elem, function(max_elem) { // adjust current value
 			setElemValue(val_elem, getElemValue(max_elem))
+			do_max(max_elem)
 		})
 		
 		oncElemDo(inc_elem, function(inc_elem) { // increment current value
