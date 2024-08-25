@@ -443,6 +443,7 @@ function decrementElemMin(elem, min_value) {
 const Css_LSSelected  = "bg-light text-dark"
 const Css_LSInvisible = "invisible"
 const Css_LSUsable    = "clickable bg-secondary"
+// const Css_LSUsable    = "clickable bg-light"
 const Str_LSDolocked  = ":lock:"
 const Str_LSDelocked  = ":unlock:"
 
@@ -588,6 +589,32 @@ const Tpl_Gift         = { // new gifts entry template
 }
 //endregion
 //endregion
+
+//region LS_GMOnly
+const Arr_GMSheets = [] // sheets open
+const Row_GMNotes  = "Row_GMNotes" // notes for GM only
+
+function yesGMOnly(sheet) {
+	let result = false
+	Arr_GMSheets.forEach(function(sheet) {
+		if (sheet.properName() == "MJ"
+		||  sheet.properName() == "GM") {
+			result = true
+		}
+	})
+	return result
+}
+function initGMOnly(sheet) {
+	Arr_GMSheets.push(sheet)
+	Arr_GMSheets.forEach(function(sheet) {
+		if (yesGMOnly(sheet)) {
+			addElemDisplayed(getElem(sheet, Row_GMNotes))
+		} else {
+			remElemDisplayed(getElem(sheet, Row_GMNotes))
+		}
+	})
+}
+//endregion
 //endregion
 
 
@@ -597,6 +624,7 @@ init = function(sheet){
 
 
 function initCharacter(sheet) {
+	initGMOnly(sheet)
 	initPreset(sheet)
 	initHead(sheet)
 	initTabs(sheet)
