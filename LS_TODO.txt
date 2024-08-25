@@ -3,12 +3,9 @@ revoir complètement le systeme de tabs
 
 presets caracs
 
-changer initRoll en autre chose (fct réservée)
-
-ajouter le score en carac dans le jet de dé score+mod
+ajouter un compteur de pts de caracs en edit
 
 BUG presets
-BUG lock sheet
-BUG bonus
+BUG bonus (talents)
 
 

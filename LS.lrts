@@ -859,10 +859,10 @@ function initCharacs(sheet) {
 	Arr_CharacsRolls.forEach(function(ckb_item) { // toggle activity & socialrank
 		initCkbDoDe(sheet, ckb_item
 			, function(ckb_elem) {
-				incrementRollMod(sheet)
+				computeRollMod(sheet)
 			}
 			, function(ckb_elem) {
-				decrementRollMod(sheet)
+				computeRollMod(sheet)
 			}
 		)
 	})
@@ -1019,10 +1019,10 @@ function initCharacsRep(sheet) {
 
 		initRepCkbDoDe(rep_characs, Ckb_Talent // init all talent checkboxes
 			, function(ckb_elem) {
-				incrementRollMod(sheet)
+				computeRollMod(sheet)
 			}
 			, function(ckb_elem) {
-				decrementRollMod(sheet)
+				computeRollMod(sheet)
 			}
 		)
 		
@@ -1123,6 +1123,34 @@ function initDicesRoll(sheet) {
 	})
 	
 	setElemValue(val_rollmod, 0) // cleanup roll modifier
+}
+
+function computeRollMod(sheet) { // compute the roll modifier
+	const val_rollmod = getElem(sheet, rsoValue(Row_RollMod, Str_PFXROW, Str_PFXVAL))
+	const val_rolladj = getElem(sheet, Val_RollAdj)
+	const adj_rolladj = getElemValue(val_rolladj)
+	
+	let result = 0
+
+	Arr_CharacsRolls.forEach(function(ckb_item) { // compute activity & socialrank
+		const cky_elem = getElem(sheet, rsoValue(ckb_item, Str_PFXCKB, Str_PFXCKY))
+		if (getElemValue(cky_elem)) {
+			result += adj_rolladj
+		}
+	})
+	
+	Arr_CharacsReps.forEach(function(rep_item) { // compute all talent checkboxes
+		const rep_elem   = getElem(sheet, rep_item)
+		const Cky_Talent = rsoValue(Ckb_Talent, Str_PFXCKB, Str_PFXCKY)
+
+		eachRepItemDo(rep_elem, Cky_Talent, function(cky_talent) {
+			if (getElemValue(cky_talent)) {
+				result += adj_rolladj
+			}
+		})
+	})
+	
+	return setElemValue(val_rollmod, result) // set roll modifier
 }
 
 function incrementRollMod(sheet) {

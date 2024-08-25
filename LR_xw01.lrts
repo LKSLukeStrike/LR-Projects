@@ -1,32 +1,28 @@
 
-function initRepRowPts(rep, row_item) { // init a pts block (clk, max, adj) in a repeater
-	const clk_item = rsoValue(row_item, Str_PFXROW, Str_PFXCLK)
-	const max_item = rsoValue(row_item, Str_PFXROW, Str_PFXMAX)
-	const inc_item = rsoValue(row_item, Str_PFXROW, Str_PFXINC)
-	const dec_item = rsoValue(row_item, Str_PFXROW, Str_PFXDEC)
-	const val_item = rsoValue(row_item, Str_PFXROW, Str_PFXVAL)
+function computeRollMod(sheet) { // compute the roll modifier
+	const val_rollmod = getElem(sheet, rsoValue(Row_RollMod, Str_PFXROW, Str_PFXVAL))
+	const val_rolladj = getElem(sheet, Val_RollAdj)
+	const adj_rolladj = getElemValue(val_rolladj)
+	
+	let result = 0
 
-	eachRepItemDo(rep, row_item, function(elem) {
-		const clk_elem = getRepElemRelative(rep, elem, clk_item)
-		const max_elem = getRepElemRelative(rep, elem, max_item)
-		const inc_elem = getRepElemRelative(rep, elem, inc_item)
-		const dec_elem = getRepElemRelative(rep, elem, dec_item)
-		const val_elem = getRepElemRelative(rep, elem, val_item)
-		
-		oncElemDo(clk_elem, function(elem) { // restore max value
-			setElemValue(val_elem, getElemValue(max_elem))
-		})
-		
-		onuElemDo(max_elem, function(elem) { // adjust current value
-			setElemValue(val_elem, getElemValue(max_elem))
-		})
-		
-		oncElemDo(inc_elem, function(elem) { // increment current value
-			incrementElemMax(val_elem, getElemValue(max_elem))
-		})
-		
-		oncElemDo(dec_elem, function(elem) { // decrement current value
-			decrementElemMin(val_elem, 0)
+	Arr_CharacsRolls.forEach(function(ckb_item) { // compute activity & socialrank
+		const cky_elem = getElem(sheet, rsoValue(ckb_item, Str_PFXCKB, Str_PFXCKY))
+		if (getElemValue(cky_elem)) {
+			result += adj_rolladj
+		}
+	})
+	
+	Arr_CharacsReps.forEach(function(rep_item) { // compute all talent checkboxes
+		const rep_elem   = getElem(sheet, rep_item)
+		const Cky_Talent = rsoValue(Ckb_Talent, Str_PFXCKB, Str_PFXCKY)
+
+		eachRepItemDo(rep_elem, Cky_Talent, function(cky_talent) {
+			if (getElemValue(cky_talent)) {
+				result += adj_rolladj
+			}
 		})
 	})
+	
+	return setElemValue(val_rollmod, result) // set roll modifier
 }
