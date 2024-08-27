@@ -362,9 +362,11 @@ const Ckb_Activity     = "Ckb_Activity" // activity checkbox
 const Ckb_SocialRank   = "Ckb_SocialRank" // social rank checkbox
 const Row_HealthPts    = "Row_HealthPts" // health pts panel
 const Row_NarrationPts = "Row_NarrationPts" // narration pts panel
-const Row_RollMod      = "Row_RollMod" // roll modifier panel
+const Row_RollInf      = "Row_RollInf" // roll infos panel
+const Tot_CharacMax    = "Tot_CharacMax" // total charac max points
 const Val_TypeDices    = "Val_TypeDices" // dices type value
 const Val_RollAdj      = "Val_RollAdj" // dices mod adjuster value
+const Row_RollMod      = "Row_RollMod" // roll modifier panel
 const Val_RollMod      = "Val_RollMod" // dices mod value
 const Row_RollVis      = "Row_RollVis" // roll visibility panel
 const Ckb_RollVis      = "Ckb_RollVis" // roll visibility state
@@ -814,6 +816,11 @@ function initCharacs(sheet) {
 	const col_characsnewc = getElem(sheet, rsoValue(Clk_CharacsNewC, Str_PFXCLK, Str_PFXCOL))
 	const clk_characsnewr = getElem(sheet, Clk_CharacsNewR)
 	const col_characsnewr = getElem(sheet, rsoValue(Clk_CharacsNewR, Str_PFXCLK, Str_PFXCOL))
+	const ckb_activity    = getElem(sheet, Ckb_Activity)
+	const ckb_socialrank  = getElem(sheet, Ckb_SocialRank)
+	const row_rollinf     = getElem(sheet, Row_RollInf)
+	const row_rollmod     = getElem(sheet, Row_RollMod)
+	const row_rollvis     = getElem(sheet, Row_RollVis)
 
 	setElemTooltip(chc_characspst, Tip_Presets)
 	
@@ -836,22 +843,34 @@ function initCharacs(sheet) {
 	})
 
 	initCkbDoDe(sheet, Ckb_CharacsLck // toggle characs lock
-		, function(ckb_elem) {
+		, function(ckb_elem) { // view mode
 			addElemDolocked(ckb_elem)
+			remElemInvisible(ckb_activity)
+			remElemInvisible(ckb_socialrank)
 			addElemInvisible(col_characsdel)
 			addElemInvisible(col_characspst)
 			addElemInvisible(col_characsnewl)
 			addElemInvisible(col_characsnewc)
 			addElemInvisible(col_characsnewr)
+			remElemDisplayed(row_rollinf)
+			addElemDisplayed(row_rollmod)
+			addElemDisplayed(row_rollvis)
+			initDicesRoll(sheet)
 			doviewCharacs(sheet)
 		}
-		, function(ckb_elem) {
+		, function(ckb_elem) { // edit mode
 			remElemDolocked(ckb_elem)
+			addElemInvisible(ckb_activity)
+			addElemInvisible(ckb_socialrank)
 			remElemInvisible(col_characsdel)
 			remElemInvisible(col_characspst)
 			remElemInvisible(col_characsnewl)
 			remElemInvisible(col_characsnewc)
 			remElemInvisible(col_characsnewr)
+			addElemDisplayed(row_rollinf)
+			remElemDisplayed(row_rollmod)
+			remElemDisplayed(row_rollvis)
+			initDicesRoll(sheet)
 			doeditCharacs(sheet)
 		}
 	)
@@ -859,10 +878,10 @@ function initCharacs(sheet) {
 	Arr_CharacsRolls.forEach(function(ckb_item) { // toggle activity & socialrank
 		initCkbDoDe(sheet, ckb_item
 			, function(ckb_elem) {
-				incrementRollMod(sheet)
+				computeRollMod(sheet)
 			}
 			, function(ckb_elem) {
-				decrementRollMod(sheet)
+				computeRollMod(sheet)
 			}
 		)
 	})
@@ -886,6 +905,22 @@ function initCharacs(sheet) {
 	initCharacsPts(sheet)
 	initCharacsRep(sheet)
 	initCharacsRoll(sheet)
+}
+
+function computeTotCharacMax(sheet) { // compute the charac max total
+	const tot_characmax = getElem(sheet, Tot_CharacMax)
+	
+	let result = 0
+	
+	Arr_CharacsReps.forEach(function(rep_item) { // compute all charac max pts
+		const rep_elem   = getElem(sheet, rep_item)
+
+		eachRepItemDo(rep_elem, Max_CharacPts, function(max_characpts) {
+			result += getElemValue(max_characpts)
+		})
+	})
+	
+	return setElemValue(tot_characmax, result) // set charac max total
 }
 
 function delCharacsChildren(sheet) {
@@ -1015,14 +1050,18 @@ function initCharacsRep(sheet) {
 			})
 		})
 
-		initRepRowPts(rep_characs, Row_CharacPts) // init all pts blocks
+		initRepRowPtsDoMax(rep_characs, Row_CharacPts // init all pts blocks
+			, function(max_elem) {
+				computeTotCharacMax(sheet)
+			}
+		)
 
 		initRepCkbDoDe(rep_characs, Ckb_Talent // init all talent checkboxes
 			, function(ckb_elem) {
-				incrementRollMod(sheet)
+				computeRollMod(sheet)
 			}
 			, function(ckb_elem) {
-				decrementRollMod(sheet)
+				computeRollMod(sheet)
 			}
 		)
 		
@@ -1123,6 +1162,34 @@ function initDicesRoll(sheet) {
 	})
 	
 	setElemValue(val_rollmod, 0) // cleanup roll modifier
+}
+
+function computeRollMod(sheet) { // compute the roll modifier
+	const val_rollmod = getElem(sheet, rsoValue(Row_RollMod, Str_PFXROW, Str_PFXVAL))
+	const val_rolladj = getElem(sheet, Val_RollAdj)
+	const adj_rolladj = getElemValue(val_rolladj)
+	
+	let result = 0
+
+	Arr_CharacsRolls.forEach(function(ckb_item) { // compute activity & socialrank
+		const cky_elem = getElem(sheet, rsoValue(ckb_item, Str_PFXCKB, Str_PFXCKY))
+		if (getElemValue(cky_elem)) {
+			result += adj_rolladj
+		}
+	})
+	
+	Arr_CharacsReps.forEach(function(rep_item) { // compute all talent checkboxes
+		const rep_elem   = getElem(sheet, rep_item)
+		const Cky_Talent = rsoValue(Ckb_Talent, Str_PFXCKB, Str_PFXCKY)
+
+		eachRepItemDo(rep_elem, Cky_Talent, function(cky_talent) {
+			if (getElemValue(cky_talent)) {
+				result += adj_rolladj
+			}
+		})
+	})
+	
+	return setElemValue(val_rollmod, result) // set roll modifier
 }
 
 function incrementRollMod(sheet) {
@@ -1406,7 +1473,7 @@ function initCkbDoDe(sheet, ckb_item, do_fct, de_fct) { // init a checkbox + fct
 	triggerElem(cky_elem) // triggers on init
 }
 
-function initRepRowPts(rep, row_item) { // init a pts block (clk, max, adj) in a repeater
+function initRepRowPtsDoMax(rep, row_item, do_max) { // init a pts block in a rep + do_max
 	const Clk_Item = rsoValue(row_item, Str_PFXROW, Str_PFXCLK)
 	const Max_Item = rsoValue(row_item, Str_PFXROW, Str_PFXMAX)
 	const Inc_Item = rsoValue(row_item, Str_PFXROW, Str_PFXINC)
@@ -1426,6 +1493,7 @@ function initRepRowPts(rep, row_item) { // init a pts block (clk, max, adj) in a
 		
 		onuElemDo(max_elem, function(max_elem) { // adjust current value
 			setElemValue(val_elem, getElemValue(max_elem))
+			do_max(max_elem)
 		})
 		
 		oncElemDo(inc_elem, function(inc_elem) { // increment current value

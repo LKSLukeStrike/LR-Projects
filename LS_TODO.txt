@@ -3,9 +3,12 @@ revoir complètement le systeme de tabs
 
 presets caracs
 
-ajouter un compteur de pts de caracs en edit
+preferences couleurs de fond des champs
+
+
 
 BUG presets
-BUG bonus (talents)
+
+border bottom caracs label droit
 
 
