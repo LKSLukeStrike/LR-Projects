@@ -1,13 +1,18 @@
 restaurer le tab actif après preferences
 revoir complètement le systeme de tabs
 
-presets caracs
+refonte presets caracs
 
 preferences couleurs de fond des champs
 
+panel log ?
+
+entrées avec juste talent
 
 
-BUG presets
+
+BUG
+presets
 
 border bottom caracs label droit
 
