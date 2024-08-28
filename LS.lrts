@@ -521,7 +521,11 @@ const Arr_CharacsReps  = [
 	Rep_CharacsC,
 	Rep_CharacsR,
 ]
+const Row_Name         = "Row_Name" // charac name panel
+const Row_Talent       = "Row_Talent" // charac talent panel
 const Row_CharacPts    = "Row_CharacPts" // charac pts panel
+const Row_Actions      = "Row_Actions" // charac actions panel
+const Yes_NewChild     = "Yes_NewChild" // is a new child (entry)
 const Val_Name         = "Val_Name" // charac name value
 const Max_CharacPts    = "Max_CharacPts" // charac max value
 const Val_CharacPts    = "Val_CharacPts" // charac actual value
@@ -533,6 +537,7 @@ const Arr_CharacsVals  = [
 	Val_Talent,
 ]
 const Tpl_Charac       = { // new characs entry template
+	Yes_NewChild       : true,
 	Val_Name           : "",
 	Max_CharacPts      : 0,
 	Val_Talent         : "",
@@ -542,6 +547,7 @@ const Pst_Characs      = { // characs presets
 	Pst_PMSC : { // physique, mental, social, chance preset
 		Rep_CharacsL : {
 			1 : {
+				Yes_NewChild       : true,
 				Val_Name           : "physique",
 				Max_CharacPts      : 0,
 				Val_Talent         : "",
@@ -550,12 +556,14 @@ const Pst_Characs      = { // characs presets
 		},
 		Rep_CharacsC : {
 			1 : {
+				Yes_NewChild       : true,
 				Val_Name           : "mental",
 				Max_CharacPts      : 0,
 				Val_Talent         : "",
 				Chc_CharacColor    : "text-primary border-primary",
 			},
 			2 : {
+				Yes_NewChild       : true,
 				Val_Name           : "chance",
 				Max_CharacPts      : 0,
 				Val_Talent         : "",
@@ -564,6 +572,7 @@ const Pst_Characs      = { // characs presets
 		},
 		Rep_CharacsR : {
 			1 : {
+				Yes_NewChild       : true,
 				Val_Name           : "social",
 				Max_CharacPts      : 0,
 				Val_Talent         : "",
@@ -903,7 +912,7 @@ function initCharacs(sheet) {
 	})
 	
 	initCharacsPts(sheet)
-	initCharacsRep(sheet)
+	initCharacsReps(sheet)
 	initCharacsRoll(sheet)
 }
 
@@ -962,9 +971,10 @@ function initCharacsPts(sheet) {
 	initRowPts(sheet, Row_NarrationPts)
 }
 
-function initCharacsRep(sheet) {
-	const cky_characslck  = getElem(sheet, rsoValue(Ckb_CharacsLck, Str_PFXCKB, Str_PFXCKY))
+function initCharacsReps(sheet) {
 	const Vis_Name        = rsoValue(Val_Name, Str_PFXVAL, Str_PFXVIS)
+	const Vis_Talent      = rsoValue(Val_Talent, Str_PFXVAL, Str_PFXVIS)
+	const cky_characslck  = getElem(sheet, rsoValue(Ckb_CharacsLck, Str_PFXCKB, Str_PFXCKY))
 
 	triggerElem(cky_characslck) // triggers lock to set edit or view mode
 	
@@ -972,7 +982,7 @@ function initCharacsRep(sheet) {
 		const rep_characs = getElem(sheet, rep_item)
 
 		onuElemDo(rep_characs, function(elem) { // handle characs rep modifications
-			initCharacsRep(sheet)
+			initCharacsReps(sheet)
 		})
 
 		eachRepItemDo(rep_characs, Chc_CharacColor, function(chc_characcolor) {
@@ -994,22 +1004,37 @@ function initCharacsRep(sheet) {
 		})
 	
 		onuRepItemDo(rep_characs, Vis_Name, function(vis_name) { // handle characs usability
-			const val_name  = getRepElemRelative(rep_characs, vis_name, Val_Name)
+			const val_name      = getRepElemRelative(rep_characs, vis_name, Val_Name)
+			const row_name      = getRepElemRelative(rep_characs, vis_name, Row_Name)
+			const row_talent    = getRepElemRelative(rep_characs, vis_name, Row_Talent)
+			const row_characpts = getRepElemRelative(rep_characs, vis_name, Row_CharacPts)
+			const row_actions   = getRepElemRelative(rep_characs, vis_name, Row_Actions)
+			
+			if (! getElemValue(vis_name) // only talent
+			||  getElemValue(vis_name) == "") {
+				remElemDisplayed(row_name)
+				remElemDisplayed(row_characpts)
+				remElemDisplayed(row_actions)
+			} else {
+				addElemDisplayed(row_name)
+				addElemDisplayed(row_characpts)
+				addElemDisplayed(row_actions)
+			}
 
-			function setCharacColor(elem) { // set a carac elem color
-				const chc_characcolor  = getRepElemRelative(rep_characs, elem, Chc_CharacColor)
+			function setCharacColor(elm_charac) { // set a carac elem color
+				const chc_characcolor = getRepElemRelative(rep_characs, elm_charac, Chc_CharacColor)
 				
 				Tables.get(Tbl_CharacsColors).each(function(line) { // remove all colors
 					const css_color = line[Tbc_Id]
-					remElemCss(elem, css_color)
+					remElemCss(elm_charac, css_color)
 				})
 				
-				addElemCss(elem, getElemValue(chc_characcolor)) // set the current color
+				addElemCss(elm_charac, getElemValue(chc_characcolor)) // set the current color
 			}
 
-			addElemUsable(vis_name)
 			setCharacColor(val_name)
 			setCharacColor(vis_name)
+			addElemUsable(vis_name)
 			
 			onuRepItemDo(rep_characs, Chc_CharacColor, function(chc_characcolor) {
 				const val_name  = getRepElemRelative(rep_characs, chc_characcolor, Val_Name)

@@ -1,14 +1,43 @@
+function initCharacsRepsNew(sheet) {
+	const cky_characslck  = getElem(sheet, rsoValue(Ckb_CharacsLck, Str_PFXCKB, Str_PFXCKY))
+	const Vis_Name        = rsoValue(Val_Name, Str_PFXVAL, Str_PFXVIS)
 
-function doviewCharacs(sheet) {
+	triggerElem(cky_characslck) // triggers lock to set edit or view mode
+	
 	Arr_CharacsReps.forEach(function(rep_item) { // loop on repeaters
 		const rep_characs = getElem(sheet, rep_item)
-		doviewRep(rep_characs)
-	})
-}
 
-function doeditCharacs(sheet) {
-	Arr_CharacsReps.forEach(function(rep_item) { // loop on repeaters
-		const rep_characs = getElem(sheet, rep_item)
-		doeditRep(rep_characs)
+		onuElemDo(rep_characs, function(elem) { // handle characs rep modifications
+			initCharacsRepsNew(sheet)
+		})
+
+		eachRepChildrenDo(rep_characs, function(rep_child) { // loop on children
+			const yes_newchild    = getElemChild(rep_child, Yes_NewChild)
+			const chc_characcolor = getElemChild(rep_child, Chc_CharacColor)
+			
+			if (getElemValue(yes_newchild)) { // handle only new children
+				setElemTooltip(chc_characcolor, Tip_Color) // tooltip for color choices
+	
+				Arr_CharacsVals.forEach(function(val_item) { // reflects vals on vis
+					const val_elem = getElemChild(rep_child, val_item)
+					const Vis_Item = rsoValue(val_item, Str_PFXVAL, Str_PFXVIS)
+					const vis_elem = getElemChild(rep_child, Vis_Item)
+					
+					onuElemDo(val_elem, function(val_elem) {
+						const val_value = getElemValue(val_elem)
+						let   vis_value = val_item == Max_CharacPts ?
+							0 : "" // default value
+						vis_value = val_value ?
+							val_value : vis_value // no default value, val value instead
+						setElemValue(vis_elem, vis_value)
+					})
+				})
+			
+				setElemValue(yes_newchild, false) // handled
+			}
+
+		})
 	})
+
+	initDicesRoll(sheet) // cleanup roll modifiers
 }

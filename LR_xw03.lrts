@@ -1,3 +1,15 @@
-const Clk_CharacsDel   = "Clk_CharacsDel" // gifts del button
-const Ckb_CharacsLck   = "Ckb_CharacsLck" // gifts lck checkbox
-const Clk_CharacsNew   = "Clk_CharacsNew" // gifts new button
+	
+		Arr_CharacsVals.forEach(function(val_item) { // reflects vals on vis
+			const val_elem = getElemChild(rep_child, val_item)
+			const Vis_Item = rsoValue(val_item, Str_PFXVAL, Str_PFXVIS)
+			const vis_elem = getElemChild(rep_child, Vis_Item)
+			
+			onuElemDo(val_elem, function(val_elem) {
+				const val_value = getElemValue(val_elem)
+				let   vis_value = val_item == Max_CharacPts ?
+					0 : "" // default value
+				vis_value = val_value ?
+					val_value : vis_value // no default value, val value instead
+				setElemValue(vis_elem, vis_value)
+			})
+		})
