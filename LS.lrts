@@ -1010,7 +1010,7 @@ function initCharacsReps(sheet) {
 			const row_characpts = getRepElemRelative(rep_characs, vis_name, Row_CharacPts)
 			const row_actions   = getRepElemRelative(rep_characs, vis_name, Row_Actions)
 			
-			if (! getElemValue(vis_name) // only talent
+			if (! getElemValue(vis_name) // no charac if any
 			||  getElemValue(vis_name) == "") {
 				remElemDisplayed(row_name)
 				remElemDisplayed(row_characpts)
@@ -1074,6 +1074,21 @@ function initCharacsReps(sheet) {
 				initDicesRoll(sheet)
 			})
 		})
+	
+		onuRepItemDo(rep_characs, Vis_Talent, function(vis_talent) { // handle characs usability
+			const row_name      = getRepElemRelative(rep_characs, vis_talent, Row_Name)
+			const row_talent    = getRepElemRelative(rep_characs, vis_talent, Row_Talent)
+			const row_characpts = getRepElemRelative(rep_characs, vis_talent, Row_CharacPts)
+			const row_actions   = getRepElemRelative(rep_characs, vis_talent, Row_Actions)
+			
+			if (! getElemValue(vis_talent) // no talent if any
+			||  getElemValue(vis_talent) == "") {
+				remElemDisplayed(row_talent)
+			} else {
+				addElemDisplayed(row_talent)
+			}
+		})
+
 
 		initRepRowPtsDoMax(rep_characs, Row_CharacPts // init all pts blocks
 			, function(max_elem) {
