@@ -7,13 +7,14 @@ preferences couleurs de fond des champs
 
 panel log ?
 
-entrées avec juste talent
-
 
 
 BUG
 presets
 
 border bottom caracs label droit
+
+pas de compute en cas de suppression de caracs
+carac repasse en blanc si suppression intermédiaire
 
 

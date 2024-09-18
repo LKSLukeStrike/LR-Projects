@@ -322,7 +322,7 @@ const Bnd_Charac    = "Bnd_Charac" // charac binding
 
 //region LS_Constants Tables
 const Tbc_Id             = "id" // tables common id
-const Tbl_TypeDices      = "Tbl_TypeDices" // dices types table
+const Tbl_DicesType      = "Tbl_DicesType" // dices types table
 const Tbc_RollAdj        = "rolladj" // roll mod adjuster
 const Tbl_CharacsColors  = "Tbl_CharacsColors" // caracs colors table
 const Tbl_CharacsPresets = "Tbl_CharacsPresets" // caracs presets table
@@ -348,8 +348,8 @@ const Val_CharName     = "Val_CharName" // character name
 const Ckb_LockSheet    = "Ckb_LockSheet" // locking checkbox
 
 const Row_Pref         = "Row_Pref" // preferences panel
-const Dft_TypeDices    = "1d10" // default dices type
-const Chc_TypeDices    = "Chc_TypeDices" // dices type choice
+const Dft_DicesType    = "1d10" // default dices type
+const Chc_DicesType    = "Chc_DicesType" // dices type choice
 
 const Row_Characs      = "Row_Characs" // sheet characs
 const Clk_CharacsDel   = "Clk_CharacsDel" // characs del button
@@ -365,7 +365,7 @@ const Row_HealthPts    = "Row_HealthPts" // health pts panel
 const Row_NarrationPts = "Row_NarrationPts" // narration pts panel
 const Row_RollInf      = "Row_RollInf" // roll infos panel
 const Tot_CharacMax    = "Tot_CharacMax" // total charac max points
-const Val_TypeDices    = "Val_TypeDices" // dices type value
+const Val_DicesType    = "Val_DicesType" // dices type value
 const Val_RollAdj      = "Val_RollAdj" // dices mod adjuster value
 const Row_RollMod      = "Row_RollMod" // roll modifier panel
 const Val_RollMod      = "Val_RollMod" // dices mod value
@@ -552,7 +552,7 @@ const Tpl_Charac       = { // new characs entry template
 	Chc_CharacColor    : "text-light border-light",
 }
 const Pst_Characs      = { // characs presets
-	Pst_PMSC00_1d10 : { // physique, mental, social, chance preset 00 1d10
+	Pst_PMSC00 : { // physique, mental, social, chance preset 00
 		Rep_CharacsL : {
 			1 : {
 				Yes_NewChild       : true,
@@ -588,7 +588,79 @@ const Pst_Characs      = { // characs presets
 			},
 		},
 	},
-	Pst_PMSC18_1d10 : { // physique, mental, social, chance preset 18 1d10
+	Pst_PMSC11 : { // physique, mental, social, chance preset 11
+		Rep_CharacsL : {
+			1 : {
+				Yes_NewChild       : true,
+				Val_Name           : "physique",
+				Max_CharacPts      : 3,
+				Val_Talent         : "",
+				Chc_CharacColor    : "text-danger border-danger",
+			},
+		},
+		Rep_CharacsC : {
+			1 : {
+				Yes_NewChild       : true,
+				Val_Name           : "mental",
+				Max_CharacPts      : 3,
+				Val_Talent         : "",
+				Chc_CharacColor    : "text-primary border-primary",
+			},
+			2 : {
+				Yes_NewChild       : true,
+				Val_Name           : "chance",
+				Max_CharacPts      : 2,
+				Val_Talent         : "",
+				Chc_CharacColor    : "text-warning border-warning",
+			},
+		},
+		Rep_CharacsR : {
+			1 : {
+				Yes_NewChild       : true,
+				Val_Name           : "social",
+				Max_CharacPts      : 3,
+				Val_Talent         : "",
+				Chc_CharacColor    : "text-success border-success",
+			},
+		},
+	},
+	Pst_PMSC15 : { // physique, mental, social, chance preset 15
+		Rep_CharacsL : {
+			1 : {
+				Yes_NewChild       : true,
+				Val_Name           : "physique",
+				Max_CharacPts      : 4,
+				Val_Talent         : "",
+				Chc_CharacColor    : "text-danger border-danger",
+			},
+		},
+		Rep_CharacsC : {
+			1 : {
+				Yes_NewChild       : true,
+				Val_Name           : "mental",
+				Max_CharacPts      : 4,
+				Val_Talent         : "",
+				Chc_CharacColor    : "text-primary border-primary",
+			},
+			2 : {
+				Yes_NewChild       : true,
+				Val_Name           : "chance",
+				Max_CharacPts      : 3,
+				Val_Talent         : "",
+				Chc_CharacColor    : "text-warning border-warning",
+			},
+		},
+		Rep_CharacsR : {
+			1 : {
+				Yes_NewChild       : true,
+				Val_Name           : "social",
+				Max_CharacPts      : 4,
+				Val_Talent         : "",
+				Chc_CharacColor    : "text-success border-success",
+			},
+		},
+	},
+	Pst_PMSC18 : { // physique, mental, social, chance preset 18
 		Rep_CharacsL : {
 			1 : {
 				Yes_NewChild       : true,
@@ -624,7 +696,7 @@ const Pst_Characs      = { // characs presets
 			},
 		},
 	},
-	Pst_PMSC22_1d10 : { // physique, mental, social, chance preset 22 1d10
+	Pst_PMSC22 : { // physique, mental, social, chance preset 22
 		Rep_CharacsL : {
 			1 : {
 				Yes_NewChild       : true,
@@ -750,8 +822,8 @@ function initHead(sheet) {
 function initPref(sheet) {
 	const row_pref      = getElem(sheet, Row_Pref)
 	const row_characs   = getElem(sheet, Row_Characs)
-	const chc_typedices = getElem(sheet, Chc_TypeDices)
-	const val_typedices = getElem(sheet, Val_TypeDices)
+	const chc_dicestype = getElem(sheet, Chc_DicesType)
+	const val_dicestype = getElem(sheet, Val_DicesType)
 	const val_rolladj   = getElem(sheet, Val_RollAdj)
 
 	initCkbDoDe(sheet, Ckb_PrefSheet
@@ -767,15 +839,17 @@ function initPref(sheet) {
 		}
 	)
 	
-	onuElemDo(chc_typedices, function(elem) { // adjust the dices type
-		const typedices = getElemValue(chc_typedices)
-		setElemValue(val_typedices, typedices)
-		setElemValue(val_rolladj, getTableLineTbc(Tbl_TypeDices, typedices, Tbc_RollAdj))
-	})
-	
-	if (! getElemValue(val_typedices)) { // default dices type
-		setElemValue(chc_typedices, Dft_TypeDices)
+	if (! getElemValue(val_dicestype)) { // default dices type
+		setElemValue(chc_dicestype, Dft_DicesType)
 	}
+	
+	function onuChc_DicesType(chc_dicestype) { // set dices type
+		computeDicesTypeAdj(sheet)
+	}
+	onuChc_DicesType(chc_dicestype)
+	onuElemDo(chc_dicestype, function(chc_dicestype) { // adjust the dices type
+		onuChc_DicesType(chc_dicestype)
+	})
 
 	initPrefTabs(sheet)
 }
@@ -910,23 +984,48 @@ function initCharacs(sheet) {
 	const row_rollinf     = getElem(sheet, Row_RollInf)
 	const row_rollmod     = getElem(sheet, Row_RollMod)
 	const row_rollvis     = getElem(sheet, Row_RollVis)
+	const tot_characmax   = getElem(sheet, Tot_CharacMax)
+	const chc_dicestype   = getElem(sheet, Chc_DicesType)
+	const val_dicestype   = getElem(sheet, Val_DicesType)
+	const val_rolladj     = getElem(sheet, Val_RollAdj)
 
 	setElemTooltip(chc_characspst, Tip_Presets)
 	
 	onuElemDo(chc_characspst, function(chc_characspst) { // fillout a preset
-		const pst_characs = getElemValue(chc_characspst)
+		const pst_characs    = getElemValue(chc_characspst)
+		const pst_characspts = pst_characs.split(Str_Space)[0] // preset values
+		const pst_characsdty = pst_characs.split(Str_Space)[1] // preset dices type
+		// const data           = {} // brand new data to send to the LR server
 		if (pst_characs == Pst_None) {return} // do nothing
 		
-		Object.keys(Pst_Characs[pst_characs]).forEach(function(Rep_Characs) { // loop on reps
+		setElemValue(chc_dicestype, pst_characsdty) // set the preset dices type		
+		computeDicesTypeAdj(sheet) // just to be sure
+		sheet.setData({ // force the data on the LR server (dont ask me why)
+			// Chc_DicesType : getElemValue(chc_dicestype),
+			Val_DicesType : getElemValue(val_dicestype),
+			Val_RollAdj   : getElemValue(val_rolladj),
+		})
+		
+		Object.keys(Pst_Characs[pst_characspts]).forEach(function(Rep_Characs) { // loop on reps
 			const rep_characs = getElem(sheet, Rep_Characs)
-			const rep_clone   = Object.assign({}, Pst_Characs[pst_characs][Rep_Characs])
+			const rep_clone   = Object.assign({}, Pst_Characs[pst_characspts][Rep_Characs])
 
-			setElemValue(rep_characs, rep_clone)
+			setElemValue(rep_characs, rep_clone) // set the preset characs
 			initCharacsRepNewChildren(rep_characs)
+			// data[Rep_Characs] = Object.assign({}, rep_clone) // just to be sure
 			sheet.setData({ // force the data on the LR server (dont ask me why)
-				Rep_Characs : rep_clone
+				Rep_Characs   : rep_clone,
+				// Tot_CharacMax : getElemValue(tot_characmax),
 			})
 		})
+		
+		// computeTotCharacMax(sheet)
+		// data[Tot_CharacMax] = getElemValue(tot_characmax)
+		// data[Chc_DicesType] = getElemValue(chc_dicestype)
+		// data[Val_DicesType] = getElemValue(val_dicestype)
+		// data[Val_RollAdj]   = getElemValue(val_rolladj)
+		// sheet.setData(data) // force the data on the LR server (dont ask me why)
+		// initCharacsReps(sheet)
 		
 		setElemValue(chc_characspst, Pst_None) // reset the preset choice
 	})
@@ -1001,10 +1100,10 @@ function computeTotCharacMax(sheet) { // compute the charac max total
 	
 	let result = 0
 	
-	Arr_CharacsReps.forEach(function(rep_item) { // compute all charac max pts
-		const rep_elem   = getElem(sheet, rep_item)
+	Arr_CharacsReps.forEach(function(Rep_Characs) { // compute all charac max pts
+		const rep_characs = getElem(sheet, Rep_Characs)
 
-		eachRepItemDo(rep_elem, Max_CharacPts, function(max_characpts) {
+		eachRepItemDo(rep_characs, Max_CharacPts, function(max_characpts) {
 			result += getElemValue(max_characpts)
 		})
 	})
@@ -1015,6 +1114,7 @@ function computeTotCharacMax(sheet) { // compute the charac max total
 function delCharacsChildren(sheet) {
 	Arr_CharacsReps.forEach(function(Rep_Characs) {
 		const rep_characs = getElem(sheet, Rep_Characs)
+
 		delRepChildren(rep_characs)
 		initCharacsRepNewChildren(rep_characs)
 	})
@@ -1057,33 +1157,35 @@ function initCharacsPts(sheet) {
 
 function initCharacsReps(sheet) {
 	const cky_characslck = getElem(sheet, Cky_CharacsLck)
-
-	triggerElem(cky_characslck) // triggers lock to set edit or view mode
 	
 	Arr_CharacsReps.forEach(function(Rep_Characs) { // loop on repeaters
 		const rep_characs = getElem(sheet, Rep_Characs)
 		
-		eachRepChildrenDo(rep_characs, function(rep_child) { // init each child
-			const yes_newchild = getElemChild(rep_child, Yes_NewChild)
-			
-			setElemValue(yes_newchild, true) // force init on exixting children
-			initCharacsRepNewChild(rep_characs, rep_child)
-		})
+		initCharacsRepNewChildren(rep_characs)
 	})
+
+	triggerElem(cky_characslck) // triggers lock to set edit or view mode
 }
 
 function initCharacsRepNewChildren(rep_characs) {
+	const sheet = getElemSheet(rep_characs)
+	
 	eachRepChildrenDo(rep_characs, function(rep_child) { // init each new child
+		const yes_newchild = getElemChild(rep_child, Yes_NewChild)
+		
+		setElemValue(yes_newchild, true) // force init on existing children
 		initCharacsRepNewChild(rep_characs, rep_child)
 	})
+
 	doeditRep(rep_characs) // show only the edit panel
+	computeTotCharacMax(sheet) // adjust the characs total
 }
 
 function initCharacsRepNewChild(rep_characs, rep_child) { // init a characs rep child if new
 	const child           = getElemIndex(rep_child)
 	const sheet           = getElemSheet(rep_characs)
 	const val_charname    = getElem(sheet, Val_CharName)
-	const val_typedices   = getElem(sheet, Val_TypeDices)
+	const val_dicestype   = getElem(sheet, Val_DicesType)
 	const val_rollmod     = getElem(sheet, Val_RollMod)
 	const val_rolladj     = getElem(sheet, Val_RollAdj)
 	const str_visibility  = getElemValue(getElem(sheet, Cky_RollVis)) ?
@@ -1179,7 +1281,7 @@ function initCharacsRepNewChild(rep_characs, rep_child) { // init a characs rep 
 
 		const dice = Dice.create("" + getElemValue(val_characpts) + "")
 			.add(getElemValue(val_rollmod))
-			.minus(getElemValue(val_typedices))
+			.minus(getElemValue(val_dicestype))
 
 		const roll = new RollBuilder(sheet)
 			.visibility(str_visibility)
@@ -1279,15 +1381,15 @@ function delockCharacs(sheet) {
 }
 
 function doviewCharacs(sheet) {
-	Arr_CharacsReps.forEach(function(rep_item) { // loop on repeaters
-		const rep_characs = getElem(sheet, rep_item)
+	Arr_CharacsReps.forEach(function(Rep_Characs) { // loop on repeaters
+		const rep_characs = getElem(sheet, Rep_Characs)
 		doviewRep(rep_characs)
 	})
 }
 
 function doeditCharacs(sheet) {
-	Arr_CharacsReps.forEach(function(rep_item) { // loop on repeaters
-		const rep_characs = getElem(sheet, rep_item)
+	Arr_CharacsReps.forEach(function(Rep_Characs) { // loop on repeaters
+		const rep_characs = getElem(sheet, Rep_Characs)
 		doeditRep(rep_characs)
 	})
 }
@@ -1302,16 +1404,26 @@ function initDicesRoll(sheet) {
 		setElemValue(cky_elem, false)
 	})
 	
-	Arr_CharacsReps.forEach(function(rep_item) { // cleanup all talent checkboxes
-		const rep_elem   = getElem(sheet, rep_item)
-		const Cky_Talent = rsoValue(Ckb_Talent, Str_PFXCKB, Str_PFXCKY)
+	Arr_CharacsReps.forEach(function(Rep_Characs) { // cleanup all talent checkboxes
+		const rep_characs = getElem(sheet, Rep_Characs)
+		const Cky_Talent  = rsoValue(Ckb_Talent, Str_PFXCKB, Str_PFXCKY)
 
-		eachRepItemDo(rep_elem, Cky_Talent, function(cky_talent) {
+		eachRepItemDo(rep_characs, Cky_Talent, function(cky_talent) {
 			setElemValue(cky_talent, false)
 		})
 	})
 	
 	setElemValue(val_rollmod, 0) // cleanup roll modifier
+}
+
+function computeDicesTypeAdj(sheet) { // compute the dices type and adjuster
+	const chc_dicestype = getElem(sheet, Chc_DicesType)
+	const val_dicestype = getElem(sheet, Val_DicesType)
+	const val_rolladj   = getElem(sheet, Val_RollAdj)
+	const dicestype = getElemValue(chc_dicestype)
+
+	setElemValue(val_dicestype, dicestype)
+	setElemValue(val_rolladj, getTableLineTbc(Tbl_DicesType, dicestype, Tbc_RollAdj))
 }
 
 function computeRollMod(sheet) { // compute the roll modifier
@@ -1328,11 +1440,11 @@ function computeRollMod(sheet) { // compute the roll modifier
 		}
 	})
 	
-	Arr_CharacsReps.forEach(function(rep_item) { // compute all talent checkboxes
-		const rep_elem   = getElem(sheet, rep_item)
-		const Cky_Talent = rsoValue(Ckb_Talent, Str_PFXCKB, Str_PFXCKY)
+	Arr_CharacsReps.forEach(function(Rep_Characs) { // compute all talent checkboxes
+		const rep_characs = getElem(sheet, Rep_Characs)
+		const Cky_Talent  = rsoValue(Ckb_Talent, Str_PFXCKB, Str_PFXCKY)
 
-		eachRepItemDo(rep_elem, Cky_Talent, function(cky_talent) {
+		eachRepItemDo(rep_characs, Cky_Talent, function(cky_talent) {
 			if (getElemValue(cky_talent)) {
 				result += adj_rolladj
 			}

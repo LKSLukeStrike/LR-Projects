@@ -1,6 +1,36 @@
-function initCharacsRepNewChildren(rep_characs) {
-	eachRepChildrenDo(rep_characs, function(rep_child) { // init each new child
-		initCharacsRepNewChild(rep_characs, rep_child)
-	})
-	doeditRep(rep_characs) // show only the edit panel
-}
+	Pst_PMSC15 : { // physique, mental, social, chance preset 15
+		Rep_CharacsL : {
+			1 : {
+				Yes_NewChild       : true,
+				Val_Name           : "physique",
+				Max_CharacPts      : 4,
+				Val_Talent         : "",
+				Chc_CharacColor    : "text-danger border-danger",
+			},
+		},
+		Rep_CharacsC : {
+			1 : {
+				Yes_NewChild       : true,
+				Val_Name           : "mental",
+				Max_CharacPts      : 4,
+				Val_Talent         : "",
+				Chc_CharacColor    : "text-primary border-primary",
+			},
+			2 : {
+				Yes_NewChild       : true,
+				Val_Name           : "chance",
+				Max_CharacPts      : 3,
+				Val_Talent         : "",
+				Chc_CharacColor    : "text-warning border-warning",
+			},
+		},
+		Rep_CharacsR : {
+			1 : {
+				Yes_NewChild       : true,
+				Val_Name           : "social",
+				Max_CharacPts      : 4,
+				Val_Talent         : "",
+				Chc_CharacColor    : "text-success border-success",
+			},
+		},
+	},
